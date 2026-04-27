@@ -3,6 +3,10 @@ bin/
 *.out
 .DS_Store
 
+# Copied from repo root by goreleaser's `before` hook so it can be
+# bundled into release archives. Not source-controlled in cli/.
+LICENSE
+
 # Local secrets — never commit
 .env
 .env.*

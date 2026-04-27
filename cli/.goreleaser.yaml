@@ -9,6 +9,9 @@ project_name: ncc
 before:
   hooks:
     - go mod tidy
+    # LICENSE only exists at the repo root; copy it into cli/ so the
+    # archives.files block can reference it as a normal local file.
+    - cp ../LICENSE LICENSE
 
 builds:
   - id: ncc
@@ -33,8 +36,8 @@ archives:
     name_template: >-
       {{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}
     files:
-      - LICENSE
-      - README.md
+      - LICENSE   # copied from repo root by the `before` hook above
+      - README.md # cli/README.md (CLI-specific)
 
 checksum:
   name_template: 'checksums.txt'
