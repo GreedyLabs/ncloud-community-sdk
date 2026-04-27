@@ -1,0 +1,601 @@
+openapi: 3.0.3
+info:
+  title: security-monitoring
+  description: security-monitoring
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: false
+    gov: true
+
+  x-ncloud-nrn:
+
+    productName: VPCSecurityMonitoring
+    resource_types:
+      - IDS
+      - IPS
+      - WAF
+      - AV
+      - DDoS
+
+servers:
+  - url: https://securitymonitoring.apigw.ntruss.com
+    description: security-monitoring 민간
+    x-ncloud-env: public
+  - url: https://securitymonitoring.apigw.gov-ntruss.com
+    description: security-monitoring 공공
+    x-ncloud-env: gov
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /security-monitoring/v1/getAVList:
+    post:
+      operationId: GetAvList
+      summary: getAVList
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - security-monitoring
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-securitymonitoring-getavlist
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - startDateTime
+                - endDateTime
+                - page
+                - countPerPage
+              properties:
+                startDateTime:
+                  type: integer
+                  format: int64
+                  description: 보안 이벤트 조회 시작 시간 Unix Timestamp 형식 <예시> 1720540427000
+                endDateTime:
+                  type: integer
+                  format: int64
+                  description: 보안 이벤트 조회 종료 시간 Unix Timestamp 형식 <예시> 1720540427000
+                page:
+                  type: integer
+                  description: 페이지 번호
+                countPerPage:
+                  type: integer
+                  description: 페이지당 노출 개수
+                order:
+                  type: string
+                  description: '이벤트 탐지 시간 정렬 순서 asc | desc (기본값) asc : 오름차순 desc : 내림차순'
+                regionCode:
+                  type: string
+                  description: '리전 코드 KR | DEN | JPN | SGN | USWN KR : 한국 DEN : 독일 JPN : 일본 SGN : 싱가포르 USWN : 미국'
+                zoneName:
+                  type: string
+                  description: 존 구분 KR-1 | KR-2
+                infectedServerIp:
+                  type: string
+                  description: 보안 이벤트가 탐지된 서버 IP 주소
+                detectionPath:
+                  type: string
+                  description: 보안 이벤트가 탐지된 상세 경로
+                malwareType:
+                  type: string
+                  description: 탐지된 악성 코드의 유형
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnCode:
+                    type: integer
+                    description: 요청에 대한 처리 결과 코드
+                  returnMessage:
+                    type: string
+                    description: 요청에 대한 처리 결과 메시지
+                  totalRows:
+                    type: integer
+                    description: 조회된 목록의 총 개수
+                  page:
+                    type: integer
+                    description: 요청 페이지 번호
+                  antiVirusDataList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 'Anti-Virus 보안 이벤트 목록: antiVirusDataList'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /security-monitoring/v1/getDDoSEventDetail:
+    post:
+      operationId: GetDdOsEventDetail
+      summary: getDDoSEventDetail
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - security-monitoring
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-securitymonitoring-getddoseventdetail
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - ticketId
+              properties:
+                ticketId:
+                  type: string
+                  description: 조회할 DDoS 보안 이벤트의 고유 번호 getDDoSList 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnCode:
+                    type: integer
+                    description: 요청에 대한 처리 결과 코드
+                  lbName:
+                    type: string
+                    description: 보안 이벤트가 탐지된 로드밸런서 이름
+                  returnMessage:
+                    type: string
+                    description: 요청에 대한 처리 결과 메시지
+                  report:
+                    type: string
+                    description: 보안 이벤트의 상세 정보
+                  lbDomainName:
+                    type: string
+                    description: 보안 이벤트가 탐지된 로드밸런서의 DNS 이름
+                  lbInstanceNo:
+                    type: string
+                    description: 보안 이벤트가 탐지된 로드밸런서의 인스턴스 번호
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /security-monitoring/v1/getDDoSList:
+    post:
+      operationId: GetDdOsList
+      summary: getDDoSList
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - security-monitoring
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-securitymonitoring-getddoslist
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - startDateTime
+                - endDateTime
+                - page
+                - countPerPage
+              properties:
+                startDateTime:
+                  type: integer
+                  format: int64
+                  description: 보안 이벤트 조회 시작 시간 Unix Timestamp 형식 <예시> 1720540427000
+                endDateTime:
+                  type: integer
+                  format: int64
+                  description: 보안 이벤트 조회 종료 시간 Unix Timestamp 형식 <예시> 1720540427000
+                page:
+                  type: integer
+                  description: 페이지 번호
+                countPerPage:
+                  type: integer
+                  description: 페이지당 노출 개수
+                order:
+                  type: string
+                  description: '이벤트 탐지 시간 정렬 순서 asc | desc (기본값) asc : 오름차순 desc : 내림차순'
+                regionCode:
+                  type: string
+                  description: '리전 코드 KR | DEN | JPN | SGN | USWN KR : 한국 DEN : 독일 JPN : 일본 SGN : 싱가포르 USWN : 미국'
+                zoneName:
+                  type: string
+                  description: 존 구분 KR-1 | KR-2
+                attackIp:
+                  type: string
+                  description: 공격자 IP 주소
+                targetIp:
+                  type: string
+                  description: 공격 대상 IP 주소
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnCode:
+                    type: integer
+                    description: 요청에 대한 처리 결과 코드
+                  ddosDataList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 'Anti-DDoS 보안 이벤트 목록: ddosDataList'
+                  returnMessage:
+                    type: string
+                    description: 요청에 대한 처리 결과 메시지
+                  totalRows:
+                    type: integer
+                    description: 조회된 목록의 총 개수
+                  page:
+                    type: integer
+                    description: 요청 페이지 번호
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /security-monitoring/v1/getIDSEventDetail:
+    post:
+      operationId: GetIdsEventDetail
+      summary: getIDSEventDetail
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - security-monitoring
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-securitymonitoring-getidseventdetail
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - ticketId
+              properties:
+                ticketId:
+                  type: string
+                  description: 조회할 IDS 보안 이벤트의 고유 번호 getIDSList 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnCode:
+                    type: integer
+                    description: 요청에 대한 처리 결과 코드
+                  lbName:
+                    type: string
+                    description: 보안 이벤트가 탐지된 로드밸런서 이름
+                  returnMessage:
+                    type: string
+                    description: 요청에 대한 처리 결과 메시지
+                  report:
+                    type: string
+                    description: 보안 이벤트의 상세 정보
+                  lbDomainName:
+                    type: string
+                    description: 보안 이벤트가 탐지된 로드밸런서의 DNS 이름
+                  lbInstanceNo:
+                    type: string
+                    description: 보안 이벤트가 탐지된 로드밸런서의 인스턴스 번호
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /security-monitoring/v1/getIDSList:
+    post:
+      operationId: GetIdsList
+      summary: getIDSList
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - security-monitoring
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-securitymonitoring-getidslist
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - startDateTime
+                - endDateTime
+                - page
+                - countPerPage
+              properties:
+                startDateTime:
+                  type: integer
+                  format: int64
+                  description: 보안 이벤트 조회 시작 시간 Unix Timestamp 형식 <예시> 1720540427000
+                endDateTime:
+                  type: integer
+                  format: int64
+                  description: 보안 이벤트 조회 종료 시간 Unix Timestamp 형식 <예시> 1720540427000
+                page:
+                  type: integer
+                  description: 페이지 번호
+                countPerPage:
+                  type: integer
+                  description: 페이지당 노출 개수
+                order:
+                  type: string
+                  description: '이벤트 탐지 시간 정렬 순서 asc | desc (기본값) asc : 오름차순 desc : 내림차순'
+                regionCode:
+                  type: string
+                  description: '리전 코드 KR | DEN | JPN | SGN | USWN KR : 한국 DEN : 독일 JPN : 일본 SGN : 싱가포르 USWN : 미국'
+                zoneName:
+                  type: string
+                  description: 존 구분 KR-1 | KR-2
+                attackType:
+                  type: string
+                  description: 탐지된 공격 유형
+                attackIp:
+                  type: string
+                  description: 공격자 IP 주소
+                targetIp:
+                  type: string
+                  description: 공격 대상 IP 주소
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnCode:
+                    type: integer
+                    description: 요청에 대한 처리 결과 코드
+                  idsDataList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 'IDS 보안 이벤트 목록: idsDataList'
+                  returnMessage:
+                    type: string
+                    description: 요청에 대한 처리 결과 메시지
+                  totalRows:
+                    type: integer
+                    description: 조회된 목록의 총 개수
+                  page:
+                    type: integer
+                    description: 요청 페이지 번호
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /security-monitoring/v1/getIPSList:
+    post:
+      operationId: GetIpsList
+      summary: getIPSList
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - security-monitoring
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-securitymonitoring-getipslist
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - startDateTime
+                - endDateTime
+                - page
+                - countPerPage
+              properties:
+                startDateTime:
+                  type: integer
+                  format: int64
+                  description: 보안 이벤트 조회 시작 시간 Unix Timestamp 형식 <예시> 1720540427000
+                endDateTime:
+                  type: integer
+                  format: int64
+                  description: 보안 이벤트 조회 종료 시간 Unix Timestamp 형식 <예시> 1720540427000
+                page:
+                  type: integer
+                  description: 페이지 번호
+                countPerPage:
+                  type: integer
+                  description: 페이지당 노출 개수
+                order:
+                  type: string
+                  description: '이벤트 탐지 시간 정렬 순서 asc | desc (기본값) asc : 오름차순 desc : 내림차순'
+                regionCode:
+                  type: string
+                  description: '리전 코드 KR | DEN | JPN | SGN | USWN KR : 한국 DEN : 독일 JPN : 일본 SGN : 싱가포르 USWN : 미국'
+                zoneName:
+                  type: string
+                  description: 존 구분 KR-1 | KR-2
+                eventNm:
+                  type: string
+                  description: 탐지된 이벤트의 이름
+                attackIp:
+                  type: string
+                  description: 공격자 IP 주소
+                targetIp:
+                  type: string
+                  description: 공격 대상 IP 주소
+                attackType:
+                  type: string
+                  description: 탐지된 공격 유형 Classic 환경에서만 사용 가능
+                protocol:
+                  type: string
+                  description: 공격 프로토콜 VPC 환경에서만 사용 가능
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnCode:
+                    type: integer
+                    description: 요청에 대한 처리 결과 코드
+                  ipsDataList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 'IPS 보안 이벤트 목록: ipsDataList'
+                  returnMessage:
+                    type: string
+                    description: 요청에 대한 처리 결과 메시지
+                  totalRows:
+                    type: integer
+                    description: 조회된 목록의 총 개수
+                  page:
+                    type: integer
+                    description: 요청 페이지 번호
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /security-monitoring/v1/getWAFList:
+    post:
+      operationId: GetWafList
+      summary: getWAFList
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - security-monitoring
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-securitymonitoring-getwaflist
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - startDateTime
+                - endDateTime
+                - page
+                - countPerPage
+              properties:
+                startDateTime:
+                  type: integer
+                  format: int64
+                  description: 보안 이벤트 조회 시작 시간(Unix timestamp) <예시> 1720540427000
+                endDateTime:
+                  type: integer
+                  format: int64
+                  description: 보안 이벤트 조회 종료 시간(Unix timestamp) <예시> 1720540427000
+                page:
+                  type: integer
+                  description: 페이지 번호
+                countPerPage:
+                  type: integer
+                  description: 페이지당 노출 개수
+                order:
+                  type: string
+                  description: '이벤트 탐지 시간 정렬 순서 asc | desc (기본값) asc : 오름차순 desc : 내림차순'
+                regionCode:
+                  type: string
+                  description: '리전 코드 KR | DEN | JPN | SGN | USWN KR : 한국 DEN : 독일 JPN : 일본 SGN : 싱가포르 USWN : 미국'
+                zoneName:
+                  type: string
+                  description: 존 구분 KR-1 | KR-2
+                attackType:
+                  type: string
+                  description: 탐지된 공격 유형
+                eventNm:
+                  type: string
+                  description: 탐지된 이벤트의 이름
+                attackIp:
+                  type: string
+                  description: 공격자 IP 주소
+                targetIp:
+                  type: string
+                  description: 공격 대상 IP 주소
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnCode:
+                    type: integer
+                    description: 요청에 대한 처리 결과 코드
+                  wafDataList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 'WAF 보안 이벤트 목록: wafDataList'
+                  returnMessage:
+                    type: string
+                    description: 요청에 대한 처리 결과 메시지
+                  totalRows:
+                    type: integer
+                    description: 조회된 목록의 총 개수
+                  page:
+                    type: integer
+                    description: 요청 페이지 번호
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+components:
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  schemas:
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

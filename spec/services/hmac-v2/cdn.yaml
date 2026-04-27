@@ -1,0 +1,775 @@
+openapi: 3.0.3
+info:
+  title: cdn
+  description: ''
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: false
+    gov: false
+
+  x-ncloud-nrn:
+
+    productName: GCDN
+    resource_types:
+      - Service
+
+servers:
+  - url: https://ncloud.apigw.ntruss.com/cdn/v2
+    description: cdn 민간
+    x-ncloud-env: public
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /getCdnPlusInstanceList:
+    post:
+      operationId: GetCdnPlusInstanceList
+      summary: CDN+인스턴스 리스트조회
+      tags:
+        - cdn
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCdnPlusInstanceListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCdnPlusInstanceListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getCdnPlusPurgeHistoryList:
+    post:
+      operationId: GetCdnPlusPurgeHistoryList
+      summary: CDN+퍼지기록조회
+      tags:
+        - cdn
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCdnPlusPurgeHistoryListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCdnPlusPurgeHistoryListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getGlobalCdnInstanceList:
+    post:
+      operationId: GetGlobalCdnInstanceList
+      summary: Global CDN 인스턴스 리스트조회
+      tags:
+        - cdn
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetGlobalCdnInstanceListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetGlobalCdnInstanceListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getGlobalCdnPurgeHistoryList:
+    post:
+      operationId: GetGlobalCdnPurgeHistoryList
+      summary: Global CDN 퍼지기록조회
+      tags:
+        - cdn
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetGlobalCdnPurgeHistoryListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetGlobalCdnPurgeHistoryListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /requestCdnPlusPurge:
+    post:
+      operationId: RequestCdnPlusPurge
+      summary: CDN+퍼지요청
+      tags:
+        - cdn
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RequestCdnPlusPurgeRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestCdnPlusPurgeResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /requestGlobalCdnPurge:
+    post:
+      operationId: RequestGlobalCdnPurge
+      summary: Global CDN 퍼지요청
+      tags:
+        - cdn
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RequestGlobalCdnPurgeRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestGlobalCdnPurgeResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+components:
+  schemas:
+    CdnPlusInstance:
+      type: object
+      properties:
+        cdnInstanceNo:
+          type: string
+          description: CDN 인스턴스 번호
+        cdnInstanceStatus:
+          $ref: '#/components/schemas/CommonCode'
+        cdnInstanceOperation:
+          $ref: '#/components/schemas/CommonCode'
+        cdnInstanceStatusName:
+          type: string
+          description: CDN 인스턴스 상태명
+        createDate:
+          type: string
+          description: 생성일자
+        lastModifiedDate:
+          type: string
+          description: UPTIME
+        cdnInstanceDescription:
+          type: string
+          description: CDN 인스턴스설명
+        serviceName:
+          type: string
+          description: 서비스이름
+        isForLiveTranscoder:
+          type: boolean
+          description: 라이브트랜스코더여부
+        liveTranscoderInstanceNoList:
+          type: array
+          description: 라이브트랜스코더인스턴스 번호 리스트
+          items:
+            type: string
+        isForImageOptimizer:
+          type: boolean
+          description: Image Optimizer 여부
+        imageOptimizerInstanceNo:
+          type: string
+          description: Image Optimizer 인스턴스 번호
+        isAvailablePartialDomainPurge:
+          type: boolean
+        cdnPlusServiceDomainList:
+          type: array
+          description: CDN+서비스도메인리스트
+          items:
+            $ref: '#/components/schemas/CdnPlusServiceDomain'
+        cdnPlusRule:
+          $ref: '#/components/schemas/CdnPlusRule'
+    CdnPlusPurgeHistory:
+      type: object
+      properties:
+        cdnInstanceNo:
+          type: string
+          description: CDN 인스턴스 번호
+        purgeId:
+          type: string
+          description: 퍼지 ID
+        isWholePurge:
+          type: boolean
+          description: 전체퍼지여부
+        isWholeDomain:
+          type: boolean
+          description: 전체도메인퍼지여부
+        cdnPlusServiceDomainList:
+          type: array
+          description: CDN+서비스도메인리스트
+          items:
+            $ref: '#/components/schemas/CdnPlusServiceDomain'
+        targetDirectoryName:
+          type: string
+          description: 대상디렉토리명
+        targetFileList:
+          type: array
+          description: 타겟파일리스트
+          items:
+            type: string
+        requestDate:
+          type: string
+          description: 요청날짜
+        purgeStatusName:
+          type: string
+          description: 퍼지상태
+    CdnPlusRule:
+      type: object
+      properties:
+        protocolTypeCode:
+          type: string
+          description: 프로토콜구분코드
+        serviceDomainTypeCode:
+          type: string
+          description: 서비스도메인구분코드
+        originUrl:
+          type: string
+          description: 원본 URL
+        originPath:
+          type: string
+          description: 원본경로
+        originHttpPort:
+          type: integer
+          format: int32
+          description: 원본 HTTP 포트
+        originHttpsPort:
+          type: integer
+          format: int32
+          description: 원본 HTTPS 포트
+        forwardHostHeaderTypeCode:
+          type: string
+          description: 포워드호스트헤더구분코드
+        forwardHostHeader:
+          type: string
+          description: 포워드호스트헤더
+        cacheKeyHostNameTypeCode:
+          type: string
+          description: 캐쉬키호스트명구분코드
+        isGzipCompressionUse:
+          type: boolean
+          description: GZIP 압축사용여부
+        cachingOptionTypeCode:
+          type: string
+          description: 캐싱옵션구분코드
+        isErrorContentsResponseUse:
+          type: boolean
+          description: 오류내용응답사용여부
+        cachingTtlTime:
+          type: integer
+          format: int32
+          description: TTL 캐싱
+        isQueryStringIgnoreUse:
+          type: boolean
+          description: 쿼리스트링무시여부
+        isRemoveVaryHeaderUse:
+          type: boolean
+          description: 헤더제거사용여부
+        isLargeFileOptimizationUse:
+          type: boolean
+          description: 대용량파일최적화사용여부
+        gzipResponseTypeCode:
+          type: string
+          description: GZIP 응답구분코드
+        isReferrerDomainUse:
+          type: boolean
+          description: 레퍼러도메인사용여부
+        referrerDomainList:
+          type: array
+          description: 레퍼러도메인리스트
+          items:
+            type: string
+        isReferrerDomainRestrictUse:
+          type: boolean
+          description: 레퍼러도메인제한사용여부
+        isSecureTokenUse:
+          type: boolean
+          description: 보안토큰사용여부
+        secureTokenPassword:
+          type: string
+          description: 보안토큰비밀번호
+        isReissueSecureTokenPassword:
+          type: boolean
+          description: 보안토큰재발급여부
+        certificateName:
+          type: string
+          description: 인증서이름
+        isAccessLogUse:
+          type: boolean
+          description: 엑세스로그사용여부
+        accessLogFileStorageContainerName:
+          type: string
+          description: 엑세스로그파일스토리지인스턴스 이름
+    CdnPlusServiceDomain:
+      type: object
+      properties:
+        domainId:
+          type: string
+          description: 도메인 ID
+        serviceDomainTypeCode:
+          type: string
+          description: 서비스도메인구분코드
+        protocolTypeCode:
+          type: string
+          description: 프로토콜구분코드
+        defaultDomainName:
+          type: string
+          description: 디폴트도메인이름
+        userDomainName:
+          type: string
+          description: 유저도메인이름
+    CommonCode:
+      type: object
+      properties:
+        code:
+          type: string
+        codeName:
+          type: string
+    GetCdnPlusInstanceListRequest:
+      type: object
+      properties:
+        cdnInstanceNo:
+          type: string
+          description: CDN 인스턴스 번호
+        pageNo:
+          type: integer
+          format: int32
+          description: 페이지 번호
+        pageSize:
+          type: integer
+          format: int32
+          description: 페이지 사이즈
+    GetCdnPlusInstanceListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cdnPlusInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/CdnPlusInstance'
+    GetCdnPlusPurgeHistoryListRequest:
+      type: object
+      properties:
+        cdnInstanceNo:
+          type: string
+          description: CDN 인스턴스 번호
+        purgeIdList:
+          type: array
+          description: 퍼지 ID 리스트
+          items:
+            type: string
+    GetCdnPlusPurgeHistoryListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cdnPlusPurgeHistoryList:
+          type: array
+          items:
+            $ref: '#/components/schemas/CdnPlusPurgeHistory'
+    GetGlobalCdnInstanceListRequest:
+      type: object
+      properties:
+        cdnInstanceNo:
+          type: string
+          description: CDN 인스턴스 번호
+        pageNo:
+          type: integer
+          format: int32
+          description: 페이지 번호
+        pageSize:
+          type: integer
+          format: int32
+          description: 페이지 사이즈
+    GetGlobalCdnInstanceListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        globalCdnInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/GlobalCdnInstance'
+    GetGlobalCdnPurgeHistoryListRequest:
+      type: object
+      properties:
+        cdnInstanceNo:
+          type: string
+          description: CDN 인스턴스 번호
+        purgeIdList:
+          type: array
+          description: 퍼지 ID 리스트
+          items:
+            type: string
+    GetGlobalCdnPurgeHistoryListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        globalCdnPurgeHistoryList:
+          type: array
+          items:
+            $ref: '#/components/schemas/GlobalCdnPurgeHistory'
+    GlobalCdnInstance:
+      type: object
+      properties:
+        cdnInstanceNo:
+          type: string
+          description: CDN 인스턴스 번호
+        cdnInstanceStatus:
+          $ref: '#/components/schemas/CommonCode'
+        cdnInstanceOperation:
+          $ref: '#/components/schemas/CommonCode'
+        cdnInstanceStatusName:
+          type: string
+          description: CDN 인스턴스 상태명
+        createDate:
+          type: string
+          description: 생성일자
+        lastModifiedDate:
+          type: string
+          description: UPTIME
+        cdnInstanceDescription:
+          type: string
+          description: CDN 인스턴스설명
+        serviceName:
+          type: string
+          description: 서비스이름
+        isAvailablePartialDomainPurge:
+          type: boolean
+        globalCdnServiceDomainList:
+          type: array
+          items:
+            $ref: '#/components/schemas/GlobalCdnServiceDomain'
+        globalCdnRule:
+          $ref: '#/components/schemas/GlobalCdnRule'
+    GlobalCdnPurgeHistory:
+      type: object
+      properties:
+        cdnInstanceNo:
+          type: string
+          description: CDN 인스턴스 번호
+        purgeId:
+          type: string
+          description: 퍼지 ID
+        isWholePurge:
+          type: boolean
+          description: 전체퍼지여부
+        isWholeDomain:
+          type: boolean
+          description: 전체도메인퍼지여부
+        globalCdnServiceDomainList:
+          type: array
+          description: Global CDN 서비스도메인리스트
+          items:
+            $ref: '#/components/schemas/GlobalCdnServiceDomain'
+        targetFileList:
+          type: array
+          description: 타겟파일리스트
+          items:
+            type: string
+        estimatedCompletionDate:
+          type: string
+          description: 예상완료날짜
+        isSuccess:
+          type: boolean
+          description: 성공여부
+        requestDate:
+          type: string
+          description: 요청날짜
+    GlobalCdnRule:
+      type: object
+      properties:
+        protocolTypeCode:
+          type: string
+          description: 프로토콜구분코드
+        serviceDomainTypeCode:
+          type: string
+          description: 서비스도메인구분코드
+        originUrl:
+          type: string
+          description: 원본 URL
+        originPath:
+          type: string
+          description: 원본경로
+        originHttpPort:
+          type: integer
+          format: int32
+          description: 원본 HTTP 포트
+        originHttpsPort:
+          type: integer
+          format: int32
+          description: 원본 HTTPS 포트
+        forwardHostHeaderTypeCode:
+          type: string
+          description: 포워드호스트헤더구분코드
+        forwardHostHeader:
+          type: string
+          description: 포워드호스트헤더
+        cacheKeyHostNameTypeCode:
+          type: string
+          description: 캐쉬키호스트명구분코드
+        isGzipCompressionUse:
+          type: boolean
+          description: GZIP 압축사용여부
+        cachingOptionTypeCode:
+          type: string
+          description: 캐싱옵션구분코드
+        isErrorContentsResponseUse:
+          type: boolean
+          description: 오류내용응답사용여부
+        cachingTtlTime:
+          type: integer
+          format: int32
+          description: TTL 캐싱
+        isQueryStringIgnoreUse:
+          type: boolean
+          description: 쿼리스트링무시여부
+        isRemoveVaryHeaderUse:
+          type: boolean
+          description: 헤더제거사용여부
+        isLargeFileOptimizationUse:
+          type: boolean
+          description: 대용량파일최적화사용여부
+        gzipResponseTypeCode:
+          type: string
+          description: GZIP 응답구분코드
+        isReferrerDomainUse:
+          type: boolean
+          description: 레퍼러도메인사용여부
+        referrerDomainList:
+          type: array
+          description: 레퍼러도메인리스트
+          items:
+            type: string
+        isReferrerDomainRestrictUse:
+          type: boolean
+          description: 레퍼러도메인제한사용여부
+        isSecureTokenUse:
+          type: boolean
+          description: 보안토큰사용여부
+        secureTokenPassword:
+          type: string
+          description: 보안토큰비밀번호
+        isReissueSecureTokenPassword:
+          type: boolean
+          description: 보안토큰재발급여부
+        certificateName:
+          type: string
+          description: 인증서이름
+        isAccessLogUse:
+          type: boolean
+          description: 엑세스로그사용여부
+        accessLogFileStorageContainerName:
+          type: string
+          description: 엑세스로그파일스토리지인스턴스 이름
+    GlobalCdnServiceDomain:
+      type: object
+      properties:
+        serviceDomainTypeCode:
+          type: string
+          description: 서비스도메인구분코드
+        protocolTypeCode:
+          type: string
+          description: 프로토콜구분코드
+        defaultDomainName:
+          type: string
+          description: 디폴트도메인이름
+        userDomainName:
+          type: string
+          description: 유저도메인이름
+    RequestCdnPlusPurgeRequest:
+      type: object
+      properties:
+        cdnInstanceNo:
+          type: string
+          description: CDN 인스턴스 번호
+        domainIdList:
+          type: array
+          description: 도메인 ID 리스트
+          items:
+            type: string
+        isWholePurge:
+          type: boolean
+          description: 전체퍼지여부
+        isWholeDomain:
+          type: boolean
+          description: 전체도메인여부
+        targetFileList:
+          type: array
+          description: 대상파일리스트
+          items:
+            type: string
+        targetDirectoryName:
+          type: string
+          description: 대상디렉토리명
+    RequestCdnPlusPurgeResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cdnPlusPurgeHistoryList:
+          type: array
+          items:
+            $ref: '#/components/schemas/CdnPlusPurgeHistory'
+    RequestGlobalCdnPurgeRequest:
+      type: object
+      properties:
+        cdnInstanceNo:
+          type: string
+          description: CDN 인스턴스 번호
+        serviceDomainNameList:
+          type: array
+          description: 서비스도메인이름 리스트
+          items:
+            type: string
+        isWholePurge:
+          type: boolean
+          description: 전체퍼지여부
+        isWholeDomain:
+          type: boolean
+          description: 전체도메인여부
+        targetFileList:
+          type: array
+          description: 대상파일리스트
+          items:
+            type: string
+    RequestGlobalCdnPurgeResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        globalCdnPurgeHistoryList:
+          type: array
+          items:
+            $ref: '#/components/schemas/GlobalCdnPurgeHistory'
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

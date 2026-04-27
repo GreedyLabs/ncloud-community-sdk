@@ -1,0 +1,630 @@
+openapi: 3.0.3
+info:
+  title: cloud-advisor
+  description: cloud-advisor
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: false
+    gov: false
+
+  x-ncloud-nrn:
+
+    productName: CloudAdvisor
+    resource_types:
+      - Advisor
+
+servers:
+  - url: https://cloud-advisor.apigw.ntruss.com
+    description: cloud-advisor 민간
+    x-ncloud-env: public
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /categories:
+    get:
+      operationId: Categories
+      summary: 점검 카테고리 조회
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-advisor
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-cloud-advisor-categories
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: 'API 처리 결과 SUCCESS | FAIL SUCCESS : 성공 FAIL : 실패'
+                  contents:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '점검 카테고리 목록: contents'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /categories/checkitems/excel:
+    get:
+      operationId: ExcelAll
+      summary: 점검 결과 다운로드
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-advisor
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-cloud-advisor-excel-all
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /categories/{categoryCode}/checkitems:
+    get:
+      operationId: CheckItems
+      summary: 점검 항목 조회
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-advisor
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-cloud-advisor-checkitems
+      parameters:
+        - name: categoryCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '점검 카테고리 코드 SECURITY | COST SECURITY : 보안 카테고리 COST : 비용&고가용성 카테고리'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: 'API 처리 결과 SUCCESS | FAIL SUCCESS : 성공 FAIL : 실패'
+                  contents:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '점검 항목 목록: content'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /categories/{categoryCode}/checkitems/excel:
+    get:
+      operationId: ExcelCategories
+      summary: 점검 카테고리 점검 결과 다운로드
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-advisor
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-cloud-advisor-excel-categories
+      parameters:
+        - name: categoryCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '점검 카테고리 코드 SECURITY | COST SECURITY : 보안 카테고리 COST : 비용&고가용성 카테고리'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /categories/{categoryCode}/checkitems/refresh:
+    post:
+      operationId: RefreshCategories
+      summary: 점검 카테고리 점검 요청
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-advisor
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-cloud-advisor-refresh-categories
+      parameters:
+        - name: categoryCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '점검 카테고리 코드 SECURITY | COST SECURITY : 보안 카테고리 COST : 비용&고가용성 카테고리'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: 'API 처리 결과 SUCCESS | FAIL SUCCESS : 성공 FAIL : 실패'
+                  contents:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '점검 항목 목록: content'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /categories/{categoryCode}/checkitems/result-summary:
+    get:
+      operationId: ResultSummaryCategories
+      summary: 점검 카테고리 점검 결과 요약 조회
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-advisor
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-cloud-advisor-result-summary-categories
+      parameters:
+        - name: categoryCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '점검 카테고리 코드 SECURITY | COST SECURITY : 보안 카테고리 COST : 비용&고가용성 카테고리'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: 'API 처리 결과 SUCCESS | FAIL SUCCESS : 성공 FAIL : 실패'
+                  contents:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '점검 항목 목록: content'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /categories/{categoryCode}/checkitems/status:
+    get:
+      operationId: StatusCategories
+      summary: 점검 카테고리 상태 조회
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-advisor
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-cloud-advisor-status-categories
+      parameters:
+        - name: categoryCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '점검 카테고리 코드 SECURITY | COST SECURITY : 보안 카테고리 COST : 비용&고가용성 카테고리'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: 'API 처리 결과 SUCCESS | FAIL SUCCESS : 성공 FAIL : 실패'
+                  contents:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '점검 항목 목록: content'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /categories/{categoryCode}/checkitems/{itemCode}/excel:
+    get:
+      operationId: Excel
+      summary: 점검 항목 점검 결과 다운로드
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-advisor
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-cloud-advisor-excel
+      parameters:
+        - name: categoryCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '점검 카테고리 코드 SECURITY | COST SECURITY : 보안 카테고리 COST : 비용&고가용성 카테고리'
+        - name: itemCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 점검 항목 코드 점검 항목 코드 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /categories/{categoryCode}/checkitems/{itemCode}/refresh:
+    post:
+      operationId: Refresh
+      summary: 점검 항목 점검 요청
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-advisor
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-cloud-advisor-refresh
+      parameters:
+        - name: categoryCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '점검 카테고리 코드 SECURITY | COST SECURITY : 보안 카테고리 COST : 비용&고가용성 카테고리'
+        - name: itemCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 점검 항목 코드 점검 항목 코드 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: 'API 처리 결과 SUCCESS | FAIL SUCCESS : 성공 FAIL : 실패'
+                  contents:
+                    type: object
+                    additionalProperties: true
+                    description: 점검 항목
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /categories/{categoryCode}/checkitems/{itemCode}/result-detail:
+    get:
+      operationId: ResultDetail
+      summary: 점검 항목 점검 결과 상세 조회
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-advisor
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-cloud-advisor-result-detail
+      parameters:
+        - name: categoryCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '점검 카테고리 코드 SECURITY | COST SECURITY : 보안 카테고리 COST : 비용&고가용성 카테고리'
+        - name: itemCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 점검 항목 코드 점검 항목 코드 참조
+        - name: display
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '조회 대상 인스턴스 all | included (기본값)| excluded all : 전체 인스턴스 included : 포함 설정 인스턴스 excluded : 제외 설정 인스턴스'
+        - name: page
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: 페이지 번호 1~N
+        - name: size
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: 페이지당 항목 수 1~N
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: 'API 처리 결과 SUCCESS | FAIL SUCCESS : 성공 FAIL : 실패'
+                  contents:
+                    type: object
+                    additionalProperties: true
+                    description: 점검 항목
+                  meta:
+                    type: object
+                    additionalProperties: true
+                    description: 페이지 처리를 위한 메타 데이터
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '점검 항목의 인스턴스별 상세 점검 결과: ResultTableRow'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /categories/{categoryCode}/checkitems/{itemCode}/result-detail/exclude:
+    post:
+      operationId: ResultDetailExclude
+      summary: 점검 결과 상세 제외 설정
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-advisor
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-cloud-advisor-result-detail-exclude
+      parameters:
+        - name: categoryCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '점검 카테고리 코드 SECURITY | COST SECURITY : 보안 카테고리 COST : 비용&고가용성 카테고리'
+        - name: itemCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 점검 항목 코드 점검 항목 코드 참조
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - instanceKeys
+              properties:
+                instanceKeys:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: 조회 가능한 인스턴스의 instanceKey 목록 점검 항목 점검 결과 상세 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: 'API 처리 결과 SUCCESS | FAIL SUCCESS : 성공 FAIL : 실패'
+                  contents:
+                    type: string
+                    description: 설정 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /categories/{categoryCode}/checkitems/{itemCode}/result-detail/include:
+    post:
+      operationId: ResultDetailInclude
+      summary: 점검 결과 상세 조회 포함 설정
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-advisor
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-cloud-advisor-result-detail-include
+      parameters:
+        - name: categoryCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '점검 카테고리 코드 SECURITY | COST SECURITY : 보안 카테고리 COST : 비용&고가용성 카테고리'
+        - name: itemCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 점검 항목 코드 점검 항목 코드 참조
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - root
+              properties:
+                root:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: 조회 가능한 인스턴스의 instanceKey 점검 항목 점검 결과 상세 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: 'API 처리 결과 SUCCESS | FAIL SUCCESS : 성공 FAIL : 실패'
+                  contents:
+                    type: string
+                    description: 설정 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /categories/{categoryCode}/checkitems/{itemCode}/status:
+    get:
+      operationId: Status
+      summary: 점검 항목 상태 조회
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-advisor
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-cloud-advisor-status
+      parameters:
+        - name: categoryCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '점검 카테고리 코드 SECURITY | COST SECURITY : 보안 카테고리 COST : 비용&고가용성 카테고리'
+        - name: itemCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 점검 항목 코드 점검 항목 코드 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: 'API 처리 결과 SUCCESS | FAIL SUCCESS : 성공 FAIL : 실패'
+                  contents:
+                    type: object
+                    additionalProperties: true
+                    description: 점검 항목
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /categories/{categoryCode}/dashboard:
+    get:
+      operationId: Dashboard
+      summary: 점검 카테고리 점검 결과 등급 조회
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-advisor
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-cloud-advisor-dashboard
+      parameters:
+        - name: categoryCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '점검 카테고리 코드 SECURITY | COST SECURITY : 보안 카테고리 COST : 비용&고가용성 카테고리'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: 'API 처리 결과 SUCCESS | FAIL SUCCESS : 성공 FAIL : 실패'
+                  contents:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '점검 카테고리 목록: content'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+components:
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  schemas:
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

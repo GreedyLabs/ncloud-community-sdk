@@ -1,0 +1,1599 @@
+[
+  {
+    "service": "ai-tems",
+    "total_ops": 27,
+    "fidelity": {
+      "verified": 27
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [
+        {
+          "opid": "ServiceIntervalUpload",
+          "path": "/services/{serviceId}/datasets/{datasetId}",
+          "method": "POST"
+        }
+      ],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "api-gateway",
+    "total_ops": 132,
+    "fidelity": {
+      "verified": 132
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [
+        {
+          "opid": "ApiApisDetail",
+          "path": "/products/{product-id}/apis/{api-id}",
+          "method": "GET"
+        },
+        {
+          "opid": "MethodGetResponses",
+          "path": "/products/{product-id}/apis/{api-id}/resources/{resource-id}/methods/{method-name}/responses",
+          "method": "GET"
+        },
+        {
+          "opid": "GetResponses",
+          "path": "/products/{product-id}/apis/{api-id}/responses",
+          "method": "GET"
+        }
+      ],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "application-maps",
+    "total_ops": 4,
+    "fidelity": {
+      "verified": 4
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [
+        {
+          "opid": "Static",
+          "path": "/map-static/v2/lastversion",
+          "method": "GET"
+        }
+      ],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "arc-eye",
+    "total_ops": 3,
+    "fidelity": {
+      "verified": 3
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "auto-scaling",
+    "total_ops": 22,
+    "fidelity": {
+      "verified": 22
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "blockchain",
+    "total_ops": 19,
+    "fidelity": {
+      "verified": 19
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "cache",
+    "total_ops": 11,
+    "fidelity": {
+      "verified": 11
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "cdn",
+    "total_ops": 6,
+    "fidelity": {
+      "verified": 6
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "cdss",
+    "total_ops": 41,
+    "fidelity": {
+      "verified": 41
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "certificate-manager",
+    "total_ops": 20,
+    "fidelity": {
+      "verified": 20
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "chatbot",
+    "total_ops": 0,
+    "fidelity": {},
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "cloud-activity-tracer",
+    "total_ops": 1,
+    "fidelity": {
+      "verified": 1
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "cloud-advisor",
+    "total_ops": 14,
+    "fidelity": {
+      "verified": 14
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [
+        {
+          "opid": "ExcelAll",
+          "path": "/categories/checkitems/excel",
+          "method": "GET"
+        },
+        {
+          "opid": "ExcelCategories",
+          "path": "/categories/{categoryCode}/checkitems/excel",
+          "method": "GET"
+        },
+        {
+          "opid": "Excel",
+          "path": "/categories/{categoryCode}/checkitems/{itemCode}/excel",
+          "method": "GET"
+        }
+      ],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "cloud-functions",
+    "total_ops": 42,
+    "fidelity": {
+      "verified": 42
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "cloud-insight",
+    "total_ops": 75,
+    "fidelity": {
+      "verified": 75
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [
+        {
+          "opid": "GetDashboardWidgetImage",
+          "path": "/cw_fea/real/cw/api/chart/dashboard/{dashboardId}/widgets/{widgetId}",
+          "method": "GET"
+        },
+        {
+          "opid": "DeleteIntegration",
+          "path": "/cw_fea/real/cw/api/integration/delete",
+          "method": "POST"
+        },
+        {
+          "opid": "UpdateIntegration",
+          "path": "/cw_fea/real/cw/api/integration/update",
+          "method": "POST"
+        },
+        {
+          "opid": "GetRuleGroupByMetricGroupIds",
+          "path": "/cw_fea/real/cw/api/rule/group/metric/group/related",
+          "method": "POST"
+        },
+        {
+          "opid": "UpdateMetricsGroup",
+          "path": "/cw_fea/real/cw/api/rule/group/metrics/update",
+          "method": "POST"
+        },
+        {
+          "opid": "GetRuleGroupByMonitorGroupIds",
+          "path": "/cw_fea/real/cw/api/rule/group/monitor/group/related",
+          "method": "POST"
+        },
+        {
+          "opid": "RemoveResourceFromRules",
+          "path": "/cw_fea/real/cw/api/rule/group/monitor/removeResourceFromRules",
+          "method": "POST"
+        },
+        {
+          "opid": "GetAllMonitorGrp",
+          "path": "/cw_fea/real/cw/api/rule/group/monitor/{prodKey}",
+          "method": "GET"
+        },
+        {
+          "opid": "DeleteRuleGroup",
+          "path": "/cw_fea/real/cw/api/rule/group/ruleGrp/del",
+          "method": "POST"
+        },
+        {
+          "opid": "GetRuleGroupList",
+          "path": "/cw_fea/real/cw/api/rule/group/ruleGrp/query",
+          "method": "POST"
+        },
+        {
+          "opid": "GetRuleGroup",
+          "path": "/cw_fea/real/cw/api/rule/group/ruleGrp/query/{prodKey}/{id}",
+          "method": "GET"
+        },
+        {
+          "opid": "UpdateRuleGroup",
+          "path": "/cw_fea/real/cw/api/rule/group/ruleGrp/update",
+          "method": "POST"
+        },
+        {
+          "opid": "UpdateFilePlugin",
+          "path": "/cw_server/real/api/plugin/file",
+          "method": "POST"
+        },
+        {
+          "opid": "AddFilePlugin",
+          "path": "/cw_server/real/api/plugin/file/add",
+          "method": "POST"
+        },
+        {
+          "opid": "RemoveFilePlugin",
+          "path": "/cw_server/real/api/plugin/file/remove",
+          "method": "POST"
+        },
+        {
+          "opid": "UpdatePortPlugin",
+          "path": "/cw_server/real/api/plugin/port",
+          "method": "POST"
+        },
+        {
+          "opid": "AddPortPlugin",
+          "path": "/cw_server/real/api/plugin/port/add",
+          "method": "POST"
+        },
+        {
+          "opid": "RemovePortPlugin",
+          "path": "/cw_server/real/api/plugin/port/remove",
+          "method": "POST"
+        },
+        {
+          "opid": "UpdateProcessPlugin",
+          "path": "/cw_server/real/api/plugin/process",
+          "method": "POST"
+        },
+        {
+          "opid": "AddProcessPlugin",
+          "path": "/cw_server/real/api/plugin/process/add",
+          "method": "POST"
+        },
+        {
+          "opid": "RemoveProcessPlugin",
+          "path": "/cw_server/real/api/plugin/process/remove",
+          "method": "POST"
+        }
+      ],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "cloud-log-analytics",
+    "total_ops": 29,
+    "fidelity": {
+      "verified": 29
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "cloud-outbound-mailer",
+    "total_ops": 35,
+    "fidelity": {
+      "verified": 35
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "cloud-search",
+    "total_ops": 59,
+    "fidelity": {
+      "verified": 59
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [
+        {
+          "opid": "PostDbUploadTable",
+          "path": "/CloudSearch/real/v1/db_upload/table",
+          "method": "POST"
+        },
+        {
+          "opid": "PostDbUploadTableVpc",
+          "path": "/CloudSearch/real/v1/db_upload/table/vpc",
+          "method": "POST"
+        },
+        {
+          "opid": "CreateRanking",
+          "path": "/CloudSearch/real/v1/domain/{name}/ranking/{rankingName}",
+          "method": "POST"
+        }
+      ],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "clova-speech",
+    "total_ops": 5,
+    "fidelity": {
+      "verified": 5
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "clova-studio",
+    "total_ops": 18,
+    "fidelity": {
+      "verified": 18
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "data-box-frame",
+    "total_ops": 30,
+    "fidelity": {
+      "verified": 30
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "data-catalog",
+    "total_ops": 21,
+    "fidelity": {
+      "verified": 21
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "data-fence",
+    "total_ops": 35,
+    "fidelity": {
+      "verified": 35
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "data-flow",
+    "total_ops": 23,
+    "fidelity": {
+      "verified": 23
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [
+        {
+          "opid": "VerifyJob",
+          "path": "/jobs/verify",
+          "method": "POST"
+        }
+      ],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "data-forest",
+    "total_ops": 24,
+    "fidelity": {
+      "verified": 24
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [
+        {
+          "opid": "AccountsGetKerberOsKeyTab",
+          "path": "/accounts/getKerberosKeytab",
+          "method": "POST"
+        },
+        {
+          "opid": "AppsGetAppbasicSetTing",
+          "path": "/apps/getAppBasicSetting",
+          "method": "POST"
+        }
+      ],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "data-query",
+    "total_ops": 5,
+    "fidelity": {
+      "verified": 5
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "data-stream",
+    "total_ops": 19,
+    "fidelity": {
+      "verified": 19
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [
+        {
+          "opid": "CreateSchemaS",
+          "path": "/topics/{topicId}/schemas",
+          "method": "POST"
+        }
+      ],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "drm",
+    "total_ops": 8,
+    "fidelity": {
+      "verified": 8
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "edge",
+    "total_ops": 16,
+    "fidelity": {
+      "verified": 16
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "file-safer",
+    "total_ops": 13,
+    "fidelity": {
+      "verified": 13
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "gamepot",
+    "total_ops": 14,
+    "fidelity": {
+      "verified": 14
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "geo-cidr",
+    "total_ops": 6,
+    "fidelity": {
+      "verified": 6
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [
+        {
+          "opid": "View",
+          "path": "/gtm/v1/maps",
+          "method": "GET"
+        },
+        {
+          "opid": "MapTypeView",
+          "path": "/gtm/v1/maps/mapType",
+          "method": "GET"
+        },
+        {
+          "opid": "MapDetailView",
+          "path": "/gtm/v1/maps/{mapId}",
+          "method": "GET"
+        }
+      ],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "geo-location",
+    "total_ops": 3,
+    "fidelity": {
+      "verified": 3
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [
+        {
+          "opid": "SetQuota",
+          "path": "/geo-location/v2/quota",
+          "method": "POST"
+        }
+      ],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "global-dns",
+    "total_ops": 12,
+    "fidelity": {
+      "verified": 12
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [
+        {
+          "opid": "RecordGetDomainList",
+          "path": "/dns/v1/ncpdns/domain",
+          "method": "GET"
+        },
+        {
+          "opid": "RecordGetDomainDetail",
+          "path": "/dns/v1/ncpdns/domain/{domainId}",
+          "method": "GET"
+        },
+        {
+          "opid": "RecordGetRecordList",
+          "path": "/dns/v1/ncpdns/record/{domainId}",
+          "method": "GET"
+        }
+      ],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "global-traffic-manager",
+    "total_ops": 5,
+    "fidelity": {
+      "verified": 5
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [
+        {
+          "opid": "View",
+          "path": "/gtm/v1/domains",
+          "method": "GET"
+        },
+        {
+          "opid": "DetailView",
+          "path": "/gtm/v1/domains/{domainId}",
+          "method": "GET"
+        }
+      ],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "hadoop",
+    "total_ops": 13,
+    "fidelity": {
+      "verified": 13
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "kms",
+    "total_ops": 6,
+    "fidelity": {
+      "verified": 6
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "kms2",
+    "total_ops": 38,
+    "fidelity": {
+      "verified": 38
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "live-station",
+    "total_ops": 68,
+    "fidelity": {
+      "verified": 68
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "load-balancer",
+    "total_ops": 26,
+    "fidelity": {
+      "verified": 26
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "maiu",
+    "total_ops": 39,
+    "fidelity": {
+      "verified": 39
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "media-connect-center",
+    "total_ops": 20,
+    "fidelity": {
+      "verified": 20
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [
+        {
+          "opid": "DeptsCreate",
+          "path": "/ncloudmcc/v1/companies/{companyId}/depts/{externalKey}",
+          "method": "POST"
+        },
+        {
+          "opid": "PositionCreate",
+          "path": "/ncloudmcc/v1/companies/{companyId}/job-grades/{externalKey}",
+          "method": "POST"
+        },
+        {
+          "opid": "JobCreate",
+          "path": "/ncloudmcc/v1/companies/{companyId}/job-positions/{externalKey}",
+          "method": "POST"
+        },
+        {
+          "opid": "MemberCreate",
+          "path": "/ncloudmcc/v1/companies/{companyId}/users/{externalKey}",
+          "method": "POST"
+        }
+      ],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "mongodb",
+    "total_ops": 23,
+    "fidelity": {
+      "verified": 23
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "mssql",
+    "total_ops": 21,
+    "fidelity": {
+      "verified": 21
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "mysql",
+    "total_ops": 25,
+    "fidelity": {
+      "verified": 25
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "nas",
+    "total_ops": 17,
+    "fidelity": {
+      "verified": 17
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "naver",
+    "total_ops": 16,
+    "fidelity": {
+      "verified": 16
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [
+        {
+          "opid": "MapsStaticMapRaster",
+          "path": "/map-static/v2/lastversion",
+          "method": "GET"
+        }
+      ],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "ncloud-chat",
+    "total_ops": 23,
+    "fidelity": {
+      "verified": 23
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "nclue",
+    "total_ops": 21,
+    "fidelity": {
+      "verified": 21
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "nks",
+    "total_ops": 36,
+    "fidelity": {
+      "verified": 36
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "object-storage",
+    "total_ops": 9,
+    "fidelity": {
+      "verified": 9
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [
+        {
+          "opid": "ListBuckets",
+          "path": "/",
+          "method": "GET"
+        },
+        {
+          "opid": "Listobjectsv2",
+          "path": "/{bucket-name}",
+          "method": "GET"
+        },
+        {
+          "opid": "DeleteMultiPleObjects",
+          "path": "/{bucket-name}",
+          "method": "POST"
+        },
+        {
+          "opid": "ListParts",
+          "path": "/{bucket-name}/{object-name}",
+          "method": "GET"
+        },
+        {
+          "opid": "OptionSObjectCors",
+          "path": "/{bucket-name}/{object-name}",
+          "method": "POST"
+        }
+      ],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "ocr",
+    "total_ops": 7,
+    "fidelity": {
+      "verified": 7
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "organization",
+    "total_ops": 27,
+    "fidelity": {
+      "verified": 27
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "papago",
+    "total_ops": 9,
+    "fidelity": {
+      "verified": 9
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "platform",
+    "total_ops": 17,
+    "fidelity": {
+      "verified": 17
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [
+        {
+          "opid": "CostandUsageGetContractdemandcostList",
+          "path": "/cost/getContractDemandCostList",
+          "method": "GET"
+        },
+        {
+          "opid": "CostandUsageGetContractSummaryList",
+          "path": "/cost/getContractSummaryList",
+          "method": "GET"
+        },
+        {
+          "opid": "CostandUsageGetContractUsageList",
+          "path": "/cost/getContractUsageList",
+          "method": "GET"
+        },
+        {
+          "opid": "CostandUsageGetContractUsageListBydaily",
+          "path": "/cost/getContractUsageListByDaily",
+          "method": "GET"
+        },
+        {
+          "opid": "CostandUsageGetCostrelationCodeList",
+          "path": "/cost/getCostRelationCodeList",
+          "method": "GET"
+        },
+        {
+          "opid": "CostandUsageGetProductDemandcostList",
+          "path": "/cost/getProductDemandCostList",
+          "method": "GET"
+        },
+        {
+          "opid": "DisCountGetCoinHistoryList",
+          "path": "/discount/getCoinHistoryList",
+          "method": "GET"
+        },
+        {
+          "opid": "DisCountGetCreditHistoryList",
+          "path": "/discount/getCreditHistoryList",
+          "method": "GET"
+        },
+        {
+          "opid": "DisCountGetDisCountList",
+          "path": "/discount/getDiscountList",
+          "method": "GET"
+        },
+        {
+          "opid": "DisCountGetProductDemandcostbydisCountList",
+          "path": "/discount/getProductDemandCostByDiscountList",
+          "method": "GET"
+        },
+        {
+          "opid": "DisCountGetProductDisCountHistoryList",
+          "path": "/discount/getProductDiscountHistoryList",
+          "method": "GET"
+        },
+        {
+          "opid": "ListPriceGetPriceList",
+          "path": "/product/getPriceList",
+          "method": "GET"
+        },
+        {
+          "opid": "ListPriceGetProductCategoryList",
+          "path": "/product/getProductCategoryList",
+          "method": "GET"
+        },
+        {
+          "opid": "ListPriceGetProductList",
+          "path": "/product/getProductList",
+          "method": "GET"
+        },
+        {
+          "opid": "ListPriceGetProductPriceList",
+          "path": "/product/getProductPriceList",
+          "method": "GET"
+        }
+      ],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "postgresql",
+    "total_ops": 24,
+    "fidelity": {
+      "verified": 24
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "private-ca",
+    "total_ops": 14,
+    "fidelity": {
+      "verified": 14
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "resource-manager",
+    "total_ops": 6,
+    "fidelity": {
+      "verified": 6
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "secret-manager",
+    "total_ops": 32,
+    "fidelity": {
+      "verified": 32
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "security-monitoring",
+    "total_ops": 7,
+    "fidelity": {
+      "verified": 7
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "sens",
+    "total_ops": 29,
+    "fidelity": {
+      "verified": 29
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "server",
+    "total_ops": 91,
+    "fidelity": {
+      "verified": 91
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "ses",
+    "total_ops": 29,
+    "fidelity": {
+      "verified": 29
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "ses2",
+    "total_ops": 13,
+    "fidelity": {
+      "verified": 13
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "source-build",
+    "total_ops": 17,
+    "fidelity": {
+      "verified": 17
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "source-commit",
+    "total_ops": 6,
+    "fidelity": {
+      "verified": 6
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "source-deploy",
+    "total_ops": 33,
+    "fidelity": {
+      "verified": 33
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "source-pipeline",
+    "total_ops": 16,
+    "fidelity": {
+      "verified": 16
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "sso",
+    "total_ops": 121,
+    "fidelity": {
+      "verified": 121
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "sts",
+    "total_ops": 2,
+    "fidelity": {
+      "verified": 2
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "sub-account",
+    "total_ops": 103,
+    "fidelity": {
+      "verified": 103
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "vod-station",
+    "total_ops": 22,
+    "fidelity": {
+      "verified": 22
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "vpc",
+    "total_ops": 47,
+    "fidelity": {
+      "verified": 47
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "vpe",
+    "total_ops": 21,
+    "fidelity": {
+      "verified": 21
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "web-security-checker",
+    "total_ops": 6,
+    "fidelity": {
+      "verified": 6
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "webshell-behavior-detector",
+    "total_ops": 35,
+    "fidelity": {
+      "verified": 35
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  },
+  {
+    "service": "wms",
+    "total_ops": 5,
+    "fidelity": {
+      "verified": 5
+    },
+    "issues": {
+      "lowercase_opid": [],
+      "opid_collision": [],
+      "stub_path": [],
+      "stub_response": [],
+      "no_summary": [],
+      "no_source_url": [],
+      "odd_chars_opid": []
+    }
+  }
+]

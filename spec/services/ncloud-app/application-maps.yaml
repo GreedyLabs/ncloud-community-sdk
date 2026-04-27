@@ -1,0 +1,384 @@
+openapi: 3.0.3
+info:
+  title: application-maps
+  description: application-maps
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: false
+    gov: false
+
+  x-ncloud-nrn-todo: true
+servers:
+  - url: https://maps.apigw.ntruss.com
+    description: application-maps 민간
+    x-ncloud-env: public
+security:
+  # APIGW Client Key — issued per registered app, distinct from IAM creds.
+  - ncpApiKeyId: []
+    ncpApiKey: []
+paths:
+  /driving:
+    get:
+      operationId: Directions15
+      summary: Directions 15
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - application-maps
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/application-maps-directions15
+      parameters:
+        - name: start
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 출발지(경도,위도) <예시> start=127.12345,37.12345
+        - name: goal
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 목적지(경도,위도) ':'로 구분하여 최대 10개의 목적지 입력 가능 입력한 목적지 중 가장 적은 비용으로 도달할 수 있는 목적지에 대한 경로 조회 <예시> goal=123.45678,34.56789:124.56789,35.67890
+        - name: waypoints
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 경유지(경도,위도) '| (Pipe char)'로 구분하여 최대 15개의 경유지 입력 가능 동일 경유지의 좌표가 2개인 경우, ':'로 구분하여 입력 <예시> waypoints=127.12345,37.12345:127.23456,37.23456|128.12345,38.12345:128.23456,38.23456
+        - name: option
+          in: query
+          required: false
+          schema:
+            type: string
+          description: "경로 조회 옵션 ':'로 구분하여 최대 3개의 옵션 입력 가능 trafast | tracomfort | traoptimal (기본값) | traavoidtoll | traavoidcaronly trafast : 실시간 빠른 길 tracomfort : 실시간 편한 길 traoptimal : 실시간 최적 traavoidtoll : 무료 우선 traavoidcaronly : 자동차 전용 도로 회피 우선"
+        - name: cartype
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '차량 타입 1 (기본값) | 2 | 3 | 4 | 5 | 6 1 : 1종 소형차 2축 차량(윤폭 279.4 mm 이하 승용차, 소형 승합차, 소형 화물차) 2 : 2종 2축 차량(윤폭 279.4 mm 초과, 윤거 1,800 mm 이하 중형 승합차, 중형 화물차) 3 : 3종 대형차 2축 차량(윤폭 279.4 mm 초과, 윤거 1,800 mm 초과 대형 승합차, 2축 대형 화물차) 4 : 4종 3축 대형 화물차 5 : 5종 4축 이상 특수 화물차 6 : 1종 경형 자동차(배기량 1000 cc 미만으로 길이 3.6m, 너비 1.6 m, 높이 2.0 m 이하) 일반적인 승용차는 모두 1 입력 톨게이트 요금 계산에 활용되며, 차종에 따른 중량 또는 크기는 판단하지 않음'
+        - name: fueltype
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '연료 타입 gasoline (기본값) | highgradegasoline | diesel | lpg gasoline : 휘발유 highgradegasoline : 고급 휘발유 diesel : 경유 lpg : LPG 유류비 계산에 활용'
+        - name: mileage
+          in: query
+          required: false
+          schema:
+            type: number
+          description: '연비 사용하는 차량의 연비를 직접 설정하고자 할 때 입력 1~99 (기본값: 14) 예시 : 1L 당 14km 연비'
+        - name: lang
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '응답 결과 언어 ko (기본값) | en | ja | zh ko : 한국어 en : 영어 ja : 일본어 zh : 중국어 간체'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  currentDateTime:
+                    type: string
+                    description: 경로 조회 일시(yyyy-MM-ddTHH:mm:ss)
+                  route:
+                    type: object
+                    additionalProperties: true
+                    description: 경로 조회 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /gc:
+    get:
+      operationId: ReverseGeocoding
+      summary: Reverse Geocoding
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - application-maps
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/application-maps-reversegeocoding
+      parameters:
+        - name: coords
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 좌표(X 좌표,Y 좌표) <예시> coords=128.12345,37.98776
+        - name: sourcecrs
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '입력 좌표계 코드 EPSG:4326 (기본값) | EPSG:3857 | NHN:2048 EPSG:4326 : WGS84 경위도 EPSG:3857 : 구글 맵 NHN:2048 : UTM-K 지원되는 좌표계 코드는 좌표 체계 참조'
+        - name: targetcrs
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '출력 좌표계 코드 EPSG:4326 (기본값) | EPSG:3857 | NHN:2048 EPSG:4326 : WGS84 경위도 EPSG:3857 : 구글 맵 NHN:2048 : UTM-K 지원되는 좌표계 코드는 좌표 체계 참조'
+        - name: orders
+          in: query
+          required: false
+          schema:
+            type: string
+          description: "변환 타입 legalcode (기본값) | admcode (기본값) | addr | roadaddr legalcode : 법정동으로 변환 admcode : 행정동으로 변환 addr : 지번 주소로 변환 roadaddr : 도로명 주소로 변환 ','로 구분하여 여러 옵션 값을 입력할 수 있으며, 입력순으로 결과 표시 해안선 부근이나 신규 택지 등 상세 주소가 없는 지역의 좌표 변환 시 addr 또는 roadaddr 로 요청하면 결과가 반환되지 않을 수 있으나, legalcode 또는 admcode 로 요청하면 법정동 또는 행정동 단위 주소 확인 가능 <예시> orders=legalcode,addr"
+        - name: output
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 응답 결과의 포맷 유형 xml (기본값) | json
+        - name: callback
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 콜백 이름 JSONP 통신을 위해 콜백 처리 시 이용 입력한 이름으로 JSON 데이터를 감싸서 반환 output 이 json 인 경우에만 입력 가능 <예시> callback=abc
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 상태에 대한 정보
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '응답 결과: results'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /geocode:
+    get:
+      operationId: Geocoding
+      summary: Geocoding
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - application-maps
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/application-maps-geocoding
+      parameters:
+        - name: query
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 검색할 주소
+        - name: coordinate
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 검색 중심 좌표(경도,위도) 입력한 좌표와 근접한 순으로 검색 결과 표시
+        - name: filter
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '검색 결과 필터 HCODE | BCODE hCODE : 행정동 코드 BCODE : 법정동 코드 필터 타입@코드1;코드2;...... 형식으로 입력 <예시> HCODE@4113554500;4113555000'
+        - name: language
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '응답 결과 언어 kor (기본값) | eng kor : 한국어 eng : 영어'
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: number
+          description: 페이지 번호 1 (기본값)
+        - name: count
+          in: query
+          required: false
+          schema:
+            type: number
+          description: '결과 목록 크기 1~100 (기본값: 10)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: 응답 코드
+                  meta:
+                    type: object
+                    additionalProperties: true
+                    description: 메타 데이터
+                  addresses:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '주소 정보 목록: addresses'
+                  errorMessage:
+                    type: string
+                    description: 오류 메시지 500 오류(알 수 없는 오류) 발생 시에만 표시
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /map-static/v2/lastversion:
+    get:
+      operationId: Static
+      summary: Static Map
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - application-maps
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/application-maps-static
+      parameters:
+        - name: crs
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '좌표 체계 EPSG:4326 (기본값) | NHN:2048 | NHN:128 | EPSG:4258 | EPSG:4162 | EPSG:2096 | EPSG:2097 | EPSG:2098 | EPSG:3857 | EPSG:900913 | EPSG:5179 EPSG:4326 : WGS84 경위도 NHN:2048 : UTM-K NHN:128 : KATECH(TM128) EPSG:4258 : GRS80 경위도 EPSG:4162 : Bessel 경위도 EPSG:2096 : Korea East Belt EPSG:2097 : Korea Central Belt EPSG:2098 : Korea West Belt EPSG:3857 , EPSG:900913 : 구글 맵 EPSG:5179 : Korea 2000 / Unified CS'
+        - name: center
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '중심 좌표(X 좌표,Y 좌표) X 좌표, Y 좌표 순서는 좌표 체계 정의에 따름 <예시> WGS84 경위도 좌표 체계: center=경도,위도 markers 미입력 시, 필수 입력 level 입력 시, 필수 입력'
+        - name: level
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 줌 레벨 0~20 markers 미입력 시, 필수 입력 level 입력 시, 필수 입력
+        - name: w , h
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: '가로, 세로 이미지 크기 w=int&h=int 형식으로 1~1,024 픽셀 지원 w : 가로 크기 h : 세로 크기'
+        - name: maptype
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '지도 유형 basic (기본값) | traffic | satellite | satellite_base | terrain basic : 일반 지도 traffic : 교통 정보 지도(일반 지도 기반) satellite : 위성 지도 satellite_base : 위성 배경 지도 terrain : 지형도'
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '지도 이미지 형식 jpg / jpeg (기본값) | png8 | png jpg / jpeg : 압축 품질 85%, 24비트 png8 : 8비트 png : 24비트'
+        - name: scale
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '해상도 1 (기본값) | 2 1 : 저해상도용 이미지 요청. 요청한 w , h 크기의 이미지를 256 x 256 타일 기반으로 생성해서 반환 2 : 고해상도용 이미지 요청. 요청한 w , h 크기의 이미지를 512 x 512 타일 기반으로 생성해서 반환( scale=1 과 동일한 지도 서비스 지역이 반환되지만 각 크기에 포함되는 픽셀은 2배 증가)'
+        - name: markers
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 마커 설정 center , level 미입력 시, 필수 입력 center , level 미입력 시 설정한 마커에 최적화된 줌 레벨과 위치로 지도 표시 최대 20개 입력 가능 '| (Pipe char)'로 구분하여 옵션 설정 가능 markers 참조 <예시> markers=type:n|size:tiny|color:Blue|pos:126.9810479%2037.5695075&markers=type:d|size:mid|color:Default|pos:123.524712%2024.1236547
+        - name: lang
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '라벨 언어 ko (기본값) | en | ja | zh ko : 한국어 en : 영어 ja : 일본어 zh : 중국어 간체'
+        - name: dataversion
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 버전 정보 Static Map API의 이미지 캐싱으로, 클라이언트에서 동일 URL 요청 시 원본 서버의 배경 타일 업데이트가 반영되지 않는 문제를 해결하기 위해 입력 배경 타일에 대한 최신성 이슈가 있는 경우에 입력 권장 버전 정보가 주기적으로 업데이트되므로 작업의 효율성을 위해 배치성 작업을 권장 권장 업데이트 주기( interval )에 따라 일일 확인 횟수를 설정하여 정해진 시간에 확인한 버전 정보를 저장한 후 Static Map API 호출 시 사용하는 것을 권장 Data Version API 를 통해 version 확인
+        - name: version
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '버전 정보 major_version.minor_version 형식 major_version : 정기 업데이트 시 변경, 원타일 맵 메이저 버전과 동일하게 유지(2달에 1번 업데이트) minor_version : 부분 업데이트 시 버전 올림(1달에 1~2번 업데이트)'
+        - name: interval
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+          description: 권장 업데이트 주기(초)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+components:
+  securitySchemes:
+    ncpApiKeyId:
+      type: apiKey
+      in: header
+      name: X-NCP-APIGW-API-KEY-ID
+      description: APIGW Client ID issued when an app is registered in NCP console.
+    ncpApiKey:
+      type: apiKey
+      in: header
+      name: X-NCP-APIGW-API-KEY
+      description: APIGW Client Secret issued when an app is registered in NCP console.
+  schemas:
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

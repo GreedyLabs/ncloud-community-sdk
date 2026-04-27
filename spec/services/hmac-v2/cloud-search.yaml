@@ -1,0 +1,2996 @@
+openapi: 3.0.3
+info:
+  title: Cloud Search
+  description: Cloud Search
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: false
+    gov: true
+
+  x-ncloud-nrn:
+
+    productName: CloudSearch
+    resource_types:
+      - Domain
+
+servers:
+  - url: https://cloudsearch.apigw.ntruss.com
+    description: cloud-search 민간
+    x-ncloud-env: public
+  - url: https://cloudsearch.apigw.gov-ntruss.com
+    description: cloud-search 공공
+    x-ncloud-env: gov
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /CloudSearch/real/v1/db_upload/check_connection:
+    post:
+      operationId: PostDbUploadCheckConnection
+      summary: 예시
+      description: 도메인에 DB upload 기능을 실행전 connection 을 확인합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-postdbuploadcheckconnection
+      parameters:
+        - name: dbKind
+          in: query
+          required: false
+          schema:
+            type: string
+          description: DB 종류
+        - name: host
+          in: query
+          required: false
+          schema:
+            type: string
+          description: DB의 IP
+        - name: port
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: DB 포트
+        - name: user
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 사용자 아이디
+        - name: password
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 비밀번호
+        - name: db
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Database 이름
+        - name: charset
+          in: query
+          required: false
+          schema:
+            type: string
+          description: DB의 character
+        - name: connectTimeout
+          in: query
+          required: false
+          schema:
+            type: string
+          description: connection 타임아웃, 단위 second
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/db_upload/check_connection/vpc?region=KR:
+    post:
+      operationId: PostDbUploadCheckConnectionVpc
+      summary: 예시
+      description: 도메인에 DB upload 기능을 실행 전 connection을 확인합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-postdbuploadcheckconnectionvpc
+      parameters:
+        - name: region
+          in: query
+          required: false
+          schema:
+            type: string
+          description: DB 서버가 설치된 리전 코드
+        - name: dbKind
+          in: query
+          required: false
+          schema:
+            type: string
+          description: DB 종류
+        - name: host
+          in: query
+          required: false
+          schema:
+            type: string
+          description: DB 의 Instance ID
+        - name: port
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: DB 포트
+        - name: user
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 사용자 아이디
+        - name: password
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 비밀번호
+        - name: db
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Database 이름
+        - name: charset
+          in: query
+          required: false
+          schema:
+            type: string
+          description: DB 의 character
+        - name: connectTimeout
+          in: query
+          required: false
+          schema:
+            type: string
+          description: connection 타임아웃, 단위 second
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/db_upload/mapping:
+    post:
+      operationId: PostDbUploadMapping
+      summary: 예시
+      description: user의 DB에 접근하여 table 정보를 가져온후, cloud search의 schema에 맞게 매핑하여 반환합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-postdbuploadmapping
+      parameters:
+        - name: dbKind
+          in: query
+          required: false
+          schema:
+            type: string
+          description: DB 종류
+        - name: host
+          in: query
+          required: false
+          schema:
+            type: string
+          description: DB의 IP
+        - name: port
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: DB 포트
+        - name: user
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 사용자 아이디
+        - name: password
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 비밀번호
+        - name: db
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Database 이름
+        - name: charset
+          in: query
+          required: false
+          schema:
+            type: string
+          description: DB의 character
+        - name: table
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 테이블
+        - name: connectTimeout
+          in: query
+          required: false
+          schema:
+            type: string
+          description: connection 타임아웃, 단위 second
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  document:
+                    type: object
+                    additionalProperties: true
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/db_upload/mapping/vpc:
+    post:
+      operationId: PostDbUploadMappingVpc
+      summary: 예시
+      description: user의 db에 접근하여 table 정보를 가져온후, cloud search의 schema에 맞게 매핑하여 반환합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-postdbuploadmappingvpc
+      parameters:
+        - name: region
+          in: query
+          required: false
+          schema:
+            type: string
+          description: DB 서버가 설치된 리전 코드
+        - name: dbKind
+          in: query
+          required: false
+          schema:
+            type: string
+          description: DB 종류
+        - name: host
+          in: query
+          required: false
+          schema:
+            type: string
+          description: DB의 Instance ID
+        - name: port
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: DB 포트
+        - name: user
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 사용자 아이디
+        - name: password
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 비밀번호
+        - name: db
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Database 이름
+        - name: charset
+          in: query
+          required: false
+          schema:
+            type: string
+          description: DB의 character
+        - name: table
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 테이블
+        - name: connectTimeout
+          in: query
+          required: false
+          schema:
+            type: string
+          description: connection 타임아웃, 단위 second
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  document:
+                    type: object
+                    additionalProperties: true
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/db_upload/table:
+    post:
+      operationId: PostDbUploadTable
+      summary: 예시
+      description: user의 DB에 접근하여 table list를 가져옵니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-postdbuploadtable
+      parameters:
+        - name: dbKind
+          in: query
+          required: false
+          schema:
+            type: string
+          description: DB 종류
+        - name: host
+          in: query
+          required: false
+          schema:
+            type: string
+          description: DB의 IP
+        - name: port
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: DB 포트
+        - name: user
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 사용자 아이디
+        - name: password
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 비밀번호
+        - name: db
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Database 이름
+        - name: charset
+          in: query
+          required: false
+          schema:
+            type: string
+          description: DB의 character
+        - name: connectTimeout
+          in: query
+          required: false
+          schema:
+            type: string
+          description: connection 타임아웃, 단위 second
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/db_upload/table/vpc:
+    post:
+      operationId: PostDbUploadTableVpc
+      summary: 예시
+      description: user의 DB에 접근하여 table list를 가져옵니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-postdbuploadtablevpc
+      parameters:
+        - name: region
+          in: query
+          required: false
+          schema:
+            type: string
+          description: DB 서버가 설치된 리전 코드
+        - name: dbKind
+          in: query
+          required: false
+          schema:
+            type: string
+          description: DB 종류
+        - name: host
+          in: query
+          required: false
+          schema:
+            type: string
+          description: DB의 Instance ID
+        - name: port
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: DB 포트
+        - name: user
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 사용자 아이디
+        - name: password
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 비밀번호
+        - name: db
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Database 이름
+        - name: charset
+          in: query
+          required: false
+          schema:
+            type: string
+          description: DB의 character
+        - name: connectTimeout
+          in: query
+          required: false
+          schema:
+            type: string
+          description: connection 타임아웃, 단위 second
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/domain:
+    get:
+      operationId: GetDomainList
+      summary: 예시
+      description: 전체 도메인 목록을 조회합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-getdomainlist
+      parameters:
+        - name: haveContainer
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: 컨테이너 정보 조회 여부
+        - name: haveUsage
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: 도메인 사용량 정보 조회 여부
+      responses:
+        '200':
+          description: |
+            OK. Verified against the live NCP API on 2026-04-26: the response
+            body is a top-level JSON array of domain objects, not the wrapped
+            object shape implied by earlier docparse runs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: CreateDomain
+      summary: 예시
+      description: 도메인을 생성합니다 자동 완성 설정 및 수정 은 도메인 생성 이 후 가능합니다. 색인(index)은 도메인 생성 이 후 추가는 가능하지만, 생성 후 삭제는 불가능합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-createdomain
+      parameters:
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 생성할 Domain 이름
+        - name: type
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '컨테이너 규모 설정 small: Standard - 4: 메모리 4GB / 스토리지 30GB / 권장 최대 문서수 100만 개 / 권장 색인 2개 medium: Standard - 8: 메모리 8GB / 스토리지 50GB / 권장 최대 문서수 200만 개 / 권장 색인 3개 large: Standard - 16: 메모리 16GB / 스토리지 100GB / 권장 최대 문서수 400만 개 / 권장 색인 4개 xlarge: Standard - 32: 메모리 32GB / 스토리지 200GB / 권장 최대 문서수 800만 개 / 권장 색인 5개 xxlarge: High Memory - 64: 메모리 64GB / 스토리지 400GB / 권장 최대 문서수 1600만 개 / 권장 색인 6개 xxxlarge: High Memory - 128: 메모리 128GB / 스토리지 800GB / 권장 최대 문서수 3200만 개 / 권장 색인 7개'
+        - name: indexerCount
+          in: query
+          required: false
+          schema:
+            type: number
+          description: 색인을 담당하는 컨테이너의 개수
+        - name: searcherCount
+          in: query
+          required: false
+          schema:
+            type: number
+          description: 검색을 담당하는 컨테이너의 개수
+        - name: description
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 생성할 도메인에 대한 설명
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/domain/check/{name}:
+    get:
+      operationId: CheckDomainName
+      summary: 예시
+      description: 도메인의 존재 여부를 확인합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-checkdomainname
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 도메인 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/domain/{name}:
+    put:
+      operationId: ChangeDomain
+      summary: 예시
+      description: 도메인 정보를 수정합니다
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-changedomain
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 도메인 이름
+        - name: description
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 수정할 도메인에 대한 설명
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: DeleteDomain
+      summary: 예시
+      description: 도메인을 삭제합니다
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-deletedomain
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 Domain 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/domain/{name}/analysis/count:
+    post:
+      operationId: AnalysisCount
+      summary: 예시
+      description: 사용된 검색 Query 들을 분석하여 field별 Count 집계를 합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-analysiscount
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 Domain 이름
+        - name: from
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '시작 시간(UTC, ex: 20161027T171340Z )'
+        - name: to
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '종료 시간(UTC, ex: 20161027T171340Z )'
+        - name: field
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 집계 field 설정
+        - name: max_size
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 가져올 최대 Size
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  key:
+                    type: string
+                    description: 선택한 field에 해당하는 값
+                  doc_count:
+                    type: number
+                    description: 선택한 field의 count
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/domain/{name}/analysis/count_group_by:
+    post:
+      operationId: AnalysisGroupByCount
+      summary: 예시
+      description: 사용된 검색 Query 들을 분석하여 field별 Group By 된 Count 집계를 합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-analysisgroupbycount
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 Domain 이름
+        - name: from
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '시작 시간(UTC, ex: 20161027T171340Z )'
+        - name: to
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '종료 시간(UTC, ex: 20161027T171340Z )'
+        - name: groupBy
+          in: query
+          required: false
+          schema:
+            type: string
+          description: groupBy 설정
+        - name: aggregate
+          in: query
+          required: false
+          schema:
+            type: string
+          description: aggregate 설정
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  key:
+                    type: string
+                    description: Group by 된 결과의 기준 값
+                  doc_count:
+                    type: number
+                    description: 기준 값에 해당하는 모든 값의 합
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/domain/{name}/analysis/timeseries:
+    post:
+      operationId: AnalysisTimeSeries
+      summary: 예시
+      description: 지정한 시간에 사용된 검색 Query 들을 분석하여 field 별로 계산합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-analysistimeseries
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 Domain 이름
+        - name: from
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '시작 시간(UTC, ex: 20161027T171340Z )'
+        - name: to
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '종료 시간(UTC, ex: 20161027T171340Z )'
+        - name: field
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 집계 field 설정
+        - name: field_value
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 해당 파라미터와 일치하는 field value 만 리턴
+        - name: max_size
+          in: query
+          required: false
+          schema:
+            type: string
+          description: aggregate 할 key의 최대 개수
+        - name: interval
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'aggregation 하는 시간 / 단위 : 분'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  key_as_string:
+                    type: string
+                    description: aggregate 기준 시간
+                  key:
+                    type: number
+                    description: aggreagte 기준 시간(milliseconds)
+                  doc_count:
+                    type: number
+                    description: 기준 시간 동안 aggregate 된 결과의 합
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/domain/{name}/autocomplete:
+    get:
+      operationId: GetAutoComplete
+      summary: 예시
+      description: 도메인에 설정된 자동 완성 설정을 조회합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-getautocomplete
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 Domain 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  indexName:
+                    type: string
+                    description: 자동 완성 검색으로 설정된 색인 이름
+                  sectionName:
+                    type: string
+                    description: 자동 완성 검색으로 설정된 섹션 이름
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    put:
+      operationId: PutAutoComplete
+      summary: 예시
+      description: 생성한 도메인에 자동 완성 검색을 설정하거나 수정합니다. 해당 요청 이후 자동 완성 색인 갱신이 수행됩니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-putautocomplete
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 Domain 이름
+        - name: indexName
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 색인 이름
+        - name: sectionName
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 섹션 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/domain/{name}/autocomplete/history:
+    get:
+      operationId: GetAutoCompleteHistory
+      summary: 예시
+      description: 도메인에 설정된 자동 완성의 변경 이력을 조회합니다. 자동 완성 설정 이력이 있을 때에만 데이터가 출력됩니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-getautocompletehistory
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 자동 완성 설정 이력을 조회하고자 하는 Domain 이름
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: number
+          description: Pagination Limit
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: number
+          description: Pagination Offset
+        - name: order
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 결과 정렬 기준
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/domain/{name}/container:
+    get:
+      operationId: GetContainerList
+      summary: 예시
+      description: 해당 도메인의 컨테이너 목록을 조회합니다
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-getcontainerlist
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 Domain 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    description: indexer, searcher
+                  containerStatus:
+                    type: number
+                    description: created, warmup, running, clous_exiting, failed, unknown
+                  memoryUsageBytes:
+                    type: number
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/domain/{name}/container/searcher:
+    patch:
+      operationId: PatchSearchErContainer
+      summary: 예시
+      description: 해당 도메인의 검색용 컨테이너 개수를 변경합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-patchsearchercontainer
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 Domain 이름
+        - name: count
+          in: query
+          required: false
+          schema:
+            type: number
+          description: 검색용 컨테이너 요청 개수
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/domain/{name}/document/manage:
+    post:
+      operationId: ManageDocument
+      summary: 예시
+      description: 문서의 insert(색인), update, upsert, delete 요청을 수행합니다. 모든 요청은 POST 메서드를 사용하며, 해당 요청을 수행하기 이전에 Domain이 생성 되어져 있어야 합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-managedocument
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 Domain 이름
+        - name: requests[]
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: object
+              additionalProperties: true
+          description: 문서 요청 목록
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  request_id:
+                    type: string
+                    description: indexer가 반환하는 update_time 값
+                  total_document_count:
+                    type: number
+                    description: 요청에 포함된 개별 요청 개수
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/domain/{name}/document/manage/db_upload:
+    get:
+      operationId: GetDbUpload
+      summary: 예시
+      description: 도메인에 DB upload 기능 사용이력을 조회 합니다. DB upload 기능 사용하였을때만 데이터가 출력됩니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-getdbupload
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 자동 완성 설정 이력을 조회하고자 하는 Domain 이름
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: number
+          description: Pagination Limit
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: number
+          description: Pagination Offset
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cnt:
+                    type: number
+                    description: 전체 데이터 개수
+                  page:
+                    type: number
+                    description: 페이지
+                  limit:
+                    type: number
+                    description: 리밋
+                  userDbUploadList:
+                    type: string
+                    description: db upload 호출정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: PostDbUpload
+      summary: 예시
+      description: 도메인에 DB upload 기능을 실행합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-postdbupload
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Domain 이름
+        - name: dbKind
+          in: query
+          required: false
+          schema:
+            type: string
+          description: DB 종류
+        - name: host
+          in: query
+          required: false
+          schema:
+            type: string
+          description: DB 의 IP
+        - name: port
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: DB 포트
+        - name: user
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 사용자 아이디
+        - name: password
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 비밀번호
+        - name: db
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Database 이름
+        - name: charset
+          in: query
+          required: false
+          schema:
+            type: string
+          description: DB 의 character
+        - name: keyField
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 적용할 키칼럼
+        - name: indexTypeField
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '- 문서의 삭제, 추가, 업데이트를 구별하기 위한 칼럼 - 사용하려는 DB의 칼럼에는 insert, upsert, update, delete 값만 들어감 - 칼럼이 따로 지정이 안되어 있는경우 upsert로 처리됨'
+        - name: sql
+          in: query
+          required: false
+          schema:
+            type: string
+          description: DB query
+        - name: connectTimeout
+          in: query
+          required: false
+          schema:
+            type: string
+          description: connection 타임아웃, 단위 second
+        - name: Vasili
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: Swen
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: Davita
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: Berri
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/domain/{name}/document/manage/db_upload/vpc:
+    post:
+      operationId: PostDbUploadVpc
+      summary: 예시
+      description: 도메인에 DB upload 기능을 실행합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-postdbuploadvpc
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Domain 이름
+        - name: region
+          in: query
+          required: false
+          schema:
+            type: string
+          description: DB 서버가 설치된 리전 코드
+        - name: dbKind
+          in: query
+          required: false
+          schema:
+            type: string
+          description: DB 종류
+        - name: host
+          in: query
+          required: false
+          schema:
+            type: string
+          description: DB 의 Instance ID
+        - name: port
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: DB 포트
+        - name: user
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 사용자 아이디
+        - name: password
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 비밀번호
+        - name: db
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Database 이름
+        - name: charset
+          in: query
+          required: false
+          schema:
+            type: string
+          description: DB 의 character
+        - name: keyField
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 적용할 키칼럼
+        - name: indexTypeField
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '- 문서의 삭제, 추가, 업데이트 를 구별하기 위한 칼럼 - 사용하려는 DB 의 칼럼에는 insert, upsert, update, delete 값만 들어감 - 칼럼이 따로 지정이 안되어 있는경우 upsert로 처리됨'
+        - name: sql
+          in: query
+          required: false
+          schema:
+            type: string
+          description: DB query
+        - name: connectTimeout
+          in: query
+          required: false
+          schema:
+            type: string
+          description: connection 타임아웃, 단위 second
+        - name: Vasili
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: Swen
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: Davita
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: Berri
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/domain/{name}/document/manage/object_storage:
+    post:
+      operationId: ManageObjectstorageDocument
+      summary: 예시
+      description: Object Storage를 통해 대용량 문서 업로드(최대 100MB)를 수행할 수 있습니다. 문서에 대한 자세한 설명은 Document 관리 를 통해 확인해주세요.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-manageobjectstoragedocument
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 Domain 이름
+        - name: bucket
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 업로드 할 문서가 위치한 버킷 이름
+        - name: objectPath
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 업로드 할 문서의 경로
+        - name: region
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 버킷의 리전 정보
+        - name: pruning
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: 기존 색인된 문서의 삭제 여부(true로 할 경우 기존에 색인된 문서들을 삭제하고, 업로드 요청한 문서의 색인을 수행함)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/domain/{name}/document/search:
+    post:
+      operationId: SearchDocument
+      summary: Document 검색
+      description: 색인별로 생성한 문서에 대해 검색을 수행합니다. 해당 요청을 수행하기 이전에 Domain 생성 및 Document 관리 이 되어져 있어야 합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-searchdocument
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 Domain 이름
+        - name: start
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 검색 결과의 시작 랭킹
+        - name: display
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 검색 결과의 개수
+        - name: result_format
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 검색 결과 포맷 지정, 현재는 json 포맷만 지원
+        - name: index_name
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 검색 할 색인의 이름
+        - name: queryList
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 검색 요청 쿼리
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: object
+            additionalProperties: true
+          description: '검색 결과 정렬 기준을 가지는 Map 형태의 Object key : 정렬 기준 섹션 value : 정렬 방식 지정(desc, asc)'
+        - name: scope
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 제한 검색 설정 목록
+        - name: key_scope
+          in: query
+          required: false
+          schema:
+            type: object
+            additionalProperties: true
+          description: '제한 검색을 설정하는 Map 형태의 Object key : 제한 검색 방식 선택 value : 제한 검색 방식에 따른 값 설정 key 옵션 종류 - exist, nexist: 지정한 값이 존재하는 문서 속성으로 검색 결과를 제한'
+        - name: user_scope
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 사용자가 직접 scope 수식을 입력, 입력된 수식은 'scope' 파라미터의 내용과 and 조건으로 추가됨 ex) price가 2000 초과 5000 미인 문서를 찾을 때,"(dp_price > '2000') and (dp_price < '5000')"
+        - name: highlighting
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 검색 결과 구문 강조 설정
+        - name: display_section
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '검색 결과로 보여줄 섹션을 지정(지정하지 않으면 모든 섹션 데이터 출력) 예 : 가격과 이름만 결과로 출력하고 싶을 때, "price, name" 여러 섹션 조합 가능 예 : 브랜드와 이름을 하나의 결과로 출력하고 싶을 때, "brand+name"'
+        - name: passage
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 검색 결과 추출 방식 설정
+        - name: aggregate
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 검색 결과 요약 설정 목록
+        - name: result_processing
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 검색 결과 후처리 설정
+        - name: setting
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 검색 시 기타 환경 설정
+        - name: ip_str
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'IP type format 이여야 함 예 : 10.78.140.200'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    description: 응답 타입
+                  version:
+                    type: string
+                  status:
+                    type: number
+                    description: 응답 상태
+                  message:
+                    type: string
+                    description: 오류 메시지
+                  time_zone:
+                    type: string
+                    description: 타임존
+                  elapsed_time:
+                    type: number
+                    description: 검색 시 걸린 시간
+                  term:
+                    type: object
+                    additionalProperties: true
+                    description: 질의 내용
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 검색 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/domain/{name}/document/search/autocomplete:
+    get:
+      operationId: SearchAutoComplete
+      summary: 예시
+      description: 자동 완성 설정 이후 해당 요청을 사용할 수 있습니다. 요청한 검색어의 자동 완성 색인을 검색합니다. GET, POST 요청을 지원하며, 두 요청이 동일하여 선택적으로 이용할 수 있습니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-searchautocomplete
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 검색하고자 하는 도메인 이름
+        - name: type
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '검색하고자 하는 타입 term: 색인 단위의 자동 완성 검색 section: 섹션 단위의 자동 완성 검색'
+        - name: query
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 검색어
+        - name: AutocompleteSearchQuery
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 자동 완성 검색 질의
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    description: 자동 완성 검색 요청 타입
+                  item_count:
+                    type: number
+                    description: 자동 완성 검색 결과 개수
+                  items:
+                    type: string
+                    description: 자동 완성 검색 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/domain/{name}/monitoring/apicall_count:
+    get:
+      operationId: GetMonitoringItem
+      summary: 예시
+      description: 설정한 Monitoring data를 보여줍니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-getmonitoringitem
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 Domain 이름
+        - name: monitoring_item
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Monitoring 항목 : document_upload, reindex, autocomplete_reindex, search_response'
+        - name: interval
+          in: query
+          required: false
+          schema:
+            type: number
+          description: '조회 간격 : 60s, 300s, 1800s, 7200s, 86400s'
+        - name: from
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '시작 시간(UTC, ex: 20161027T171340Z )'
+        - name: to
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '종료 시간(UTC, ex: 20161027T171340Z )'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  '-':
+                    type: string
+                    description: 'index 0 : unixtime, index 1 : 값'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/domain/{name}/quota:
+    get:
+      operationId: GetQuotaList
+      summary: 예시
+      description: 도메인에 설정된 사용량 제한을 조회합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-getquotalist
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 Domain 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/domain/{name}/quota/{type}:
+    put:
+      operationId: PutQuota
+      summary: 예시
+      description: 아래 항목에 대해 도메인에 사용량 제한을 설정할 수 있습니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-putquota
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 Domain 이름
+        - name: type
+          in: path
+          required: true
+          schema:
+            type: string
+          description: search_response, document_upload, reindex, autocomplete_reindex
+        - name: interval
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '사용량 초기화 주기 1Month(reset: 매달 1일, 0:00:00) 1Day(reset: 00:00)'
+        - name: quota
+          in: query
+          required: false
+          schema:
+            type: number
+          description: 제한 사용량
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/domain/{name}/ranking:
+    get:
+      operationId: GetRankingList
+      summary: 예시
+      description: 해당 Domain의 전체 Ranking 목록을 조회합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-getrankinglist
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 Domain 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  list:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: Ranking 리스트
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/domain/{name}/ranking/{rankingName}:
+    get:
+      operationId: GetRanking
+      summary: 예시
+      description: 해당 Domain의 한 Ranking을 조회합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-getranking
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 Domain 이름
+        - name: rankingName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 Ranking 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: Ranking 이름
+                  code:
+                    type: string
+                    description: Ranking 수식
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: CreateRanking
+      summary: 예시
+      description: 해당 Domain에 Ranking을 생성합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-createranking
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 Domain 이름
+        - name: rankingName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 Ranking 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    patch:
+      operationId: ChangeRanking
+      summary: 예시
+      description: 해당 Domain에 기본 Ranking을 변경합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-changeranking
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 Domain 이름
+        - name: rankingName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 Ranking 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: DeleteRanking
+      summary: 예시
+      description: 해당 Domain의 Ranking을 삭제합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-deleteranking
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 Domain 이름
+        - name: rankingName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 Ranking 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/domain/{name}/schema:
+    get:
+      operationId: GetSchema
+      summary: 예시
+      description: 해당 도메인에 설정된 검색 설정(Schema)를 조회합니다. 해당 요청을 수행하기 이전에 Domain 생성 이 되어져 있어야 합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-getschema
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 Domain 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  document:
+                    type: string
+                    description: 검색 설정
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    put:
+      operationId: ChangeSchema
+      summary: 예시
+      description: Schema 변경 시, 색인은 추가만 가능합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-changeschema
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 Domain 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/domain/{name}/schema/history:
+    get:
+      operationId: GetSchemaHistory
+      summary: 예시
+      description: 해당 도메인에 설정된 검색 설정(Schema)의 이력을 조회합니다. 해당 요청을 수행하기 이전에 Domain 생성 이 되어져 있어야 합니다. Schema 변경 이력이 있을 때에만 데이터가 출력됩니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-getschemahistory
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Schema 이력을 조회하고자 하는 Domain 이름
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: number
+          description: Pagination Limit
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: number
+          description: Pagination Offset
+        - name: order
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 결과 정렬 기준
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  createdDate:
+                    type: string
+                    description: Schema 변경 시간
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/domain/{name}/stopword:
+    get:
+      operationId: GetStopWordList
+      summary: 예시
+      description: 생성한 Stopword(불용어) 정책의 목록을 조회합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-getstopwordlist
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 Domain 이름
+        - name: hasWordList
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: 요청 결과에 stopword로 등록된 단어 목록 포함 여부
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/domain/{name}/stopword/{rule_name}:
+    get:
+      operationId: GetStopWord
+      summary: 예시
+      description: 생성한 Stopword(불용어) 정책을 조회합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-getstopword
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: rule_name
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: hasWordList
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: 요청 결과에 stopword로 등록된 단어 목록 포함 여부
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    description: filter, exact
+                  case_sensitive:
+                    type: boolean
+                    description: true, false
+                  word_list:
+                    type: string
+                  word_list_length:
+                    type: number
+                  rule_name:
+                    type: string
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: PostStopWord
+      summary: 예시
+      description: 입력된 검색어 중에서 의미없는 단어(Stopword, 불용어)를 제거하도록 설정합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-poststopword
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 Domain 이름
+        - name: rule_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성할 Stopword 규칙 이름
+        - name: type
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Stopword 규칙 종류 filter: 부분 매칭, 등록한 불용어와 검색어 일부가 일치하면 검색어 중 매칭되는 부분 제거 exact: 완전 매칭, 등록한 불용어와 검색어가 정확히 일치하면 검색어 중 매칭되는 단어 제거'
+        - name: word_list
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Stopword로 설정할 단어 목록
+        - name: case_sensitive
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: Stopword로 설정할 단어의 대소문자 구분 여부
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: DeleteStopWord
+      summary: 예시
+      description: 설정한 Stopword(불용어) 정책을 삭제합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-deletestopword
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 Domain 이름
+        - name: rule_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 삭제할 Stopword 규칙 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/domain/{name}/synonym:
+    get:
+      operationId: GetSynonymList
+      summary: 예시
+      description: 도메인에 설정된 동의어 사전 목록을 조회합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-getsynonymlist
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 Domain 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: PostSynonym
+      summary: 예시
+      description: 사용자 동의어 사전을 설정합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-postsynonym
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 Domain 이름
+        - name: description
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 생성할 동의어 사전에 대한 설명
+        - name: wordList
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 동의어로 설정할 단어 목록
+        - name: version
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 생성할 동의어 사전의 버전
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/domain/{name}/synonym/check/{synoName}:
+    get:
+      operationId: CheckSynonymname
+      summary: 예시
+      description: 동의어 사전 중복 여부를 확인합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-checksynonymname
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 도메인 이름
+        - name: synoName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 동의어 사전 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/domain/{name}/synonym/names:
+    get:
+      operationId: GetSynonymnameList
+      summary: 예시
+      description: 도메인에 설정된 동의어 사전 이름 목록을 조회합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-getsynonymnamelist
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 Domain 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  '-':
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 동의어 사전 이름 목록
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/domain/{name}/synonym/{synoName}:
+    get:
+      operationId: GetSynonym
+      summary: 예시
+      description: 도메인에 설정된 동의어 사전의 상세 정보를 조회합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-getsynonym
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 Domain 이름
+        - name: synoName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 동의어 사전 이름
+        - name: version
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 동의어 사전 버전
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: 동의어 사전 이름
+                  serviceName:
+                    type: string
+                    description: 동의어 사전 서비스 이름
+                  version:
+                    type: string
+                    description: 동의어 사전에 설정된 버전
+                  description:
+                    type: string
+                    description: 동의어 사전 설명
+                  wordList:
+                    type: string
+                    description: 동의어로 설정할 단어 목록
+                  createdDate:
+                    type: string
+                    description: 동의어 사전 생성 시간
+                  updatedDate:
+                    type: string
+                    description: 동의어 사전 수정 시간
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    put:
+      operationId: PutSynonym
+      summary: 예시
+      description: 사용자 동의어 사전을 수정합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-putsynonym
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 Domain 이름
+        - name: synoName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성할 동의어 사전 이름
+        - name: type
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Stopword 규칙 종류 filter: 부분 매칭, 등록한 불용어와 검색어 일부가 일치하면 검색어 중 매칭되는 부분 제거 exact: 완전 매칭, 등록한 불용어와 검색어가 정확히 일치하면 검색어 중 매칭되는 단어 제거'
+        - name: word_list
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Stopword로 설정할 단어 목록
+        - name: case_sensitive
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: Stopword로 설정할 단어의 대소문자 구분 여부
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: DeleteSynonym
+      summary: 예시
+      description: 사용자 동의어 사전을 삭제합니다. 생성한 버전 전체 혹은 특정 버전을 지정하여 삭제할 수 있습니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-deletesynonym
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 Domain 이름
+        - name: synoName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 사전 이름
+        - name: version
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 삭제하려는 동의어 사전 버전
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/domain/{name}/synonym/{synoName}/versions:
+    get:
+      operationId: GetSynonymVersionList
+      summary: 예시
+      description: 도메인에 설정된 동의어 사전의 버전을 조회합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-getsynonymversionlist
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 Domain 이름
+        - name: synoName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 동의어 사전 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/domain/{name}/type:
+    patch:
+      operationId: PatchContainerType
+      summary: 예시
+      description: 도메인의 컨테이너 타입을 변경합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-patchcontainertype
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 Domain 이름
+        - name: type
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 변경할 컨테이너 타입
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/language:
+    get:
+      operationId: GetLanguage
+      summary: 예시
+      description: 형태소 분석이 가능한 언어들을 조회합니다. 조회된 언어들로 형태소 분석기를 조회 하여 Domain 생성 시 사용할 수 있습니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-getlanguage
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  '-':
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 형태소 분석이 가능한 언어 목록
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/schemaValidator:
+    post:
+      operationId: CheckSchemaValidAtor
+      summary: 예시
+      description: Domain 생성을 하기 전에 Schema 검증을 할 수 있습니다. 해당 요청을 통해 올바르게 작성된 Schema 인지 확인이 가능합니다. 색인(index)은 추가는 가능하지만, 생성 후 삭제는 불가능합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-checkschemavalidator
+      parameters:
+        - name: document
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 검색 설정
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: (inferred from JSON example)
+                  message:
+                    type: string
+                    description: (inferred from JSON example)
+                  response:
+                    type: string
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/tempdomain:
+    get:
+      operationId: GetTempDomainList
+      summary: 예시
+      description: Cloud Search는 실제 도메인 생성 이전 임시 Domain 생성 기능 을 지원합니다. 생성한 모든 임시 도메인을 조회합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-gettempdomainlist
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: CreateTempDomain
+      summary: 예시
+      description: Cloud Search에서 사용할 도메인을 임시로 생성할 수 있습니다. 해당 요청을 수행하기 이전에 Schema 검증 을 통해서 작성한 Schema를 확인해보세요.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-createtempdomain
+      parameters:
+        - name: name
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 도메인 이름
+        - name: type
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 컨테이너 규모 설정
+        - name: description
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 도메인 설명
+        - name: indexerCount
+          in: query
+          required: false
+          schema:
+            type: number
+          description: 색인용 컨테이너 수
+        - name: searcherCount
+          in: query
+          required: false
+          schema:
+            type: number
+          description: 검색용 컨테이너 수
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/tempdomain/{name}:
+    get:
+      operationId: GetTempDomain
+      summary: 예시
+      description: Cloud Search는 실제 도메인 생성 이전 임시 Domain 생성 을 지원합니다. 생성한 임시 도메인을 조회합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-gettempdomain
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 임시 Domain 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: 도메인 이름
+                  description:
+                    type: string
+                    description: 도메인 설명
+                  type:
+                    type: string
+                    description: 컨테이너 타입
+                  indexerCount:
+                    type: number
+                    description: 색인용 컨테이너 개수
+                  searcherCount:
+                    type: number
+                    description: 검색용 컨테이너 개수
+                  createdDate:
+                    type: string
+                    description: 도메인 생성 시간
+                  updatedDate:
+                    type: string
+                    description: 최종 업데이트 시간
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    put:
+      operationId: ChangeTempDomain
+      summary: 예시
+      description: Cloud Search에서 생성한 임시 도메인을 수정합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-changetempdomain
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 임시 Domain 이름
+        - name: description
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 임시 도메인 설명
+        - name: type
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Container 규모 설정
+        - name: indexerCount
+          in: query
+          required: false
+          schema:
+            type: number
+          description: 색인을 담당하는 컨테이너의 개수
+        - name: searcherCount
+          in: query
+          required: false
+          schema:
+            type: number
+          description: 검색을 담당하는 컨테이너의 개수
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: DeleteTempDomain
+      summary: 예시
+      description: 생성한 임시 도메인을 삭제합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-deletetempdomain
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 생성되어져 있는 임시 Domain 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/tokenizer:
+    get:
+      operationId: GetTokenIzerList
+      summary: 예시
+      description: 형태소 분석이 가능한 언어들을 조회합니다. 조회된 옵션들을 Domain 생성 시 색인 옵션으로 사용할 수 있으며, 색인 별 하나 이상의 언어에 대해 형태소 분석을 설정하려면 형태소 분석기 조회 - 특정 언어 를 통해 조회 가능합니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-gettokenizerlist
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /CloudSearch/real/v1/tokenizer/{languages}:
+    get:
+      operationId: GetTokenIzer
+      summary: 예시
+      description: 특정 언어로 색인을 생성해주는 IndexProcessor(형태소 분석기) 값을 조회합니다. 조회한 값으로 Domain 생성 시 색인 옵션으로 사용하여 언어별 색인을 생성할 수 있습니다.
+      tags:
+        - cloud-search
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudsearch-gettokenizer
+      parameters:
+        - name: languages
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 색인을 생성할 언어
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  '-':
+                    type: string
+                    description: 요청한 언어들의 형태소 분석기 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+components:
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  schemas:
+    SuccessResponse:
+      type: object
+      description: Trivial success envelope — returned by mutations that don't carry a body.
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: API 호출 성공 여부
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

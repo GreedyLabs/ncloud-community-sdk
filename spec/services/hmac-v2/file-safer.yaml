@@ -1,0 +1,636 @@
+openapi: 3.0.3
+info:
+  title: file-safer
+  description: file-safer
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: true
+    gov: true
+
+  x-ncloud-nrn:
+
+    productName: FileSafer
+    resource_types:
+      - Safer
+
+servers:
+  - url: https://filesafer.apigw.ntruss.com
+    description: file-safer 민간
+    x-ncloud-env: public
+  - url: https://filesafer.apigw.fin-ntruss.com
+    description: file-safer 금융
+    x-ncloud-env: financial
+  - url: https://filesafer.apigw.gov-ntruss.com
+    description: file-safer 공공
+    x-ncloud-env: gov
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /filefilter/v1/getInputFileLog:
+    get:
+      operationId: GetInPutFileLog
+      summary: getInputFileLog
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - file-safer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-filesafer-getinputfilelog
+      parameters:
+        - name: hash
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 조회하려는 Hash 값
+        - name: hashType
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 조회하려는 Hash 값을 생성하는 데 사용한 알고리즘 sha1 | md5
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnCode:
+                    type: string
+                    description: 응답 코드
+                  returnMessage:
+                    type: string
+                    description: 응답 메시지
+                  inputFileLogList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '분석 요청한 파일의 분석 결과: inputFileLogList 동일한 Hash의 파일이 2회 이상 분석한 경우에는 목록으로 표시 분석한 파일이 없는 경우에는 공란으로 표시'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /filefilter/v1/getNotiConfig:
+    get:
+      operationId: GetNotiConfig2
+      summary: getNotiConfig
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - file-safer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-filesafer-getnoticonfig-2
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - returnCode
+                  - returnMessage
+                  - notificationType
+                properties:
+                  returnCode:
+                    type: string
+                    description: 응답 코드
+                  returnMessage:
+                    type: string
+                    description: 응답 메시지
+                  notificationType:
+                    type: string
+                    description: '분석 결과 통보 조건 OFF | MAL | MAE | ERR | ALL OFF : 통보 안 함 MAL : 악성 코드 탐지 시 통보 MAE : 악성 코드 탐지 또는 조회 실패 시 통보 ERR : 조회 실패 시 통보 ALL : 모두 통보'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /filefilter/v1/getThresholdNotiConfig:
+    post:
+      operationId: GetThresholdnotiConfig2
+      summary: getThresholdNotiConfig
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - file-safer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-filesafer-getthresholdnoticonfig-2
+      requestBody:
+        description: '(Per NCP docs this endpoint takes no request body. Source: https://api.ncloud-docs.com/docs/security-filesafer-getthresholdnoticonfig-2)'
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - returnCode
+                  - returnMessage
+                properties:
+                  returnCode:
+                    type: string
+                    description: 응답 코드
+                  returnMessage:
+                    type: string
+                    description: 응답 메시지
+                  thresholdNotificationInfoList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '분석 결과의 통보 설정 정보: thresholdNotificationInfoList 객체가 있는 경우: 통보 설정 객체가 없는 경우: 통보 설정 안 함'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /filefilter/v1/inputFile:
+    post:
+      operationId: InPutFile
+      summary: inputFile
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - file-safer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-filesafer-inputfile
+      parameters:
+        - name: file
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 대상 파일
+        - name: archivePassword
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 압축 파일 암호 대상 파일이 암호가 걸려있는 압축 파일인 경우에 입력
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - returnCode
+                  - returnMessage
+                properties:
+                  returnCode:
+                    type: string
+                    description: 응답 코드
+                  returnMessage:
+                    type: string
+                    description: 응답 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /filefilter/v1/removeThresholdNotiConfig:
+    post:
+      operationId: RemoveThresholdnotiConfig2
+      summary: removeThresholdNotiConfig
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - file-safer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-filesafer-removethresholdnoticonfig-2
+      requestBody:
+        description: '(Per NCP docs this endpoint takes no request body. Source: https://api.ncloud-docs.com/docs/security-filesafer-removethresholdnoticonfig-2)'
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - returnCode
+                  - returnMessage
+                properties:
+                  returnCode:
+                    type: string
+                    description: 응답 코드
+                  returnMessage:
+                    type: string
+                    description: 응답 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /filefilter/v1/setNotiConfig:
+    post:
+      operationId: SetNotiConfig2
+      summary: setNotiConfig
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - file-safer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-filesafer-setnoticonfig-2
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - notificationType
+              properties:
+                notificationType:
+                  type: string
+                  description: '분석 결과 통보 조건 OFF | MAL | MAE | ERR | ALL OFF : 통보 안 함 MAL : 악성 코드 탐지 시 통보 MAE : 악성 코드 탐지 또는 조회 실패 시 통보 ERR : 조회 실패 시 통보 ALL : 모두 통보'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - returnCode
+                  - returnMessage
+                properties:
+                  returnCode:
+                    type: string
+                    description: 응답 코드
+                  returnMessage:
+                    type: string
+                    description: 응답 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /filefilter/v1/setThresholdNotiConfig:
+    post:
+      operationId: SetThresholdnotiConfig2
+      summary: setThresholdNotiConfig
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - file-safer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-filesafer-setthresholdnoticonfig-2
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - notificationType
+                - referenceTime
+                - thresholdValue
+              properties:
+                notificationType:
+                  type: string
+                  description: '분석 결과 통보 조건 MAL | ERR MAL : 악성코드 탐지 시 통보 ERR : 조회 실패 시 통보'
+                referenceTime:
+                  type: integer
+                  description: 임계치에 해당하는 악성코드를 탐지하는 시간(분) 5~30 5분 단위로 설정 가능
+                thresholdValue:
+                  type: integer
+                  description: 임계치(건) 1~1000
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - returnCode
+                  - returnMessage
+                properties:
+                  returnCode:
+                    type: string
+                    description: 응답 코드
+                  returnMessage:
+                    type: string
+                    description: 응답 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /hashfilter/v1/checkHash:
+    get:
+      operationId: CheckHash
+      summary: checkHash
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - file-safer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-filesafer-checkhash
+      parameters:
+        - name: hashCode
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 조회하려는 Hash 값
+        - name: hashType
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 조회하려는 Hash 값을 생성하는 데 사용된 알고리즘 sha1 | md5
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - returnCode
+                  - returnMessage
+                  - totalRows
+                  - hashCheckResultList
+                properties:
+                  returnCode:
+                    type: string
+                    description: 요청에 대한 처리 결과 코드
+                  returnMessage:
+                    type: string
+                    description: 요청에 대한 처리 결과 메시지
+                  totalRows:
+                    type: integer
+                    description: hashCheckResultList 의 객체 개수
+                  hashCheckResultList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '조회한 Hash 값에 대한 탐지 결과: hashCheckResultList 목록에 객체가 있는 경우: 악성코드 목록에 객체가 없는 경우: 정상'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /hashfilter/v1/getNotiConfig:
+    get:
+      operationId: GetNotiConfig
+      summary: getNotiConfig
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - file-safer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-filesafer-getnoticonfig
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - returnCode
+                  - returnMessage
+                  - notificationType
+                properties:
+                  returnCode:
+                    type: string
+                    description: 응답 코드
+                  returnMessage:
+                    type: string
+                    description: 응답 메시지
+                  notificationType:
+                    type: string
+                    description: '분석 결과 통보 조건 OFF | MAL | MAE | ERR | ALL OFF : 통보 안 함 MAL : 악성 코드 탐지 시 통보 MAE : 악성 코드 탐지 또는 조회 실패 시 통보 ERR : 조회 실패 시 통보 ALL : 모두 통보'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /hashfilter/v1/getThresholdNotiConfig:
+    post:
+      operationId: GetThresholdnotiConfig
+      summary: getThresholdNotiConfig
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - file-safer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-filesafer-getthresholdnoticonfig
+      requestBody:
+        description: '(Per NCP docs this endpoint takes no request body. Source: https://api.ncloud-docs.com/docs/security-filesafer-getthresholdnoticonfig)'
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - returnCode
+                  - returnMessage
+                properties:
+                  returnCode:
+                    type: string
+                    description: 응답 코드
+                  returnMessage:
+                    type: string
+                    description: 응답 메시지
+                  thresholdNotificationInfoList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '분석 결과의 통보 설정 정보: thresholdNotificationInfoList 객체가 있는 경우: 통보 설정 객체가 없는 경우: 통보 설정 안 함'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /hashfilter/v1/removeThresholdNotiConfig:
+    post:
+      operationId: RemoveThresholdnotiConfig
+      summary: removeThresholdNotiConfig
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - file-safer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-filesafer-removethresholdnoticonfig
+      requestBody:
+        description: '(Per NCP docs this endpoint takes no request body. Source: https://api.ncloud-docs.com/docs/security-filesafer-removethresholdnoticonfig)'
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - returnCode
+                  - returnMessage
+                properties:
+                  returnCode:
+                    type: string
+                    description: 응답 코드
+                  returnMessage:
+                    type: string
+                    description: 응답 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /hashfilter/v1/setNotiConfig:
+    post:
+      operationId: SetNotiConfig
+      summary: setNotiConfig
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - file-safer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-filesafer-setnoticonfig
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - notificationType
+              properties:
+                notificationType:
+                  type: string
+                  description: '분석 결과 통보 조건 OFF | MAL | MAE | ERR | ALL OFF : 통보 안 함 MAL : 악성 코드 탐지 시 통보 MAE : 악성 코드 탐지 또는 조회 실패 시 통보 ERR : 조회 실패 시 통보 ALL : 모두 통보'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - returnCode
+                  - returnMessage
+                properties:
+                  returnCode:
+                    type: string
+                    description: 응답 코드
+                  returnMessage:
+                    type: string
+                    description: 응답 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /hashfilter/v1/setThresholdNotiConfig:
+    post:
+      operationId: SetThresholdnotiConfig
+      summary: setThresholdNotiConfig
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - file-safer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-filesafer-setthresholdnoticonfig
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - notificationType
+                - referenceTime
+                - thresholdValue
+              properties:
+                notificationType:
+                  type: string
+                  description: '분석 결과 통보 조건 MAL | ERR MAL : 악성코드 탐지 시 통보 ERR : 조회 실패 시 통보'
+                referenceTime:
+                  type: integer
+                  description: 임계치에 해당하는 악성코드를 탐지하는 시간(분) 5~30 5분 단위로 설정 가능
+                thresholdValue:
+                  type: integer
+                  description: 임계치(건) 1~1000
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - returnCode
+                  - returnMessage
+                properties:
+                  returnCode:
+                    type: string
+                    description: 응답 코드
+                  returnMessage:
+                    type: string
+                    description: 응답 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+components:
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  schemas:
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

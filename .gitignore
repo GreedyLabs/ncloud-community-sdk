@@ -1,0 +1,21 @@
+.DS_Store
+
+# Editor / IDE junk
+.vscode/
+.idea/
+
+# Local secrets — never commit
+.env
+.env.*
+!.env.example
+
+# Go build artefacts
+*.test
+bin/
+vendor/
+
+# Python tool artefacts
+__pycache__/
+*.pyc
+.venv/
+venv/

@@ -1,0 +1,1681 @@
+openapi: 3.0.3
+info:
+  title: auto-scaling
+  description: VPC Auto Scaling 관련 API
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: true
+    gov: true
+
+  x-ncloud-nrn:
+
+    productName: VPCAutoScaling
+    resource_types:
+      - AutoScalingGroup
+      - LaunchConfiguration
+
+servers:
+  - url: https://ncloud.apigw.ntruss.com/vautoscaling/v2
+    description: auto-scaling 민간
+    x-ncloud-env: public
+  - url: https://ncloud.apigw.fin-ntruss.com/vautoscaling/v2
+    description: auto-scaling 금융
+    x-ncloud-env: financial
+  - url: https://ncloud.apigw.gov-ntruss.com/vautoscaling/v2
+    description: auto-scaling 공공
+    x-ncloud-env: gov
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /createAutoScalingGroup:
+    post:
+      operationId: CreateAutoScalingGroup
+      summary: 오토스케일링그룹생성
+      tags:
+        - auto-scaling
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateAutoScalingGroupRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateAutoScalingGroupResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /createLaunchConfiguration:
+    post:
+      operationId: CreateLaunchConfiguration
+      summary: 론치설정생성
+      tags:
+        - auto-scaling
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateLaunchConfigurationRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateLaunchConfigurationResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /deleteAutoScalingGroup:
+    post:
+      operationId: DeleteAutoScalingGroup
+      summary: 오토스케일링그룹삭제
+      tags:
+        - auto-scaling
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteAutoScalingGroupRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteAutoScalingGroupResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /deleteLaunchConfiguration:
+    post:
+      operationId: DeleteLaunchConfiguration
+      summary: 론치설정삭제
+      tags:
+        - auto-scaling
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteLaunchConfigurationRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteLaunchConfigurationResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /deleteScalingPolicy:
+    post:
+      operationId: DeleteScalingPolicy
+      summary: 스케일링정책삭제
+      tags:
+        - auto-scaling
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteScalingPolicyRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteScalingPolicyResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /deleteScheduledAction:
+    post:
+      operationId: DeleteScheduledAction
+      summary: 스케쥴액션삭제
+      tags:
+        - auto-scaling
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteScheduledActionRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteScheduledActionResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /executePolicy:
+    post:
+      operationId: ExecutePolicy
+      summary: 정책실행
+      tags:
+        - auto-scaling
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ExecutePolicyRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutePolicyResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getAdjustmentTypeList:
+    post:
+      operationId: GetAdjustmentTypeList
+      summary: 조정유형리스트조회
+      tags:
+        - auto-scaling
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetAdjustmentTypeListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAdjustmentTypeListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getAutoScalingActivityLogList:
+    post:
+      operationId: GetAutoScalingActivityLogList
+      summary: 액티비티로그리스트조회
+      tags:
+        - auto-scaling
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetAutoScalingActivityLogListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAutoScalingActivityLogListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getAutoScalingGroupDetail:
+    post:
+      operationId: GetAutoScalingGroupDetail
+      summary: 오토스케일링그룹상세조회
+      tags:
+        - auto-scaling
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetAutoScalingGroupDetailRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAutoScalingGroupDetailResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getAutoScalingGroupList:
+    post:
+      operationId: GetAutoScalingGroupList
+      summary: 오토스케일링그룹리스트조회
+      tags:
+        - auto-scaling
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetAutoScalingGroupListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAutoScalingGroupListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getAutoScalingPolicyList:
+    post:
+      operationId: GetAutoScalingPolicyList
+      summary: 오토스케일링정책리스트조회
+      tags:
+        - auto-scaling
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetAutoScalingPolicyListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAutoScalingPolicyListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getLaunchConfigurationDetail:
+    post:
+      operationId: GetLaunchConfigurationDetail
+      summary: 론치설정상세조회
+      tags:
+        - auto-scaling
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetLaunchConfigurationDetailRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetLaunchConfigurationDetailResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getLaunchConfigurationList:
+    post:
+      operationId: GetLaunchConfigurationList
+      summary: 론치설정리스트조회
+      tags:
+        - auto-scaling
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetLaunchConfigurationListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetLaunchConfigurationListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getScalingProcessTypeList:
+    post:
+      operationId: GetScalingProcessTypeList
+      summary: 스케일링프로세스유형리스트조회
+      tags:
+        - auto-scaling
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetScalingProcessTypeListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetScalingProcessTypeListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getScheduledActionList:
+    post:
+      operationId: GetScheduledActionList
+      summary: 스케쥴액션리스트조회
+      tags:
+        - auto-scaling
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetScheduledActionListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetScheduledActionListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /putScalingPolicy:
+    post:
+      operationId: PutScalingPolicy
+      summary: 스케일링정책생성/수정
+      tags:
+        - auto-scaling
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PutScalingPolicyRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PutScalingPolicyResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /putScheduledUpdateGroupAction:
+    post:
+      operationId: PutScheduledUpdateGroupAction
+      summary: 스케쥴액션생성/수정
+      tags:
+        - auto-scaling
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PutScheduledUpdateGroupActionRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PutScheduledUpdateGroupActionResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /resumeProcesses:
+    post:
+      operationId: ResumeProcesses
+      summary: 프로세스재시작
+      tags:
+        - auto-scaling
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ResumeProcessesRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResumeProcessesResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /setDesiredCapacity:
+    post:
+      operationId: SetDesiredCapacity
+      summary: 기대용량설정
+      tags:
+        - auto-scaling
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetDesiredCapacityRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetDesiredCapacityResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /suspendProcesses:
+    post:
+      operationId: SuspendProcesses
+      summary: 프로세스일시정지
+      tags:
+        - auto-scaling
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SuspendProcessesRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuspendProcessesResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /updateAutoScalingGroup:
+    post:
+      operationId: UpdateAutoScalingGroup
+      summary: 오토스케일링그룹수정
+      tags:
+        - auto-scaling
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdateAutoScalingGroupRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateAutoScalingGroupResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+components:
+  schemas:
+    ActivityLog:
+      type: object
+      properties:
+        autoScalingGroupNo:
+          type: string
+          description: "오토스케일링그룹 번호"
+        activityNo:
+          type: string
+          description: "액티비티번호"
+        serverInstanceNo:
+          type: string
+          description: "서버인스턴스 번호"
+        zoneCode:
+          type: string
+          description: "ZONE 코드"
+        actionName:
+          type: string
+          description: "액션이름"
+        actionStatus:
+          $ref: '#/components/schemas/CommonCode'
+        actionCause:
+          type: string
+          description: "액션원인"
+        actionDescription:
+          type: string
+          description: "액션설명"
+        startTime:
+          type: string
+          description: "시작일시"
+        endTime:
+          type: string
+          description: "종료일시"
+    AdjustmentType:
+      type: object
+      properties:
+        code:
+          type: string
+          description: "코드"
+        codeName:
+          type: string
+          description: "코드이름"
+    AutoScalingGroup:
+      type: object
+      properties:
+        vpcNo:
+          type: string
+          description: "VPC 번호"
+        subnetNo:
+          type: string
+          description: "서브넷 번호"
+        serverNamePrefix:
+          type: string
+          description: "서버 이름 Prefix"
+        autoScalingGroupNo:
+          type: string
+          description: "오토스케일링그룹 번호"
+        autoScalingGroupName:
+          type: string
+          description: "오토스케일링그룹 이름"
+        launchConfigurationNo:
+          type: string
+          description: "론치설정번호"
+        minSize:
+          type: integer
+          format: int32
+          description: "최소용량"
+        maxSize:
+          type: integer
+          format: int32
+          description: "최대용량"
+        desiredCapacity:
+          type: integer
+          format: int32
+          description: "기대용량"
+        defaultCoolDown:
+          type: integer
+          format: int32
+          description: "쿨다운기본값"
+        healthCheckGracePeriod:
+          type: integer
+          format: int32
+          description: "헬스체크보류기간"
+        healthCheckType:
+          $ref: '#/components/schemas/CommonCode'
+        createDate:
+          type: string
+          description: "생성일시"
+        autoScalingGroupStatus:
+          $ref: '#/components/schemas/CommonCode'
+        targetGroupNoList:
+          type: array
+          description: "타겟그룹 번호 리스트"
+          items:
+            type: string
+        inAutoScalingGroupServerInstanceList:
+          type: array
+          description: "오토스케일링그룹에속한서버인스턴스 리스트"
+          items:
+            $ref: '#/components/schemas/InAutoScalingGroupServerInstance'
+        accessControlGroupNoList:
+          type: array
+          description: "ACG 번호 리스트"
+          items:
+            type: string
+        suspendedProcessList:
+          type: array
+          description: "일시정지된프로세스리스트"
+          items:
+            $ref: '#/components/schemas/SuspendedProcess'
+    CommonCode:
+      type: object
+      properties:
+        code:
+          type: string
+          description: "코드"
+        codeName:
+          type: string
+          description: "코드명"
+    CreateAutoScalingGroupRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        launchConfigurationNo:
+          type: string
+          description: "론치설정번호"
+        autoScalingGroupName:
+          type: string
+          description: "오토스케일링그룹 이름"
+        vpcNo:
+          type: string
+          description: "VPC 번호"
+        subnetNo:
+          type: string
+          description: "서브넷 번호"
+        accessControlGroupNoList:
+          type: array
+          description: "ACG 번호 리스트"
+          items:
+            type: string
+        serverNamePrefix:
+          type: string
+          description: "서버 이름 Prefix"
+        minSize:
+          type: integer
+          format: int32
+          description: "최소용량"
+        maxSize:
+          type: integer
+          format: int32
+          description: "최대용량"
+        desiredCapacity:
+          type: integer
+          format: int32
+          description: "기대용량"
+        defaultCoolDown:
+          type: integer
+          format: int32
+          description: "쿨다운기본값"
+        healthCheckGracePeriod:
+          type: integer
+          format: int32
+          description: "헬스체크보류기간"
+        healthCheckTypeCode:
+          type: string
+          description: "헬스체크유형 코드"
+        targetGroupNoList:
+          type: array
+          description: "타겟그룹 번호 리스트"
+          items:
+            type: string
+      required:
+        - accessControlGroupNoList
+    CreateAutoScalingGroupResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        autoScalingGroupList:
+          type: array
+          items:
+            $ref: '#/components/schemas/AutoScalingGroup'
+    CreateLaunchConfigurationRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        serverImageProductCode:
+          type: string
+          description: "서버이미지상품코드"
+        memberServerImageInstanceNo:
+          type: string
+          description: "회원서버이미지인스턴스 번호"
+        serverProductCode:
+          type: string
+          description: "서버상품코드"
+        isEncryptedVolume:
+          type: boolean
+          description: "볼륨암호화여부"
+        initScriptNo:
+          type: string
+          description: "초기화스크립트번호"
+        launchConfigurationName:
+          type: string
+          description: "론치설정이름"
+        loginKeyName:
+          type: string
+          description: "로그인키이름"
+    CreateLaunchConfigurationResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        launchConfigurationList:
+          type: array
+          items:
+            $ref: '#/components/schemas/LaunchConfiguration'
+    DeleteAutoScalingGroupRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        autoScalingGroupNo:
+          type: string
+          description: "오토스케일링그룹 번호"
+    DeleteAutoScalingGroupResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        autoScalingGroupList:
+          type: array
+          items:
+            $ref: '#/components/schemas/AutoScalingGroup'
+    DeleteLaunchConfigurationRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        launchConfigurationNo:
+          type: string
+          description: "론치설정번호"
+    DeleteLaunchConfigurationResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        launchConfigurationList:
+          type: array
+          items:
+            $ref: '#/components/schemas/LaunchConfiguration'
+    DeleteScalingPolicyRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        autoScalingGroupNo:
+          type: string
+          description: "오토스케일링그룹 번호"
+        policyNo:
+          type: string
+          description: "정책번호"
+    DeleteScalingPolicyResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        scalingPolicyList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScalingPolicy'
+    DeleteScheduledActionRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        autoScalingGroupNo:
+          type: string
+          description: "오토스케일링그룹 번호"
+        scheduledActionNo:
+          type: string
+          description: "스케쥴액션번호"
+    DeleteScheduledActionResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        scheduledUpdateGroupActionList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScheduledUpdateGroupAction'
+    ExecutePolicyRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        autoScalingGroupNo:
+          type: string
+          description: "오토스케일링그룹 번호"
+        policyNo:
+          type: string
+          description: "정책번호"
+    ExecutePolicyResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        scalingPolicyList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScalingPolicy'
+    GetAdjustmentTypeListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+    GetAdjustmentTypeListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        adjustmentTypeList:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdjustmentType'
+    GetAutoScalingActivityLogListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        autoScalingGroupNo:
+          type: string
+          description: "오토스케일링그룹 번호"
+        activityNoList:
+          type: array
+          description: "액티비티번호 리스트"
+          items:
+            type: string
+        pageNo:
+          type: integer
+          format: int32
+          description: "페이지번호"
+        pageSize:
+          type: integer
+          format: int32
+          description: "페이지사이즈"
+    GetAutoScalingActivityLogListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        activityLogList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ActivityLog'
+    GetAutoScalingGroupDetailRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        autoScalingGroupNo:
+          type: string
+          description: "오토스케일링그룹 번호"
+    GetAutoScalingGroupDetailResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        autoScalingGroupList:
+          type: array
+          items:
+            $ref: '#/components/schemas/AutoScalingGroup'
+    GetAutoScalingGroupListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        autoScalingGroupNoList:
+          type: array
+          description: "오토스케일링그룹 번호 리스트"
+          items:
+            type: string
+        autoScalingGroupNameList:
+          type: array
+          description: "오토스케일링그룹 이름 리스트"
+          items:
+            type: string
+        pageNo:
+          type: integer
+          format: int32
+          description: "페이지번호"
+        pageSize:
+          type: integer
+          format: int32
+          description: "페이지사이즈"
+        sortList:
+          type: string
+          description: "정렬리스트"
+    GetAutoScalingGroupListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        autoScalingGroupList:
+          type: array
+          items:
+            $ref: '#/components/schemas/AutoScalingGroup'
+    GetAutoScalingPolicyListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        autoScalingGroupNo:
+          type: string
+          description: "오토스케일링그룹 번호"
+        policyNoList:
+          type: array
+          description: "정책번호 리스트"
+          items:
+            type: string
+    GetAutoScalingPolicyListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        scalingPolicyList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScalingPolicy'
+    GetLaunchConfigurationDetailRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        launchConfigurationNo:
+          type: string
+          description: "론치설정번호"
+    GetLaunchConfigurationDetailResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        launchConfigurationList:
+          type: array
+          items:
+            $ref: '#/components/schemas/LaunchConfiguration'
+    GetLaunchConfigurationListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        launchConfigurationNoList:
+          type: array
+          description: "론치설정번호 리스트"
+          items:
+            type: string
+        launchConfigurationNameList:
+          type: array
+          description: "론치설정이름 리스트"
+          items:
+            type: string
+        pageNo:
+          type: integer
+          format: int32
+          description: "페이지번호"
+        pageSize:
+          type: integer
+          format: int32
+          description: "페이지사이즈"
+        sortList:
+          type: array
+          description: "정렬리스트"
+          items:
+            $ref: '#/components/schemas/Sort'
+    GetLaunchConfigurationListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        launchConfigurationList:
+          type: array
+          items:
+            $ref: '#/components/schemas/LaunchConfiguration'
+    GetScalingProcessTypeListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+    GetScalingProcessTypeListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        processList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Process'
+    GetScheduledActionListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        autoScalingGroupNo:
+          type: string
+          description: "오토스케일링그룹 번호"
+        scheduledActionNoList:
+          type: array
+          description: "스케쥴액션번호 리스트"
+          items:
+            type: string
+        scheduledActionNameList:
+          type: array
+          description: "스케쥴액션이름 리스트"
+          items:
+            type: string
+        startTime:
+          type: string
+          description: "스케쥴시작일시"
+        endTime:
+          type: string
+          description: "스케쥴종료일시"
+        pageNo:
+          type: integer
+          format: int32
+          description: "페이지번호"
+        pageSize:
+          type: integer
+          format: int32
+          description: "페이지사이즈"
+        sortedBy:
+          type: string
+          description: "정렬대상"
+        sortingOrder:
+          type: string
+          description: "정렬순서"
+    GetScheduledActionListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        scheduledUpdateGroupActionList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScheduledUpdateGroupAction'
+    InAutoScalingGroupServerInstance:
+      type: object
+      properties:
+        serverInstanceNo:
+          type: string
+          description: "서버인스턴스 번호"
+        healthStatus:
+          $ref: '#/components/schemas/CommonCode'
+        lifecycleState:
+          $ref: '#/components/schemas/CommonCode'
+    LaunchConfiguration:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        launchConfigurationNo:
+          type: string
+          description: "론치설정번호"
+        launchConfigurationName:
+          type: string
+          description: "론치설정이름"
+        serverImageProductCode:
+          type: string
+          description: "서버이미지상품코드"
+        memberServerImageInstanceNo:
+          type: string
+          description: "회원서버이미지인스턴스 번호"
+        serverProductCode:
+          type: string
+          description: "서버상품코드"
+        loginKeyName:
+          type: string
+          description: "로그인키이름"
+        createDate:
+          type: string
+          description: "생성일시"
+        launchConfigurationStatus:
+          $ref: '#/components/schemas/CommonCode'
+        initScriptNo:
+          type: string
+          description: "초기화스크립트번호"
+        isEncryptedVolume:
+          type: boolean
+          description: "볼륨암호화여부"
+    Process:
+      type: object
+      properties:
+        code:
+          type: string
+          description: "코드"
+        codeName:
+          type: string
+          description: "코드이름"
+    PutScalingPolicyRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        autoScalingGroupNo:
+          type: string
+          description: "오토스케일링그룹 번호"
+        policyNo:
+          type: string
+          description: "정책번호"
+        policyName:
+          type: string
+          description: "정책이름"
+        adjustmentTypeCode:
+          type: string
+          description: "조정유형 코드"
+        scalingAdjustment:
+          type: integer
+          format: int32
+          description: "조정값"
+        minAdjustmentStep:
+          type: integer
+          format: int32
+          description: "최소조정폭"
+        coolDown:
+          type: integer
+          format: int32
+          description: "쿨다운"
+    PutScalingPolicyResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        scalingPolicyList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScalingPolicy'
+    PutScheduledUpdateGroupActionRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        autoScalingGroupNo:
+          type: string
+          description: "오토스케일링그룹 번호"
+        scheduledActionNo:
+          type: string
+          description: "스케쥴액션번호"
+        scheduledActionName:
+          type: string
+          description: "스케쥴액션이름"
+        minSize:
+          type: integer
+          format: int32
+          description: "최소용량"
+        maxSize:
+          type: integer
+          format: int32
+          description: "최대용량"
+        desiredCapacity:
+          type: integer
+          format: int32
+          description: "기대용량"
+        startTime:
+          type: string
+          description: "스케쥴시작일시"
+        endTime:
+          type: string
+          description: "스케쥴종료일시"
+        recurrence:
+          type: string
+          description: "반복설정"
+        timeZone:
+          type: string
+          description: "타임존"
+    PutScheduledUpdateGroupActionResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        scheduledUpdateGroupActionList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScheduledUpdateGroupAction'
+    ResumeProcessesRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        autoScalingGroupNo:
+          type: string
+          description: "오토스케일링그룹 번호"
+        scalingProcessCodeList:
+          type: array
+          description: "스케일링프로세스코드 리스트"
+          items:
+            type: string
+      required:
+        - scalingProcessCodeList
+    ResumeProcessesResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        processList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Process'
+    ScalingPolicy:
+      type: object
+      properties:
+        autoScalingGroupNo:
+          type: string
+          description: "오토스케일링그룹 번호"
+        policyNo:
+          type: string
+          description: "정책번호"
+        policyName:
+          type: string
+          description: "정책이름"
+        adjustmentType:
+          $ref: '#/components/schemas/CommonCode'
+        scalingAdjustment:
+          type: integer
+          format: int32
+          description: "조정값"
+        minAdjustmentStep:
+          type: integer
+          format: int32
+          description: "최소조정폭"
+        coolDown:
+          type: integer
+          format: int32
+          description: "쿨다운"
+    ScheduledUpdateGroupAction:
+      type: object
+      properties:
+        autoScalingGroupNo:
+          type: string
+          description: "오토스케일링그룹 번호"
+        scheduledActionNo:
+          type: string
+          description: "스케쥴액션번호"
+        scheduledActionName:
+          type: string
+          description: "스케쥴액션이름"
+        minSize:
+          type: integer
+          format: int32
+          description: "최소용량"
+        maxSize:
+          type: integer
+          format: int32
+          description: "최대용량"
+        desiredCapacity:
+          type: integer
+          format: int32
+          description: "기대용량"
+        startTime:
+          type: string
+          description: "스케쥴시작일시"
+        endTime:
+          type: string
+          description: "스케쥴종료일시"
+        recurrence:
+          type: string
+          description: "반복설정"
+        timeZone:
+          type: string
+          description: "타임존"
+    SetDesiredCapacityRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        autoScalingGroupNo:
+          type: string
+          description: "오토스케일링그룹 번호"
+        desiredCapacity:
+          type: integer
+          format: int32
+          description: "기대용량"
+    SetDesiredCapacityResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        autoScalingGroupList:
+          type: array
+          items:
+            $ref: '#/components/schemas/AutoScalingGroup'
+    Sort:
+      type: object
+      properties:
+        sortedBy:
+          type: string
+          description: "정렬대상"
+        sortingOrder:
+          type: string
+          description: "정렬순서"
+    SuspendProcessesRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        autoScalingGroupNo:
+          type: string
+          description: "오토스케일링그룹 번호"
+        scalingProcessCodeList:
+          type: array
+          description: "스케일링프로세스코드 리스트"
+          items:
+            type: string
+      required:
+        - scalingProcessCodeList
+    SuspendProcessesResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        processList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Process'
+    SuspendedProcess:
+      type: object
+      properties:
+        process:
+          $ref: '#/components/schemas/CommonCode'
+        suspensionReason:
+          type: string
+          description: "프로세스일시정지원인"
+    UpdateAutoScalingGroupRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        autoScalingGroupNo:
+          type: string
+          description: "오토스케일링그룹 번호"
+        launchConfigurationNo:
+          type: string
+          description: "론치설정번호"
+        serverNamePrefix:
+          type: string
+          description: "서버 이름 Prefix"
+        minSize:
+          type: integer
+          format: int32
+          description: "최소용량"
+        maxSize:
+          type: integer
+          format: int32
+          description: "최대용량"
+        desiredCapacity:
+          type: integer
+          format: int32
+          description: "기대용량"
+        defaultCoolDown:
+          type: integer
+          format: int32
+          description: "쿨다운기본값"
+        healthCheckGracePeriod:
+          type: integer
+          format: int32
+          description: "헬스체크보류기간"
+        healthCheckTypeCode:
+          type: string
+          description: "헬스체크유형 코드"
+    UpdateAutoScalingGroupResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        autoScalingGroupList:
+          type: array
+          items:
+            $ref: '#/components/schemas/AutoScalingGroup'
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

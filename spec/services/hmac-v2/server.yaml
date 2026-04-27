@@ -1,0 +1,6226 @@
+openapi: 3.0.3
+info:
+  title: server
+  description: VPC Compute 관련 API
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: true
+    gov: true
+
+  x-ncloud-nrn:
+
+    productName: VPCServer
+    resource_types:
+      - Server
+      - ServerImage
+      - Storage
+      - Snapshot
+      - InitScript
+      - NetworkInterface
+      - ACG
+      - PublicIP
+
+servers:
+  - url: https://ncloud.apigw.ntruss.com/vserver/v2
+    description: server 민간
+    x-ncloud-env: public
+  - url: https://ncloud.apigw.fin-ntruss.com/vserver/v2
+    description: server 금융
+    x-ncloud-env: financial
+  - url: https://ncloud.apigw.gov-ntruss.com/vserver/v2
+    description: server 공공
+    x-ncloud-env: gov
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /addAccessControlGroupInboundRule:
+    post:
+      operationId: AddAccessControlGroupInboundRule
+      summary: ACGInboundRule 추가
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AddAccessControlGroupInboundRuleRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddAccessControlGroupInboundRuleResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /addAccessControlGroupOutboundRule:
+    post:
+      operationId: AddAccessControlGroupOutboundRule
+      summary: ACGOutboundRule 추가
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AddAccessControlGroupOutboundRuleRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddAccessControlGroupOutboundRuleResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /addMemberServerImageSharingPermission:
+    post:
+      operationId: AddMemberServerImageSharingPermission
+      summary: 회원서버이미지공유권한추가
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AddMemberServerImageSharingPermissionRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddMemberServerImageSharingPermissionResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /addNetworkInterfaceAccessControlGroup:
+    post:
+      operationId: AddNetworkInterfaceAccessControlGroup
+      summary: 네트워크인터페이스의 ACG 추가
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AddNetworkInterfaceAccessControlGroupRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddNetworkInterfaceAccessControlGroupResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /addPlacementGroupServerInstance:
+    post:
+      operationId: AddPlacementGroupServerInstance
+      summary: 물리배치그룹에서버인스턴스추가
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AddPlacementGroupServerInstanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddPlacementGroupServerInstanceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /addServerImageSharingPermission:
+    post:
+      operationId: AddServerImageSharingPermission
+      summary: 서버이미지공유권한추가
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AddServerImageSharingPermissionRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddServerImageSharingPermissionResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /assignSecondaryIps:
+    post:
+      operationId: AssignSecondaryIps
+      summary: 보조 IP 할당
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AssignSecondaryIpsRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssignSecondaryIpsResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /associatePublicIpWithServerInstance:
+    post:
+      operationId: AssociatePublicIpWithServerInstance
+      summary: 공인 IP 를서버인스턴스에할당
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AssociatePublicIpWithServerInstanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssociatePublicIpWithServerInstanceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /attachBlockStorageInstance:
+    post:
+      operationId: AttachBlockStorageInstance
+      summary: 블록스토리지인스턴스할당
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AttachBlockStorageInstanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttachBlockStorageInstanceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /attachNetworkInterface:
+    post:
+      operationId: AttachNetworkInterface
+      summary: 네트워크인터페이스할당
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AttachNetworkInterfaceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttachNetworkInterfaceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /changeBlockStorageInstance:
+    post:
+      operationId: ChangeBlockStorageInstance
+      summary: 블록스토리지인스턴스변경
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChangeBlockStorageInstanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeBlockStorageInstanceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /changeBlockStorageVolumeSize:
+    post:
+      operationId: ChangeBlockStorageVolumeSize
+      summary: 블록스토리지볼륨사이즈변경
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChangeBlockStorageVolumeSizeRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeBlockStorageVolumeSizeResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /changeServerInstanceSpec:
+    post:
+      operationId: ChangeServerInstanceSpec
+      summary: 서버인스턴스스펙변경
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChangeServerInstanceSpecRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeServerInstanceSpecResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /createAccessControlGroup:
+    post:
+      operationId: CreateAccessControlGroup
+      summary: ACG 생성
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateAccessControlGroupRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateAccessControlGroupResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /createBlockStorageInstance:
+    post:
+      operationId: CreateBlockStorageInstance
+      summary: 블록스토리지인스턴스생성
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateBlockStorageInstanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateBlockStorageInstanceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /createBlockStorageSnapshotInstance:
+    post:
+      operationId: CreateBlockStorageSnapshotInstance
+      summary: 블록스토리지스냅샷인스턴스생성
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateBlockStorageSnapshotInstanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateBlockStorageSnapshotInstanceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /createInitScript:
+    post:
+      operationId: CreateInitScript
+      summary: 초기화스크립트생성
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateInitScriptRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateInitScriptResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /createLoginKey:
+    post:
+      operationId: CreateLoginKey
+      summary: 로그인키생성
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateLoginKeyRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateLoginKeyResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /createMemberServerImageInstance:
+    post:
+      operationId: CreateMemberServerImageInstance
+      summary: 회원서버이미지인스턴스생성
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateMemberServerImageInstanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateMemberServerImageInstanceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /createNetworkInterface:
+    post:
+      operationId: CreateNetworkInterface
+      summary: 네트워크인터페이스생성
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateNetworkInterfaceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateNetworkInterfaceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /createPlacementGroup:
+    post:
+      operationId: CreatePlacementGroup
+      summary: 물리배치그룹생성
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreatePlacementGroupRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatePlacementGroupResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /createPublicIpInstance:
+    post:
+      operationId: CreatePublicIpInstance
+      summary: 공인 IP 인스턴스생성
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreatePublicIpInstanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatePublicIpInstanceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /createServerImage:
+    post:
+      operationId: CreateServerImage
+      summary: createServerImage
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateServerImageRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateServerImageResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /createServerImageFromSnapshot:
+    post:
+      operationId: CreateServerImageFromSnapshot
+      summary: createServerImageFromSnapshot
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateServerImageFromSnapshotRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateServerImageFromSnapshotResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /createServerInstances:
+    post:
+      operationId: CreateServerInstances
+      summary: 서버인스턴스생성
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateServerInstancesRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateServerInstancesResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /deleteAccessControlGroup:
+    post:
+      operationId: DeleteAccessControlGroup
+      summary: ACG 삭제
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteAccessControlGroupRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteAccessControlGroupResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /deleteBlockStorageInstances:
+    post:
+      operationId: DeleteBlockStorageInstances
+      summary: 블록스토리지인스턴스삭제
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteBlockStorageInstancesRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteBlockStorageInstancesResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /deleteBlockStorageSnapshotInstances:
+    post:
+      operationId: DeleteBlockStorageSnapshotInstances
+      summary: 블록스토리지스냅샷인스턴스삭제
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteBlockStorageSnapshotInstancesRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteBlockStorageSnapshotInstancesResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /deleteInitScripts:
+    post:
+      operationId: DeleteInitScripts
+      summary: 초기화스크립트삭제
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteInitScriptsRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteInitScriptsResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /deleteLoginKeys:
+    post:
+      operationId: DeleteLoginKeys
+      summary: 로그인키삭제
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteLoginKeysRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteLoginKeysResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /deleteMemberServerImageInstances:
+    post:
+      operationId: DeleteMemberServerImageInstances
+      summary: 회원서버이미지인스턴스삭제
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteMemberServerImageInstancesRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteMemberServerImageInstancesResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /deleteNetworkInterface:
+    post:
+      operationId: DeleteNetworkInterface
+      summary: 네트워크인터페이스삭제
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteNetworkInterfaceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteNetworkInterfaceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /deletePlacementGroup:
+    post:
+      operationId: DeletePlacementGroup
+      summary: 물리배치그룹삭제
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeletePlacementGroupRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeletePlacementGroupResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /deletePublicIpInstance:
+    post:
+      operationId: DeletePublicIpInstance
+      summary: 공인 IP 인스턴스삭제
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeletePublicIpInstanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeletePublicIpInstanceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /deleteServerImage:
+    post:
+      operationId: DeleteServerImage
+      summary: deleteServerImage
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteServerImageRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteServerImageResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /detachBlockStorageInstances:
+    post:
+      operationId: DetachBlockStorageInstances
+      summary: 블록스토리지인스턴스할당해제
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DetachBlockStorageInstancesRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetachBlockStorageInstancesResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /detachNetworkInterface:
+    post:
+      operationId: DetachNetworkInterface
+      summary: 네트워크인터페이스할당해제
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DetachNetworkInterfaceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetachNetworkInterfaceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /disableFlowLog:
+    post:
+      operationId: DisableFlowLog
+      summary: FlowLog 비활성화
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DisableFlowLogRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlowLogConfigurationList'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /disassociatePublicIpFromServerInstance:
+    post:
+      operationId: DisassociatePublicIpFromServerInstance
+      summary: 공인 IP 를서버인스턴스에서할당해제
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DisassociatePublicIpFromServerInstanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisassociatePublicIpFromServerInstanceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /enableFlowLog:
+    post:
+      operationId: EnableFlowLog
+      summary: FlowLog 활성화
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EnableFlowLogRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlowLogConfigurationList'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getAccessControlGroupDetail:
+    post:
+      operationId: GetAccessControlGroupDetail
+      summary: ACG 상세조회
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetAccessControlGroupDetailRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAccessControlGroupDetailResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getAccessControlGroupList:
+    post:
+      operationId: GetAccessControlGroupList
+      summary: ACG 리스트조회
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetAccessControlGroupListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAccessControlGroupListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getAccessControlGroupRuleList:
+    post:
+      operationId: GetAccessControlGroupRuleList
+      summary: ACGRule 리스트조회
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetAccessControlGroupRuleListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAccessControlGroupRuleListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getBlockStorageInstanceDetail:
+    post:
+      operationId: GetBlockStorageInstanceDetail
+      summary: 블록스토리지인스턴스상세조회
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetBlockStorageInstanceDetailRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBlockStorageInstanceDetailResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getBlockStorageInstanceList:
+    post:
+      operationId: GetBlockStorageInstanceList
+      summary: 블록스토리지인스턴스 리스트조회
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetBlockStorageInstanceListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBlockStorageInstanceListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getBlockStorageSnapshotInstanceDetail:
+    post:
+      operationId: GetBlockStorageSnapshotInstanceDetail
+      summary: 블록스토리지스냅샷인스턴스상세조회
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetBlockStorageSnapshotInstanceDetailRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBlockStorageSnapshotInstanceDetailResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getBlockStorageSnapshotInstanceList:
+    post:
+      operationId: GetBlockStorageSnapshotInstanceList
+      summary: 블록스토리지스냅샷인스턴스 리스트조회
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetBlockStorageSnapshotInstanceListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBlockStorageSnapshotInstanceListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getBlockStorageVolumeTypeList:
+    post:
+      operationId: GetBlockStorageVolumeTypeList
+      summary: 블록스토리지볼륨타입리스트 조회
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetBlockStorageVolumeTypeListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBlockStorageVolumeTypeListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getFlowLogConfigurationList:
+    post:
+      operationId: GetFlowLogConfigurationList
+      summary: FlogLog 설정정보 조회
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetFlowLogConfigurationListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlowLogConfigurationList'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getHypervisorTypeList:
+    post:
+      operationId: GetHypervisorTypeList
+      summary: 하이퍼바이저타입리스트조회
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetHypervisorTypeListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetHypervisorTypeListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getInitScriptDetail:
+    post:
+      operationId: GetInitScriptDetail
+      summary: 초기화스크립트상세조회
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetInitScriptDetailRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetInitScriptDetailResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getInitScriptList:
+    post:
+      operationId: GetInitScriptList
+      summary: 초기화스크립트리스트조회
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetInitScriptListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetInitScriptListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getLoginKeyList:
+    post:
+      operationId: GetLoginKeyList
+      summary: 로그인키리스트조회
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetLoginKeyListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetLoginKeyListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getMemberServerImageInstanceDetail:
+    post:
+      operationId: GetMemberServerImageInstanceDetail
+      summary: 회원서버이미지인스턴스상세조회
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetMemberServerImageInstanceDetailRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMemberServerImageInstanceDetailResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getMemberServerImageInstanceList:
+    post:
+      operationId: GetMemberServerImageInstanceList
+      summary: 회원서버이미지인스턴스 리스트조회
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetMemberServerImageInstanceListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMemberServerImageInstanceListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getNetworkInterfaceDetail:
+    post:
+      operationId: GetNetworkInterfaceDetail
+      summary: 네트워크인터페이스상세조회
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetNetworkInterfaceDetailRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetNetworkInterfaceDetailResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getNetworkInterfaceList:
+    post:
+      operationId: GetNetworkInterfaceList
+      summary: 네트워크인터페이스리스트조회
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetNetworkInterfaceListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetNetworkInterfaceListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getPlacementGroupDetail:
+    post:
+      operationId: GetPlacementGroupDetail
+      summary: 물리배치그룹상세조회
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetPlacementGroupDetailRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPlacementGroupDetailResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getPlacementGroupList:
+    post:
+      operationId: GetPlacementGroupList
+      summary: 물리배치그룹리스트조회
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetPlacementGroupListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPlacementGroupListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getPublicIpInstanceDetail:
+    post:
+      operationId: GetPublicIpInstanceDetail
+      summary: 공인 IP 인스턴스상세조회
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetPublicIpInstanceDetailRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPublicIpInstanceDetailResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getPublicIpInstanceList:
+    post:
+      operationId: GetPublicIpInstanceList
+      summary: 공인 IP 인스턴스 리스트조회
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetPublicIpInstanceListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPublicIpInstanceListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getPublicIpTargetServerInstanceList:
+    post:
+      operationId: GetPublicIpTargetServerInstanceList
+      summary: 공인 IP 할당가능서버인스턴스 리스트조회
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetPublicIpTargetServerInstanceListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPublicIpTargetServerInstanceListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getRaidList:
+    post:
+      operationId: GetRaidList
+      summary: RAID 리스트조회
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetRaidListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRaidListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getRegionList:
+    post:
+      operationId: GetRegionList
+      summary: REGION 리스트조회
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetRegionListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRegionListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getRootPassword:
+    post:
+      operationId: GetRootPassword
+      summary: 서버인스턴스의루트패스워드조회
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetRootPasswordRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRootPasswordResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getRootPasswordServerInstanceList:
+    post:
+      operationId: GetRootPasswordServerInstanceList
+      summary: 서버인스턴스 리스트의루트패스워드조회
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetRootPasswordServerInstanceListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRootPasswordServerInstanceListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getServerImageDetail:
+    post:
+      operationId: GetServerImageDetail
+      summary: 서버이미지상세조회
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetServerImageDetailRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetServerImageDetailResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getServerImageList:
+    post:
+      operationId: GetServerImageList
+      summary: 서버이미지리스트조회
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetServerImageListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetServerImageListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getServerImageProductList:
+    post:
+      operationId: GetServerImageProductList
+      summary: 서버이미지상품리스트조회
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetServerImageProductListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetServerImageProductListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getServerInstanceDetail:
+    post:
+      operationId: GetServerInstanceDetail
+      summary: 서버인스턴스상세조회
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetServerInstanceDetailRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetServerInstanceDetailResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getServerInstanceList:
+    post:
+      operationId: GetServerInstanceList
+      summary: 서버인스턴스 리스트조회
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetServerInstanceListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetServerInstanceListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getServerProductList:
+    post:
+      operationId: GetServerProductList
+      summary: 서버상품리스트조회
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetServerProductListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetServerProductListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getServerSpecDetail:
+    post:
+      operationId: GetServerSpecDetail
+      summary: 서버스펙상세조회
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetServerSpecDetailRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetServerSpecDetailResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getServerSpecList:
+    post:
+      operationId: GetServerSpecList
+      summary: 서버스펙리스트조회
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetServerSpecListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetServerSpecListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getZoneList:
+    post:
+      operationId: GetZoneList
+      summary: ZONE 리스트조회
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetZoneListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetZoneListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /importLoginKey:
+    post:
+      operationId: ImportLoginKey
+      summary: 사용자가생성한로그인키 import
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ImportLoginKeyRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportLoginKeyResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /interruptServerInstance:
+    post:
+      operationId: InterruptServerInstance
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/InterruptServerInstanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InterruptServerInstanceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: 서버인스턴스인터럽트
+      description: |
+        이상 동작하는 서버 인스턴스(VM)의 진단을 위한 인터럽트를 실행합니다.
+        자세한 정보는 사용 가이드 > Server > Classic > Server 문제해결 > 진단 인터럽트를 참고하세요.
+  /rebootServerInstances:
+    post:
+      operationId: RebootServerInstances
+      summary: 서버인스턴스재시작
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RebootServerInstancesRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RebootServerInstancesResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /removeAccessControlGroupInboundRule:
+    post:
+      operationId: RemoveAccessControlGroupInboundRule
+      summary: ACGInboundRule 삭제
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RemoveAccessControlGroupInboundRuleRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RemoveAccessControlGroupInboundRuleResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /removeAccessControlGroupOutboundRule:
+    post:
+      operationId: RemoveAccessControlGroupOutboundRule
+      summary: ACGOutboundRule 삭제
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RemoveAccessControlGroupOutboundRuleRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RemoveAccessControlGroupOutboundRuleResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /removeMemberServerImageSharingPermission:
+    post:
+      operationId: RemoveMemberServerImageSharingPermission
+      summary: 회원서버이미지공유권한제거
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RemoveMemberServerImageSharingPermissionRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RemoveMemberServerImageSharingPermissionResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /removeNetworkInterfaceAccessControlGroup:
+    post:
+      operationId: RemoveNetworkInterfaceAccessControlGroup
+      summary: 네트워크인터페이스의 ACG 제거
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RemoveNetworkInterfaceAccessControlGroupRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RemoveNetworkInterfaceAccessControlGroupResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /removePlacementGroupServerInstance:
+    post:
+      operationId: RemovePlacementGroupServerInstance
+      summary: 물리배치그룹에서서버인스턴스제거
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RemovePlacementGroupServerInstanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RemovePlacementGroupServerInstanceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /removeServerImageSharingPermission:
+    post:
+      operationId: RemoveServerImageSharingPermission
+      summary: 서버이미지공유권한제거
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RemoveServerImageSharingPermissionRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RemoveServerImageSharingPermissionResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /setBlockStorageReturnProtection:
+    post:
+      operationId: SetBlockStorageReturnProtection
+      summary: 블록스토리지반납보호설정
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetBlockStorageReturnProtectionRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetBlockStorageReturnProtectionResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /setMemberServerImageSharingPermission:
+    post:
+      operationId: SetMemberServerImageSharingPermission
+      summary: 회원서버이미지공유권한설정
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetMemberServerImageSharingPermissionRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetMemberServerImageSharingPermissionResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /setProtectServerTermination:
+    post:
+      operationId: SetProtectServerTermination
+      summary: 서버반납보호설정
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetProtectServerTerminationRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetProtectServerTerminationResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /startServerInstances:
+    post:
+      operationId: StartServerInstances
+      summary: 서버인스턴스시작
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/StartServerInstancesRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StartServerInstancesResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /stopServerInstances:
+    post:
+      operationId: StopServerInstances
+      summary: 서버인스턴스정지
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/StopServerInstancesRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StopServerInstancesResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /terminateServerInstances:
+    post:
+      operationId: TerminateServerInstances
+      summary: 서버인스턴스반납
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TerminateServerInstancesRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TerminateServerInstancesResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /unassignSecondaryIps:
+    post:
+      operationId: UnassignSecondaryIps
+      summary: 보조 IP 할당해제
+      tags:
+        - server
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UnassignSecondaryIpsRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnassignSecondaryIpsResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+components:
+  schemas:
+    AccessControlGroup:
+      type: object
+      properties:
+        accessControlGroupNo:
+          type: string
+          description: ACG 번호
+        accessControlGroupName:
+          type: string
+          description: ACG 이름
+        isDefault:
+          type: boolean
+          description: Default 여부
+        vpcNo:
+          type: string
+          description: VPC 번호
+        accessControlGroupStatus:
+          $ref: '#/components/schemas/CommonCode'
+        accessControlGroupDescription:
+          type: string
+          description: ACG 설명
+    AccessControlGroupRule:
+      type: object
+      properties:
+        accessControlGroupNo:
+          type: string
+          description: ACG 번호
+        protocolType:
+          $ref: '#/components/schemas/ProtocolType'
+        ipBlock:
+          type: string
+          description: IP 블록
+        portRange:
+          type: string
+          description: 포트범위
+        accessControlGroupSequence:
+          type: string
+          description: 접근소스 ACG
+        accessControlGroupRuleType:
+          $ref: '#/components/schemas/CommonCode'
+        accessControlGroupRuleDescription:
+          type: string
+          description: ACGRule 설명
+    AddAccessControlGroupInboundRuleRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        accessControlGroupNo:
+          type: string
+          description: ACG 번호
+        vpcNo:
+          type: string
+          description: VPC 번호
+        accessControlGroupRuleList:
+          type: array
+          description: ACGRule 리스트
+          items:
+            $ref: '#/components/schemas/AddAccessControlGroupRuleParameter'
+      required:
+        - accessControlGroupRuleList
+    AddAccessControlGroupInboundRuleResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        accessControlGroupRuleList:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessControlGroupRule'
+    AddAccessControlGroupOutboundRuleRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        accessControlGroupNo:
+          type: string
+          description: ACG 번호
+        vpcNo:
+          type: string
+          description: VPC 번호
+        accessControlGroupRuleList:
+          type: array
+          description: ACGRule 리스트
+          items:
+            $ref: '#/components/schemas/AddAccessControlGroupRuleParameter'
+      required:
+        - accessControlGroupRuleList
+    AddAccessControlGroupOutboundRuleResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        accessControlGroupRuleList:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessControlGroupRule'
+    AddAccessControlGroupRuleParameter:
+      type: object
+      properties:
+        accessControlGroupRuleDescription:
+          type: string
+          description: ACGRule 설명
+        ipBlock:
+          type: string
+          description: IP 블록
+        accessControlGroupSequence:
+          type: string
+          description: 접근소스 ACG
+        portRange:
+          type: string
+          description: 포트범위
+        protocolTypeCode:
+          type: string
+          description: 프로토콜유형 코드
+    AddMemberServerImageSharingPermissionRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        memberServerImageInstanceNo:
+          type: string
+          description: 회원서버이미지인스턴스 번호
+        targetLoginIdList:
+          type: array
+          description: 대상로그인 ID 리스트
+          items:
+            type: string
+      required:
+        - targetLoginIdList
+    AddMemberServerImageSharingPermissionResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        memberServerImageInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/MemberServerImageInstance'
+    AddNetworkInterfaceAccessControlGroupRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        accessControlGroupNoList:
+          type: array
+          description: ACG 번호 리스트
+          items:
+            type: string
+        networkInterfaceNo:
+          type: string
+          description: 네트워크인터페이스번호
+      required:
+        - accessControlGroupNoList
+    AddNetworkInterfaceAccessControlGroupResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        networkInterfaceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkInterface'
+    AddPlacementGroupServerInstanceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        placementGroupNo:
+          type: string
+          description: 물리배치그룹 번호
+        serverInstanceNo:
+          type: string
+          description: 서버인스턴스 번호
+    AddPlacementGroupServerInstanceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        serverInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServerInstance'
+    AddServerImageSharingPermissionRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        serverImageNo:
+          type: string
+          description: 서버이미지번호
+        targetLoginIdList:
+          type: array
+          description: 대상로그인 ID 리스트
+          items:
+            type: string
+      required:
+        - targetLoginIdList
+    AddServerImageSharingPermissionResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        serverImageList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServerImage'
+    AssignSecondaryIpsRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        networkInterfaceNo:
+          type: string
+          description: 네트워크인터페이스번호
+        secondaryIpList:
+          type: array
+          description: 보조 IP 리스트
+          items:
+            type: string
+        secondaryIpCount:
+          type: integer
+          format: int32
+          description: 보조 IP 자동할당개수
+        allowReassign:
+          type: boolean
+          description: 명시적재할당허용여부
+    AssignSecondaryIpsResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        networkInterfaceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkInterface'
+    AssociatePublicIpWithServerInstanceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        publicIpInstanceNo:
+          type: string
+          description: 공인 IP 인스턴스 번호
+        serverInstanceNo:
+          type: string
+          description: 서버인스턴스 번호
+    AssociatePublicIpWithServerInstanceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        publicIpInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicIpInstance'
+    AttachBlockStorageInstanceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        serverInstanceNo:
+          type: string
+          description: 서버인스턴스 번호
+        blockStorageInstanceNo:
+          type: string
+          description: 블록스토리지인스턴스 번호
+    AttachBlockStorageInstanceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        blockStorageInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlockStorageInstance'
+    AttachNetworkInterfaceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        serverInstanceNo:
+          type: string
+          description: 서버인스턴스 번호
+        networkInterfaceNo:
+          type: string
+          description: 네트워크인터페이스번호
+        subnetNo:
+          type: string
+          description: 서브넷 번호
+    AttachNetworkInterfaceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        networkInterfaceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkInterface'
+    BlockDevicePartition:
+      type: object
+      properties:
+        mountPoint:
+          type: string
+          description: 마운트포인트
+        partitionSize:
+          type: string
+          description: 파티션사이즈
+    BlockStorage:
+      type: object
+      properties:
+        order:
+          type: integer
+          format: int32
+          description: 스토리지 순서
+        snapshotInstanceNo:
+          type: string
+          description: 스토리지 스냅샷 인스턴스 번호
+        blockStorageSize:
+          type: integer
+          format: int32
+          description: 스토리지 크기(GB)
+        blockStorageVolumeTypeCode:
+          type: string
+          description: 스토리지 타입
+        emptyBlockStorage:
+          type: boolean
+          description: 신규 스토리지 생성 여부
+        noBlockStorage:
+          type: boolean
+          description: 기존 스토이지 삭제 여부
+    BlockStorageInstance:
+      type: object
+      properties:
+        blockStorageInstanceNo:
+          type: string
+          description: 블록스토리지인스턴스 번호
+        serverInstanceNo:
+          type: string
+          description: 서버인스턴스 번호
+        blockStorageName:
+          type: string
+          description: 블록스토리지이름
+        blockStorageType:
+          $ref: '#/components/schemas/CommonCode'
+        blockStorageSize:
+          type: integer
+          format: int64
+          description: 블록스토리지사이즈
+        deviceName:
+          type: string
+          description: 디바이스이름
+        blockStorageProductCode:
+          type: string
+          description: 블록스토리지상품코드
+        blockStorageInstanceStatus:
+          $ref: '#/components/schemas/CommonCode'
+        blockStorageInstanceOperation:
+          $ref: '#/components/schemas/CommonCode'
+        blockStorageInstanceStatusName:
+          type: string
+          description: 블록스토리지인스턴스 상태이름
+        createDate:
+          type: string
+          description: 생성일시
+        blockStorageDescription:
+          type: string
+          description: 블록스토리지설명
+        blockStorageDiskType:
+          $ref: '#/components/schemas/CommonCode'
+        blockStorageDiskDetailType:
+          $ref: '#/components/schemas/CommonCode'
+        maxIopsThroughput:
+          type: integer
+          format: int32
+          description: 최대 IOPS
+        isEncryptedVolume:
+          type: boolean
+          description: 볼륨암호화여부
+        zoneCode:
+          type: string
+          description: ZONE 코드
+        regionCode:
+          type: string
+          description: REGION 코드
+        isReturnProtection:
+          type: boolean
+          description: 반납보호여부
+        blockStorageVolumeType:
+          $ref: '#/components/schemas/CommonCode'
+        hypervisorType:
+          $ref: '#/components/schemas/CommonCode'
+        throughput:
+          type: integer
+          format: int64
+          description: 블록스토리지 throughput
+    BlockStorageMapping:
+      type: object
+      properties:
+        order:
+          type: integer
+          format: int32
+          description: 블록스토리지순서
+        blockStorageSnapshotInstanceNo:
+          type: integer
+          format: int32
+          description: 블록스토리지스냅샷인스턴스 번호
+        blockStorageSnapshotName:
+          type: string
+          description: 블록스토리지스냅샷이름
+        blockStorageSize:
+          type: integer
+          format: int64
+          description: 블록스토리지사이즈
+        blockStorageName:
+          type: string
+          description: 블록스토리지이름
+        blockStorageVolumeType:
+          $ref: '#/components/schemas/CommonCode'
+        iops:
+          type: integer
+          format: int32
+          description: IOPS
+        throughput:
+          type: integer
+          format: int64
+          description: 부하처리성능
+        isEncryptedVolume:
+          type: boolean
+          description: 볼륨암호화여부
+    BlockStorageMappingParameter:
+      type: object
+      properties:
+        order:
+          type: integer
+          format: int32
+          description: 생성스토리지순서
+        snapshotInstanceNo:
+          type: string
+          description: 생성스토리지스냅샷번호
+        blockStorageSize:
+          type: string
+          description: 생성스토리지사이즈
+        blockStorageName:
+          type: string
+          description: 생성스토리지이름
+        blockStorageVolumeTypeCode:
+          type: string
+          description: 생성스토리지볼륨타입코드
+        encrypted:
+          type: string
+          description: 생성스토리지암호화여부
+    BlockStorageSnapshotInstance:
+      type: object
+      properties:
+        blockStorageSnapshotInstanceNo:
+          type: string
+          description: 블록스토리지스냅샷인스턴스 번호
+        blockStorageSnapshotName:
+          type: string
+          description: 블록스토리지스냅샷이름
+        blockStorageSnapshotVolumeSize:
+          type: integer
+          format: int64
+          description: 블록스토리지스냅샷볼륨사이즈
+        originalBlockStorageInstanceNo:
+          type: string
+          description: 원본블록스토리지인스턴스 번호
+        blockStorageSnapshotInstanceStatus:
+          $ref: '#/components/schemas/CommonCode'
+        blockStorageSnapshotInstanceOperation:
+          $ref: '#/components/schemas/CommonCode'
+        blockStorageSnapshotInstanceStatusName:
+          type: string
+          description: 블록스토리지스냅샷인스턴스 상태이름
+        createDate:
+          type: string
+          description: 생성일시
+        isEncryptedOriginalBlockStorageVolume:
+          type: boolean
+          description: 원본블록스토리지볼륨암호화여부
+        blockStorageSnapshotDescription:
+          type: string
+          description: 블록스토리지스냅샷설명
+        snapshotType:
+          $ref: '#/components/schemas/CommonCode'
+        baseSnapshotInstanceNo:
+          type: string
+          description: 베이스스냅샷인스턴스 번호
+        snapshotChainDepth:
+          type: integer
+          format: int32
+          description: 스냅샷일련 Depth
+        hypervisorType:
+          $ref: '#/components/schemas/CommonCode'
+        isBootable:
+          type: boolean
+          description: 부팅가능 여부
+    BlockStorageVolumeType:
+      type: object
+      properties:
+        zoneCodeList:
+          type: array
+          description: ZONE 코드 리스트
+          items:
+            type: string
+        blockStorageVolumeType:
+          $ref: '#/components/schemas/CommonCode'
+        hypervisorType:
+          $ref: '#/components/schemas/CommonCode'
+        minThroughput:
+          type: integer
+          format: int32
+          description: 블록스토리지 볼륨타입 최소 throughput
+        maxThroughput:
+          type: integer
+          format: int32
+          description: 블록스토리지 볼륨타입 최대 throughput
+        minIops:
+          type: integer
+          format: int32
+          description: 블록스토리지 볼륨타입 최소 iops
+        maxIops:
+          type: integer
+          format: int32
+          description: 블록스토리지 볼륨타입 최대 iops
+        minVolumeSize:
+          type: integer
+          format: int32
+          description: 블록스토리지 볼륨타입 최소 volumeSize
+        maxVolumeSize:
+          type: integer
+          format: int32
+          description: 블록스토리지 볼륨타입 최대 volumeSize
+        minBaseVolumeSize:
+          type: integer
+          format: int32
+          description: 블록스토리지 볼륨타입 최소 rootVolumeSize
+        maxBaseVolumeSize:
+          type: integer
+          format: int32
+          description: 블록스토리지 볼륨타입 최대 rootVolumeSize
+        isAvailableBase:
+          type: boolean
+          description: 기본스토리지 가능 여부
+    ChangeBlockStorageInstanceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        blockStorageInstanceNo:
+          type: string
+          description: 블록스토리지인스턴스 번호
+        blockStorageSize:
+          type: integer
+          format: int32
+          description: 블록스토리지사이즈
+        iops:
+          type: integer
+          format: int32
+          description: iops
+        throughput:
+          type: integer
+          format: int32
+          description: throughput
+    ChangeBlockStorageInstanceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        blockStorageInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlockStorageInstance'
+    ChangeBlockStorageVolumeSizeRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        blockStorageInstanceNo:
+          type: string
+          description: 블록스토리지인스턴스 번호
+        blockStorageSize:
+          type: integer
+          format: int32
+          description: 블록스토리지사이즈
+    ChangeBlockStorageVolumeSizeResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        blockStorageInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlockStorageInstance'
+    ChangeServerInstanceSpecRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        serverInstanceNo:
+          type: string
+          description: 서버인스턴스 번호
+        serverProductCode:
+          type: string
+          description: 서버상품코드
+        serverSpecCode:
+          type: string
+          description: 서버스펙코드
+    ChangeServerInstanceSpecResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        serverInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServerInstance'
+    CommonCode:
+      type: object
+      properties:
+        code:
+          type: string
+          description: 코드
+        codeName:
+          type: string
+          description: 코드명
+    CreateAccessControlGroupRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        accessControlGroupName:
+          type: string
+          description: ACG 이름
+        accessControlGroupDescription:
+          type: string
+          description: ACG 설명
+        vpcNo:
+          type: string
+          description: VPC 번호
+    CreateAccessControlGroupResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        accessControlGroupList:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessControlGroup'
+    CreateBlockStorageInstanceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        blockStorageName:
+          type: string
+          description: 블록스토리지이름
+        blockStorageSize:
+          type: integer
+          format: int32
+          description: 블록스토리지사이즈
+        blockStorageDiskDetailTypeCode:
+          type: string
+          description: 블록스토리지디스크상세유형 코드
+        blockStorageDescription:
+          type: string
+          description: 블록스토리지설명
+        serverInstanceNo:
+          type: string
+          description: 서버인스턴스 번호
+        blockStorageSnapshotInstanceNo:
+          type: string
+          description: 블록스토리지스냅샷인스턴스 번호
+        zoneCode:
+          type: string
+          description: ZONE 코드
+        isReturnProtection:
+          type: boolean
+          description: 반납보호여부
+        blockStorageVolumeTypeCode:
+          type: string
+          description: 블록스토리지볼륨타입코드
+    CreateBlockStorageInstanceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        blockStorageInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlockStorageInstance'
+    CreateBlockStorageSnapshotInstanceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        blockStorageSnapshotName:
+          type: string
+          description: 블록스토리지스냅샷이름
+        blockStorageSnapshotDescription:
+          type: string
+          description: 블록스토리지스냅샷설명
+        originalBlockStorageInstanceNo:
+          type: string
+          description: 원본블록스토리지인스턴스 번호
+        snapshotTypeCode:
+          type: string
+          description: 스냅샷유형 코드
+    CreateBlockStorageSnapshotInstanceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        blockStorageSnapshotInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlockStorageSnapshotInstance'
+    CreateInitScriptRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        initScriptContent:
+          type: string
+          description: 초기화스크립트내용
+        initScriptName:
+          type: string
+          description: 초기화스크립트이름
+        initScriptDescription:
+          type: string
+          description: 초기화스크립트설명
+        osTypeCode:
+          type: string
+          description: OS 유형 코드
+    CreateInitScriptResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        initScriptList:
+          type: array
+          items:
+            $ref: '#/components/schemas/InitScript'
+    CreateLoginKeyRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        keyName:
+          type: string
+          description: 키이름
+    CreateLoginKeyResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        keyName:
+          type: string
+          description: 키이름
+        privateKey:
+          type: string
+          description: 개인키
+    CreateMemberServerImageInstanceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        memberServerImageName:
+          type: string
+          description: 회원서버이미지이름
+        memberServerImageDescription:
+          type: string
+          description: 회원서버이미지설명
+        serverInstanceNo:
+          type: string
+          description: 서버인스턴스 번호
+    CreateMemberServerImageInstanceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        memberServerImageInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/MemberServerImageInstance'
+    CreateNetworkInterfaceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        accessControlGroupNoList:
+          type: array
+          description: ACG 번호 리스트
+          items:
+            type: string
+        networkInterfaceDescription:
+          type: string
+          description: 네트워크인터페이스설명
+        networkInterfaceName:
+          type: string
+          description: 네트워크인터페이스이름
+        subnetNo:
+          type: string
+          description: 서브넷 번호
+        vpcNo:
+          type: string
+          description: VPC 번호
+        serverInstanceNo:
+          type: string
+          description: 서버인스턴스 번호
+        ip:
+          type: string
+          description: IP 주소
+        secondaryIpList:
+          type: array
+          description: 보조 IP 리스트
+          items:
+            type: string
+        secondaryIpCount:
+          type: integer
+          format: int32
+          description: 보조 IP 자동할당개수
+        isBareMetal:
+          type: boolean
+          description: 베어메탈여부
+      required:
+        - accessControlGroupNoList
+    CreateNetworkInterfaceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        networkInterfaceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkInterface'
+    CreatePlacementGroupRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        placementGroupName:
+          type: string
+          description: 물리배치그룹 이름
+        placementGroupTypeCode:
+          type: string
+          description: 물리배치그룹유형 코드
+    CreatePlacementGroupResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        placementGroupList:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlacementGroup'
+    CreatePublicIpInstanceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        publicIpDescription:
+          type: string
+          description: 공인 IP 설명
+        serverInstanceNo:
+          type: string
+          description: 서버인스턴스 번호
+    CreatePublicIpInstanceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        publicIpInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicIpInstance'
+    CreateServerImageFromSnapshotRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        serverImageName:
+          type: string
+          description: 서버이미지이름
+        serverImageDescription:
+          type: string
+          description: 서버이미지설명
+        blockStorageList:
+          type: array
+          description: 스토리지리스트
+          items:
+            $ref: '#/components/schemas/BlockStorage'
+      required:
+        - blockStorageList
+    CreateServerImageFromSnapshotResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        serverImageList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServerImage'
+    CreateServerImageRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        serverInstanceNo:
+          type: string
+          description: 원본서버인스턴스 번호
+        serverImageName:
+          type: string
+          description: 서버이미지이름
+        serverImageDescription:
+          type: string
+          description: 서버이미지설명
+        blockStorageList:
+          type: array
+          description: 스토리지리스트
+          items:
+            $ref: '#/components/schemas/BlockStorage'
+      required:
+        - blockStorageList
+    CreateServerImageResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        serverImageList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServerImage'
+    CreateServerInstancesRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        serverProductCode:
+          type: string
+          description: 서버상품코드
+        serverImageProductCode:
+          type: string
+          description: 서버이미지상품코드
+        memberServerImageInstanceNo:
+          type: string
+          description: 회원서버이미지인스턴스 번호
+        serverName:
+          type: string
+          description: 서버 이름
+        serverDescription:
+          type: string
+          description: 서버설명
+        loginKeyName:
+          type: string
+          description: 로그인키이름
+        isProtectServerTermination:
+          type: boolean
+          description: 반납보호여부
+        serverCreateCount:
+          type: integer
+          format: int32
+          description: 서버생성개수
+        serverCreateStartNo:
+          type: integer
+          format: int32
+          description: 서버생성시작 번호
+        feeSystemTypeCode:
+          type: string
+          description: 요금제유형 코드
+        initScriptNo:
+          type: string
+          description: 초기화스크립트번호
+        vpcNo:
+          type: string
+          description: VPC 번호
+        subnetNo:
+          type: string
+          description: 서브넷 번호
+        networkInterfaceList:
+          type: array
+          description: 네트워크인터페이스리스트
+          items:
+            $ref: '#/components/schemas/NetworkInterfaceParameter'
+        placementGroupNo:
+          type: string
+          description: 물리배치그룹 번호
+        isEncryptedBaseBlockStorageVolume:
+          type: boolean
+          description: 기본블록스토리지볼륨암호화여부
+        associateWithPublicIp:
+          type: boolean
+          description: 서버생성시공인 IP 할당여부
+        raidTypeName:
+          type: string
+          description: RAID 유형이름
+        blockDevicePartitionList:
+          type: array
+          description: 블록디바이스파티션리스트
+          items:
+            $ref: '#/components/schemas/BlockDevicePartition'
+        serverImageNo:
+          type: string
+          description: 서버이미지번호
+        serverSpecCode:
+          type: string
+          description: 서버스펙코드
+        blockStorageMappingList:
+          type: array
+          description: 블록스토리지맵핑리스트
+          items:
+            $ref: '#/components/schemas/BlockStorageMappingParameter'
+      required:
+        - networkInterfaceList
+    CreateServerInstancesResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        serverInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServerInstance'
+    DeleteAccessControlGroupRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        vpcNo:
+          type: string
+          description: VPC 번호
+        accessControlGroupNo:
+          type: string
+          description: ACG 번호
+    DeleteAccessControlGroupResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        accessControlGroupList:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessControlGroup'
+    DeleteBlockStorageInstancesRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        blockStorageInstanceNoList:
+          type: array
+          description: 블록스토리지인스턴스 번호 리스트
+          items:
+            type: string
+      required:
+        - blockStorageInstanceNoList
+    DeleteBlockStorageInstancesResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        blockStorageInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlockStorageInstance'
+    DeleteBlockStorageSnapshotInstancesRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        blockStorageSnapshotInstanceNoList:
+          type: array
+          description: 블록스토리지스냅샷인스턴스 번호 리스트
+          items:
+            type: string
+      required:
+        - blockStorageSnapshotInstanceNoList
+    DeleteBlockStorageSnapshotInstancesResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        blockStorageSnapshotInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlockStorageSnapshotInstance'
+    DeleteInitScriptsRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        initScriptNoList:
+          type: array
+          description: 초기화스크립트번호 리스트
+          items:
+            type: string
+      required:
+        - initScriptNoList
+    DeleteInitScriptsResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        initScriptList:
+          type: array
+          items:
+            $ref: '#/components/schemas/InitScript'
+    DeleteLoginKeysRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        keyNameList:
+          type: array
+          description: 키이름 리스트
+          items:
+            type: string
+      required:
+        - keyNameList
+    DeleteLoginKeysResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+    DeleteMemberServerImageInstancesRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        memberServerImageInstanceNoList:
+          type: array
+          description: 회원서버이미지인스턴스 번호 리스트
+          items:
+            type: string
+      required:
+        - memberServerImageInstanceNoList
+    DeleteMemberServerImageInstancesResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        memberServerImageInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/MemberServerImageInstance'
+    DeleteNetworkInterfaceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        networkInterfaceNo:
+          type: string
+          description: 네트워크인터페이스번호
+    DeleteNetworkInterfaceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        networkInterfaceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkInterface'
+    DeletePlacementGroupRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        placementGroupNo:
+          type: string
+          description: 물리배치그룹 번호
+    DeletePlacementGroupResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        placementGroupList:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlacementGroup'
+    DeletePublicIpInstanceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        publicIpInstanceNo:
+          type: string
+          description: 공인 IP 인스턴스 번호
+    DeletePublicIpInstanceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        publicIpInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicIpInstance'
+    DeleteServerImageRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        serverImageNoList:
+          type: array
+          description: 서버이미지번호 리스트
+          items:
+            type: string
+    DeleteServerImageResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        serverImageList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServerImage'
+    DetachBlockStorageInstancesRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        blockStorageInstanceNoList:
+          type: array
+          description: 블록스토리지인스턴스 번호 리스트
+          items:
+            type: string
+      required:
+        - blockStorageInstanceNoList
+    DetachBlockStorageInstancesResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        blockStorageInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlockStorageInstance'
+    DetachNetworkInterfaceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        serverInstanceNo:
+          type: string
+          description: 서버인스턴스 번호
+        networkInterfaceNo:
+          type: string
+          description: 네트워크인터페이스번호
+        subnetNo:
+          type: string
+          description: 서브넷 번호
+    DetachNetworkInterfaceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        networkInterfaceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkInterface'
+    DisableFlowLogRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        networkInterfaceNo:
+          type: string
+          description: 네트워크인터페이스번호
+    DisassociatePublicIpFromServerInstanceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        publicIpInstanceNo:
+          type: string
+          description: 공인 IP 인스턴스 번호
+        serverInstanceNo:
+          type: string
+          description: 서버인스턴스 번호
+    DisassociatePublicIpFromServerInstanceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        publicIpInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicIpInstance'
+    EnableFlowLogRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        collectActionTypeCode:
+          type: string
+          description: 수집액션유형 코드
+        collectIntervalMinute:
+          type: integer
+          format: int32
+          description: 수집주기(분)
+        networkInterfaceNo:
+          type: string
+          description: 네트워크인터페이스번호
+        storageTypeCode:
+          type: string
+          description: 저장소유형 코드
+        storageBucketName:
+          type: string
+          description: 저장소버킷이름
+        storageBucketDirectoryName:
+          type: string
+          description: 저장소버킷디렉토리이름
+    FlowLogConfiguration:
+      type: object
+      properties:
+        networkInterfaceNo:
+          type: string
+        collectActionType:
+          $ref: '#/components/schemas/CommonCode'
+        collectIntervalMinute:
+          type: integer
+          format: int32
+        storageType:
+          $ref: '#/components/schemas/CommonCode'
+        storageBucketName:
+          type: string
+        storageBucketDirectoryName:
+          type: string
+    FlowLogConfigurationList:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        flowLogConfigurationList:
+          type: array
+          items:
+            $ref: '#/components/schemas/FlowLogConfiguration'
+    GetAccessControlGroupDetailRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        accessControlGroupNo:
+          type: string
+          description: ACG 번호
+    GetAccessControlGroupDetailResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        accessControlGroupList:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessControlGroup'
+    GetAccessControlGroupListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        accessControlGroupNoList:
+          type: array
+          description: ACG 번호 리스트
+          items:
+            type: string
+        accessControlGroupName:
+          type: string
+          description: ACG 이름
+        accessControlGroupStatusCode:
+          type: string
+          description: ACG 상태 코드
+        pageNo:
+          type: integer
+          format: int32
+          description: 페이지번호
+        pageSize:
+          type: integer
+          format: int32
+          description: 페이지사이즈
+        vpcNo:
+          type: string
+          description: VPC 번호
+    GetAccessControlGroupListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        accessControlGroupList:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessControlGroup'
+    GetAccessControlGroupRuleListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        accessControlGroupNo:
+          type: string
+          description: ACG 번호
+        accessControlGroupRuleTypeCode:
+          type: string
+          description: ACGRule 유형 코드
+    GetAccessControlGroupRuleListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        accessControlGroupRuleList:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessControlGroupRule'
+    GetBlockStorageInstanceDetailRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        blockStorageInstanceNo:
+          type: string
+          description: 블록스토리지인스턴스 번호
+    GetBlockStorageInstanceDetailResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        blockStorageInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlockStorageInstance'
+    GetBlockStorageInstanceListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        serverInstanceNo:
+          type: string
+          description: 서버인스턴스 번호
+        blockStorageTypeCodeList:
+          type: array
+          description: 블록스토리지유형 코드 리스트
+          items:
+            type: string
+        blockStorageInstanceStatusCode:
+          type: string
+          description: 블록스토리지인스턴스 상태 코드
+        pageNo:
+          type: integer
+          format: int32
+          description: 페이지번호
+        pageSize:
+          type: integer
+          format: int32
+          description: 페이지사이즈
+        blockStorageSize:
+          type: integer
+          format: int32
+          description: 블록스토리지사이즈
+        blockStorageInstanceNoList:
+          type: array
+          description: 블록스토리지인스턴스 번호 리스트
+          items:
+            type: string
+        blockStorageName:
+          type: string
+          description: 블록스토리지이름
+        serverName:
+          type: string
+          description: 서버 이름
+        connectionInfo:
+          type: string
+          description: 연결정보
+        blockStorageDiskTypeCode:
+          type: string
+          description: 블록스토리지디스크유형 코드
+        blockStorageDiskDetailTypeCode:
+          type: string
+          description: 블록스토리지디스크상세유형 코드
+        blockStorageVolumeTypeCodeList:
+          type: array
+          description: 블록스토리지볼륨타입코드 리스트
+          items:
+            type: string
+        hypervisorTypeCodeList:
+          type: array
+          description: 하이퍼바이저타입코드 리스트
+          items:
+            type: string
+    GetBlockStorageInstanceListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        blockStorageInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlockStorageInstance'
+    GetBlockStorageSnapshotInstanceDetailRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        blockStorageSnapshotInstanceNo:
+          type: string
+          description: 블록스토리지스냅샷인스턴스 번호
+    GetBlockStorageSnapshotInstanceDetailResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        blockStorageSnapshotInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlockStorageSnapshotInstance'
+    GetBlockStorageSnapshotInstanceListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        blockStorageSnapshotInstanceNoList:
+          type: array
+          description: 블록스토리지스냅샷인스턴스 번호 리스트
+          items:
+            type: string
+        originalBlockStorageInstanceNoList:
+          type: array
+          description: 원본블록스토리지인스턴스 번호 리스트
+          items:
+            type: string
+        hypervisorTypeCodeList:
+          type: array
+          description: 하이퍼바이저타입코드 리스트
+          items:
+            type: string
+        blockStorageSnapshotInstanceStatusCode:
+          type: string
+          description: 블록스토리지스냅샷인스턴스 상태 코드
+        pageNo:
+          type: integer
+          format: int32
+          description: 페이지번호
+        pageSize:
+          type: integer
+          format: int32
+          description: 페이지사이즈
+        blockStorageSnapshotVolumeSize:
+          type: integer
+          format: int64
+          description: 블록스토리지스냅샷볼륨사이즈
+        isEncryptedOriginalBlockStorageVolume:
+          type: boolean
+          description: 원본블록스토리지볼륨암호화여부
+        blockStorageSnapshotName:
+          type: string
+          description: 블록스토리지스냅샷이름
+        isBootable:
+          type: boolean
+          description: 부팅가능 여부
+        sortedBy:
+          type: string
+          description: 정렬대상
+        sortingOrder:
+          type: string
+          description: 정렬순서
+    GetBlockStorageSnapshotInstanceListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        blockStorageSnapshotInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlockStorageSnapshotInstance'
+    GetBlockStorageVolumeTypeListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        zoneCode:
+          type: string
+          description: 존코드
+        isAvailableBase:
+          type: boolean
+          description: 기본스토리지 가능 여부
+        serverSpecCode:
+          type: string
+          description: 서버스펙코드
+        blockStorageVolumeTypeCodeList:
+          type: array
+          description: 블록스토리지볼륨타입코드 리스트
+          items:
+            type: string
+        hypervisorTypeCodeList:
+          type: array
+          description: 하이퍼바이저타입코드 리스트
+          items:
+            type: string
+    GetBlockStorageVolumeTypeListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        blockStorageVolumeTypeList:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlockStorageVolumeType'
+    GetFlowLogConfigurationListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        networkInterfaceNoList:
+          type: array
+          description: 네트워크인터페이스번호 리스트
+          items:
+            type: string
+      required:
+        - networkInterfaceNoList
+    GetHypervisorTypeListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+    GetHypervisorTypeListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        hypervisorTypeList:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonCode'
+    GetInitScriptDetailRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        initScriptNo:
+          type: string
+          description: 초기화스크립트번호
+    GetInitScriptDetailResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        initScriptList:
+          type: array
+          items:
+            $ref: '#/components/schemas/InitScript'
+    GetInitScriptListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        osTypeCode:
+          type: string
+          description: OS 유형 코드
+        pageNo:
+          type: integer
+          format: int32
+          description: 페이지번호
+        pageSize:
+          type: integer
+          format: int32
+          description: 페이지사이즈
+        sortedBy:
+          type: string
+          description: 정렬대상
+        sortingOrder:
+          type: string
+          description: 정렬순서
+        initScriptName:
+          type: string
+          description: 초기화스크립트이름
+        initScriptNoList:
+          type: array
+          description: 초기화스크립트번호 리스트
+          items:
+            type: string
+    GetInitScriptListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        initScriptList:
+          type: array
+          items:
+            $ref: '#/components/schemas/InitScript'
+    GetLoginKeyListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        keyName:
+          type: string
+          description: 키이름
+        pageNo:
+          type: integer
+          format: int32
+          description: 페이지번호
+        pageSize:
+          type: integer
+          format: int32
+          description: 페이지사이즈
+    GetLoginKeyListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        loginKeyList:
+          type: array
+          items:
+            $ref: '#/components/schemas/LoginKey'
+    GetMemberServerImageInstanceDetailRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        memberServerImageInstanceNo:
+          type: string
+          description: 회원서버이미지인스턴스 번호
+    GetMemberServerImageInstanceDetailResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        memberServerImageInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/MemberServerImageInstance'
+    GetMemberServerImageInstanceListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        memberServerImageName:
+          type: string
+          description: 회원서버이미지이름
+        memberServerImageInstanceStatusCode:
+          type: string
+          description: 회원서버이미지인스턴스 상태 코드
+        memberServerImageInstanceNoList:
+          type: array
+          description: 회원서버이미지인스턴스 번호 리스트
+          items:
+            type: string
+        platformTypeCodeList:
+          type: array
+          description: 플랫폼유형 코드 리스트
+          items:
+            type: string
+        pageNo:
+          type: integer
+          format: int32
+          description: 페이지번호
+        pageSize:
+          type: integer
+          format: int32
+          description: 페이지사이즈
+        sortedBy:
+          type: string
+          description: 정렬대상
+        sortingOrder:
+          type: string
+          description: 정렬순서
+    GetMemberServerImageInstanceListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        memberServerImageInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/MemberServerImageInstance'
+    GetNetworkInterfaceDetailRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        networkInterfaceNo:
+          type: string
+          description: 네트워크인터페이스번호
+    GetNetworkInterfaceDetailResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        networkInterfaceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkInterface'
+    GetNetworkInterfaceListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        networkInterfaceNoList:
+          type: array
+          description: 네트워크인터페이스번호 리스트
+          items:
+            type: string
+        ip:
+          type: string
+          description: IP 주소
+        networkInterfaceName:
+          type: string
+          description: 네트워크인터페이스이름
+        serverName:
+          type: string
+          description: 서버 이름
+        subnetName:
+          type: string
+          description: 서브넷이름
+        secondaryIpList:
+          type: array
+          description: 보조 IP 리스트
+          items:
+            type: string
+        instanceNo:
+          type: string
+          description: 인스턴스 번호
+        isDefault:
+          type: boolean
+          description: Default 여부
+        deviceName:
+          type: string
+          description: 디바이스이름
+        pageNo:
+          type: integer
+          format: int32
+          description: 페이지번호
+        pageSize:
+          type: integer
+          format: int32
+          description: 페이지사이즈
+    GetNetworkInterfaceListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        networkInterfaceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkInterface'
+    GetPlacementGroupDetailRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        placementGroupNo:
+          type: string
+          description: 물리배치그룹 번호 리스트
+    GetPlacementGroupDetailResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        placementGroupList:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlacementGroup'
+    GetPlacementGroupListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        placementGroupName:
+          type: string
+          description: 물리배치그룹 이름
+        placementGroupNoList:
+          type: array
+          description: 물리배치그룹 번호 리스트
+          items:
+            type: string
+    GetPlacementGroupListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        placementGroupList:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlacementGroup'
+    GetPublicIpInstanceDetailRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        publicIpInstanceNo:
+          type: string
+          description: 공인 IP 인스턴스 번호
+    GetPublicIpInstanceDetailResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        publicIpInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicIpInstance'
+    GetPublicIpInstanceListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        publicIpInstanceNoList:
+          type: array
+          description: 공인 IP 인스턴스 번호 리스트
+          items:
+            type: string
+        publicIp:
+          type: string
+          description: 공인 IP 주소
+        privateIp:
+          type: string
+          description: 비공인 IP 주소
+        isAssociated:
+          type: boolean
+          description: 할당여부
+        serverName:
+          type: string
+          description: 서버 이름
+        publicIpInstanceStatusCode:
+          type: string
+          description: 공인 IP 인스턴스 상태 코드
+        pageNo:
+          type: integer
+          format: int32
+          description: 페이지번호
+        pageSize:
+          type: integer
+          format: int32
+          description: 페이지사이즈
+        vpcNo:
+          type: string
+          description: VPC 번호
+    GetPublicIpInstanceListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        publicIpInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicIpInstance'
+    GetPublicIpTargetServerInstanceListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+    GetPublicIpTargetServerInstanceListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        serverInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServerInstance'
+    GetRaidListRequest:
+      type: object
+      properties:
+        productTypeCode:
+          type: string
+          description: 상품유형 코드
+    GetRaidListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        raidList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Raid'
+    GetRegionListRequest:
+      type: object
+    GetRegionListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        regionList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Region'
+    GetRootPasswordRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        serverInstanceNo:
+          type: string
+          description: 서버인스턴스 번호
+        privateKey:
+          type: string
+          description: 개인키
+    GetRootPasswordResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        rootPassword:
+          type: string
+          description: 루트패스워드
+    GetRootPasswordServerInstanceListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        rootPasswordServerInstanceList:
+          type: array
+          description: 루트패스워드서버인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/RootPasswordServerInstanceParameter'
+      required:
+        - rootPasswordServerInstanceList
+    GetRootPasswordServerInstanceListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        rootPasswordServerInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/RootPasswordServerInstance'
+    GetServerImageDetailRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        serverImageNo:
+          type: string
+          description: 서버이미지번호
+    GetServerImageDetailResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        serverImageList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServerImage'
+    GetServerImageListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        serverImageName:
+          type: string
+          description: 서버이미지이름
+        serverImageStatusCode:
+          type: string
+          description: 서버이미지상태 코드
+        serverImageNoList:
+          type: array
+          description: 서버이미지번호 리스트
+          items:
+            type: string
+        hypervisorCodeList:
+          type: array
+          description: 하이퍼바이저유형 코드 리스트
+          items:
+            type: string
+        serverImageTypeCodeList:
+          type: array
+          description: 서버이미지유형 코드 리스트
+          items:
+            type: string
+        osTypeCodeList:
+          type: array
+          description: OS 유형 코드 리스트
+          items:
+            type: string
+        pageNo:
+          type: integer
+          format: int32
+          description: 페이지번호
+        pageSize:
+          type: integer
+          format: int32
+          description: 페이지사이즈
+        sortedBy:
+          type: string
+          description: 정렬대상
+        sortingOrder:
+          type: string
+          description: 정렬순서
+    GetServerImageListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        serverImageList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServerImage'
+    GetServerImageProductListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        blockStorageSize:
+          type: integer
+          format: int32
+          description: REGION 코드
+        exclusionProductCode:
+          type: string
+          description: 제외할상품코드
+        productCode:
+          type: string
+          description: 상품코드
+        platformTypeCodeList:
+          type: array
+          description: 플랫폼유형 코드 리스트
+          items:
+            type: string
+        infraResourceDetailTypeCode:
+          type: string
+          description: 인프라자원상세유형 코드
+    GetServerImageProductListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        productList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+        totalRows:
+          type: integer
+          format: int32
+    GetServerInstanceDetailRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        serverInstanceNo:
+          type: string
+          description: 서버인스턴스 번호
+    GetServerInstanceDetailResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        serverInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServerInstance'
+    GetServerInstanceListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        serverInstanceNoList:
+          type: array
+          description: 서버인스턴스 번호 리스트
+          items:
+            type: string
+        vpcNo:
+          type: string
+          description: VPC 번호
+        pageNo:
+          type: integer
+          format: int32
+          description: 페이지번호
+        pageSize:
+          type: integer
+          format: int32
+          description: 페이지사이즈
+        serverInstanceStatusCode:
+          type: string
+          description: 서버인스턴스 상태 코드
+        baseBlockStorageDiskTypeCode:
+          type: string
+          description: 기본블록스토리지디스크유형 코드
+        baseBlockStorageDiskDetailTypeCode:
+          type: string
+          description: 기본블록스토리지디스크상세유형 코드
+        serverName:
+          type: string
+          description: 서버인스턴스 이름
+        ip:
+          type: string
+          description: IP 주소
+        sortedBy:
+          type: string
+          description: 정렬대상
+        sortingOrder:
+          type: string
+          description: 정렬순서
+        placementGroupNoList:
+          type: array
+          description: 물리배치그룹 번호 리스트
+          items:
+            type: string
+        hypervisorTypeCodeList:
+          type: array
+          description: 하이퍼바이저타입코드 리스트
+          items:
+            type: string
+    GetServerInstanceListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        serverInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServerInstance'
+    GetServerProductListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        zoneCode:
+          type: string
+          description: ZONE 코드
+        serverImageProductCode:
+          type: string
+          description: 서버이미지상품코드
+        exclusionProductCode:
+          type: string
+          description: 제외할상품코드
+        productCode:
+          type: string
+          description: 상품코드
+        generationCode:
+          type: string
+          description: 세대코드
+        memberServerImageInstanceNo:
+          type: string
+          description: 회원서버이미지인스턴스 번호
+    GetServerProductListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        productList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+        totalRows:
+          type: integer
+          format: int32
+    GetServerSpecDetailRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        serverSpecCode:
+          type: string
+          description: 서버스펙코드
+    GetServerSpecDetailResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        serverSpecList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServerSpec'
+    GetServerSpecListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        serverImageNo:
+          type: string
+          description: 서버이미지번호
+        zoneCode:
+          type: string
+          description: ZONE 코드
+        serverSpecCodeList:
+          type: array
+          description: 서버스펙코드 리스트
+          items:
+            type: string
+        hypervisorCodeList:
+          type: array
+          description: 하이퍼바이저유형 코드 리스트
+          items:
+            type: string
+    GetServerSpecListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        serverSpecList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServerSpec'
+    GetZoneListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+    GetZoneListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        zoneList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Zone'
+    ImportLoginKeyRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        keyName:
+          type: string
+          description: 키이름
+        publicKey:
+          type: string
+          description: 공개키
+    ImportLoginKeyResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        loginKeyList:
+          type: array
+          items:
+            $ref: '#/components/schemas/LoginKey'
+    InitScript:
+      type: object
+      properties:
+        initScriptNo:
+          type: string
+          description: 초기화스크립트번호
+        initScriptName:
+          type: string
+          description: 초기화스크립트이름
+        createDate:
+          type: string
+          description: 생성일시
+        initScriptDescription:
+          type: string
+          description: 초기화스크립트설명
+        initScriptContent:
+          type: string
+          description: 초기화스크립트내용
+        osType:
+          $ref: '#/components/schemas/CommonCode'
+    InterruptServerInstanceRequest:
+      type: object
+      properties:
+        serverInstanceNo:
+          type: string
+          description: 서버인스턴스 번호
+    InterruptServerInstanceResponse:
+      type: object
+      properties:
+        serverInstanceNoList:
+          type: array
+          description: 서버인스턴스 번호 리스트
+          items:
+            type: string
+      required:
+        - serverInstanceNoList
+    LoginKey:
+      type: object
+      properties:
+        keyName:
+          type: string
+          description: 키이름
+        fingerprint:
+          type: string
+          description: 핑거프린트
+        publicKey:
+          type: string
+          description: 공개키
+        createDate:
+          type: string
+          description: 생성일시
+    MemberServerImageInstance:
+      type: object
+      properties:
+        memberServerImageInstanceNo:
+          type: string
+          description: 회원서버이미지인스턴스 번호
+        memberServerImageName:
+          type: string
+          description: 회원서버이미지이름
+        memberServerImageDescription:
+          type: string
+          description: 회원서버이미지설명
+        originalServerInstanceNo:
+          type: string
+          description: 원본서버인스턴스 번호
+        originalServerImageProductCode:
+          type: string
+          description: 원본서버이미지상품코드
+        memberServerImageInstanceStatus:
+          $ref: '#/components/schemas/CommonCode'
+        memberServerImageInstanceOperation:
+          $ref: '#/components/schemas/CommonCode'
+        memberServerImageInstanceStatusName:
+          type: string
+          description: 회원서버이미지인스턴스 상태이름
+        createDate:
+          type: string
+          description: 생성일시
+        memberServerImageBlockStorageTotalRows:
+          type: integer
+          format: int32
+          description: 회원서버이미지블록스토리지총개수
+        memberServerImageBlockStorageTotalSize:
+          type: integer
+          format: int64
+          description: 회원서버이미지블록스토리지총사이즈
+        shareStatus:
+          $ref: '#/components/schemas/CommonCode'
+        sharedLoginIdList:
+          type: array
+          description: 공유받는로그인 ID 리스트
+          items:
+            type: string
+    NetworkInterface:
+      type: object
+      properties:
+        networkInterfaceNo:
+          type: string
+          description: 네트워크인터페이스번호
+        networkInterfaceName:
+          type: string
+          description: 네트워크인터페이스이름
+        subnetNo:
+          type: string
+          description: 서브넷 번호
+        deleteOnTermination:
+          type: boolean
+          description: 디바이스반납시자동반납여부
+        isDefault:
+          type: boolean
+          description: Default 여부
+        deviceName:
+          type: string
+          description: 디바이스이름
+        networkInterfaceStatus:
+          $ref: '#/components/schemas/CommonCode'
+        instanceType:
+          $ref: '#/components/schemas/CommonCode'
+        instanceNo:
+          type: string
+          description: 인스턴스 번호
+        ip:
+          type: string
+          description: IP 주소
+        macAddress:
+          type: string
+          description: MAC 주소
+        accessControlGroupNoList:
+          type: array
+          description: ACG 번호 리스트
+          items:
+            type: string
+        networkInterfaceDescription:
+          type: string
+          description: 네트워크인터페이스설명
+        secondaryIpList:
+          type: array
+          description: 보조 IP 리스트
+          items:
+            type: string
+    NetworkInterfaceParameter:
+      type: object
+      properties:
+        networkInterfaceOrder:
+          type: integer
+          format: int32
+          description: 네트워크인터페이스순서
+        networkInterfaceNo:
+          type: string
+          description: 네트워크인터페이스번호
+        subnetNo:
+          type: string
+          description: 서브넷 번호
+        ip:
+          type: string
+          description: IP 주소
+        accessControlGroupNoList:
+          type: array
+          description: ACG 번호 리스트
+          items:
+            type: string
+      required:
+        - accessControlGroupNoList
+    PlacementGroup:
+      type: object
+      properties:
+        placementGroupNo:
+          type: string
+          description: 물리배치그룹 번호
+        placementGroupName:
+          type: string
+          description: 물리배치그룹 이름
+        placementGroupType:
+          $ref: '#/components/schemas/CommonCode'
+    Product:
+      type: object
+      properties:
+        productCode:
+          type: string
+          description: 상품코드
+        productName:
+          type: string
+          description: 상품이름
+        productType:
+          $ref: '#/components/schemas/CommonCode'
+        productDescription:
+          type: string
+          description: 상품설명
+        infraResourceType:
+          $ref: '#/components/schemas/CommonCode'
+        infraResourceDetailType:
+          $ref: '#/components/schemas/CommonCode'
+        cpuCount:
+          type: integer
+          format: int32
+          description: CPU 개수
+        memorySize:
+          type: integer
+          format: int64
+          description: 메모리사이즈
+        baseBlockStorageSize:
+          type: integer
+          format: int64
+          description: 기본블록스토리지사이즈
+        platformType:
+          $ref: '#/components/schemas/CommonCode'
+        osInformation:
+          type: string
+          description: OS 정보
+        diskType:
+          $ref: '#/components/schemas/CommonCode'
+        dbKindCode:
+          type: string
+          description: DB 유형 코드
+        addBlockStorageSize:
+          type: integer
+          format: int64
+          description: 추가블록스토리지사이즈
+        generationCode:
+          type: string
+          description: 세대코드
+    ProtocolType:
+      type: object
+      properties:
+        code:
+          type: string
+          description: 프로토콜 코드
+        codeName:
+          type: string
+          description: 프로토콜 코드명
+        number:
+          type: integer
+          format: int32
+          description: 프로토콜 번호
+    PublicIpInstance:
+      type: object
+      properties:
+        publicIpInstanceNo:
+          type: string
+          description: 공인 IP 인스턴스 번호
+        publicIp:
+          type: string
+          description: 공인 IP 주소
+        publicIpDescription:
+          type: string
+          description: 공인 IP 설명
+        createDate:
+          type: string
+          description: 생성일시
+        publicIpInstanceStatusName:
+          type: string
+          description: 공인 IP 인스턴스 상태이름
+        publicIpInstanceStatus:
+          $ref: '#/components/schemas/CommonCode'
+        serverInstanceNo:
+          type: string
+          description: 서버인스턴스 번호
+        serverName:
+          type: string
+          description: 서버 이름
+        privateIp:
+          type: string
+          description: 사설 IP 주소
+        lastModifyDate:
+          type: string
+          description: 마지막수정일시
+        publicIpInstanceOperation:
+          $ref: '#/components/schemas/CommonCode'
+    Raid:
+      type: object
+      properties:
+        raidTypeName:
+          type: string
+          description: RAID 유형이름
+        raidName:
+          type: string
+          description: RAID 명
+        productType:
+          $ref: '#/components/schemas/CommonCode'
+    RebootServerInstancesRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        serverInstanceNoList:
+          type: array
+          description: 서버인스턴스 번호 리스트
+          items:
+            type: string
+      required:
+        - serverInstanceNoList
+    RebootServerInstancesResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        serverInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServerInstance'
+    Region:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        regionName:
+          type: string
+          description: REGION 이름
+    RemoveAccessControlGroupInboundRuleRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        accessControlGroupNo:
+          type: string
+          description: ACG 번호
+        vpcNo:
+          type: string
+          description: VPC 번호
+        accessControlGroupRuleList:
+          type: array
+          description: ACGRule 리스트
+          items:
+            $ref: '#/components/schemas/RemoveAccessControlGroupRuleParameter'
+      required:
+        - accessControlGroupRuleList
+    RemoveAccessControlGroupInboundRuleResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        accessControlGroupRuleList:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessControlGroupRule'
+    RemoveAccessControlGroupOutboundRuleRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        accessControlGroupNo:
+          type: string
+          description: ACG 번호
+        vpcNo:
+          type: string
+          description: VPC 번호
+        accessControlGroupRuleList:
+          type: array
+          description: ACGRule 리스트
+          items:
+            $ref: '#/components/schemas/RemoveAccessControlGroupRuleParameter'
+      required:
+        - accessControlGroupRuleList
+    RemoveAccessControlGroupOutboundRuleResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        accessControlGroupRuleList:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessControlGroupRule'
+    RemoveAccessControlGroupRuleParameter:
+      type: object
+      properties:
+        ipBlock:
+          type: string
+          description: IP 블록
+        accessControlGroupSequence:
+          type: string
+          description: 접근소스 ACG
+        portRange:
+          type: string
+          description: 포트범위
+        protocolTypeCode:
+          type: string
+          description: 프로토콜유형 코드
+    RemoveMemberServerImageSharingPermissionRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        memberServerImageInstanceNo:
+          type: string
+          description: 회원서버이미지인스턴스 번호
+        targetLoginIdList:
+          type: array
+          description: 대상로그인 ID 리스트
+          items:
+            type: string
+      required:
+        - targetLoginIdList
+    RemoveMemberServerImageSharingPermissionResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        memberServerImageInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/MemberServerImageInstance'
+    RemoveNetworkInterfaceAccessControlGroupRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        accessControlGroupNoList:
+          type: array
+          description: ACG 번호 리스트
+          items:
+            type: string
+        networkInterfaceNo:
+          type: string
+          description: 네트워크인터페이스번호
+      required:
+        - accessControlGroupNoList
+    RemoveNetworkInterfaceAccessControlGroupResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        networkInterfaceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkInterface'
+    RemovePlacementGroupServerInstanceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        placementGroupNo:
+          type: string
+          description: 물리배치그룹 번호
+        serverInstanceNo:
+          type: string
+          description: 서버인스턴스 번호
+    RemovePlacementGroupServerInstanceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        serverInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServerInstance'
+    RemoveServerImageSharingPermissionRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        serverImageNo:
+          type: string
+          description: 회원서버이미지인스턴스 번호
+        targetLoginIdList:
+          type: array
+          description: 대상로그인 ID 리스트
+          items:
+            type: string
+      required:
+        - targetLoginIdList
+    RemoveServerImageSharingPermissionResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        serverImageList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServerImage'
+    RootPasswordServerInstance:
+      type: object
+      properties:
+        rootPassword:
+          type: string
+          description: 루트패스워드
+        serverInstanceNo:
+          type: string
+          description: 서버인스턴스 번호
+    RootPasswordServerInstanceParameter:
+      type: object
+      properties:
+        serverInstanceNo:
+          type: string
+          description: 서버인스턴스 번호
+        privateKey:
+          type: string
+          description: 개인키
+    ServerImage:
+      type: object
+      properties:
+        serverImageNo:
+          type: string
+          description: 서버이미지번호
+        serverImageName:
+          type: string
+          description: 서버이미지이름
+        serverImageDescription:
+          type: string
+          description: 서버이미지설명
+        serverImageProductCode:
+          type: string
+          description: 서버이미지상품코드
+        serverImageType:
+          $ref: '#/components/schemas/CommonCode'
+        hypervisorType:
+          $ref: '#/components/schemas/CommonCode'
+        cpuArchitectureType:
+          $ref: '#/components/schemas/CommonCode'
+        osCategoryType:
+          $ref: '#/components/schemas/CommonCode'
+        osType:
+          $ref: '#/components/schemas/CommonCode'
+        serverImageStatus:
+          $ref: '#/components/schemas/CommonCode'
+        serverImageOperation:
+          $ref: '#/components/schemas/CommonCode'
+        serverImageStatusName:
+          type: string
+          description: 서버이미지상태이름
+        createDate:
+          type: string
+          description: 생성일시
+        shareStatus:
+          $ref: '#/components/schemas/CommonCode'
+        sharedLoginIdList:
+          type: array
+          description: 공유받는로그인 ID 리스트
+          items:
+            type: string
+        blockStorageMappingList:
+          type: array
+          description: 블록스토리지맵핑리스트
+          items:
+            $ref: '#/components/schemas/BlockStorageMapping'
+    ServerInstance:
+      type: object
+      properties:
+        serverInstanceNo:
+          type: string
+          description: 서버인스턴스 번호
+        serverName:
+          type: string
+          description: 서버 이름
+        serverDescription:
+          type: string
+          description: 서버설명
+        cpuCount:
+          type: integer
+          format: int32
+          description: CPU 개수
+        memorySize:
+          type: integer
+          format: int64
+          description: 메모리사이즈
+        platformType:
+          $ref: '#/components/schemas/CommonCode'
+        loginKeyName:
+          type: string
+          description: 로그인키이름
+        publicIpInstanceNo:
+          type: string
+          description: 공인 IP 인스턴스 번호
+        publicIp:
+          type: string
+          description: 공인 IP 주소
+        serverInstanceStatus:
+          $ref: '#/components/schemas/CommonCode'
+        serverInstanceOperation:
+          $ref: '#/components/schemas/CommonCode'
+        serverInstanceStatusName:
+          type: string
+          description: 서버인스턴스 상태이름
+        createDate:
+          type: string
+          description: 생성일시
+        uptime:
+          type: string
+          description: 업시간
+        serverImageProductCode:
+          type: string
+          description: 서버이미지상품코드
+        serverProductCode:
+          type: string
+          description: 서버상품코드
+        isProtectServerTermination:
+          type: boolean
+          description: 서버반납보호설정여부
+        zoneCode:
+          type: string
+          description: ZONE 코드
+        regionCode:
+          type: string
+          description: REGION 코드
+        vpcNo:
+          type: string
+          description: VPC 번호
+        subnetNo:
+          type: string
+          description: 서브넷 번호
+        networkInterfaceNoList:
+          type: array
+          description: 네트워크인터페이스번호 리스트
+          items:
+            type: string
+        initScriptNo:
+          type: string
+          description: 초기화스크립트번호
+        serverInstanceType:
+          $ref: '#/components/schemas/CommonCode'
+        baseBlockStorageDiskType:
+          $ref: '#/components/schemas/CommonCode'
+        baseBlockStorageDiskDetailType:
+          $ref: '#/components/schemas/CommonCode'
+        placementGroupNo:
+          type: string
+          description: 물리배치그룹 번호
+        blockDevicePartitionList:
+          type: array
+          description: 블록디바이스파티션리스트
+          items:
+            $ref: '#/components/schemas/BlockDevicePartition'
+        hypervisorType:
+          $ref: '#/components/schemas/CommonCode'
+        serverImageNo:
+          type: string
+          description: 서버이미지번호
+        serverSpecCode:
+          type: string
+          description: 서버스펙코드
+    ServerSpec:
+      type: object
+      properties:
+        serverSpecCode:
+          type: string
+          description: 서버스펙코드
+        generationCode:
+          type: string
+          description: 세대코드
+        cpuCount:
+          type: integer
+          format: int32
+          description: CPU 개수
+        memorySize:
+          type: integer
+          format: int64
+          description: 메모리사이즈
+        hypervisorType:
+          $ref: '#/components/schemas/CommonCode'
+        cpuArchitectureType:
+          $ref: '#/components/schemas/CommonCode'
+        blockStorageMaxCount:
+          type: integer
+          format: int32
+          description: 할당가능한스토리지최대개수
+        blockStorageMaxIops:
+          type: integer
+          format: int32
+          description: 스토리지최대 IOPS
+        blockStorageMaxThroughput:
+          type: integer
+          format: int32
+          description: 스토리지최대부하처리성능
+        networkPerformance:
+          type: integer
+          format: int64
+          description: 네트워크성능
+        networkInterfaceMaxCount:
+          type: integer
+          format: int32
+          description: 할당가능한네트워크인터페이스최대개수
+        serverProductCode:
+          type: string
+          description: 서버상품코드
+        serverSpecDescription:
+          type: string
+          description: 서버스펙설명
+        gpuCount:
+          type: integer
+          format: int32
+          description: GPU 개수
+    SetBlockStorageReturnProtectionRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        blockStorageInstanceNo:
+          type: string
+          description: 블록스토리지인스턴스 번호
+        isReturnProtection:
+          type: boolean
+          description: 반납보호여부
+    SetBlockStorageReturnProtectionResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        blockStorageInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlockStorageInstance'
+    SetMemberServerImageSharingPermissionRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        memberServerImageInstanceNo:
+          type: string
+          description: 회원서버이미지인스턴스 번호
+        targetLoginIdList:
+          type: array
+          description: 대상로그인 ID 리스트
+          items:
+            type: string
+    SetMemberServerImageSharingPermissionResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        memberServerImageInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/MemberServerImageInstance'
+    SetProtectServerTerminationRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        serverInstanceNo:
+          type: string
+          description: 서버인스턴스 번호
+        isProtectServerTermination:
+          type: boolean
+          description: 반납보호여부
+    SetProtectServerTerminationResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        serverInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServerInstance'
+    StartServerInstancesRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        serverInstanceNoList:
+          type: array
+          description: 서버인스턴스 번호 리스트
+          items:
+            type: string
+      required:
+        - serverInstanceNoList
+    StartServerInstancesResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        serverInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServerInstance'
+    StopServerInstancesRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        serverInstanceNoList:
+          type: array
+          description: 서버인스턴스 번호 리스트
+          items:
+            type: string
+      required:
+        - serverInstanceNoList
+    StopServerInstancesResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        serverInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServerInstance'
+    TerminateServerInstancesRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        serverInstanceNoList:
+          type: array
+          description: 서버인스턴스 번호 리스트
+          items:
+            type: string
+      required:
+        - serverInstanceNoList
+    TerminateServerInstancesResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        serverInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServerInstance'
+    UnassignSecondaryIpsRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        networkInterfaceNo:
+          type: string
+          description: 네트워크인터페이스번호
+        secondaryIpList:
+          type: array
+          description: 보조 IP 리스트
+          items:
+            type: string
+      required:
+        - secondaryIpList
+    UnassignSecondaryIpsResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        networkInterfaceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkInterface'
+    Zone:
+      type: object
+      properties:
+        zoneName:
+          type: string
+          description: ZONE 이름
+        zoneCode:
+          type: string
+          description: ZONE 코드
+        regionCode:
+          type: string
+          description: REGION 코드
+        zoneDescription:
+          type: string
+          description: ZONE 설명
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

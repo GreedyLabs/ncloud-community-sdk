@@ -1,0 +1,39 @@
+name: cli-ci
+
+# Listens to spec/** and sdk/** because the CLI's commands are
+# generated from spec via the SDK's auth/client primitives.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'cli/**'
+      - 'sdk/**'
+      - 'spec/**'
+      - '.github/workflows/cli-ci.yml'
+  pull_request:
+    paths:
+      - 'cli/**'
+      - 'sdk/**'
+      - 'spec/**'
+      - '.github/workflows/cli-ci.yml'
+
+concurrency:
+  group: cli-ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: cli
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-go@v6
+        with:
+          go-version: '1.25'
+          cache: true
+          cache-dependency-path: cli/go.sum
+      - run: go vet ./...
+      - run: go build ./...
+      - run: go test ./...

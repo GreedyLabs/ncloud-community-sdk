@@ -1,0 +1,52 @@
+name: sdk-release
+
+# `<subdir>/vX.Y.Z` is Go's multi-module tag convention. proxy.golang.org
+# uses the prefix to know which module the version applies to.
+on:
+  push:
+    tags:
+      - 'sdk/v*'
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: sdk
+    steps:
+      - uses: actions/checkout@v6
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-go@v6
+        with:
+          go-version: '1.25'
+          cache: true
+          cache-dependency-path: sdk/go.sum
+      - run: go vet ./...
+      - run: go build ./...
+      - run: go test ./...
+
+  release:
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with: { fetch-depth: 0 }
+      - id: ver
+        run: |
+          tag="${GITHUB_REF#refs/tags/}"
+          echo "tag=$tag"           >> "$GITHUB_OUTPUT"
+          echo "version=${tag#sdk/}" >> "$GITHUB_OUTPUT"
+      - uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ steps.ver.outputs.tag }}
+          name: SDK ${{ steps.ver.outputs.version }}
+          generate_release_notes: true
+          body: |
+            **Module path**: `github.com/greedylabs/ncloud-community-sdk/sdk`
+
+            ```bash
+            go get github.com/greedylabs/ncloud-community-sdk/sdk@${{ steps.ver.outputs.version }}
+            ```

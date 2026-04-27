@@ -1,0 +1,2157 @@
+openapi: 3.0.3
+info:
+  title: maiu
+  description: maiu
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: false
+    gov: false
+
+  x-ncloud-nrn-todo: true
+servers:
+  - url: https://mi.apigw.ntruss.com/api/v1
+    description: maiu 민간
+    x-ncloud-env: public
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /query-assets/uploads/complete:
+    post:
+      operationId: UploadAsSetQueryStatus
+      summary: 검색 에셋 업로드 상태 조회
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-upload-asset-query-status
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - assetKey
+              properties:
+                assetKey:
+                  type: string
+                  description: 업로드 완료 여부를 확인할 이미지 파일의 키 값 사전에 Presigned URL 발급 API 호출을 통해 발급받은 assetFileKey 사용
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 업로드 상태 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /query-assets/uploads/presigned-url:
+    post:
+      operationId: UploadAsSetQueryUrl
+      summary: 검색 에셋 Presigned URL 발급
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-upload-asset-query-url
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - assetType
+                - assetFileName
+              properties:
+                assetType:
+                  type: string
+                  description: '에셋 유형 IMAGE IMAGE : 이미지'
+                assetFileName:
+                  type: string
+                  description: 업로드할 이미지 파일명 <예시> search_image.jpg
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: Presigned URL 발급 결과 객체
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /workspaces:
+    get:
+      operationId: ListWorkspaces
+      summary: 워크스페이스 목록 조회
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-list-workspaces
+      parameters:
+        - name: pageNum
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: 조회할 페이지 번호
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지당 조회 항목 수 1~1,000 기본값: 1,000'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - code
+                  - message
+                  - result
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: API 반환 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: CreateWorkspaces
+      summary: 워크스페이스 생성
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-create-workspaces
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - workspaceName
+              properties:
+                workspaceName:
+                  type: string
+                  description: '생성할 워크스페이스 이름 워크스페이스 이름 중복 불가 길이 제한: 3~63자 알파벳 소문자, 숫자, - 만 허용'
+                bucketName:
+                  type: string
+                  description: 연동할 Object Storage 버킷 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 워크스페이스 상세 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /workspaces/{workspace_name}:
+    get:
+      operationId: WorkspaceDetailS
+      summary: 워크스페이스 상세 조회
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-workspace-details
+      parameters:
+        - name: workspace_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 워크스페이스 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 워크스페이스 상세 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: DeleteWorkspaces
+      summary: 워크스페이스 삭제
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-delete-workspaces
+      parameters:
+        - name: workspace_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 워크스페이스 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - code
+                  - message
+                  - result
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 삭제된 워크스페이스 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /workspaces/{workspace_name}/assets/search:
+    post:
+      operationId: SearchAsSet
+      summary: 에셋 검색 요청
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-search-asset
+      parameters:
+        - name: workspace_name
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: query
+          in: query
+          required: true
+          schema:
+            type: object
+            additionalProperties: true
+          description: 미디어 에셋 검색 조건 (텍스트, 이미지, 인물, 대사)
+        - name: queryOption
+          in: query
+          required: false
+          schema:
+            type: object
+            additionalProperties: true
+          description: 유사도 신뢰 수준 설정
+        - name: filter
+          in: query
+          required: false
+          schema:
+            type: object
+            additionalProperties: true
+          description: 검색 대상 프로젝트, 비디오, 인덱스 수정일 필터
+        - name: textQuery
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 미디어 에셋에 대한 텍스트 쿼리 textQuery 또는 imageQuery 필수 입력 세미콜론( ; ), 버티컬바( | ), 백틱( ` ) 사용 불가
+        - name: imageQuery
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 업로드 완료한 이미지 파일의 키값 textQuery 또는 imageQuery 필수 입력
+        - name: personQuery
+          in: query
+          required: false
+          schema:
+            type: object
+            additionalProperties: true
+          description: 미디어 에셋 내 포함되거나 제외할 인물 조건
+        - name: dialogQuery
+          in: query
+          required: false
+          schema:
+            type: object
+            additionalProperties: true
+          description: 영상에서 미디어 에셋 내 포함되거나 제외할 대사 조건 세미콜론( ; ), 버티컬바( | ), 백틱( ` ) 사용 불가 이미지 에셋은 0으로 표시
+        - name: confidenceLevel
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 유사도 신뢰 수준 LOW | MEDIUM (기본값) | HIGH
+        - name: projectIds
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 검색할 프로젝트 ID 목록 projectIds 또는 assetIds 필수 입력
+        - name: assetIds
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 검색할 미디어 에셋 ID 목록 projectIds 또는 assetIds 필수 입력
+        - name: assetTypes
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '검색할 에셋 타입 (미설정 시 모든 에셋 타입에서 검색 진행) IMAGE | VIDEO IMAGE : 이미지 VIDEO : 비디오'
+        - name: indexModifiedFrom
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 인덱스 수정 시작 일시 ISO 8601 형식
+        - name: indexModifiedTo
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 인덱스 수정 종료 일시 ISO 8601 형식
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 검색 요청 결과 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /workspaces/{workspace_name}/assets/search/{search_id}:
+    get:
+      operationId: GetAsSetSearchResult
+      summary: 에셋 검색 결과 조회
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-get-asset-search-result
+      parameters:
+        - name: workspace_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 워크스페이스 이름
+        - name: search_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 에셋 검색 요청 시 발급된 검색 식별자 에셋 검색 요청 참조
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지당 결과 개수 1~100 (기본값: 50)'
+        - name: pageNum
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '조회할 페이지 번호 1~N (기본값: 1)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 에셋 검색 결과 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /workspaces/{workspace_name}/person-tags:
+    get:
+      operationId: ListPerSonTags
+      summary: 인물 태그 목록 조회
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-list-person-tags
+      parameters:
+        - name: workspace_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 워크스페이스 이름
+        - name: id
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 인물 태그 ID
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 인물 태그 이름 1~30자
+        - name: pageNum
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: 페이지 번호 1 이상
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지당 항목 수 1~50 (기본값: 10)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: API 반환 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: CreatePerSonTags
+      summary: 인물 태그 등록
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-create-person-tags
+      parameters:
+        - name: workspace_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 워크스페이스 이름
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                  description: 생성할 인물 태그 이름 1~30자 워크스페이스 내 중복 불가
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 생성된 인물 태그 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /workspaces/{workspace_name}/person-tags/{tag_id}:
+    delete:
+      operationId: DeletePerSonTags
+      summary: 인물 태그 삭제
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-delete-person-tags
+      parameters:
+        - name: workspace_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 워크스페이스 이름
+        - name: tag_id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 삭제할 인물 태그 ID 인물 태그 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /workspaces/{workspace_name}/person-thumbnail/uploads/complete:
+    post:
+      operationId: UploadPerSonThumbnailStatus
+      summary: 인물 썸네일 업로드 상태 조회
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-upload-person-thumbnail-status
+      parameters:
+        - name: workspace_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 워크스페이스 이름
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - thumbnailKey
+              properties:
+                thumbnailKey:
+                  type: string
+                  description: 업로드 완료 여부를 확인할 이미지 파일의 키 값 사전에 Presigned URL 발급 API 호출을 통해 발급받은 thumbnailKey 사용
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 업로드 상태 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /workspaces/{workspace_name}/person-thumbnail/uploads/presigned-url:
+    post:
+      operationId: UploadPerSonThumbnailUrl
+      summary: 인물 썸네일 Presigned URL 발급
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-upload-person-thumbnail-url
+      parameters:
+        - name: workspace_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 워크스페이스 이름
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - thumbnailFileName
+              properties:
+                thumbnailFileName:
+                  type: string
+                  description: 업로드할 프로필 이미지의 파일명 <예시> test_profile.jpg
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: Presigned URL 발급 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /workspaces/{workspace_name}/persons:
+    get:
+      operationId: ListPerSons
+      summary: 인물 목록 조회
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-list-persons
+      parameters:
+        - name: workspace_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 워크스페이스 이름
+        - name: pageNum
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: 페이지 번호 1 이상
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지당 항목 수 1~1000 (기본값: 1000)'
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 검색할 인물 이름 2~50자 세미콜론( ; ), 버티컬바( | ), 백틱( ` ) 사용 불가
+        - name: tagIdList
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 검색할 인물 태그 ID 목록 , 로 구분된 다중 ID 입력 지원
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 인물 목록 조회 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: CreatePerSons
+      summary: 인물 등록
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-create-persons
+      parameters:
+        - name: workspace_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 워크스페이스 이름
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - thumbnails
+              properties:
+                name:
+                  type: string
+                  description: 인물 이름 1~50자 워크스페이스 내 중복 불가 공백 문자열 또는 공백만 포함된 경우 등록 불가
+                description:
+                  type: string
+                  description: 인물 설명 1~700자
+                thumbnails:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: 등록할 썸네일 목록 최대 100개까지 등록 가능 각 항목은 thumbnailKey 와 isPrimaryThumbnail 필드 포함 대표 썸네일은 하나만 지정 가능
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 생성된 인물 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /workspaces/{workspace_name}/persons/{person_id}:
+    get:
+      operationId: PerSonDetailS
+      summary: 인물 상세 조회
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-person-details
+      parameters:
+        - name: workspace_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 워크스페이스 이름
+        - name: person_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 인물 ID 인물 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 인물 상세 정보 객체
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    patch:
+      operationId: UpdatePerSons
+      summary: 인물 수정
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-update-persons
+      parameters:
+        - name: workspace_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 워크스페이스 이름
+        - name: person_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 인물 ID 인물 목록 조회 참조
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 인물 이름 1~50자 워크스페이스 내 중복 불가 공백 문자열 또는 공백만 포함된 경우 등록 불가
+                description:
+                  type: string
+                  description: 인물 설명 1~700자
+                primaryThumbnailId:
+                  type: integer
+                  description: 대표 썸네일 ID 인물 썸네일 목록 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 인물 상세 정보 객체
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: DeletePerSons
+      summary: 인물 삭제
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-delete-persons
+      parameters:
+        - name: workspace_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 워크스페이스 이름
+        - name: person_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 삭제할 인물 ID 인물 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /workspaces/{workspace_name}/persons/{person_id}/person-tags:
+    post:
+      operationId: AddPerSonTags
+      summary: 인물 수정 태그 설정
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-add-person-tags
+      parameters:
+        - name: workspace_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 워크스페이스 이름
+        - name: person_id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 인물 ID 인물 목록 조회 참조
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - tagIds
+              properties:
+                tagIds:
+                  type: string
+                  description: 추가할 인물 태그 ID 목록 중복된 ID는 무시됨
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 인물에 설정된 태그 목록 객체
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: RemovePerSonTags
+      summary: 인물 수정 태그 제거
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-remove-person-tags
+      parameters:
+        - name: workspace_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 워크스페이스 이름
+        - name: person_id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 인물 ID 인물 목록 조회 참조
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - tagIds
+              properties:
+                tagIds:
+                  type: string
+                  description: 제거할 인물 태그 ID 목록 존재하지 않거나 이미 제거된 태그 ID는 무시됨
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 인물 태그 목록 객체
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /workspaces/{workspace_name}/persons/{person_id}/person-thumbnail:
+    post:
+      operationId: SetPerSonThumbnail
+      summary: 인물 수정 썸네일 설정
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-set-person-thumbnail
+      parameters:
+        - name: workspace_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 워크스페이스 이름
+        - name: person_id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 인물 ID 인물 목록 조회 참조
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - thumbnails
+                - thumbnailKey
+                - isPrimaryThumbnail
+              properties:
+                thumbnails:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: '등록할 썸네일 목록: thumbnails'
+                thumbnailKey:
+                  type: string
+                  description: Object Storage에 업로드된 썸네일의 키값
+                isPrimaryThumbnail:
+                  type: boolean
+                  description: 대표 썸네일 여부 true | false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 인물 썸네일 목록 객체
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: RemovePerSonThumbnail
+      summary: 인물 수정 썸네일 제거
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-remove-person-thumbnail
+      parameters:
+        - name: workspace_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 워크스페이스 이름
+        - name: person_id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 인물 ID 인물 목록 조회 참조
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - thumbnailIds
+              properties:
+                thumbnailIds:
+                  type: string
+                  description: 제거할 썸네일 ID 목록 존재하지 않거나 이미 제거된 ID는 무시됨
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 인물 썸네일 목록 객체
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /workspaces/{workspace_name}/projects:
+    get:
+      operationId: ListProjects
+      summary: 프로젝트 목록 조회
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-list-projects
+      parameters:
+        - name: workspace_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 워크스페이스 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: API 반환 정보
+                  totalCount:
+                    type: integer
+                    description: 전체 프로젝트 수
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: CreateProjects
+      summary: 프로젝트 생성
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-create-projects
+      parameters:
+        - name: workspace_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 워크스페이스 이름
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                  description: 프로젝트 이름 영문자, 숫자, 특수문자를 조합하여 100자 이내로 입력 세미콜론( ; ), 버티컬바( | ), 백틱( ` ) 사용 불가 워크스페이스 내 중복 불가
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 프로젝트 상세 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /workspaces/{workspace_name}/projects/{project_id}:
+    get:
+      operationId: ProjectDetailS
+      summary: 프로젝트 상세 조회
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-project-details
+      parameters:
+        - name: workspace_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 워크스페이스 이름
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 프로젝트 ID 프로젝트 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 프로젝트 상세 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    patch:
+      operationId: UpdateProjects
+      summary: 프로젝트 정보 수정
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-update-projects
+      parameters:
+        - name: workspace_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 워크스페이스 이름
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 프로젝트 ID 프로젝트 목록 조회 참조
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                  description: 프로젝트 이름 영문자, 숫자, 특수문자를 조합하여 100자 이내로 입력 세미콜론( ; ), 버티컬바( | ), 백틱( ` ) 사용 불가 워크스페이스 내 중복 불가
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 프로젝트 상세 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: DeleteProjects
+      summary: 프로젝트 삭제
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-delete-projects
+      parameters:
+        - name: workspace_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 워크스페이스 이름
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 프로젝트 ID 프로젝트 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /workspaces/{workspace_name}/projects/{project_id}/assets/{asset_id}/indexes:
+    get:
+      operationId: ListIndexes
+      summary: 인덱스 목록 조회
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-list-indexes
+      parameters:
+        - name: workspace_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 워크스페이스 이름
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 프로젝트 ID 프로젝트 목록 조회 참조
+        - name: asset_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 미디어 에셋 ID 미디어 에셋 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /workspaces/{workspace_name}/projects/{project_id}/assets/{asset_id}/indexes/{index_id}:
+    get:
+      operationId: IndexDetailS
+      summary: 인덱스 상세 조회
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-index-details
+      parameters:
+        - name: workspace_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 워크스페이스 이름
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 프로젝트 ID 프로젝트 목록 조회 참조
+        - name: asset_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 미디어 에셋 ID 미디어 에셋 목록 조회 참조
+        - name: index_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 인덱스 ID 인덱스 목록 조회 참조
+        - name: confidence_level
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '신뢰도 기반의 필터링 조건 LOW | MEDIUM (기본값) | HIGH LOW : 신뢰 수준이 낮은 탐지 결과 노출(더 많은 키워드 추출) MEDIUM : 신뢰 수준이 중간인 탐지 결과 노출(적당한 키워드 추출) HIGH : 신뢰 수준이 높은 탐지 결과 노출(정확한 키워드 추출)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 분석 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: DeleteIndexes
+      summary: 인덱스 삭제
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-delete-indexes
+      parameters:
+        - name: workspace_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 워크스페이스 이름
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 프로젝트 ID 프로젝트 목록 조회 참조
+        - name: asset_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 미디어 에셋 ID 미디어 에셋 목록 조회 참조
+        - name: index_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 인덱스 ID 인덱스 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /workspaces/{workspace_name}/projects/{project_id}/video-assets:
+    get:
+      operationId: ListAsSetS
+      summary: 비디오 에셋 목록 조회(Deprecated)
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-list-assets
+      parameters:
+        - name: workspace_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 워크스페이스 이름
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 프로젝트 ID 프로젝트 목록 조회 참조
+        - name: pageNum
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: 페이지 번호 1 이상
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지당 항목 수 1~1,000 (기본값: 1,000)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - code
+                  - message
+                  - result
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: API 반환 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /workspaces/{workspace_name}/projects/{project_id}/video-assets/import/object-storage:
+    post:
+      operationId: CreateAsSetS
+      summary: 비디오 에셋 등록(Deprecated)
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-create-assets
+      parameters:
+        - name: workspace_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 워크스페이스 이름
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 프로젝트 ID 프로젝트 목록 조회 참조
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - key
+                - bucketName
+              properties:
+                key:
+                  type: string
+                  description: 'Object Storage에 업로드한 비디오의 전체 파일명 동영상 분석 지원 포맷 해상도: 360p~1080p (720p 권장) 길이: 6시간 파일 크기: 10GB 파일 형식: MP4, MKV, MOV, WebM <예시> sample-video.mp4'
+                bucketName:
+                  type: string
+                  description: Object Storage 버킷 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - code
+                  - message
+                  - result
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 비디오 에셋 상세 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /workspaces/{workspace_name}/projects/{project_id}/video-assets/{video_asset_id}:
+    get:
+      operationId: AsSetDetailS
+      summary: 비디오 에셋 상세 조회(Deprecated)
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-asset-details
+      parameters:
+        - name: workspace_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 워크스페이스 이름
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 프로젝트 ID 프로젝트 목록 조회 참조
+        - name: video_asset_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 비디오 에셋 ID 비디오 에셋 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - code
+                  - message
+                  - result
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 비디오 에셋 상세 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    patch:
+      operationId: MoveAsSetS
+      summary: 비디오 에셋 프로젝트 이동(Deprecated)
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-move-assets
+      parameters:
+        - name: workspace_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 워크스페이스 이름
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 프로젝트 ID 프로젝트 목록 조회 참조
+        - name: video_asset_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 비디오 에셋 ID 비디오 에셋 목록 조회 참조
+        - name: new_project_id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 비디오를 이동하려는 프로젝트의 ID
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - code
+                  - message
+                  - result
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 비디오 에셋 상세 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: DeleteAsSetS
+      summary: 비디오 에셋 삭제(Deprecated)
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-delete-assets
+      parameters:
+        - name: workspace_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 워크스페이스 이름
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 프로젝트 ID 프로젝트 목록 조회 참조
+        - name: video_asset_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 비디오 에셋 ID 비디오 에셋 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - code
+                  - message
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /workspaces/{workspace_name}/projects/{project_id}/video-assets/{video_asset_id}/analyze:
+    post:
+      operationId: RequestAnalysis
+      summary: 비디오 에셋 분석 요청(Deprecated)
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-request-analysis
+      parameters:
+        - name: workspace_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 워크스페이스 이름
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 프로젝트 ID 프로젝트 목록 조회 참조
+        - name: video_asset_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 비디오 에셋 ID 비디오 에셋 목록 조회 참조
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - analysisPersonCount
+              properties:
+                sceneRange:
+                  type: string
+                  description: '자동으로 분할되는 장면의 길이 EXTRA_SHORT | SHORT | MEDIUM (기본값) | LONG EXTRA_SHORT (매우 짧게): 10~20초 사이 SHORT (짧게): 초 단위로 세밀하게 분할하여 영상 내 세부 장면을 정밀하게 분석 MEDIUM (보통): 장면 간 적절한 흐름을 유지하면서 주요 변화 포착 LONG (길게): 장면 간 연결성을 높여 자연스러운 흐름 유지'
+                analysisPersonCount:
+                  type: integer
+                  description: 영상 분석 시 감지할 인물의 수 0~10 0 입력 시 인물을 분석하지 않으며, 분석 속도가 빨라짐
+                tagIdList:
+                  type: string
+                  description: '영상 분석 시 감지할 인물 태그 길이: 1~30'
+                sourceLanguage:
+                  type: string
+                  description: '분석 대상 원본 영상의 언어 정보 ENKO (기본값) | EN | KO | JA | ZH-CN | ZH-TW ENKO : 한국어 + 영어 EN : 영어 KO : 한국어 JA : 일본어 ZH-CN : 중국어 (간체) ZH-TW : 중국어 (번체)'
+                detectAudioEffects:
+                  type: boolean
+                  description: 음성 효과 탐지 여부 true | false (기본값) 활성화 시 '박수', '웃음', '배경 음악' 항목 탐지
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - code
+                  - message
+                  - result
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 분석 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: CancelAnalysis
+      summary: 비디오 에셋 분석 취소(Deprecated)
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-cancel-analysis
+      parameters:
+        - name: workspace_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 워크스페이스 이름
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 프로젝트 ID 프로젝트 목록 조회 참조
+        - name: video_asset_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 비디오 에셋 ID 비디오 에셋 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - code
+                  - message
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /workspaces/{workspace_name}/projects/{project_id}/video-assets/{video_asset_id}/analyze-status:
+    get:
+      operationId: AnalysisStatus
+      summary: 비디오 에셋 분석 상태 조회(Deprecated)
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-analysis-status
+      parameters:
+        - name: workspace_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 워크스페이스 이름
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 프로젝트 ID 프로젝트 목록 조회 참조
+        - name: video_asset_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 비디오 에셋 ID 비디오 에셋 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - code
+                  - message
+                  - result
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 비디오 에셋 분석 상태 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /workspaces/{workspace_name}/projects/{project_id}/video-assets/{video_asset_id}/import-status:
+    get:
+      operationId: AsSetStatus
+      summary: 비디오 에셋 등록 상태 조회(Deprecated)
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - maiu
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/maiu-asset-status
+      parameters:
+        - name: workspace_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 워크스페이스 이름
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 프로젝트 ID 프로젝트 목록 조회 참조
+        - name: video_asset_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 비디오 에셋 ID 비디오 에셋 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - code
+                  - message
+                  - result
+                properties:
+                  code:
+                    type: string
+                    description: API 처리 결과 코드
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 비디오 에셋 등록 상태 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+components:
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  schemas:
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

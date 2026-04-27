@@ -1,0 +1,1087 @@
+openapi: 3.0.3
+info:
+  title: hadoop
+  description: ''
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: false
+    gov: true
+
+  x-ncloud-nrn:
+
+    productName: VPCCloudHadoop
+    resource_types:
+      - Cluster
+      - Server
+      - Notebook
+
+servers:
+  - url: https://ncloud.apigw.ntruss.com/vhadoop/v2
+    description: hadoop 민간
+    x-ncloud-env: public
+  - url: https://ncloud.apigw.gov-ntruss.com/vhadoop/v2
+    description: hadoop 공공
+    x-ncloud-env: gov
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /backupClusterConfiguration:
+    post:
+      operationId: BackupClusterConfiguration
+      tags:
+        - hadoop
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BackupClusterConfigurationRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackupClusterConfigurationResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud Hadoop 클러스터 구성 요소의 모든 설정을 Object Storage 버킷에 백업합니다.
+  /changeCloudHadoopNodeCount:
+    post:
+      operationId: ChangeCloudHadoopNodeCount
+      tags:
+        - hadoop
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChangeCloudHadoopNodeCountRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeCloudHadoopNodeCountResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud Hadoop 클러스터의 작업자노드 수를 변경합니다.
+  /changeCloudHadoopNodeSpec:
+    post:
+      operationId: ChangeCloudHadoopNodeSpec
+      tags:
+        - hadoop
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChangeCloudHadoopNodeSpecRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeCloudHadoopNodeSpecResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud Hadoop 클러스터의 노드 스펙을 업그레이드합니다.
+  /createCloudHadoopInstance:
+    post:
+      operationId: CreateCloudHadoopInstance
+      tags:
+        - hadoop
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateCloudHadoopInstanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCloudHadoopInstanceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud Hadoop 클러스터를 생성합니다.
+  /deleteCloudHadoopInstance:
+    post:
+      operationId: DeleteCloudHadoopInstance
+      tags:
+        - hadoop
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteCloudHadoopInstanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteCloudHadoopInstanceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud Hadoop 클러스터를 삭제합니다.
+  /getCloudHadoopAddOnList:
+    post:
+      operationId: GetCloudHadoopAddOnList
+      tags:
+        - hadoop
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudHadoopAddOnListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudHadoopAddOnListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud Hadoop에서 추가적으로 설치할 수 있는 Add-on 컴포넌트 목록을 조회합니다.
+  /getCloudHadoopBucketList:
+    post:
+      operationId: GetCloudHadoopBucketList
+      tags:
+        - hadoop
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudHadoopBucketListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudHadoopBucketListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud Hadoop에서 사용할 수 있는 Object Storage 버킷 목록을 조회합니다.
+  /getCloudHadoopClusterTypeList:
+    post:
+      operationId: GetCloudHadoopClusterTypeList
+      tags:
+        - hadoop
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudHadoopClusterTypeListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudHadoopClusterTypeListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud Hadoop에서 사용할 수 있는 클러스터 타입을 조회합니다.
+  /getCloudHadoopImageProductList:
+    post:
+      operationId: GetCloudHadoopImageProductList
+      tags:
+        - hadoop
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudHadoopImageProductListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudHadoopImageProductListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud Hadoop에서 사용할 수 있는 클러스터 이미지를 조회합니다.
+  /getCloudHadoopInstanceDetail:
+    post:
+      operationId: GetCloudHadoopInstanceDetail
+      tags:
+        - hadoop
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudHadoopInstanceDetailRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudHadoopInstanceDetailResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get cloud hadoop instance detail
+  /getCloudHadoopInstanceList:
+    post:
+      operationId: GetCloudHadoopInstanceList
+      tags:
+        - hadoop
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudHadoopInstanceListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudHadoopInstanceListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud Hadoop 클러스터 목록을 조회합니다.
+  /getCloudHadoopLoginKeyList:
+    post:
+      operationId: GetCloudHadoopLoginKeyList
+      tags:
+        - hadoop
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudHadoopLoginKeyListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudHadoopLoginKeyListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: SSH 접속에 사용되는 인증키를 조회합니다.
+  /getCloudHadoopProductList:
+    post:
+      operationId: GetCloudHadoopProductList
+      tags:
+        - hadoop
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudHadoopProductListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudHadoopProductListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud Hadoop에서 노드별로 사용할 수 있는 서버 타입을 조회합니다.
+components:
+  schemas:
+    BackupClusterConfigurationRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+    BackupClusterConfigurationResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+    ChangeCloudHadoopNodeCountRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudHadoopInstanceNo:
+          type: string
+          description: Cloud Hadoop 인스턴스 번호
+        workerNodeCount:
+          type: integer
+          format: int32
+          description: Cloud Hadoop 작업자 노드 개수
+    ChangeCloudHadoopNodeCountResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudHadoopInstanceList:
+          type: array
+          description: CloudHadoop 인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudHadoopInstance'
+    ChangeCloudHadoopNodeSpecRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudHadoopInstanceNo:
+          type: string
+          description: Cloud Hadoop 인스턴스 번호
+        workerNodeProductCode:
+          type: string
+          description: Cloud Hadoop 작업자 노드 상품 개수
+        edgeNodeProductCode:
+          type: string
+          description: Cloud Hadoop 엣지 노드 상품 개수
+        masterNodeProductCode:
+          type: string
+          description: Cloud Hadoop 마스터 노드 상품 개수
+    ChangeCloudHadoopNodeSpecResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudHadoopInstanceList:
+          type: array
+          description: CloudHadoop 인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudHadoopInstance'
+    CloudHadoopAddOn:
+      type: object
+      properties:
+        code:
+          type: string
+          description: CloudHadoopAdd-On 코드
+        codeName:
+          type: string
+          description: CloudHadoopAdd-On 코드이름
+    CloudHadoopBucket:
+      type: object
+      properties:
+        bucketName:
+          type: string
+          description: CloudHadoop 버킷이름
+    CloudHadoopClusterType:
+      type: object
+      properties:
+        code:
+          type: string
+          description: CloudHadoop 클러스터유형 코드
+        codeName:
+          type: string
+          description: CloudHadoop 클러스터유형 코드이름
+    CloudHadoopInstance:
+      type: object
+      properties:
+        cloudHadoopInstanceNo:
+          type: string
+          description: CloudHadoop 인스턴스 번호
+        cloudHadoopClusterName:
+          type: string
+          description: CloudHadoop 클러스터이름
+        cloudHadoopImageProductCode:
+          type: string
+          description: CloudHadoop 이미지상품코드
+        cloudHadoopInstanceStatusName:
+          type: string
+          description: CloudHadoop 인스턴스 상태이름
+        cloudHadoopInstanceStatus:
+          $ref: '#/components/schemas/CommonCode'
+        cloudHadoopInstanceOperation:
+          $ref: '#/components/schemas/CommonCode'
+        cloudHadoopClusterType:
+          $ref: '#/components/schemas/CloudHadoopClusterType'
+        cloudHadoopVersion:
+          $ref: '#/components/schemas/CloudHadoopVersion'
+        cloudHadoopAddOnList:
+          type: array
+          description: CloudHadoop 인스턴스 OP
+          items:
+            $ref: '#/components/schemas/CloudHadoopAddOn'
+        isHa:
+          type: boolean
+          description: 고가용성여부
+        ambariServerHost:
+          type: string
+          description: Ambari host 이름
+        clusterDirectAccessAccount:
+          type: string
+          description: 클러스터 직접 접속 계정
+        loginKey:
+          type: string
+          description: Cloud Hadoop 인증키
+        objectStorageBucket:
+          type: string
+          description: Object Storage 버킷 이름
+        kdcRealm:
+          type: string
+          description: KDC Realm
+        domain:
+          type: string
+          description: 도메인
+        role:
+          $ref: '#/components/schemas/CommonCode'
+        createDate:
+          type: string
+          description: 생성일자
+        accessControlGroupNoList:
+          type: array
+          description: ACG 번호 리스트
+          items:
+            type: string
+        cloudHadoopServerInstanceList:
+          type: array
+          description: CloudHadoop 서버인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudHadoopServerInstance'
+    CloudHadoopLoginKey:
+      type: object
+      properties:
+        keyName:
+          type: string
+          description: CloudHadoop 인증키이름
+    CloudHadoopServerInstance:
+      type: object
+      properties:
+        cloudHadoopServerInstanceNo:
+          type: string
+          description: CloudHadoop 서버인스턴스 번호
+        cloudHadoopServerName:
+          type: string
+          description: CloudHadoop 서버 이름
+        cloudHadoopServerInstanceStatusName:
+          type: string
+          description: CloudHadoop 인스턴스 상태이름
+        cloudHadoopServerInstanceStatus:
+          $ref: '#/components/schemas/CommonCode'
+        cloudHadoopServerInstanceOperation:
+          $ref: '#/components/schemas/CommonCode'
+        cloudHadoopServerRole:
+          $ref: '#/components/schemas/CommonCode'
+        cloudHadoopProductCode:
+          type: string
+          description: CloudHadoop 상품코드
+        regionCode:
+          type: string
+          description: REGION 코드
+        zoneCode:
+          type: string
+          description: ZONE 코드
+        vpcNo:
+          type: string
+          description: VPC 번호
+        subnetNo:
+          type: string
+          description: Subnet 번호
+        isPublicSubnet:
+          type: boolean
+          description: PublicSubnet 여부
+        cpuCount:
+          type: integer
+          format: int32
+          description: cpu 개수
+        dataStorageType:
+          $ref: '#/components/schemas/CommonCode'
+        dataStorageSize:
+          type: integer
+          format: int64
+          description: 데이터스토리지사이즈
+        memorySize:
+          type: integer
+          format: int64
+          description: 메모리사이즈
+        uptime:
+          type: string
+          description: 업시간
+        createDate:
+          type: string
+          description: 생성일자
+    CloudHadoopVersion:
+      type: object
+      properties:
+        code:
+          type: string
+          description: CloudHadoop 버전코드
+        codeName:
+          type: string
+          description: CloudHadoop 버전코드이름
+    CommonCode:
+      type: object
+      properties:
+        code:
+          type: string
+          description: 코드
+        codeName:
+          type: string
+          description: 코드명
+    CreateCloudHadoopInstanceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        vpcNo:
+          type: string
+          description: VPC 번호
+        cloudHadoopClusterName:
+          type: string
+          description: Cloud Hadoop 클러스터 이름
+        cloudHadoopImageProductCode:
+          type: string
+          description: Cloud Hadoop 이미지상품코드
+        cloudHadoopClusterTypeCode:
+          type: string
+          description: Cloud Hadoop 클러스터 유형 코드
+        cloudHadoopAddOnCodeList:
+          type: array
+          description: Cloud Hadoop Add-On 코드 리스트
+          items:
+            type: string
+        cloudHadoopAdminUserName:
+          type: string
+          description: 클러스터 관리자 계정
+        cloudHadoopAdminUserPassword:
+          type: string
+          description: 클러스터 관리자 계정 패스워드
+        loginKeyName:
+          type: string
+          description: 인증키 이름
+        bucketName:
+          type: string
+          description: 버킷 이름
+        edgeNodeProductCode:
+          type: string
+          description: Cloud Hadoop 엣지노드 상품 코드
+        edgeNodeSubnetNo:
+          type: string
+          description: 엣지노드의 Subnet 번호
+        masterNodeProductCode:
+          type: string
+          description: Cloud Hadoop 마스터노드 상품 코드
+        masterNodeSubnetNo:
+          type: string
+          description: 마스터노드의 Subnet 번호
+        masterNodeDataStorageTypeCode:
+          type: string
+          description: 마스터노드의 데이터 스토리지 타입 코드
+        masterNodeDataStorageSize:
+          type: integer
+          format: int32
+          description: 마스터노드의 데이터 스토리지 크기
+        workerNodeProductCode:
+          type: string
+          description: Cloud Hadoop 작업자노드 상품 코드
+        workerNodeCount:
+          type: integer
+          format: int32
+          description: 작업자노드 개수
+        workerNodeSubnetNo:
+          type: string
+          description: 작업자노드의 Subnet 번호
+        workerNodeDataStorageTypeCode:
+          type: string
+          description: 작업자노드의 데이터 스토리지 타입 코드
+        workerNodeDataStorageSize:
+          type: integer
+          format: int32
+          description: 작업자노드의 데이터 스토리지 크기
+        useKdc:
+          type: boolean
+          description: 커버로스 인증 구성 여부
+        kdcRealm:
+          type: string
+          description: KDC 의 Realm 정보
+        kdcPassword:
+          type: string
+          description: KDC admin 계정의 패스워드
+        useBootstrapScript:
+          type: boolean
+          description: Cloud Hadoop 부트스트랩 스크립트 사용 여부
+        bootstrapScript:
+          type: string
+          description: Cloud Hadoop 부트스트랩 스크립트 사용 여부
+        useDataCatalog:
+          type: boolean
+          description: Cloud Hadoop Data Catalog 사용 여부
+        engineVersionCode:
+          type: string
+          description: engineVersionCode
+    CreateCloudHadoopInstanceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudHadoopInstanceList:
+          type: array
+          description: CloudHadoop 인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudHadoopInstance'
+    DeleteCloudHadoopInstanceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudHadoopInstanceNo:
+          type: string
+          description: CloudHadoop 인스턴스 번호
+    DeleteCloudHadoopInstanceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudHadoopInstanceList:
+          type: array
+          description: CloudHadoop 인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudHadoopInstance'
+    GetCloudHadoopAddOnListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudHadoopImageProductCode:
+          type: string
+          description: Cloud Hadoop 이미지 상품 코드
+        cloudHadoopClusterTypeCode:
+          type: string
+          description: Cloud Hadoop 클러스터 유형 코드
+    GetCloudHadoopAddOnListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudHadoopAddOnList:
+          type: array
+          description: CloudHadoop Add-On 리스트
+          items:
+            $ref: '#/components/schemas/CloudHadoopAddOn'
+    GetCloudHadoopBucketListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+    GetCloudHadoopBucketListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudHadoopBucketList:
+          type: array
+          description: CloudHadoop 버킷리스트
+          items:
+            $ref: '#/components/schemas/CloudHadoopBucket'
+    GetCloudHadoopClusterTypeListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudHadoopImageProductCode:
+          type: string
+          description: Cloud Hadoop 이미지 상품 코드
+    GetCloudHadoopClusterTypeListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudHadoopClusterTypeList:
+          type: array
+          description: CloudHadoop 클러스터 유형 리스트
+          items:
+            $ref: '#/components/schemas/CloudHadoopClusterType'
+    GetCloudHadoopImageProductListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        productCode:
+          type: string
+          description: 조회할상품코드
+        exclusionProductCode:
+          type: string
+          description: 제외할상품코드
+    GetCloudHadoopImageProductListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        productList:
+          type: array
+          description: 상품리스트
+          items:
+            $ref: '#/components/schemas/Product'
+    GetCloudHadoopInstanceDetailRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudHadoopInstanceNo:
+          type: string
+          description: CloudHadoop 인스턴스 번호
+    GetCloudHadoopInstanceDetailResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudHadoopInstanceList:
+          type: array
+          description: CloudHadoop 인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudHadoopInstance'
+    GetCloudHadoopInstanceListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        zoneCode:
+          type: string
+          description: ZONE 코드
+        vpcNo:
+          type: string
+          description: VPC 번호
+        subnetNo:
+          type: string
+          description: Subnet 번호
+        cloudHadoopClusterName:
+          type: string
+          description: CloudHadoop 클러스터이름
+        cloudHadoopInstanceNoList:
+          type: array
+          description: CloudHadoop 인스턴스 번호 리스트
+          items:
+            type: string
+        cloudHadoopServerName:
+          type: string
+          description: CloudHadoop 서버 이름
+        cloudHadoopServerInstanceNoList:
+          type: array
+          description: CloudHadoop 서버인스턴스 번호 리스트
+          items:
+            type: string
+        pageNo:
+          type: integer
+          format: int32
+          description: 페이지번호
+        pageSize:
+          type: integer
+          format: int32
+          description: 페이지사이즈
+    GetCloudHadoopInstanceListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudHadoopInstanceList:
+          type: array
+          description: CloudHadoop 인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudHadoopInstance'
+    GetCloudHadoopLoginKeyListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+    GetCloudHadoopLoginKeyListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudHadoopLoginKeyList:
+          type: array
+          description: CloudHadoopLoginKey 리스트
+          items:
+            $ref: '#/components/schemas/CloudHadoopLoginKey'
+    GetCloudHadoopProductListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        zoneCode:
+          type: string
+          description: ZONE 코드
+        cloudHadoopImageProductCode:
+          type: string
+          description: CloudHadoop 이미지상품코드
+        productCode:
+          type: string
+          description: 조회할상품코드
+        infraResourceDetailTypeCode:
+          type: string
+          description: Cloud Hadoop 기타 서버 infra 상세 상품 코드
+        exclusionProductCode:
+          type: string
+          description: 제외할상품코드
+    GetCloudHadoopProductListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        productList:
+          type: array
+          description: 상품리스트
+          items:
+            $ref: '#/components/schemas/Product'
+    Product:
+      type: object
+      properties:
+        productCode:
+          type: string
+          description: 상품코드
+        productName:
+          type: string
+          description: 상품이름
+        productType:
+          $ref: '#/components/schemas/CommonCode'
+        productDescription:
+          type: string
+          description: 상품설명
+        infraResourceType:
+          $ref: '#/components/schemas/CommonCode'
+        infraResourceDetailType:
+          $ref: '#/components/schemas/CommonCode'
+        cpuCount:
+          type: integer
+          format: int32
+          description: CPU 개수
+        memorySize:
+          type: integer
+          format: int64
+          description: 메모리사이즈
+        baseBlockStorageSize:
+          type: integer
+          format: int64
+          description: 기본블록스토리지사이즈
+        platformType:
+          $ref: '#/components/schemas/CommonCode'
+        osInformation:
+          type: string
+          description: OS 정보
+        diskType:
+          $ref: '#/components/schemas/CommonCode'
+        dbKindCode:
+          type: string
+          description: DB 유형 코드
+        addBlockStorageSize:
+          type: integer
+          format: int64
+          description: 추가블록스토리지사이즈
+        generationCode:
+          type: string
+          description: 세대코드
+        engineVersionCode:
+          type: string
+          description: engineVersionCode
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

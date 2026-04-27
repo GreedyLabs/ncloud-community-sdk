@@ -1,0 +1,1069 @@
+openapi: 3.0.3
+info:
+  title: certificate-manager
+  description: certificate-manager
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: false
+    gov: false
+
+  x-ncloud-nrn:
+
+    productName: CertificateManager
+    resource_types:
+      - Certificate
+
+servers:
+  - url: https://certificatemanager.apigw.ntruss.com
+    description: certificate-manager 민간
+    x-ncloud-env: public
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /certificate/certificateTypes:
+    get:
+      operationId: ListCertificateTypeS
+      summary: ListCertificateTypes
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - certificate-manager
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-certificatemanager-listcertificatetypes
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnCode:
+                    type: string
+                    description: 응답 코드
+                  returnMessage:
+                    type: string
+                    description: 응답 메시지
+                  totalCount:
+                    type: integer
+                    description: 조회된 목록의 총 개수
+                  certificatetype:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '인증서 타입 목록: certificatetype'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /certificate/certificates:
+    get:
+      operationId: ListCertificateS
+      summary: ListCertificates
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - certificate-manager
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-certificatemanager-listcertificates
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnCode:
+                    type: string
+                    description: 응답 코드
+                  returnMessage:
+                    type: string
+                    description: 응답 메시지
+                  totalCount:
+                    type: integer
+                    description: 조회된 목록의 총 개수
+                  sslCertificateList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '인증서 목록: sslCertificateList'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /certificate/deleteCertificate/{certificateNo}:
+    delete:
+      operationId: DeleteLeteCertificate
+      summary: DeleteCertificate
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - certificate-manager
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-certificatemanager-deleteletecertificate
+      parameters:
+        - name: certificateNo
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 인증서 번호 getCertificateList 참조
+        - name: certificateName
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 인증서 이름 getCertificateList 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnCode:
+                    type: string
+                    description: 응답 코드
+                  returnMessage:
+                    type: string
+                    description: 응답 메시지
+                  totalRows:
+                    type: integer
+                    description: 조회된 목록의 총 개수
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /certificate/exportCertificate/{certificateNo}:
+    get:
+      operationId: DownloadCertificate
+      summary: DownloadCertificate
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - certificate-manager
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-certificatemanager-downloadcertificate
+      parameters:
+        - name: certificateNo
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 인증서 번호
+      responses:
+        '200':
+          description: OK
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /certificate/exportCertificate/{certificateNo}/chain:
+    get:
+      operationId: GetCertificateChain
+      summary: GetCertificateChain
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - certificate-manager
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-certificatemanager-getcertificatechain
+      parameters:
+        - name: certificateNo
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 인증서 번호
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnCode:
+                    type: string
+                    description: 응답 코드
+                  returnMessage:
+                    type: string
+                    description: 응답 메시지
+                  totalRows:
+                    type: integer
+                    description: 조회된 목록의 총 개수
+                  subjectCommonName:
+                    type: integer
+                    description: 인증서 CN(Common Name)
+                  certificate:
+                    type: string
+                    description: 인증서의 PEM 형식
+                  subCaCertificate:
+                    type: string
+                    description: SubCA 인증서의 PEM 형식
+                  rootCaCertificate:
+                    type: string
+                    description: RootCA 인증서의 PEM 형식
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /certificate/getPaidCertificates:
+    get:
+      operationId: ListAdvancedCertificateS
+      summary: ListAdvancedCertificates
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - certificate-manager
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-certificatemanager-listadvancedcertificates
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnCode:
+                    type: string
+                    description: 응답 코드
+                  returnMessage:
+                    type: string
+                    description: 응답 메시지
+                  totalCount:
+                    type: integer
+                    description: 조회된 목록의 총 개수
+                  orders:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '인증서 발급 요청 목록: orders'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /certificate/getVerificationInfo/{certificateNo}:
+    get:
+      operationId: ListDcvStatusEs
+      summary: ListDcvStatuses
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - certificate-manager
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-certificatemanager-listdcvstatuses
+      parameters:
+        - name: certificateNo
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 인증서 번호
+        - name: domainAddress
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 검증 대상 도메인(FQDN)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnCode:
+                    type: string
+                    description: 응답 코드
+                  returnMessage:
+                    type: string
+                    description: 응답 메시지
+                  totalRows:
+                    type: integer
+                    description: 조회된 목록의 총 개수
+                  dnsVerificationCount:
+                    type: integer
+                    description: DNS TXT 레코드 기반 도메인 검증 요청 수
+                  dnsVerificationList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 'DNS TXT 레코드 기반 도메인 검증 요청 목록: dnsVerificationList'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /certificate/recentChanges:
+    get:
+      operationId: ListRecentCertChangeS
+      summary: ListRecentCertChanges
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - certificate-manager
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-certificatemanager-listrecentcertchanges
+      parameters:
+        - name: minutes
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 최근 N 분 동안 상태가 변경된 요청으로 결과 제한 N~10080
+        - name: seconds
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 최근 N 초 동안 상태가 변경된 요청으로 결과 제한 N~604800
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnCode:
+                    type: string
+                    description: 응답 코드
+                  returnMessage:
+                    type: string
+                    description: 응답 메시지
+                  totalCount:
+                    type: integer
+                    description: 조회된 목록의 총 개수
+                  orders:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '요청 목록: orders'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /certificate/registPrivateKey:
+    post:
+      operationId: RegisterprivateKey
+      summary: RegisterPrivateKey
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - certificate-manager
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-certificatemanager-registerprivatekey
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - certificateNo
+                - privateKey
+              properties:
+                certificateNo:
+                  type: integer
+                  description: 인증서 번호
+                privateKey:
+                  type: string
+                  description: 인증서 개인키의 PEM 파일
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnCode:
+                    type: string
+                    description: 응답 코드
+                  returnMessage:
+                    type: string
+                    description: 응답 메시지
+                  totalRows:
+                    type: integer
+                    description: 조회된 목록의 총 개수
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /certificate/requestCertificateIssuance:
+    post:
+      operationId: CloudBasicCertificateRequest
+      summary: CloudBasicCertificateRequest
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - certificate-manager
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-certificatemanager-cloudbasiccertificaterequest
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - certificateName
+                - commonName
+                - validationMethod
+              properties:
+                certificateName:
+                  type: string
+                  description: 인증서 이름
+                commonName:
+                  type: string
+                  description: 인증서 CN(Common Name)에 포함될 도메인
+                dnsName:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: 인증서 SAN(Subject Alternative Name)에 포함될 도메인 목록
+                validationMethod:
+                  type: string
+                  description: '인증서 도메인 소유권(DCV) 검증 방법 D : DNS CNAME 레코드를 이용한 검증 방식'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnCode:
+                    type: string
+                    description: 응답 코드
+                  returnMessage:
+                    type: string
+                    description: 응답 메시지
+                  totalRows:
+                    type: integer
+                    description: 조회된 목록의 총 개수
+                  certificateName:
+                    type: string
+                    description: 인증서 이름
+                  commonName:
+                    type: string
+                    description: 인증서 CN(Common Name)에 포함될 도메인
+                  dnsName:
+                    type: string
+                    description: 인증서 SAN(Subject Alternative Name)에 포함될 도메인 목록
+                  validationMethod:
+                    type: string
+                    description: 도메인 소유권(DCV) 검증 방법
+                  requestSn:
+                    type: string
+                    description: 요청 고유 식별자
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /certificate/requestGedCertificateIssuance:
+    post:
+      operationId: GlobalEdgeCertificateRequest
+      summary: GlobalEdgeCertificateRequest
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - certificate-manager
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-certificatemanager-globaledgecertificaterequest
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - certificateName
+                - commonName
+              properties:
+                certificateName:
+                  type: string
+                  description: 인증서 이름
+                commonName:
+                  type: string
+                  description: 인증서 CN(Common Name)에 포함될 도메인
+                dnsName:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: 인증서 SAN(Subject Alternative Name)에 포함될 도메인 목록
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnCode:
+                    type: string
+                    description: 응답 코드
+                  returnMessage:
+                    type: string
+                    description: 응답 메시지
+                  totalRows:
+                    type: integer
+                    description: 조회된 목록의 총 개수
+                  certificate:
+                    type: object
+                    additionalProperties: true
+                    description: 인증서 신청 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /certificate/requestPaidCertificateIssuance:
+    post:
+      operationId: AdvancedCertificateRequest
+      summary: AdvancedCertificateRequest
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - certificate-manager
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-certificatemanager-advancedcertificaterequest
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - csr
+                - certificateType
+                - certificateName
+                - commonName
+                - validationMethod
+              properties:
+                csr:
+                  type: string
+                  description: Certificate Signing Request (CSR)
+                certificateType:
+                  type: string
+                  description: '인증서 타입 NCP_PAID_DV_01 | NCP_PAID_OV_01 NCP_PAID_DV_01 : Advanced DV 인증서 NCP_PAID_OV_01 : Advanced OV 인증서'
+                certificateName:
+                  type: string
+                  description: 인증서 이름
+                commonName:
+                  type: string
+                  description: 인증서 CN(Common Name)에 포함될 도메인
+                dnsName:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: 인증서 SAN(Subject Alternative Name)에 포함될 도메인 목록
+                validationMethod:
+                  type: string
+                  description: '인증서 도메인 소유권(DCV) 검증 방법 D : DNS CNAME 레코드를 이용한 검증 방식'
+                organizationNo:
+                  type: integer
+                  description: 조직 번호 certificateType 이 NCP_PAID_OV_01 인 경우, 필수 입력
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnCode:
+                    type: string
+                    description: 응답 코드
+                  returnMessage:
+                    type: string
+                    description: 응답 메시지
+                  totalRows:
+                    type: integer
+                    description: 조회된 목록의 총 개수
+                  paidCertificate:
+                    type: object
+                    additionalProperties: true
+                    description: 인증서 신청 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /certificate/revoke:
+    post:
+      operationId: RevokeCertificate
+      summary: RevokeCertificate
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - certificate-manager
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-certificatemanager-revokecertificate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - orderId
+                - certificateNo
+                - revokeType
+              properties:
+                orderId:
+                  type: string
+                  description: 폐지할 인증서가 포함된 오더 ID
+                certificateNo:
+                  type: integer
+                  description: '인증서 번호 0~N 오더 내 전체 인증서를 폐지할 경우: 0 입력'
+                revokeType:
+                  type: string
+                  description: '폐지 유형 입력 값: affiliationChanged · superseded · cessationOfOperation · unspecified 중 하나'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnCode:
+                    type: string
+                    description: 응답 코드
+                  returnMessage:
+                    type: string
+                    description: 응답 메시지
+                  totalRows:
+                    type: integer
+                    description: 이번 폐지 요청에 포함된 인증서 수
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /certificate/setCertificateRenewal:
+    post:
+      operationId: SetRenewalStatus
+      summary: SetRenewalStatus
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - certificate-manager
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-certificatemanager-setrenewalstatus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - certificateNo
+                - renewalYn
+              properties:
+                certificateNo:
+                  type: string
+                  description: 인증서 번호
+                renewalYn:
+                  type: string
+                  description: '자동 갱신 설정 여부 Y | N Y : 설정 N : 설정 해지'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnCode:
+                    type: string
+                    description: 응답 코드
+                  returnMessage:
+                    type: string
+                    description: 응답 메시지
+                  totalRows:
+                    type: integer
+                    description: 조회된 목록의 총 개수
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /certificate/subscription/extend:
+    post:
+      operationId: SubScriptIonextEnd
+      summary: SubscriptionExtend
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - certificate-manager
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-certificatemanager-subscriptionextend
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - orderId
+                - subscriptionPeriod
+              properties:
+                orderId:
+                  type: string
+                  description: 연장할 오더 ID
+                subscriptionPeriod:
+                  type: string
+                  description: '연장 기간 1Y | 2Y | 3Y 1Y : 1년 2Y : 2년 3Y : 3년'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnCode:
+                    type: string
+                    description: 응답 코드
+                  returnMessage:
+                    type: string
+                    description: 응답 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /certificate/withExternal:
+    post:
+      operationId: RegisterexternalCertificate
+      summary: RegisterExternalCertificate
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - certificate-manager
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-certificatemanager-registerexternalcertificate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - certificateName
+                - privateKey
+                - certificateBody
+                - certificateChain
+              properties:
+                certificateName:
+                  type: string
+                  description: 인증서 이름
+                privateKey:
+                  type: string
+                  description: 'PEM 인코딩된 인증서 개인 키 개인 키가 암호화된 경우, 복호화하여 입력 복호화: Certificate Manager 사용 가이드 참조 중복 불가'
+                certificateBody:
+                  type: string
+                  description: PEM 인코딩된 인증서 바디 중복 불가
+                certificateChain:
+                  type: string
+                  description: 'PEM 인코딩된 인증서 체인 체인 추출: Certificate Manager 사용 가이드 참조 중복 불가'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnCode:
+                    type: string
+                    description: 응답 코드
+                  returnMessage:
+                    type: string
+                    description: 응답 메시지
+                  totalRows:
+                    type: integer
+                    description: 조회된 목록의 총 개수
+                  sslCertificateList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '인증서 목록: sslCertificateList'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /certificate/{certificateNo}:
+    delete:
+      operationId: DeleteCertificate
+      summary: deleteCertificate
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - certificate-manager
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-certificatemanager-deletecertificate
+      parameters:
+        - name: certificateNo
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 인증서 번호 getCertificateList 참조
+        - name: certificateName
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 인증서 이름 getCertificateList 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnCode:
+                    type: string
+                    description: 응답 코드
+                  returnMessage:
+                    type: string
+                    description: 응답 메시지
+                  totalRows:
+                    type: integer
+                    description: SSL 인증서( sslCertificateList ) 수
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /certificate/{certificateNo}/reissue:
+    post:
+      operationId: ReIssueCertificate
+      summary: ReissueCertificate
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - certificate-manager
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-certificatemanager-reissuecertificate
+      parameters:
+        - name: certificateNo
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 인증서 번호
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - csr
+                - certificateName
+                - commonName
+                - validationMethod
+              properties:
+                csr:
+                  type: string
+                  description: Certificate Signing Request (CSR)
+                certificateName:
+                  type: string
+                  description: 인증서 이름
+                commonName:
+                  type: string
+                  description: 인증서 CN(Common Name)에 포함될 도메인
+                dnsName:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: 인증서 SAN(Subject Alternative Name)에 포함될 도메인 목록
+                validationMethod:
+                  type: string
+                  description: '인증서 도메인 소유권(DCV) 검증 방법 D : DNS CNAME 레코드를 이용한 검증 방식'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnCode:
+                    type: string
+                    description: 응답 코드
+                  returnMessage:
+                    type: string
+                    description: 응답 메시지
+                  totalRows:
+                    type: integer
+                    description: 조회된 목록의 총 개수
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /certificates:
+    get:
+      operationId: GetCertificateList
+      summary: getCertificateList
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - certificate-manager
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-certificatemanager-getcertificatelist
+      parameters:
+        - name: certificateName
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 인증서 이름
+        - name: certificateNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 인증서 번호
+        - name: instanceNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '인스턴스 번호 인스턴스: 인증서를 사용 중인 연동 서비스(Global Edge, CDN+, Load Balancer)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnCode:
+                    type: string
+                    description: 응답 코드
+                  returnMessage:
+                    type: string
+                    description: 응답 메시지
+                  totalRows:
+                    type: integer
+                    description: SSL 인증서( sslCertificateList ) 수
+                  sslCertificateList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '인증서 목록: sslCertificateList'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /organization/getOrganizationInfoList:
+    post:
+      operationId: ListOrganizations
+      summary: ListOrganizations (수정필요)
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - certificate-manager
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-certificatemanager-listorganizations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                organizationNameKor:
+                  type: string
+                  description: 조직 이름(한글)
+                organizationNameEng:
+                  type: string
+                  description: 조직 이름(영문)
+                businessRegistrationNo:
+                  type: string
+                  description: 사업자 등록 번호
+                verificationProgressCode:
+                  type: integer
+                  description: '검증 상태 0 | 1 | 2 | 3 | 4 | 7 | 90 | 91 0 : 검증 대기 1 : 서류 검증 (검증 진행 중) 2 : 전화번호 검증 (검증 진행 중) 3 : 전화 검증 (검증 진행 중) 4 : 최종 검증 (검증 진행 중) 7 : 검증 완료 90 : 검증 실패 91 : 검증 기간 만료'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  organizationNo:
+                    type: integer
+                    description: 조직 번호
+                  memberNo:
+                    type: string
+                    description: 네이버 클라우드 플랫폼 사용자 회원 번호
+                  organizationNameKor:
+                    type: string
+                    description: 조직 이름(한글)
+                  organizationNameEng:
+                    type: string
+                    description: 조직 이름(영문)
+                  businessRegistrationNo:
+                    type: string
+                    description: 사업자 등록 번호
+                  verificationType:
+                    type: string
+                    description: '검증 유형 BUSINESS_REGISTRATION : 사업자 등록증'
+                  verificationProgressCode:
+                    type: string
+                    description: '검증 상태 0 | 1 | 2 | 3 | 4 | 7 | 90 | 91 0 : 검증 대기 1 : 서류 검증 (검증 진행 중) 2 : 전화번호 검증 (검증 진행 중) 3 : 전화 검증 (검증 진행 중) 4 : 최종 검증 (검증 진행 중) 7 : 검증 완료 90 : 검증 실패 91 : 검증 기간 만료'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+components:
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  schemas:
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

@@ -1,0 +1,403 @@
+openapi: 3.0.3
+info:
+  title: kms
+  description: kms
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: true
+    gov: true
+
+  x-ncloud-nrn:
+
+    productName: KMS
+    resource_types:
+      - Key
+
+servers:
+  - url: https://kms.apigw.ntruss.com
+    description: kms 민간
+    x-ncloud-env: public
+  - url: https://kms.apigw.fin-ntruss.com
+    description: kms 금융
+    x-ncloud-env: financial
+  - url: https://kms.apigw.gov-ntruss.com
+    description: kms 공공
+    x-ncloud-env: gov
+security:
+  # KMS legacy v1 uses HMAC v1 (NOT v2) plus an APIGW Client Key alongside
+  # the IAM access key. All four headers are required.
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV1: []
+    ncpApiGwApiKey: []
+paths:
+  /keys/v1/{keyTag}/createCustomKey:
+    post:
+      operationId: CreateUserCustomKey
+      summary: Create Custom Key
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms-createusercustomkey
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                requestPlainKey:
+                  type: boolean
+                  description: '암호화된 임의의 평문 생성 여부 true | false (기본값) true : 생성 false : 미생성'
+                bits:
+                  type: integer
+                  description: 생성할 키 데이터 크기(비트) 128 | 256 (기본값) | 512
+                context:
+                  type: string
+                  description: Base64로 인코딩된 문자열 데이터 수렴 암호화(convergent encryption)가 적용된 키 사용 시 필수 입력 최대 50 바이트 입력 가능 같은 데이터를 여러 번 암호화하더라도 항상 동일한 암호문 생성
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  msg:
+                    type: string
+                    description: 응답 코드( code )에 대한 설명 요청 성공( SUCCESS ) 시 빈값("")으로 표시
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /keys/v1/{keyTag}/decrypt:
+    post:
+      operationId: Decrypt
+      summary: Decrypt
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms-decrypt
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - ciphertext
+              properties:
+                ciphertext:
+                  type: string
+                  description: 평문을 암호화하여 생성된 문자열 데이터
+                context:
+                  type: string
+                  description: Base64로 인코딩된 문자열 데이터 수렴 암호화(convergent encryption)가 적용된 키로 데이터를 암호화할 때 사용한 context 파라미터 값 필수 입력
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  msg:
+                    type: string
+                    description: 응답 코드( code )에 대한 설명 요청 성공( SUCCESS ) 시 빈값("")으로 표시
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /keys/v1/{keyTag}/encrypt:
+    post:
+      operationId: Encrypt
+      summary: Encrypt
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms-encrypt
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - plaintext
+              properties:
+                plaintext:
+                  type: string
+                  description: Base64로 인코딩된 문자열 데이터 최대 32 KB 데이터 암호화 가능
+                context:
+                  type: string
+                  description: Base64로 인코딩된 문자열 데이터 수렴 암호화(convergent encryption)가 적용된 키 사용 시 필수 입력 최대 50 바이트 입력 가능 같은 데이터를 여러 번 암호화하더라도 항상 동일한 암호문 생성
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  msg:
+                    type: string
+                    description: 응답 코드( code )에 대한 설명 요청 성공( SUCCESS ) 시 빈값("")으로 표시
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /keys/v1/{keyTag}/reencrypt:
+    post:
+      operationId: ReEncrypt
+      summary: Re-encrypt
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms-reencrypt
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - ciphertext
+              properties:
+                ciphertext:
+                  type: string
+                  description: 평문을 암호화하여 생성된 문자열 데이터
+                context:
+                  type: string
+                  description: Base64로 인코딩된 문자열 데이터 수렴 암호화(convergent encryption)가 적용된 키 사용 시 필수 입력 최대 50 바이트 입력 가능 같은 데이터를 여러 번 암호화하더라도 항상 동일한 암호문 생성
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  msg:
+                    type: string
+                    description: 응답 코드( code )에 대한 설명 요청 성공( SUCCESS ) 시 빈값("")으로 표시
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /keys/v1/{keyTag}/sign:
+    post:
+      operationId: Sign
+      summary: Sign
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms-sign
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - data
+              properties:
+                data:
+                  type: string
+                  description: 서명값을 생성할 Base64로 인코딩된 문자열 데이터 최대 8 KB 입력 가능
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  msg:
+                    type: string
+                    description: 응답 코드( code )에 대한 설명 요청 성공( SUCCESS ) 시 빈값("")으로 표시
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /keys/v1/{keyTag}/verify:
+    post:
+      operationId: Verify
+      summary: Verify
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms-verify
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - data
+                - signature
+              properties:
+                data:
+                  type: string
+                  description: 서명된 데이터
+                signature:
+                  type: string
+                  description: 비교할 서명값
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  msg:
+                    type: string
+                    description: 응답 코드( code )에 대한 설명 요청 성공( SUCCESS ) 시 빈값("")으로 표시
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+components:
+  securitySchemes:
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+    ncpHmacV1:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v1
+      description: HMAC v1 signature (legacy KMS only — newer KMS2 uses v2).
+    ncpApiGwApiKey:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-api-key
+      description: APIGW Client Key required by legacy KMS v1 in addition to IAM creds.
+  schemas:
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

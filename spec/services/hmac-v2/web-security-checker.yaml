@@ -1,0 +1,444 @@
+openapi: 3.0.3
+info:
+  title: web-security-checker
+  description: web-security-checker
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: true
+    gov: true
+
+  x-ncloud-nrn:
+
+    productName: WebSecurityChecker
+    resource_types:
+      - Checker
+
+servers:
+  - url: https://wsc.apigw.ntruss.com/api/v1
+    description: web-security-checker 민간
+    x-ncloud-env: public
+  - url: https://wsc.apigw.fin-ntruss.com/api/v1
+    description: web-security-checker 금융
+    x-ncloud-env: financial
+  - url: https://wsc.apigw.gov-ntruss.com/api/v1
+    description: web-security-checker 공공
+    x-ncloud-env: gov
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /job:
+    put:
+      operationId: CreateJob
+      summary: 샘플 코드
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - web-security-checker
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-websecuritychecker-createjob
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - StartUrl
+                - VulnItems
+                - UserAgent
+                - Speed
+              properties:
+                StartUrl:
+                  type: string
+                  description: 진단 대상 URL <예시> "https://www.ncloud.com"
+                ExcludeUrl:
+                  type: string
+                  description: 진단 제외 URL 목록 <예시> [ "https://www.ncloud.com/events", "https://www.ncloud.com/product/security/webSecurityChecker"]
+                Headers:
+                  type: object
+                  additionalProperties: true
+                  description: '인증을 위한 HTTP Header 정보 <예시> { "Cookie": "JSESSIONID=AB123123123123ASAS", "Accept": "text/html.....", "Authorization": "Bearer ejs..."'
+                VulnItems:
+                  type: string
+                  description: 진단 항목 목록 <예시> [ "ALL" ] , ["XSS", "SSI Injection", ...] 진단 항목 예약어 목록 참고
+                UserAgent:
+                  type: string
+                  description: 진단 작업에 이용할 브라우저(User-Agent) 정보를 선택 "Android" | "iPhone" | "PC Chrome" | "PC IE" UserAgent 예약어 목록 참고
+                Speed:
+                  type: string
+                  description: '진단 작업의 속도를 조절 "1" | "2" | "3" "1" : 보통 "2" : 조금 빠르게 "3" : 빠르게'
+                Memo:
+                  type: string
+                  description: 진단 작업에 대한 메모 <예시> "상반기 보안진단"
+                MasterInstanceNo:
+                  type: string
+                  description: 재진단 작업을 생성할 완료된 진단의 인스턴스 번호(InstanceNo) 재진단을 위한 인스턴스 번호는 getJobs 참조 <예시> "1234111231"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /jobs:
+    get:
+      operationId: GetJobs
+      summary: 샘플 코드
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - web-security-checker
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-websecuritychecker-getjobs
+      parameters:
+        - name: limit
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: 리스트 한 페이지당 출력 항목 수
+        - name: page
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: 리스트의 페이지 번호
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total_cnt:
+                    type: integer
+                    description: 총 작업 레코드 수
+                  total_page_cnt:
+                    type: integer
+                    description: 마지막 페이지
+                  current_start_page:
+                    type: integer
+                    description: 시작 페이지 번호(10개 단위)
+                  current_end_page:
+                    type: integer
+                    description: 마지막 페이지 번호(10개 단위)
+                  record_data:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '진단 목록: record_data'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /jobs/{instanceId}/cancel:
+    patch:
+      operationId: CancelJob
+      summary: 샘플 코드
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - web-security-checker
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-websecuritychecker-canceljob
+      parameters:
+        - name: instanceId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: InstanceId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: 진단 식별 번호 getJobs 또는 searchJobs 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnCode:
+                    type: string
+                    description: (inferred from JSON example)
+                  returnDesc:
+                    type: string
+                    description: (inferred from JSON example)
+                  returnMessage:
+                    type: string
+                    description: (inferred from JSON example)
+                  resources:
+                    type: string
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /jobs/{instanceId}/report:
+    get:
+      operationId: GetReport
+      summary: 샘플 코드
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - web-security-checker
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-websecuritychecker-getreport
+      parameters:
+        - name: instanceId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: InstanceId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: 진단 식별 번호 getJobs 또는 searchJobs 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  report_date:
+                    type: string
+                    description: 진단 완료 시간
+                  Target_Info:
+                    type: string
+                    description: 진단 대상 정보
+                  Crawl_Time:
+                    type: string
+                    description: 크롤링 작업 시간 (YYYY/MM/DD hh:mm:ss~YYYY/MM/DD hh:mm:ss)
+                  Scan_Time:
+                    type: string
+                    description: 진단 작업 시간 (YYYY/MM/DD hh:mm:ss~YYYY/MM/DD hh:mm:ss)
+                  Excluded_Url:
+                    type: string
+                    description: 진단 제외 대상 URL 리스트
+                  Login_Info:
+                    type: string
+                    description: 인증 쿠키 정보
+                  Vulnerability_Category:
+                    type: string
+                    description: 진단 항목 나열 (VulnTitle_1, VulnTitle_2, ...)
+                  User_Agent:
+                    type: string
+                    description: 진단/크롤러 브라우저 설정
+                  Memo:
+                    type: string
+                    description: 진단 작업 생성 시 작성한 메모
+                  Scanned_Domain_List:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 진단 대상 도메인 리스트
+                  Not_Scanned_Domain_List:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 진단 제외 도메인 리스트
+                  Classify_byRisk_Level:
+                    type: object
+                    additionalProperties: true
+                    description: 위험도에 따른 취약점 개수
+                  Classify_byRisk_Domain:
+                    type: object
+                    additionalProperties: true
+                    description: 도메인, 영향도별 취약점 개수
+                  Classify_byRisk_Vulnerability:
+                    type: object
+                    additionalProperties: true
+                    description: 취약점별 취약점 개수
+                  Details:
+                    type: object
+                    additionalProperties: true
+                    description: 진단 항목별 상세 정보
+                  Recommendation:
+                    type: object
+                    additionalProperties: true
+                    description: 취약점 대응 방안 상세
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /jobs/{instanceId}/stop:
+    patch:
+      operationId: StopJob
+      summary: 샘플 코드
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - web-security-checker
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-websecuritychecker-stopjob
+      parameters:
+        - name: instanceId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: InstanceId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: 진단 식별 번호 getJobs 또는 searchJobs 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnCode:
+                    type: string
+                    description: (inferred from JSON example)
+                  returnDesc:
+                    type: string
+                    description: (inferred from JSON example)
+                  returnMessage:
+                    type: string
+                    description: (inferred from JSON example)
+                  resources:
+                    type: string
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /search:
+    post:
+      operationId: SearchJobs
+      summary: 샘플 코드
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - web-security-checker
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-websecuritychecker-searchjobs
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - searchType
+                - searchKeyword
+                - statusCode
+                - limit
+                - page
+              properties:
+                searchType:
+                  type: string
+                  description: '검색 유형 url | memo | 공백 url : searchKeyword 에 ncloud.com 과 같이 도메인 또는 URI를 입력 memo : 작업 생성 시 입력한 메모 문자열을 searchKeyword 에 입력 공백: 전체 검색'
+                searchKeyword:
+                  type: string
+                  description: searchType 에 대응하는 검색 키워드 지정
+                statusCode:
+                  type: integer
+                  description: '작업 상태 코드로 검색 null : 전체 검색 2 : 진단 대기 3 : 진단 진행 중 4 : 진단 완료 5 : 진단 실패 12 : URL 수집 대기 13 : URL 수집 진행 중 14 : URL 수집 완료 15 : URL 수집 실패 91 : 진단 취소 92 : 중지 중 93 : 작업 중지'
+                limit:
+                  type: integer
+                  description: 리스트 한 페이지당 출력 항목 수
+                page:
+                  type: integer
+                  description: 리스트의 페이지 번호
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total_cnt:
+                    type: integer
+                    description: 총 작업 레코드 수
+                  total_page_cnt:
+                    type: integer
+                    description: 마지막 페이지
+                  current_start_page:
+                    type: integer
+                    description: 시작 페이지 번호(10개 단위)
+                  current_end_page:
+                    type: integer
+                    description: 마지막 페이지 번호(10개 단위)
+                  record_data:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '진단 목록: record_data'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+components:
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  schemas:
+    SuccessResponse:
+      type: object
+      description: Trivial success envelope — returned by mutations that don't carry a body.
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: API 호출 성공 여부
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ncloud-community-spec — NAVER Cloud Platform OpenAPI</title>
+  <style>
+    html, body { margin: 0; padding: 0; height: 100%; }
+    #app { height: 100vh; }
+    #boot {
+      position: fixed; inset: 0; display: grid; place-items: center;
+      background: #fafbfc; color: #555;
+      font: 500 14px/1.5 -apple-system, system-ui, sans-serif;
+      z-index: 10;
+    }
+    #boot .err { color: #b91c1c; max-width: 560px; padding: 24px; }
+    #boot code { background: rgba(0,0,0,.06); padding: 1px 6px; border-radius: 3px; }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <div id="boot">Loading 78 NCP service specs…</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference"></script>
+  <script>
+    // Tier classification drives sort order + display suffix.
+    // hmac-v2 is the default surface (~85% of NCP) and gets a clean
+    // service name with no marker; the 12 special tiers get a faint
+    // suffix so they're scannable without polluting the common case.
+    const TIER_RANK = {
+      'hmac-v2': 0,
+      's3-compat': 1,
+      'swift-compat': 2,
+      'ncloud-app': 3,
+      'hmac-v1': 4,
+    };
+    const TIER_SUFFIX = {
+      'hmac-v2': '',
+      's3-compat': ' · S3',
+      'swift-compat': ' · Swift',
+      'ncloud-app': ' · App',
+      'hmac-v1': ' · HMAC v1',
+    };
+
+    (async () => {
+      const boot = document.getElementById('boot');
+      try {
+        const yaml = await fetch('./openapi.yaml').then((r) => {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.text();
+        });
+        const sources = parseServiceFiles(yaml);
+        if (sources.length === 0) throw new Error('no sources in openapi.yaml');
+
+        // Sort: tier rank first (hmac-v2 → s3 → swift → app → hmac-v1),
+        // then alphabetical within tier. Default selection: first
+        // hmac-v2 service so a fresh visitor lands on the main API
+        // surface.
+        sources.sort((a, b) => {
+          const dt = (TIER_RANK[a.tier] ?? 99) - (TIER_RANK[b.tier] ?? 99);
+          return dt !== 0 ? dt : a.slug.localeCompare(b.slug);
+        });
+        const defaultSource = sources.find((s) => s.tier === 'hmac-v2') || sources[0];
+
+        Scalar.createApiReference('#app', {
+          sources: sources.map((s) => ({
+            url: s.url,
+            // Title = service slug, with a faint tier suffix only for
+            // non-default tiers. Avoids the [hmac-v2] noise across 66
+            // entries while still flagging the 12 special services.
+            title: s.slug + (TIER_SUFFIX[s.tier] || ''),
+            slug: s.slug,
+            default: s.slug === defaultSource.slug,
+          })),
+
+          // Try-It is impossible against NCP API Gateway from a static
+          // page (no CORS + per-request HMAC v2 signature). Hide both
+          // the test-request and API-client buttons rather than ship
+          // something that always errors.
+          hideClientButton: true,
+          hideTestRequestButton: true,
+        });
+      } catch (e) {
+        console.error(e);
+        boot.innerHTML = '<div class="err"><b>Failed to load spec catalog.</b><br><br>' +
+          'Check that <code>openapi.yaml</code> is reachable at <code>./openapi.yaml</code> ' +
+          'relative to this page, and that the <code>x-service-files</code> entries ' +
+          'point at valid spec files.<br><br>Console error:<br><code>' +
+          String(e).replace(/[<&]/g, (c) => ({'<':'&lt;','&':'&amp;'}[c])) + '</code></div>';
+        return;
+      }
+      boot.remove();
+    })();
+
+    function parseServiceFiles(yaml) {
+      const lines = yaml.split('\n');
+      let inBlock = false;
+      const out = [];
+      let current = null;
+      const TIER_RX = /^\.\/services\/([\w-]+)\/([\w-]+)\.yaml$/;
+
+      for (const raw of lines) {
+        if (raw.startsWith('x-service-files:')) { inBlock = true; continue; }
+        if (!inBlock) continue;
+        // The block ends at the first non-list-item top-level line.
+        if (raw && !raw.startsWith(' ') && !raw.startsWith('-')) break;
+
+        const item = raw.match(/^-\s+name:\s+([\w-]+)\s*$/);
+        if (item) {
+          if (current) out.push(current);
+          current = { slug: item[1] };
+          continue;
+        }
+        const path = raw.match(/^\s+path:\s+(\S+)\s*$/);
+        if (path && current) {
+          const m = path[1].match(TIER_RX);
+          if (m) {
+            current.tier = m[1];
+            current.url = './services/' + m[1] + '/' + m[2] + '.yaml';
+          }
+        }
+      }
+      if (current) out.push(current);
+      return out.filter((s) => s.url && s.tier);
+    }
+  </script>
+</body>
+</html>

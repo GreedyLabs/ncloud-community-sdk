@@ -1,0 +1,325 @@
+openapi: 3.0.3
+info:
+  title: geo-cidr
+  description: geo-cidr
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: false
+    gov: true
+
+  x-ncloud-nrn-todo: true
+servers:
+  - url: https://globaltrafficmanager.apigw.ntruss.com
+    description: geo-cidr 민간
+    x-ncloud-env: public
+  - url: https://globaltrafficmanager.apigw.gov-ntruss.com
+    description: geo-cidr 공공
+    x-ncloud-env: gov
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /gtm/v1/maps:
+    get:
+      operationId: View
+      summary: Geo and CIDR Map 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - geo-cidr
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/geocidr-view
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지 번호 0 (기본값)
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지 크기 20 (기본값)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: MapCreate
+      summary: Geo and CIDR Map 생성
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - geo-cidr
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/geocidr-map-create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MapRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detailedMapList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: (inferred from JSON example)
+                  mapType:
+                    type: string
+                    description: (inferred from JSON example)
+                  name:
+                    type: string
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: MapDelete
+      summary: Geo and CIDR Map 삭제
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - geo-cidr
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/geocidr-map-delete
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - list
+              properties:
+                list:
+                  type: string
+                  description: Geo / CIDR Map ID 목록 Geo / CIDR Map 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  list:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /gtm/v1/maps/mapType:
+    get:
+      operationId: MapTypeView
+      summary: Geo and CIDR Map 유형 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - geo-cidr
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/geocidr-map-typeview
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /gtm/v1/maps/{mapId}:
+    get:
+      operationId: MapDetailView
+      summary: Geo and CIDR Map 상세 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - geo-cidr
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/geocidr-map-detailview
+      parameters:
+        - name: mapId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Geo / CIDR Map ID Geo / CIDR Map 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    put:
+      operationId: MapEdit
+      summary: Geo and CIDR Map 수정
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - geo-cidr
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/geocidr-map-edit
+      parameters:
+        - name: mapId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Geo/CIDR Map ID Geo/ IDR Map 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detailedMapList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: (inferred from JSON example)
+                  id:
+                    type: integer
+                    description: (inferred from JSON example)
+                  mapType:
+                    type: string
+                    description: (inferred from JSON example)
+                  name:
+                    type: string
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+components:
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  schemas:
+    GeoIdMapping:
+      type: object
+      description: '지역 정보. Source: https://api.ncloud-docs.com/docs/map-request'
+      properties:
+        geoName:
+          type: string
+          description: 지역 이름
+        geoType:
+          type: string
+          enum:
+            - CONTINENT
+            - NATION
+            - CITY
+          description: 지역 구분
+    DetailedMap:
+      type: object
+      description: 'Geo/CIDR Map 상세 정보. Source: https://api.ncloud-docs.com/docs/map-request'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Geo/CIDR Map 상세 정보 ID
+        name:
+          type: string
+          description: Geo/CIDR Map 상세 정보 이름
+        content:
+          type: string
+          description: Geo/CIDR Map 상세 정보
+        geoIdMappings:
+          type: array
+          items:
+            $ref: '#/components/schemas/GeoIdMapping'
+          description: 지역 정보 목록
+    MapRequest:
+      type: object
+      description: 'Request body for MapCreate (Geo and CIDR Map 생성). Source: https://api.ncloud-docs.com/docs/map-request'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Geo/CIDR Map ID
+        name:
+          type: string
+          description: Geo/CIDR Map 이름
+        mapType:
+          type: string
+          enum:
+            - GEO
+            - CIDR
+          description: Map 구분
+        detailedMapList:
+          type: array
+          items:
+            $ref: '#/components/schemas/DetailedMap'
+          description: Geo/CIDR Map 상세 정보
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

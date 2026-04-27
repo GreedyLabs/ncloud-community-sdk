@@ -1,0 +1,15 @@
+package: object_storage
+output: services/object_storage/client.gen.go
+generate:
+  models: true
+  client: true
+  embedded-spec: false
+output-options:
+  # Object Storage's S3-style errors are referenced via named responses
+  # (S3ClientError / S3ServerError) which oapi-codegen does NOT alias to
+  # their backing schemas when the response media type is application/xml
+  # (it does for application/json — see services/wms/). Disabling prune
+  # keeps the schema-level S3ClientError / S3ServerError types alive so
+  # the generated XML4XX/XML5XX struct fields compile.
+  skip-prune: true
+  response-type-suffix: HTTPResp

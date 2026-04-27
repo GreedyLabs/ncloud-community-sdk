@@ -1,0 +1,1787 @@
+openapi: 3.0.3
+info:
+  title: postgresql
+  description: ''
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: false
+    gov: true
+
+  x-ncloud-nrn:
+
+    productName: VPCCloudDBforPostgreSQL
+    resource_types:
+      - Service
+      - Server
+
+servers:
+  - url: https://ncloud.apigw.ntruss.com/vpostgresql/v2
+    description: postgresql 민간
+    x-ncloud-env: public
+  - url: https://ncloud.apigw.gov-ntruss.com/vpostgresql/v2
+    description: postgresql 공공
+    x-ncloud-env: gov
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /addCloudPostgresqlDatabaseList:
+    post:
+      operationId: AddCloudPostgresqlDatabaseList
+      tags:
+        - postgresql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AddCloudPostgresqlDatabaseListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddCloudPostgresqlDatabaseListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for PostgreSQL 인스턴스에 Database를 추가합니다.
+  /addCloudPostgresqlUserList:
+    post:
+      operationId: AddCloudPostgresqlUserList
+      tags:
+        - postgresql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AddCloudPostgresqlUserListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddCloudPostgresqlUserListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for PostgreSQL 인스턴스에 DB User를 추가합니다.
+  /changeCloudPostgresqlUserList:
+    post:
+      operationId: ChangeCloudPostgresqlUserList
+      tags:
+        - postgresql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChangeCloudPostgresqlUserListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeCloudPostgresqlUserListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for PostgreSQL 인스턴스에 등록된 DB User의 정보를 수정합니다.
+  /createCloudPostgresqlInstance:
+    post:
+      operationId: CreateCloudPostgresqlInstance
+      tags:
+        - postgresql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateCloudPostgresqlInstanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCloudPostgresqlInstanceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for PostgreSQL 인스턴스를 생성합니다.
+  /createCloudPostgresqlReadReplicaInstance:
+    post:
+      operationId: CreateCloudPostgresqlReadReplicaInstance
+      tags:
+        - postgresql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateCloudPostgresqlReadReplicaInstanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCloudPostgresqlReadReplicaInstanceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Create cloud postgre sql read replica instance
+  /deleteCloudPostgresqlDatabaseList:
+    post:
+      operationId: DeleteCloudPostgresqlDatabaseList
+      tags:
+        - postgresql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteCloudPostgresqlDatabaseListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteCloudPostgresqlDatabaseListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for PostgreSQL 인스턴스의 Database를 삭제합니다.
+  /deleteCloudPostgresqlInstance:
+    post:
+      operationId: DeleteCloudPostgresqlInstance
+      tags:
+        - postgresql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteCloudPostgresqlInstanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteCloudPostgresqlInstanceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: 가이드는 GET 방식 기준으로 안내합니다. POST 방식의 호출 테스트는 네이버 클라우드 플랫폼 콘솔의 API Gateway 서비스에서 Swagger를 통해서 가능합니다.
+  /deleteCloudPostgresqlReadReplicaInstance:
+    post:
+      operationId: DeleteCloudPostgresqlReadReplicaInstance
+      tags:
+        - postgresql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteCloudPostgresqlReadReplicaInstanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteCloudPostgresqlReadReplicaInstanceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for PostgreSQL Read Replica 서버 인스턴스를 삭제합니다.
+  /deleteCloudPostgresqlUserList:
+    post:
+      operationId: DeleteCloudPostgresqlUserList
+      tags:
+        - postgresql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteCloudPostgresqlUserListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteCloudPostgresqlUserListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: 가이드는 GET 방식 기준으로 안내합니다. POST 방식의 호출 테스트는 네이버 클라우드 플랫폼 콘솔의 API Gateway 서비스에서 Swagger를 통해서 가능합니다.
+  /exportBackupToObjectStorage:
+    post:
+      operationId: ExportBackupToObjectStorage
+      tags:
+        - postgresql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ExportBackupToObjectStorageRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExportBackupToObjectStorageResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for PostgreSQL 인스턴스의 백업 파일을 Object Storage로 전송합니다.
+      description: |
+        백업 파일을 Object Storage로 전송하기 전에 백업 파일을 저장하고, 검색하기 위한
+        Object Storage 버킷이 생성되어 있어야 합니다. 자세한 내용은 Object Storage 가이드를
+        참조해 주십시오.
+  /exportDbServerLogToObjectStorage:
+    post:
+      operationId: ExportDbServerLogToObjectStorage
+      tags:
+        - postgresql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ExportDbServerLogToObjectStorageRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExportDbServerLogToObjectStorageResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for PostgreSQL 인스턴스의 DB Server 로그 파일을 Object Storage로 전송합니다.
+      description: |
+        DB Server 로그 파일을 Object Storage로 전송하기 전에 DB Server 로그 파일을 저장하고,
+        검색하기 위한 Object Storage 버킷이 생성되어 있어야 합니다. 자세한 내용은
+        Object Storage 가이드를 참조해 주십시오.
+  /getCloudPostgresqlBackupDetailList:
+    post:
+      operationId: GetCloudPostgresqlBackupDetailList
+      tags:
+        - postgresql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudPostgresqlBackupDetailListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudPostgresqlBackupDetailListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for PostgreSQL 인스턴스의 백업 상세 정보를 목록으로 조회합니다.
+  /getCloudPostgresqlBackupList:
+    post:
+      operationId: GetCloudPostgresqlBackupList
+      tags:
+        - postgresql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudPostgresqlBackupListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudPostgresqlBackupListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for PostgreSQL 인스턴스의 백업 목록을 조회합니다.
+  /getCloudPostgresqlBucketList:
+    post:
+      operationId: GetCloudPostgresqlBucketList
+      tags:
+        - postgresql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudPostgresqlBucketListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudPostgresqlBucketListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: 가이드는 GET 방식 기준으로 안내합니다. POST 방식의 호출 테스트는 네이버 클라우드 플랫폼 콘솔의 API Gateway 서비스에서 Swagger를 통해서 가능합니다.
+  /getCloudPostgresqlDatabaseList:
+    post:
+      operationId: GetCloudPostgresqlDatabaseList
+      tags:
+        - postgresql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudPostgresqlDatabaseListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudPostgresqlDatabaseListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for PostgreSQL 인스턴스의 Database 목록을 조회합니다.
+  /getCloudPostgresqlImageProductList:
+    post:
+      operationId: GetCloudPostgresqlImageProductList
+      tags:
+        - postgresql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudPostgresqlImageProductListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudPostgresqlImageProductListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for PostgreSQL 이미지 상품 코드 리스트를 조회합니다.
+  /getCloudPostgresqlInstanceDetail:
+    post:
+      operationId: GetCloudPostgresqlInstanceDetail
+      tags:
+        - postgresql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudPostgresqlInstanceDetailRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudPostgresqlInstanceDetailResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for PostgreSQL 인스턴스 상세 정보를 조회합니다.
+  /getCloudPostgresqlInstanceList:
+    post:
+      operationId: GetCloudPostgresqlInstanceList
+      tags:
+        - postgresql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudPostgresqlInstanceListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudPostgresqlInstanceListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for PostgreSQL 인스턴스 리스트를 조회합니다.
+  /getCloudPostgresqlProductList:
+    post:
+      operationId: GetCloudPostgresqlProductList
+      tags:
+        - postgresql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudPostgresqlProductListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudPostgresqlProductListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: 사용할 수 있는 Cloud DB for PostgreSQL 서버 스펙 코드 리스트를 조회합니다.
+  /getCloudPostgresqlTargetSubnetList:
+    post:
+      operationId: GetCloudPostgresqlTargetSubnetList
+      tags:
+        - postgresql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudPostgresqlTargetSubnetListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudPostgresqlTargetSubnetListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for PostgreSQL에서 사용할 수 있는 Subnet 목록을 조회합니다.
+  /getCloudPostgresqlTargetVpcList:
+    post:
+      operationId: GetCloudPostgresqlTargetVpcList
+      tags:
+        - postgresql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudPostgresqlTargetVpcListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudPostgresqlTargetVpcListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for PostgreSQL에서 사용할 수 있는 VPC 목록을 조회합니다.
+  /getCloudPostgresqlUserList:
+    post:
+      operationId: GetCloudPostgresqlUserList
+      tags:
+        - postgresql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudPostgresqlUserListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudPostgresqlUserListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for PostgreSQL 인스턴스의 DB User 목록을 조회합니다.
+  /getDbServerLogList:
+    post:
+      operationId: GetDbServerLogList
+      tags:
+        - postgresql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetDbServerLogListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetDbServerLogListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for PostgreSQL 인스턴스의 DB Server 로그 목록을 조회합니다.
+  /rebootCloudPostgresqlServerInstance:
+    post:
+      operationId: RebootCloudPostgresqlServerInstance
+      tags:
+        - postgresql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RebootCloudPostgresqlServerInstanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RebootCloudPostgresqlServerInstanceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for PostgreSQL 서버 인스턴스를 재시작합니다.
+components:
+  schemas:
+    AddCloudPostgresqlDatabaseListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudPostgresqlInstanceNo:
+          type: string
+          description: CloudPostgresql 인스턴스 번호
+        cloudPostgresqlDatabaseList:
+          type: array
+          description: CloudPostgresqlDatabase 리스트
+          items:
+            $ref: '#/components/schemas/CloudPostgresqlDatabaseParameter'
+      required:
+        - cloudPostgresqlDatabaseList
+    AddCloudPostgresqlDatabaseListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+    AddCloudPostgresqlUserListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudPostgresqlInstanceNo:
+          type: string
+          description: CloudPostgresql 인스턴스 번호
+        cloudPostgresqlUserList:
+          type: array
+          description: CloudPostgresqlDBUser 리스트
+          items:
+            $ref: '#/components/schemas/CloudPostgresqlUserParameter'
+      required:
+        - cloudPostgresqlUserList
+    AddCloudPostgresqlUserListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+    ChangeCloudPostgresqlUserListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudPostgresqlInstanceNo:
+          type: string
+          description: CloudPostgresql 인스턴스 번호
+        cloudPostgresqlUserList:
+          type: array
+          description: CloudPostgresqlDBUser 리스트
+          items:
+            $ref: '#/components/schemas/CloudPostgresqlUserParameter'
+      required:
+        - cloudPostgresqlUserList
+    ChangeCloudPostgresqlUserListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+    CloudPostgresqlBackup:
+      type: object
+      properties:
+        cloudPostgresqlInstanceNo:
+          type: string
+          description: CloudPostgresql 인스턴스 번호
+        cloudPostgresqlServiceName:
+          type: string
+          description: CloudPostgresql 서비스이름
+        backupType:
+          type: string
+          description: 백업유형
+        backupRetention:
+          type: integer
+          format: int32
+          description: 백업파일보관기간
+        backupTime:
+          type: string
+          description: 백업시간
+        backupSize:
+          type: integer
+          format: int64
+          description: 백업사이즈
+        lastBackupDate:
+          type: string
+          description: 마지막백업일시
+        backupFileStorageCount:
+          type: integer
+          format: int32
+          description: 백업파일보관개수
+    CloudPostgresqlBackupDetail:
+      type: object
+      properties:
+        fileName:
+          type: string
+          description: 백업파일이름
+        startTime:
+          type: string
+          description: 백업시작시간
+        endTime:
+          type: string
+          description: 백업종료시간
+        backupSize:
+          type: integer
+          format: int64
+          description: 백업사이즈
+        dataStorageSize:
+          type: integer
+          format: int64
+          description: 데이터스토리지사이즈
+        archivedWalFileSize:
+          type: integer
+          format: int64
+          description: ArchivedWalFile 사이즈
+    CloudPostgresqlBucket:
+      type: object
+      properties:
+        bucketName:
+          type: string
+          description: bucket 이름
+    CloudPostgresqlDatabase:
+      type: object
+      properties:
+        databaseName:
+          type: string
+          description: Database 이름
+        owner:
+          type: string
+          description: Database 소유자
+    CloudPostgresqlDatabaseKeyParameter:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Database 이름
+    CloudPostgresqlDatabaseParameter:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Database 이름
+        owner:
+          type: string
+          description: Database 소유자
+    CloudPostgresqlDbServerLog:
+      type: object
+      properties:
+        fileName:
+          type: string
+          description: 데이터베이스서버로그파일이름
+        fileSize:
+          type: integer
+          format: int64
+          description: 데이터베이스서버로그파일사이즈
+        fileDate:
+          type: string
+          description: 데이터베이스서버로그파일수정일시
+    CloudPostgresqlInstance:
+      type: object
+      properties:
+        cloudPostgresqlInstanceNo:
+          type: string
+          description: CloudPostgresql 인스턴스 번호
+        cloudPostgresqlServiceName:
+          type: string
+          description: CloudPostgresql 서비스이름
+        cloudPostgresqlInstanceStatusName:
+          type: string
+          description: CloudPostgresql 인스턴스 상태이름
+        cloudPostgresqlInstanceStatus:
+          $ref: '#/components/schemas/CommonCode'
+        cloudPostgresqlInstanceOperation:
+          $ref: '#/components/schemas/CommonCode'
+        cloudPostgresqlImageProductCode:
+          type: string
+          description: CloudPostgresql 이미지상품코드
+        engineVersion:
+          type: string
+          description: CloudPostgresql 엔진버전
+        generationCode:
+          type: string
+          description: 세대코드
+        license:
+          type: string
+          description: CloudPostgresql 라이선스
+        cloudPostgresqlPort:
+          type: integer
+          format: int32
+          description: CloudPostgresql 포트
+        isHa:
+          type: boolean
+          description: 고가용성여부
+        isMultiZone:
+          type: boolean
+          description: 멀티존여부
+        isBackup:
+          type: boolean
+          description: 백업여부
+        backupFileRetentionPeriod:
+          type: integer
+          format: int32
+          description: 백업파일보관기간
+        backupTime:
+          type: string
+          description: 백업시간
+        createDate:
+          type: string
+          description: 생성일자
+        accessControlGroupNoList:
+          type: array
+          description: ACG 번호 리스트
+          items:
+            type: string
+        cloudPostgresqlConfigList:
+          type: array
+          description: CloudPostgresqlConfig 리스트
+          items:
+            type: string
+        cloudPostgresqlServerInstanceList:
+          type: array
+          description: CloudPostgresql 서버인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudPostgresqlServerInstance'
+    CloudPostgresqlServerInstance:
+      type: object
+      properties:
+        cloudPostgresqlServerInstanceNo:
+          type: string
+          description: CloudPostgresql 서버인스턴스 번호
+        cloudPostgresqlServerName:
+          type: string
+          description: CloudPostgresql 서버 이름
+        cloudPostgresqlServerRole:
+          $ref: '#/components/schemas/CommonCode'
+        cloudPostgresqlServerInstanceStatusName:
+          type: string
+          description: CloudPostgresql 인스턴스 상태이름
+        cloudPostgresqlServerInstanceStatus:
+          $ref: '#/components/schemas/CommonCode'
+        cloudPostgresqlServerInstanceOperation:
+          $ref: '#/components/schemas/CommonCode'
+        cloudPostgresqlProductCode:
+          type: string
+          description: CloudPostgresql 상품코드
+        regionCode:
+          type: string
+          description: REGION 코드
+        zoneCode:
+          type: string
+          description: ZONE 코드
+        vpcNo:
+          type: string
+          description: VPC 번호
+        subnetNo:
+          type: string
+          description: Subnet 번호
+        isPublicSubnet:
+          type: boolean
+          description: PublicSubnet 여부
+        publicDomain:
+          type: string
+          description: 공인도메인명
+        privateDomain:
+          type: string
+          description: 사설도메인명
+        privateIp:
+          type: string
+          description: 사설 IP
+        dataStorageType:
+          $ref: '#/components/schemas/CommonCode'
+        isStorageEncryption:
+          type: boolean
+          description: 데이터스토리지암호화여부
+        dataStorageSize:
+          type: integer
+          format: int64
+          description: 데이터스토리지사이즈
+        usedDataStorageSize:
+          type: integer
+          format: int64
+          description: 사용중인데이터스토리지사이즈
+        cpuCount:
+          type: integer
+          format: int32
+          description: virtualCPU 개수
+        memorySize:
+          type: integer
+          format: int64
+          description: 메모리사이즈
+        uptime:
+          type: string
+          description: 업시간
+        createDate:
+          type: string
+          description: 생성일자
+    CloudPostgresqlUser:
+      type: object
+      properties:
+        userName:
+          type: string
+          description: DBUserID
+        clientCidr:
+          type: string
+          description: clientCidr
+        isReplicationRole:
+          type: boolean
+          description: ReplicationRole 여부
+    CloudPostgresqlUserKeyParameter:
+      type: object
+      properties:
+        name:
+          type: string
+          description: DBUserID
+    CloudPostgresqlUserParameter:
+      type: object
+      properties:
+        name:
+          type: string
+          description: DBUserID
+        clientCidr:
+          type: string
+          description: clientCidr
+        password:
+          type: string
+          description: DBUserPassword
+        isReplicationRole:
+          type: boolean
+          description: ReplicationRole 여부
+    CommonCode:
+      type: object
+      properties:
+        code:
+          type: string
+          description: 코드
+        codeName:
+          type: string
+          description: 코드명
+    CreateCloudPostgresqlInstanceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        vpcNo:
+          type: string
+          description: VPC 번호
+        cloudPostgresqlImageProductCode:
+          type: string
+          description: CloudPostgresql 이미지상품코드
+        cloudPostgresqlProductCode:
+          type: string
+          description: CloudPostgresql 상품코드
+        dataStorageTypeCode:
+          type: string
+          description: 데이터스토리지유형 코드
+        isHa:
+          type: boolean
+          description: 고가용성여부
+        isMultiZone:
+          type: boolean
+          description: 멀티존여부
+        isStorageEncryption:
+          type: boolean
+          description: 데이터스토리지암호화여부
+        isBackup:
+          type: boolean
+          description: 백업여부
+        backupFileRetentionPeriod:
+          type: integer
+          format: int32
+          description: 백업파일보관기간
+        backupTime:
+          type: string
+          description: 백업시간
+        backupFileStorageCount:
+          type: integer
+          format: int32
+          description: 백업파일보관개수
+        isBackupFileCompression:
+          type: boolean
+          description: 백업파일압축여부
+        isAutomaticBackup:
+          type: boolean
+          description: 백업시간자동여부
+        cloudPostgresqlServiceName:
+          type: string
+          description: CloudPostgresql 서비스이름
+        cloudPostgresqlServerNamePrefix:
+          type: string
+          description: CloudPostgresql 서버 이름
+        cloudPostgresqlUserName:
+          type: string
+          description: CloudPostgresql 유저명
+        cloudPostgresqlUserPassword:
+          type: string
+          description: CloudPostgresql 유저패스워드
+        clientCidr:
+          type: string
+          description: 접근 ClientCIDR
+        cloudPostgresqlPort:
+          type: integer
+          format: int32
+          description: CloudPostgresql 포트
+        cloudPostgresqlDatabaseName:
+          type: string
+          description: CloudPostgresqlDB 명
+        subnetNo:
+          type: string
+          description: Subnet 번호
+        secondarySubnetNo:
+          type: string
+          description: SecondarySubnet 번호
+        engineVersionCode:
+          type: string
+          description: engineVersionCode
+    CreateCloudPostgresqlInstanceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudPostgresqlInstanceList:
+          type: array
+          description: CloudPostgresql 인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudPostgresqlInstance'
+    CreateCloudPostgresqlReadReplicaInstanceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        subnetNo:
+          type: string
+          description: Subnet 번호
+        cloudPostgresqlInstanceNo:
+          type: string
+          description: CloudPostgresql 인스턴스 번호
+    CreateCloudPostgresqlReadReplicaInstanceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudPostgresqlInstanceList:
+          type: array
+          description: CloudPostgresql 인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudPostgresqlInstance'
+    DeleteCloudPostgresqlDatabaseListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudPostgresqlInstanceNo:
+          type: string
+          description: CloudPostgresql 인스턴스 번호
+        cloudPostgresqlDatabaseList:
+          type: array
+          description: CloudPostgresqlDatabase 리스트
+          items:
+            $ref: '#/components/schemas/CloudPostgresqlDatabaseKeyParameter'
+      required:
+        - cloudPostgresqlDatabaseList
+    DeleteCloudPostgresqlDatabaseListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+    DeleteCloudPostgresqlInstanceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudPostgresqlInstanceNo:
+          type: string
+          description: CloudPostgresql 인스턴스 번호
+    DeleteCloudPostgresqlInstanceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudPostgresqlInstanceList:
+          type: array
+          description: CloudPostgresql 인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudPostgresqlInstance'
+    DeleteCloudPostgresqlReadReplicaInstanceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudPostgresqlServerInstanceNo:
+          type: string
+          description: CloudPostgresql 서버인스턴스 번호
+    DeleteCloudPostgresqlReadReplicaInstanceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudPostgresqlInstanceList:
+          type: array
+          description: CloudPostgresql 인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudPostgresqlInstance'
+    DeleteCloudPostgresqlUserListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudPostgresqlInstanceNo:
+          type: string
+          description: CloudPostgresql 인스턴스 번호
+        cloudPostgresqlUserList:
+          type: array
+          description: CloudPostgresqlDBUser 리스트
+          items:
+            $ref: '#/components/schemas/CloudPostgresqlUserKeyParameter'
+      required:
+        - cloudPostgresqlUserList
+    DeleteCloudPostgresqlUserListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+    ExportBackupToObjectStorageRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        fileName:
+          type: string
+          description: 백업파일이름
+        bucketName:
+          type: string
+          description: ObjectStorage 버킷이름
+        cloudPostgresqlInstanceNo:
+          type: string
+          description: CloudPostgresql 인스턴스 번호
+    ExportBackupToObjectStorageResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+    ExportDbServerLogToObjectStorageRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        logType:
+          type: string
+          description: 데이터베이스서버로그파일타입
+        fileName:
+          type: string
+          description: 데이터베이스서버로그파일이름
+        bucketName:
+          type: string
+          description: ObjectStorage 버킷이름
+        cloudPostgresqlServerInstanceNo:
+          type: string
+          description: CloudPostgresql 서버인스턴스 번호
+    ExportDbServerLogToObjectStorageResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+    GetCloudPostgresqlBackupDetailListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudPostgresqlInstanceNo:
+          type: string
+          description: CloudPostgresql 인스턴스 번호
+    GetCloudPostgresqlBackupDetailListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudPostgresqlBackupDetailList:
+          type: array
+          description: CloudPostgresql 백업상세리스트
+          items:
+            $ref: '#/components/schemas/CloudPostgresqlBackupDetail'
+    GetCloudPostgresqlBackupListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+    GetCloudPostgresqlBackupListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudPostgresqlBackupList:
+          type: array
+          description: CloudPostgresql 백업리스트
+          items:
+            $ref: '#/components/schemas/CloudPostgresqlBackup'
+    GetCloudPostgresqlBucketListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudPostgresqlServerInstanceNo:
+          type: string
+          description: CloudPostgresql 서버인스턴스 번호
+    GetCloudPostgresqlBucketListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudPostgresqlBucketList:
+          type: array
+          description: bucket 리스트
+          items:
+            $ref: '#/components/schemas/CloudPostgresqlBucket'
+    GetCloudPostgresqlDatabaseListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudPostgresqlInstanceNo:
+          type: string
+          description: CloudPostgresql 인스턴스 번호
+    GetCloudPostgresqlDatabaseListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudPostgresqlDatabaseList:
+          type: array
+          description: CloudPostgresqlDatabase 리스트
+          items:
+            $ref: '#/components/schemas/CloudPostgresqlDatabase'
+    GetCloudPostgresqlImageProductListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        productCode:
+          type: string
+          description: 조회할상품코드
+        exclusionProductCode:
+          type: string
+          description: 제외할상품코드
+    GetCloudPostgresqlImageProductListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        productList:
+          type: array
+          description: 상품리스트
+          items:
+            $ref: '#/components/schemas/Product'
+    GetCloudPostgresqlInstanceDetailRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudPostgresqlInstanceNo:
+          type: string
+          description: CloudPostgresql 인스턴스 번호
+    GetCloudPostgresqlInstanceDetailResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudPostgresqlInstanceList:
+          type: array
+          description: CloudPostgresql 인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudPostgresqlInstance'
+    GetCloudPostgresqlInstanceListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        zoneCode:
+          type: string
+          description: ZONE 코드
+        vpcNo:
+          type: string
+          description: VPC 번호
+        subnetNo:
+          type: string
+          description: Subnet 번호
+        cloudPostgresqlServiceName:
+          type: string
+          description: CloudPostgresql 서비스이름
+        cloudPostgresqlInstanceNoList:
+          type: array
+          description: CloudPostgresql 인스턴스 번호 리스트
+          items:
+            type: string
+        cloudPostgresqlServerName:
+          type: string
+          description: CloudPostgresql 서버 이름
+        cloudPostgresqlServerInstanceNoList:
+          type: array
+          description: CloudPostgresql 서버인스턴스 번호 리스트
+          items:
+            type: string
+        pageNo:
+          type: integer
+          format: int32
+          description: 페이지번호
+        pageSize:
+          type: integer
+          format: int32
+          description: 페이지사이즈
+    GetCloudPostgresqlInstanceListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudPostgresqlInstanceList:
+          type: array
+          description: CloudPostgresql 인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudPostgresqlInstance'
+    GetCloudPostgresqlProductListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        zoneCode:
+          type: string
+          description: ZONE 코드
+        cloudPostgresqlImageProductCode:
+          type: string
+          description: CloudPostgresql 이미지상품코드
+        productCode:
+          type: string
+          description: 조회할상품코드
+        exclusionProductCode:
+          type: string
+          description: 제외할상품코드
+    GetCloudPostgresqlProductListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        productList:
+          type: array
+          description: 상품리스트
+          items:
+            $ref: '#/components/schemas/Product'
+    GetCloudPostgresqlTargetSubnetListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        vpcNo:
+          type: string
+          description: VPC 번호
+        cloudPostgresqlImageProductCode:
+          type: string
+          description: CloudPostgresql 이미지상품코드
+    GetCloudPostgresqlTargetSubnetListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        targetSubnetList:
+          type: array
+          description: 상품리스트
+          items:
+            $ref: '#/components/schemas/TargetSubnet'
+    GetCloudPostgresqlTargetVpcListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+    GetCloudPostgresqlTargetVpcListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        targetVpcList:
+          type: array
+          description: 상품리스트
+          items:
+            $ref: '#/components/schemas/TargetVpc'
+    GetCloudPostgresqlUserListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudPostgresqlInstanceNo:
+          type: string
+          description: CloudPostgresql 인스턴스 번호
+    GetCloudPostgresqlUserListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudPostgresqlUserList:
+          type: array
+          description: CloudPostgresqlDBUser 리스트
+          items:
+            $ref: '#/components/schemas/CloudPostgresqlUser'
+    GetDbServerLogListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        logType:
+          type: string
+          description: 데이터베이스서버로그파일타입
+        cloudPostgresqlServerInstanceNo:
+          type: string
+          description: CloudPostgresql 서버인스턴스 번호
+    GetDbServerLogListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudPostgresqlDbServerLogList:
+          type: array
+          description: CloudPostgresql 데이터베이스서버로그리스트
+          items:
+            $ref: '#/components/schemas/CloudPostgresqlDbServerLog'
+    Product:
+      type: object
+      properties:
+        productCode:
+          type: string
+          description: 상품코드
+        productName:
+          type: string
+          description: 상품이름
+        productType:
+          $ref: '#/components/schemas/CommonCode'
+        productDescription:
+          type: string
+          description: 상품설명
+        infraResourceType:
+          $ref: '#/components/schemas/CommonCode'
+        infraResourceDetailType:
+          $ref: '#/components/schemas/CommonCode'
+        cpuCount:
+          type: integer
+          format: int32
+          description: CPU 개수
+        memorySize:
+          type: integer
+          format: int64
+          description: 메모리사이즈
+        baseBlockStorageSize:
+          type: integer
+          format: int64
+          description: 기본블록스토리지사이즈
+        platformType:
+          $ref: '#/components/schemas/CommonCode'
+        osInformation:
+          type: string
+          description: OS 정보
+        diskType:
+          $ref: '#/components/schemas/CommonCode'
+        dbKindCode:
+          type: string
+          description: DB 유형 코드
+        addBlockStorageSize:
+          type: integer
+          format: int64
+          description: 추가블록스토리지사이즈
+        generationCode:
+          type: string
+          description: 세대코드
+        engineVersionCode:
+          type: string
+          description: engineVersionCode
+    RebootCloudPostgresqlServerInstanceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudPostgresqlServerInstanceNo:
+          type: string
+          description: CloudPostgresql 서버인스턴스 번호
+    RebootCloudPostgresqlServerInstanceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudPostgresqlInstanceList:
+          type: array
+          description: CloudPostgresql 인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudPostgresqlInstance'
+    TargetSubnet:
+      type: object
+      properties:
+        subnetNo:
+          type: string
+          description: Subnet 번호
+        subnetName:
+          type: string
+          description: Subnet 이름
+        vpcNo:
+          type: string
+          description: VPC 번호
+        vpcName:
+          type: string
+          description: VPC 이름
+        zoneCode:
+          type: string
+          description: ZONE 코드
+        subnet:
+          type: string
+          description: Subnet
+        isPublic:
+          type: string
+          description: Public 여부
+        createdDate:
+          type: string
+          description: 생성시간
+    TargetVpc:
+      type: object
+      properties:
+        vpcNo:
+          type: string
+          description: VPC 번호
+        vpcName:
+          type: string
+          description: VPC 이름
+        ipv4Cidr:
+          type: string
+          description: IPv4 CIDR
+        regionCode:
+          type: string
+          description: REGION 코드
+        createdDate:
+          type: string
+          description: 생성시간
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

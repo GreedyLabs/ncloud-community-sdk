@@ -1,0 +1,2033 @@
+openapi: 3.0.3
+info:
+  title: Cloud Outbound Mailer
+  description: Cloud Outbound Mailer
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: true
+    gov: true
+
+  x-ncloud-nrn:
+
+    productName: CloudOutboundMailer
+    resource_types:
+      - RecipientGroup
+      - Template
+      - Unsubscribe
+
+servers:
+  - url: https://mail.apigw.ntruss.com/api/v1
+    description: cloud-outbound-mailer 민간
+    x-ncloud-env: public
+  - url: https://mail.apigw.fin-ntruss.com/api/v1
+    description: cloud-outbound-mailer 금융
+    x-ncloud-env: financial
+  - url: https://mail.apigw.gov-ntruss.com/api/v1
+    description: cloud-outbound-mailer 공공
+    x-ncloud-env: gov
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /address-book:
+    get:
+      operationId: GetAddRessbook
+      summary: getAddressBook
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-outbound-mailer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-getaddressbook
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalAddressCount:
+                    type: integer
+                    description: 총 이메일 주소 개수
+                  groups:
+                    type: string
+                    description: 수신자 그룹 정보 AddressBookResponse 참조
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: CreateAddRessbook
+      summary: createAddressBook
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-outbound-mailer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-createaddressbook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - groups
+              properties:
+                groups:
+                  type: string
+                  description: "수신자 그룹 목록 그룹 이름: 한글, 영문자, 숫자, 특수문자 '.', '_', '-'를 조합하여 1~100자 이내로 입력 이메일 주소: 콤마(,)로 구분 AddressBookRequest 참조"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalAddressCount:
+                    type: integer
+                    description: 요청받은 총 이메일 주소 개수
+                  groups:
+                    type: string
+                    description: 수신자 그룹 목록 AddressBookResponse 참조
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: DeleteAddRessbook
+      summary: deleteAddressBook
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-outbound-mailer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-deleteaddressbook
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  deletedAddressCount:
+                    type: integer
+                    description: 삭제된 이메일 주소 개수
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /address-book/address:
+    delete:
+      operationId: DeleteAddRess
+      summary: deleteAddress
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-outbound-mailer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-deleteaddress
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - emailAddresses
+              properties:
+                emailAddresses:
+                  type: string
+                  description: 삭제할 수신자 이메일 주소 목록
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalAddressCount:
+                    type: integer
+                    description: 총 이메일 주소 개수
+                  groups:
+                    type: string
+                    description: 수신자 그룹 정보 AddressBookResponse 참조
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /address-book/recipient-groups:
+    delete:
+      operationId: DeleteRecipientGroup
+      summary: deleteRecipientGroup
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-outbound-mailer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-deleterecipientgroup
+      parameters:
+        - name: groupName
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 삭제할 수신자 그룹의 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalAddressCount:
+                    type: integer
+                    description: 총 이메일 주소 개수
+                  groups:
+                    type: string
+                    description: 수신자 그룹 정보 AddressBookResponse 참조
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /address-book/recipient-groups/address:
+    delete:
+      operationId: DeleteRecipientGroupRelation
+      summary: deleteRecipientGroupRelation
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-outbound-mailer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-deleterecipientgrouprelation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - groupName
+                - emailAddresses
+              properties:
+                groupName:
+                  type: string
+                  description: 대상 수신자 그룹의 이름
+                emailAddresses:
+                  type: string
+                  description: 삭제할 수신자 이메일 주소 목록
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalAddressCount:
+                    type: integer
+                    description: 총 이메일 주소 개수
+                  groups:
+                    type: string
+                    description: 수신자 그룹 정보 AddressBookResponse 참조
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /address-book/recipient-groups/address/empty:
+    delete:
+      operationId: DeleteRecipientGroupRelationempty
+      summary: deleteRecipientGroupRelationEmpty
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-outbound-mailer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-deleterecipientgrouprelationempty
+      parameters:
+        - name: groupName
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 대상 수신자 그룹의 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - totalAddressCount
+                properties:
+                  totalAddressCount:
+                    type: integer
+                    description: 총 이메일 주소 개수
+                  groups:
+                    type: string
+                    description: 수신자 그룹 정보 AddressBookResponse 참조
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /category:
+    post:
+      operationId: CreateCategory
+      summary: createCategory
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-outbound-mailer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-createcategory
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - categoryName
+              properties:
+                categoryName:
+                  type: string
+                  description: 생성할 카테고리의 이름 한글, 영문자, 숫자, 특수문자 '.', '_', '-'를 조합하여 1~100자 이내로 입력
+                parentSid:
+                  type: integer
+                  description: 부모 카테고리의 SID -1 (root) (기본값) 특정 카테고리 하위에 새 카테고리를 생성할 경우 입력
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sid:
+                    type: integer
+                    description: 생성한 카테고리의 SID
+                  parentSid:
+                    type: integer
+                    description: 부모 카테고리의 SID
+                  name:
+                    type: string
+                    description: 생성한 카테고리의 이름
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /category/{categorySid}:
+    delete:
+      operationId: DeleteCategory
+      summary: deleteCategory
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-outbound-mailer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-deletecategory
+      parameters:
+        - name: categorySid
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 삭제할 카테고리의 SID getTemplateStructure 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sid:
+                    type: integer
+                    description: 삭제한 카테고리의 SID
+                  parentSid:
+                    type: integer
+                    description: 부모 카테고리의 SID
+                  name:
+                    type: string
+                    description: 삭제한 카테고리의 이름
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /category/{categorySid}/name-location:
+    put:
+      operationId: UpdateCategory
+      summary: updateCategory
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-outbound-mailer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-updatecategory
+      parameters:
+        - name: categorySid
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 수정할 카테고리의 SID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                categoryName:
+                  type: string
+                  description: 수정할 카테고리의 이름 1~100자로 한글, 영문자, 숫자, 마침표(.), 언더바(_), 하이픈(-) 허용
+                parentSid:
+                  type: integer
+                  description: 부모 카테고리의 SID
+                lowerSid:
+                  type: integer
+                  description: 하위에 배치할 템플릿 또는 카테고리의 SID 위치 조정 목적으로 사용 존재하지 않으면 무시
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - sid
+                  - parentSid
+                  - name
+                properties:
+                  sid:
+                    type: integer
+                    description: 수정한 카테고리의 SID
+                  parentSid:
+                    type: integer
+                    description: 부모 카테고리의 SID
+                  name:
+                    type: string
+                    description: 수정한 카테고리의 이름
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /config:
+    get:
+      operationId: GetConfig
+      summary: getConfig
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-outbound-mailer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-getconfig
+      parameters:
+        - name: type
+          in: query
+          required: true
+          schema:
+            type: string
+          description: '조회할 설정 항목 SEND_BLOCK_TIME : 발송 차단 설정'
+        - name: subType
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 해당 설정의 서브 타입 SEND_BLOCK_TIME 은 null 입력
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - type
+                  - value
+                properties:
+                  type:
+                    type: string
+                    description: 조회한 설정 항목
+                  subType:
+                    type: integer
+                    description: 해당 설정의 서브 타입
+                  value:
+                    type: string
+                    description: 반영된 설정 값
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: CreateConfig
+      summary: createConfig
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-outbound-mailer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-createconfig
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - type
+                - value
+                - unit
+              properties:
+                type:
+                  type: string
+                  description: '생성하거나 변경할 설정 항목 SEND_BLOCK_TIME : 발송 차단 설정'
+                subType:
+                  type: string
+                  description: 해당 설정의 서브 타입 SEND_BLOCK_TIME 은 null 입력
+                value:
+                  type: string
+                  description: 생성하거나 변경할 설정 값 type , subType , unit 에 따라 값 결정 SEND_BLOCK_TIME 은 정수형 문자열만 가능하며, 7일 또는 168시간 이상으로 설정
+                unit:
+                  type: string
+                  description: 설정 값의 단위 DAY | HOUR
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - type
+                  - value
+                properties:
+                  type:
+                    type: string
+                    description: 생성되거나 변경된 설정 항목
+                  subType:
+                    type: integer
+                    description: 해당 설정의 서브 타입
+                  value:
+                    type: string
+                    description: 반영된 설정 값
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /files:
+    post:
+      operationId: CreateFile
+      summary: createFile
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-outbound-mailer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-createfile
+      parameters:
+        - name: fileList
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 업로드하려는 파일
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tempRequestId:
+                    type: string
+                    description: 파일 업로드 시 생성된 임시 요청 ID 파일을 조회하거나 삭제할 때 사용 가능
+                  files:
+                    type: string
+                    description: 업로드하는 파일 목록 메일 첨부 시 파일 크기는 10 MB 이하여야 함 AttachFile 참조
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /files/{tempRequestId}:
+    get:
+      operationId: GetFile
+      summary: getFile
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-outbound-mailer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-getfile
+      parameters:
+        - name: tempRequestId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: createFile 실행 후 생성된 임시 요청 ID
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tempRequestId:
+                    type: string
+                    description: 파일 업로드 시 생성된 임시 요청 ID 파일을 조회하거나 삭제할 때 사용 가능
+                  files:
+                    type: string
+                    description: 업로드된 파일 목록 AttachFile 참조
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: DeleteFile
+      summary: deleteFile
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-outbound-mailer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-deletefile
+      parameters:
+        - name: tempRequestId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: createFile 실행 후 생성된 임시 요청 ID
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tempRequestId:
+                    type: string
+                    description: 파일 업로드 시 생성된 임시 요청 ID 파일을 조회하거나 삭제할 때 사용 가능
+                  files:
+                    type: string
+                    description: 업로드된 파일 목록 AttachFile 참조
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /mails:
+    post:
+      operationId: CreateMailRequest
+      summary: createMailRequest
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-outbound-mailer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-createmailrequest
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                senderAddress:
+                  type: string
+                  description: 발송자 이메일 주소 임의의 도메인을 사용할 수 있으나, 발신자가 실제로 소유하는 도메인 사용 권고 DMARC 가 적용된 'id@naver.com'과 같은 포털 사이트의 웹 메일 계정 사용 시 DMARC 검사에 실패하여 수신측 정책에 따라 스팸 처리될 수 있음 templateSid 를 설정하지 않으면 입력 필수 도메인에 naver.com, navercorp.com, ncloud.com 등 사용 불가
+                senderName:
+                  type: string
+                  description: 발송자 이름(Byte) 0~69
+                templateSid:
+                  type: integer
+                  description: 이메일 작성에 사용할 템플릿의 SID getTemplateStructure 참조
+                title:
+                  type: string
+                  description: 이메일 제목(Byte) 0~500 templateSid 를 설정하지 않으면 입력 필수
+                body:
+                  type: string
+                  description: 이메일 본문(KB) 0~500(광고 메일은 수신 거부 메시지를 포함하여 계산) templateSid 를 설정하지 않으면 입력 필수
+                individual:
+                  type: boolean
+                  description: '일반 또는 개인별 발송 여부 true (기본값) | false true : 개인별 발송 false : 일반 발송 개인별 발송 시 recipients 에 R (수신자)만 입력 가능. 복수 값 입력 시 개인별로 나누어 발송됨.'
+                confirmAndSend:
+                  type: boolean
+                  description: '확인 후 발송 여부 true | false true : 확인 후 발송 false : 확인 없이 바로 발송'
+                advertising:
+                  type: boolean
+                  description: '광고 메일 여부 true | false true : 광고 메일 false : 일반 메일'
+                parameters:
+                  type: object
+                  additionalProperties: true
+                  description: 치환 파라미터 전체 수신자에게 적용 치환 ID를 Key, 치환 ID에 매핑되는 값을 Value로 가지는 Map 형태의 오브젝트 구체적인 적용 방법은 사용 가이드 참조
+                referencesHeader:
+                  type: string
+                  description: References 헤더 0~100개로 <unique_id@domain.com> 형식의 문자열 특정 이메일을 모아서 보기 위한 고유한 값 필드에 값을 입력하면 추후 동일 값이 입력된 메일만 모아서 조회 가능 네이버 메일에서는 이메일을 모아서 보기 위해 사용 값이 중복되는 경우 같은 메일 스레드로 판단하여 메일을 묶어서 노출 References 헤더의 최상단 값으로만 판단
+                reservationUtc:
+                  type: integer
+                  format: int64
+                  description: 예약 발송 일시 1970년 1월 1일 00:00:00 협정 세계시(UTC)부터의 경과 시간을 1/1000초로 환산한 정수 현재 시점부터 최대 30일 후까지 지정 가능 reservationDateTime 값보다 우선 적용
+                reservationDateTime:
+                  type: string
+                  description: 예약 발송 일시(yyyy-MM-dd HH:mm) UTC+9:00 기준 현재 시점부터 최대 30일 후까지 지정 가능 reservationUtc 값이 우선 적용
+                attachFileIds:
+                  type: string
+                  description: 첨부 파일의 ID 목록 파일 ID는 createFile 을 통해 확인 파일의 총용량은 20 MB 이하여야 함
+                recipients:
+                  type: string
+                  description: 수신자 목록 recipientGroupFilter 값이 없으면 입력 필수 RecipientForRequest 참조
+                recipientGroupFilter:
+                  type: object
+                  additionalProperties: true
+                  description: 수신자 그룹 조합 필터 RecipientGroupFilter 참조
+                useBasicUnsubscribeMsg:
+                  type: boolean
+                  description: '광고 메일에서 수신 거부 메시지 사용 여부 true (기본값) | false true : 기본 수신 거부 메시지 사용 false : 사용자 정의 수신 거부 메시지 사용 수신 거부 메시지 크기는 약 900 바이트'
+                unsubscribeMessage:
+                  type: string
+                  description: '사용자 정의 수신 거부 메시지 문구 기본적으로 body 값 뒤에 추가 메일 내용 안에 삽입하려면 body 값의 원하는 위치에 #{UNSUBSCRIBE_MESSAGE} 태그 입력 useBasicUnsubscribeMsg 값이 false 일 경우 필수 body 와 합산해 500 KB 이하여야 함'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requestId:
+                    type: string
+                    description: 각 요청을 구분하기 위한 이메일 발송 요청 ID 한 번에 여러 건의 이메일 발송을 요청할 경우, requestId 는 여러 개의 mailId 를 포함할 수 있음
+                  count:
+                    type: integer
+                    description: 이메일 발송 요청 건수
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /mails/requests:
+    get:
+      operationId: GetMailRequestList
+      summary: getMailRequestList
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-outbound-mailer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-getmailrequestlist
+      parameters:
+        - name: startUtc
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+          description: 조회할 요청 내역의 시작 일시 1970년 1월 1일 00:00:00 협정 세계시(UTC)부터의 경과 시간을 1/1000초로 환산한 정수 startUtc 또는 startDateTime 입력 필수 startDateTime 값보다 우선 적용
+        - name: startDateTime
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회할 요청 내역의 시작 일시(UTC+9:00) 허용 포맷 yyyy-MM-dd yyyy-MM-dd HH:mm yyyy-MM-dd HH:mm:ss.SSS yyyy-MM-dd HH:mm:ss SSS startUtc 또는 startDateTime 입력 필수 startUtc 값이 우선 적용
+        - name: endUtc
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+          description: 조회할 요청 내역의 종료 일시 1970년 1월 1일 00:00:00 협정 세계시(UTC)부터의 경과 시간을 1/1000초로 환산한 정수 endUtc 또는 endDateTime 입력 필수 endDateTime 값보다 우선 적용
+        - name: endDateTime
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회할 요청 내역의 종료 일시(UTC+9:00) 허용 포맷 yyyy-MM-dd yyyy-MM-dd HH:mm yyyy-MM-dd HH:mm:ss.SSS yyyy-MM-dd HH:mm:ss SSS endUtc 또는 endDateTime 입력 필수 endUtc 값이 우선 적용
+        - name: requestId
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 각 요청을 구분하기 위한 이메일 발송 요청 ID 한 번에 여러 건의 이메일 발송을 요청할 경우, requestId 는 여러 개의 mailId 를 포함할 수 있음
+        - name: mailId
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 각 이메일을 식별하기 위한 고유한 ID
+        - name: dispatchType
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 이메일 발송을 요청할 때 사용된 도구 CONSOLE | API
+        - name: title
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 이메일의 제목 like 검색 지원
+        - name: templateSid
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 이메일 작성에 사용된 템플릿의 SID getTemplateStructure 참조
+        - name: senderAddress
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 발송자 이메일 주소
+        - name: recipientAddress
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 수신자 이메일 주소
+        - name: sendStatus
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '이메일 발송 상태 P | R | I | S | F | U | C | PF P : 발송 준비 중 R : 발송 준비 I : 발송 중 S : 발송 성공 F : 발송 실패 U : 수신 거부 C : 발송 취소 PF : 일부 실패'
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지당 레코드 개수 10 (기본값)
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 조회할 페이지 인덱스 0 이상
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '정렬 기준 createUtc | recipientCount | reservationUtc | sendUtc | statusCode createUtc : 생성 일시 recipientCount : 수신자 수 reservationUtc : 발송 예약 일시 sendUtc : 발송 완료 일시 statusCode : 발송 상태 property(,asc|desc) 형식 asc (기본값) 복수의 정렬 기준 설정 가능'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: string
+                    description: 요청 내역 목록에 대한 상세 내용 RequestListResponse 참조
+                  last:
+                    type: boolean
+                    description: 마지막 페이지인지의 여부
+                  totalElements:
+                    type: integer
+                    description: 총 레코드 개수
+                  totalPages:
+                    type: integer
+                    description: 총 페이지 수
+                  first:
+                    type: boolean
+                    description: 첫 번째 페이지인지의 여부
+                  numberOfElements:
+                    type: integer
+                    description: 현재 페이지의 레코드 개수
+                  size:
+                    type: integer
+                    description: 페이지당 레코드 개수
+                  number:
+                    type: integer
+                    description: 현재 페이지의 인덱스 (0부터 시작)
+                  sort:
+                    type: string
+                    description: 정렬 기준 Sort 참조
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /mails/requests/{requestId}/mails:
+    get:
+      operationId: GetMailList
+      summary: getMailList
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-outbound-mailer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-getmaillist
+      parameters:
+        - name: requestId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 각 요청을 구분하기 위한 이메일 발송 요청 ID 한 번에 여러 건의 이메일 발송을 요청할 경우, requestId 는 여러 개의 mailId 를 포함할 수 있음
+        - name: mailId
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 각 이메일을 식별하기 위한 고유한 ID
+        - name: recipientAddress
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 수신자 이메일 주소
+        - name: title
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 이메일 제목 like 검색 지원
+        - name: sendStatus
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '이메일 발송 상태 R | I | S | F | U | C | PF R : 발송 준비 I : 발송 중 S : 발송 성공 F : 발송 실패 U : 수신 거부 C : 발송 취소 PF : 일부 실패'
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지당 레코드 개수 10 (기본값)
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 조회할 페이지 인덱스 0 이상
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '정렬 기준 id | createUtc | statusCode id : 이메일 ID createUtc : 생성 일시 statusCode : 발송 상태 property(,asc|desc) 형식 asc (기본값) 복수의 정렬 기준 설정 가능'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: string
+                    description: 메일 발송 요청에 대한 상세 내용 MailListResponse 참조
+                  last:
+                    type: boolean
+                    description: 마지막 페이지 여부
+                  totalElements:
+                    type: integer
+                    description: 총 레코드 개수
+                  totalPages:
+                    type: integer
+                    description: 총 페이지 수
+                  first:
+                    type: boolean
+                    description: 첫 번째 페이지 여부
+                  numberOfElements:
+                    type: integer
+                    description: 현재 페이지의 레코드 개수
+                  sort:
+                    type: string
+                    description: 정렬 기준 Sort 참조
+                  size:
+                    type: integer
+                    description: 페이지당 레코드 개수
+                  number:
+                    type: integer
+                    description: 현재 페이지의 인덱스 0 이상
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /mails/requests/{requestId}/status:
+    get:
+      operationId: GetMailRequestsTatus
+      summary: getMailRequestStatus
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-outbound-mailer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-getmailrequeststatus
+      parameters:
+        - name: requestId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 각 요청을 구분하기 위한 이메일 발송 요청 ID 한 번에 여러 건의 이메일 발송을 요청할 경우, requestId 는 여러 개의 mailId 를 포함할 수 있음
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requestId:
+                    type: string
+                    description: 각 요청을 구분하기 위한 이메일 발송 요청 ID 한 번에 여러 건의 이메일 발송을 요청할 경우, requestId 는 여러 개의 mailId 를 포함할 수 있음
+                  readyCompleted:
+                    type: boolean
+                    description: '요청 건수가 모두 DB에 입력되어 발송 준비가 완료되었는지 여부 true | false true : 발송 준비 완료(발송 완료도 포함) false : 발송 준비가 완료되지 않음'
+                  allSentSuccess:
+                    type: boolean
+                    description: '요청된 모든 메일의 발송 성공 여부 true | false true : 성공 false : 실패'
+                  requestCount:
+                    type: integer
+                    description: 발송 요청 건수
+                  sentCount:
+                    type: integer
+                    description: 성공적으로 발송된 건수
+                  finishCount:
+                    type: integer
+                    description: 처리된 건수 발송 성공, 실패, 수신 거부, 취소 포함
+                  readyCount:
+                    type: integer
+                    description: 준비 완료 또는 발송된 건수 메일 발송을 위해 DB에 입력된 건수
+                  reservationDate:
+                    type: object
+                    additionalProperties: true
+                    description: 예약 일시 NesDateTime 참조
+                  countsByStatus:
+                    type: string
+                    description: 상태별 메일 개수 CountByStatus 참조
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /mails/{mailId}:
+    get:
+      operationId: GetMail
+      summary: getMail
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-outbound-mailer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-getmail
+      parameters:
+        - name: mailId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 각 이메일을 식별하기 위한 고유한 ID
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requestId:
+                    type: string
+                    description: 각 요청을 구분하기 위한 이메일 발송 요청 ID 한 번에 여러 건의 이메일 발송을 요청할 경우, requestId 는 여러 개의 mailId 를 포함할 수 있음
+                  requesterIp:
+                    type: string
+                    description: 이메일 발송 요청자 IP
+                  requestDate:
+                    type: object
+                    additionalProperties: true
+                    description: 요청 일시 NesDateTime 참조
+                  mailId:
+                    type: string
+                    description: 각 이메일을 식별하기 위한 고유한 ID
+                  title:
+                    type: string
+                    description: 이메일 제목
+                  templateSid:
+                    type: integer
+                    description: 조회한 템플릿의 SID
+                  templateName:
+                    type: string
+                    description: 조회한 템플릿의 이름
+                  emailStatus:
+                    type: object
+                    additionalProperties: true
+                    description: 발송 상태 EmailStatus 참조
+                  senderAddress:
+                    type: string
+                    description: 발송자 이메일 주소
+                  senderName:
+                    type: string
+                    description: 발송자 이름
+                  sendDate:
+                    type: object
+                    additionalProperties: true
+                    description: 발송 완료 일시 NesDateTime 참조
+                  reservationDate:
+                    type: object
+                    additionalProperties: true
+                    description: 예약 일시 NesDateTime 참조
+                  body:
+                    type: string
+                    description: 이메일 본문
+                  referencesHeader:
+                    type: string
+                    description: References 헤더 0~100개로 <unique_id@domain.com> 형식의 문자열 특정 이메일을 모아서 보기 위한 고유한 값 필드에 값을 입력하면 추후 동일 값이 입력된 메일만 모아서 조회 가능 네이버 메일에서는 이메일을 모아서 보기 위해 사용 값이 중복되는 경우 같은 메일 스레드로 판단하여 메일을 묶어서 노출 References 헤더의 최상단 값으로만 판단
+                  attachFiles:
+                    type: string
+                    description: 첨부 파일 목록 AttachFile
+                  recipients:
+                    type: string
+                    description: 수신자 목록 Recipient 참조
+                  advertising:
+                    type: boolean
+                    description: '광고 메일 여부 true | false true : 광고 메일 false : 일반 메일'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /send-block:
+    get:
+      operationId: GetSendBlockList
+      summary: getSendBlockList
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-outbound-mailer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-getsendblocklist
+      parameters:
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지당 레코드 개수 10 (기본값)
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 조회할 페이지 인덱스 0 이상
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '정렬 기준 createUtc (기본값) createUtc : 생성 일시 property(,asc|desc) 형식 asc (기본값) 복수의 정렬 기준 설정 가능'
+        - name: targetAddress
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 발송 차단 내역을 확인할 수신자의 이메일 주소
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: string
+                    description: 발송 차단 목록에 대한 상세 내용 SendBlockHistoryResponse 참조
+                  registerStatus:
+                    type: string
+                    description: 해당 메일의 현재 발송 차단 여부
+                  expectedDeleteDate:
+                    type: object
+                    additionalProperties: true
+                    description: 차단 해제가 예정된 일시 NesDateTime 참조
+                  last:
+                    type: boolean
+                    description: 마지막 페이지 여부
+                  totalElements:
+                    type: integer
+                    description: 총 레코드 개수
+                  totalPages:
+                    type: integer
+                    description: 총 페이지 수
+                  first:
+                    type: boolean
+                    description: 첫 번째 페이지 여부
+                  numberOfElements:
+                    type: integer
+                    description: 현재 페이지의 레코드 개수
+                  size:
+                    type: integer
+                    description: 페이지당 레코드 개수
+                  number:
+                    type: integer
+                    description: 현재 페이지의 인덱스 0 이상
+                  sort:
+                    type: string
+                    description: 정렬 기준 Sort 참조
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /template:
+    get:
+      operationId: GetTemplatestructure
+      summary: getTemplateStructure
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-outbound-mailer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-gettemplatestructure
+      parameters:
+        - name: isUse
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: '사용 중인 템플릿 및 카테고리 구조만 조회할지 여부 true | false true : 사용 중인 템플릿 및 카테고리만 조회 false : 사용 중이지 않은 템플릿 및 카테고리도 함께 조회'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  contents:
+                    type: string
+                    description: 조회 대상 템플릿 및 카테고리의 상세 구조 TemplateStructureResponse 참조
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: CreateTemplate
+      summary: createTemplate
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-outbound-mailer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-createtemplate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - templateName
+                - title
+                - body
+                - senderAddress
+              properties:
+                categorySid:
+                  type: string
+                  description: 템플릿이 소속될 카테고리의 SID -1 (root) (기본값)
+                templateName:
+                  type: string
+                  description: 생성할 템플릿의 이름 한글, 영문자, 숫자, 특수문자 '.', '_', '-'를 조합하여 1~100자 이내로 입력
+                description:
+                  type: string
+                  description: 템플릿에 대한 설명(Byte) 0~300
+                title:
+                  type: string
+                  description: 이메일 제목(Byte) 1~500
+                body:
+                  type: string
+                  description: 이메일 본문
+                senderAddress:
+                  type: string
+                  description: 발송자 이메일 주소
+                senderName:
+                  type: string
+                  description: 발송자 이름(Byte) 0~69
+                isUse:
+                  type: boolean
+                  description: '생성한 템플릿의 사용 여부 true | false true : 템플릿 사용 false : 템플릿 사용하지 않음'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sid:
+                    type: integer
+                    description: 생성한 템플릿의 SID
+                  createDate:
+                    type: object
+                    additionalProperties: true
+                    description: 생성 일시 NesDateTime 참조
+                  name:
+                    type: string
+                    description: 생성한 템플릿의 이름
+                  description:
+                    type: string
+                    description: 생성한 템플릿에 대한 설명
+                  title:
+                    type: string
+                    description: 이메일 제목
+                  senderAddress:
+                    type: string
+                    description: 발송자의 이메일 주소
+                  senderName:
+                    type: string
+                    description: 발송자 이름
+                  body:
+                    type: string
+                    description: 이메일 본문
+                  isUse:
+                    type: boolean
+                    description: 템플릿 사용 여부
+                  category:
+                    type: object
+                    additionalProperties: true
+                    description: 부모 카테고리의 정보 Category 참조
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /template/export:
+    get:
+      operationId: GetTemplateExportRequestList
+      summary: getTemplateExportRequestList
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-outbound-mailer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-gettemplateexportrequestlist
+      parameters:
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지당 레코드 개수 10 (기본값)
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 조회할 페이지 인덱스 0 이상
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '정렬 기준 createUtc (기본값) | sid | statusCode createUtc : 요청 생성 일시 sid : 요청 SID statusCode : 요청 상태 property(,asc|desc) 형식 asc (기본값) 복수의 정렬 기준 설정 가능'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: string
+                    description: 요청 내역 목록에 대한 상세 내용 RequestListResponse 참조
+                  totalElements:
+                    type: integer
+                    description: 총 레코드 개수
+                  last:
+                    type: boolean
+                    description: 마지막 페이지 여부
+                  totalPages:
+                    type: integer
+                    description: 총 페이지 수
+                  size:
+                    type: integer
+                    description: 페이지당 레코드 개수
+                  number:
+                    type: integer
+                    description: 현재 페이지의 인덱스 0 이상
+                  sort:
+                    type: string
+                    description: 정렬 기준 Sort 참조
+                  first:
+                    type: boolean
+                    description: 첫 번째 페이지 여부
+                  numberOfElements:
+                    type: integer
+                    description: 현재 페이지의 레코드 개수
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /template/export/request:
+    post:
+      operationId: CreateTemplateExportRequest
+      summary: createTemplateExportRequest
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-outbound-mailer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-createtemplateexportrequest
+      requestBody:
+        description: '(Per NCP docs this endpoint takes no request body. Source: https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-createtemplateexportrequest)'
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sid:
+                    type: integer
+                    description: 생성된 백업 파일의 SID
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /template/export/{requestId}:
+    get:
+      operationId: ExportTemplate
+      summary: exportTemplate
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-outbound-mailer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-exporttemplate
+      parameters:
+        - name: requestId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 백업 파일 생성의 요청 SID createTemplateExportRequest 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /template/import:
+    post:
+      operationId: ImportTemplate
+      summary: importTemplate
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-outbound-mailer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-importtemplate
+      parameters:
+        - name: file
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 가져올 JSON 파일 파일 내 중복 등 오류가 발생할 수 있는 내용이 있으면 해당 오류 발생 직전까지만 추가되고 그 후는 추가되지 않음
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  contents:
+                    type: string
+                    description: 템플릿 구조에 대한 상세 내용 TemplateStructureResponse 참조
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /template/{templateSid}:
+    get:
+      operationId: GetTemplate
+      summary: getTemplate
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-outbound-mailer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-gettemplate
+      parameters:
+        - name: templateSid
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 조회할 템플릿의 SID getTemplateStructure 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sid:
+                    type: integer
+                    description: 조회한 템플릿의 SID
+                  createDate:
+                    type: object
+                    additionalProperties: true
+                    description: 생성 일시 NesDateTime 참조
+                  name:
+                    type: string
+                    description: 템플릿 이름
+                  description:
+                    type: string
+                    description: 템플릿에 대한 설명
+                  title:
+                    type: string
+                    description: 이메일 제목
+                  senderAddress:
+                    type: string
+                    description: 발송자 이메일 주소
+                  senderName:
+                    type: string
+                    description: 발송자 이름
+                  body:
+                    type: string
+                    description: 이메일 본문
+                  isUse:
+                    type: boolean
+                    description: 템플릿 사용 여부
+                  category:
+                    type: object
+                    additionalProperties: true
+                    description: 부모 카테고리의 정보 Category 참조
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    put:
+      operationId: UpdateTemplate
+      summary: updateTemplate
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-outbound-mailer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-updatetemplate
+      parameters:
+        - name: templateSid
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 수정할 템플릿의 SID getTemplateStructure 참조
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - templateName
+                - title
+                - body
+                - senderAddress
+              properties:
+                templateName:
+                  type: string
+                  description: 수정할 템플릿의 이름 한글, 영문자, 숫자, 특수문자 '.', '_', '-'를 조합하여 0~100자 이내로 입력
+                description:
+                  type: string
+                  description: 템플릿에 대한 설명(Byte) 0~300
+                title:
+                  type: string
+                  description: 이메일 제목(Byte) 1~500
+                body:
+                  type: string
+                  description: 이메일 본문
+                senderAddress:
+                  type: string
+                  description: 발송자 이메일 주소
+                senderName:
+                  type: string
+                  description: 발송자 이름(Byte) 0~69
+                isUse:
+                  type: boolean
+                  description: '수정한 템플릿의 사용 여부 true | false true : 템플릿 사용 false : 템플릿 사용하지 않음'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sid:
+                    type: integer
+                    description: 수정한 템플릿의 SID
+                  createDate:
+                    type: object
+                    additionalProperties: true
+                    description: 생성 일시 NesDateTime 참조
+                  name:
+                    type: string
+                    description: 수정한 템플릿의 이름
+                  description:
+                    type: string
+                    description: 수정한 템플릿에 대한 설명
+                  title:
+                    type: string
+                    description: 이메일 제목
+                  senderAddress:
+                    type: string
+                    description: 발송자 이메일 주소
+                  senderName:
+                    type: string
+                    description: 발송자 이름
+                  body:
+                    type: string
+                    description: 이메일 본문
+                  isUse:
+                    type: boolean
+                    description: 템플릿 사용 여부
+                  category:
+                    type: object
+                    additionalProperties: true
+                    description: 부모 카테고리의 정보 Category 참조
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: DeleteTemplate
+      summary: deleteTemplate
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-outbound-mailer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-deletetemplate
+      parameters:
+        - name: templateSid
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 삭제할 템플릿의 SID getTemplateStructure 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sid:
+                    type: integer
+                    description: 삭제한 템플릿의 SID
+                  createDate:
+                    type: object
+                    additionalProperties: true
+                    description: 생성 일시 NesDateTime 참조
+                  name:
+                    type: string
+                    description: 삭제한 템플릿의 이름
+                  description:
+                    type: string
+                    description: 삭제한 템플릿에 대한 설명
+                  title:
+                    type: string
+                    description: 이메일 제목
+                  senderAddress:
+                    type: string
+                    description: 발송자 이메일 주소
+                  senderName:
+                    type: string
+                    description: 발송자 이름
+                  body:
+                    type: string
+                    description: 이메일 본문
+                  isUse:
+                    type: boolean
+                    description: 템플릿 사용 여부
+                  category:
+                    type: object
+                    additionalProperties: true
+                    description: 부모 카테고리의 정보 Category 참조
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /template/{templateSid}/name-location:
+    put:
+      operationId: UpdateTemplateLocationOrname
+      summary: updateTemplateLocationOrName
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-outbound-mailer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-updatetemplatelocationorname
+      parameters:
+        - name: templateSid
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 수정할 템플릿의 SID getTemplateStructure 를 통해 확인
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - templateName
+              properties:
+                templateName:
+                  type: string
+                  description: 수정할 템플릿의 이름 0~100자
+                parentSid:
+                  type: integer
+                  description: 부모 카테고리의 SID
+                lowerSid:
+                  type: integer
+                  description: 하위에 배치할 템플릿 또는 카테고리의 SID 위치 조정 목적으로 사용 존재하지 않으면 무시
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - sid
+                  - createDate
+                  - name
+                  - title
+                  - senderAddress
+                  - body
+                  - isUse
+                properties:
+                  sid:
+                    type: integer
+                    description: 수정한 템플릿의 SID
+                  createDate:
+                    type: string
+                    description: 생성 일시
+                  name:
+                    type: string
+                    description: 수정한 템플릿의 이름
+                  description:
+                    type: string
+                    description: 수정한 템플릿에 대한 설명
+                  title:
+                    type: string
+                    description: 이메일 제목
+                  senderAddress:
+                    type: string
+                    description: 발송자 이메일 주소
+                  senderName:
+                    type: string
+                    description: 발송자 이름
+                  body:
+                    type: string
+                    description: 이메일 본문
+                  isUse:
+                    type: boolean
+                    description: 템플릿 사용 여부
+                  category:
+                    type: string
+                    description: 부모 카테고리의 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /template/{templateSid}/restoration:
+    put:
+      operationId: RestoreTemplate
+      summary: restoreTemplate
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-outbound-mailer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-restoretemplate
+      parameters:
+        - name: templateSid
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 복구할 템플릿의 SID getTemplateStructure 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sid:
+                    type: integer
+                    description: 복구한 템플릿의 SID
+                  createDate:
+                    type: object
+                    additionalProperties: true
+                    description: 생성 일시 NesDateTime 참조
+                  name:
+                    type: string
+                    description: 템플릿의 이름
+                  description:
+                    type: string
+                    description: 템플릿에 대한 설명
+                  title:
+                    type: string
+                    description: 이메일 제목
+                  senderAddress:
+                    type: string
+                    description: 발송자 이메일 주소
+                  senderName:
+                    type: string
+                    description: 발송자 이름
+                  body:
+                    type: string
+                    description: 이메일 본문
+                  isUse:
+                    type: boolean
+                    description: 템플릿 사용 여부
+                  category:
+                    type: object
+                    additionalProperties: true
+                    description: 부모 카테고리의 정보 Category 참조
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /unsubscribers:
+    get:
+      operationId: GetUnSubScribersList
+      summary: getUnsubscribersList
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-outbound-mailer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-getunsubscriberslist
+      parameters:
+        - name: startUtc
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+          description: 수신 거부 등록 일시의 시작점 1970년 1월 1일 00:00:00 협정 세계시(UTC)부터의 경과 시간을 1/1000초로 환산한 정수 startUtc 또는 startDateTime 입력 필수 startDateTime 값보다 우선 적용
+        - name: startDateTime
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 수신 거부 등록 일시의 시작점(UTC+09:00) 허용 포맷 yyyy-MM-dd yyyy-MM-dd HH:mm yyyy-MM-dd HH:mm:ss.SSS yyyy-MM-dd HH:mm:ss SSS startUtc 또는 startDateTime 입력 필수 startUtc 값이 우선 적용
+        - name: endUtc
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+          description: 수신 거부 등록 일시의 종료점 1970년 1월 1일 00:00:00 협정 세계시(UTC)부터의 경과 시간을 1/1000초로 환산한 정수 endUtc 또는 endDateTime 입력 필수 endDateTime 값보다 우선 적용
+        - name: endDateTime
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 수신 거부 등록 일시의 종료점(UTC+09:00) 허용 포맷 yyyy-MM-dd yyyy-MM-dd HH:mm yyyy-MM-dd HH:mm:ss.SSS yyyy-MM-dd HH:mm:ss SSS endUtc 또는 endDateTime 입력 필수 endUtc 값이 우선 적용
+        - name: emailAddress
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 검색할 특정 이메일 주소
+        - name: isRegByManager
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: '관리자에 의한 등록 여부 true | false true : 관리자가 등록함 false : 수신자 본인이 등록함'
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지당 레코드 개수 10 (기본값)
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 조회할 페이지 인덱스 0 이상
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '정렬 기준 createUtc | isRegByManager createUtc : 수신 거부 등록 일시 isRegByManager : 관리자에 의한 등록 여부 property(,asc|desc) 형식 asc (기본값) 복수의 정렬 기준 설정 가능'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - totalElements
+                  - totalPages
+                  - last
+                  - numberOfElements
+                  - first
+                  - sort
+                  - size
+                  - number
+                properties:
+                  content:
+                    type: string
+                    description: 수신 거부 목록에 대한 상세 내용
+                  totalElements:
+                    type: integer
+                    description: 총 레코드 개수
+                  totalPages:
+                    type: integer
+                    description: 총 페이지 수
+                  last:
+                    type: boolean
+                    description: 마지막 페이지 여부
+                  numberOfElements:
+                    type: integer
+                    description: 현재 페이지의 레코드 개수
+                  first:
+                    type: boolean
+                    description: 첫 번째 페이지 여부
+                  sort:
+                    type: string
+                    description: 정렬 기준
+                  size:
+                    type: integer
+                    description: 페이지당 레코드 개수
+                  number:
+                    type: integer
+                    description: 현재 페이지의 인덱스 0 이상
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: RegisterunSubScribers
+      summary: registerUnsubscribers
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-outbound-mailer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-registerunsubscribers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - blockedReceivers
+              properties:
+                blockedReceivers:
+                  type: string
+                  description: 등록할 수신자의 이메일 주소 목록
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: 등록 요청받은 이메일 주소 중 수신 거부 목록에 등록된 메일 주소 개수
+                  requestCount:
+                    type: integer
+                    description: 등록 요청받은 이메일 주소 개수
+                  ignoreCount:
+                    type: integer
+                    description: 등록 요청받은 이메일 주소 중 등록되지 않은 메일 주소 개수
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: DeleteUnSubScribers
+      summary: deleteUnsubscribers
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-outbound-mailer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-deleteunsubscribers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - blockedReceivers
+              properties:
+                blockedReceivers:
+                  type: string
+                  description: 삭제할 수신자의 이메일 주소 목록
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: 삭제 요청받은 메일 주소 중 수신 거부 목록에서 삭제된 메일 주소 개수
+                  requestCount:
+                    type: integer
+                    description: 삭제 요청받은 메일 주소 개수
+                  ignoreCount:
+                    type: integer
+                    description: 삭제 요청받은 메일 주소 중 삭제되지 않은 메일 주소 개수
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+components:
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  schemas:
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

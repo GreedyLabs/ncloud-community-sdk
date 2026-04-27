@@ -1,0 +1,153 @@
+# NRN (Ncloud Resource Names) — 권위 있는 productCode → resourceType 매핑
+#
+# 출처: NAVER Cloud Platform Resource Manager 개념 문서
+#   https://guide.ncloud-docs.com/docs/management-rmgr-1-1-2  (KO)
+#   https://guide.ncloud-docs.com/docs/en/management-rmgr-1-1-2  (EN)
+# 추출 시점: 2026-04-25 (SSR'd HTML에서 직접 추출)
+#
+# 형식: nrn:domainCode:productName:regionCode:memberNo:resourceType/resourceId
+#  - nrn: 고정 구분자
+#  - domainCode: 도메인 구분 값 (예: PUB=민간 - 옵션; 금융/공공은 별도 코드 추정)
+#  - productName: 서비스 식별 "상품 코드" (= 공식 productCode). 케이스 그대로 사용.
+#  - regionCode: KR | USW | JP | SG | DE (옵션)
+#  - memberNo: 계정 회원 번호 (서브 계정 미구분)
+#  - resourceType/resourceId: 서비스별 정의. 경로 사용 가능, NRN을 유일하게 만드는 식별키 포함.
+#  - 전체 최대 128자, [A-Za-z0-9-_:./=] 만 허용.
+#
+# 예시: nrn:PUB:Server:KR:2942:Serverimage/7449
+#
+# 주의:
+#  - Classic/VPC 분리된 productCode 는 별도 항목 (예: Server vs VPCServer).
+#  - 본 문서에 등재되지 않은 서비스는 Resource Manager에 아직 등록되지 않은 상태로 간주.
+#    → SDK 생성 후에도 NCP가 신규 등재하면 이 파일과 alias 테이블만 업데이트 후
+#      tools/add_nrn_annotations.py 재실행으로 반영됨 (idempotent).
+
+version: "rmgr-2026-04-25"
+source: "https://guide.ncloud-docs.com/docs/management-rmgr-1-1-2"
+
+# 카테고리별 productCode → resourceType 리스트
+products:
+
+  # --- Compute ---
+  Server: [Server, ServerImage, ServerImageBuilder, Storage, Snapshot, InitScript, PrivateSubnet, NetworkInterface, ACG, PublicIP]
+  VPCServer: [Server, ServerImage, Storage, Snapshot, InitScript, NetworkInterface, ACG, PublicIP]
+  AutoScaling: [AutoScalingGroup, LaunchConfiguration]
+  VPCAutoScaling: [AutoScalingGroup, LaunchConfiguration]
+  CloudFunctions: [Namespace, Action, Trigger, Package]
+  VPCCloudFunctions: [Namespace, Action, Trigger, Package]
+  ContainerRegistry: [Registry, Image]
+  VPCKubernetesService: [Cluster, NodePool]
+
+  # --- Storage ---
+  ObjectStorage: [Bucket, LifeCyclePolicy]
+  NAS: [Volume, Event, CIFS]
+  VPCNAS: [Volume, CIFS]
+  ArchiveStorage: [Container]
+
+  # --- Networking ---
+  LoadBalancer: [Instance]
+  VPCLoadBalancer: [LoadBalancer]
+  GlobalDNS: [Domain, Record]
+  GCDN: [Service]
+  VPC: [VPC, Subnet, NetworkACL, NATGateway, VPCPeering, RouteTable, VirtualPrivateGateway, OnPremiseGateway, NetworkACLDenyAllowGroup]
+
+  # --- Media ---
+  ImageOptimizer: [Project]
+  VODStation: [Category, Channel, EncodingOption, Subscription]
+  LiveStation: [GeneralChannel, RestreamChannel, QualitySetting, QualityProfile, Callback, VODChannel, VODSchedule, SnapShot, CurtainContents]
+  MediaConnectCenter: [MediaConnectCenter]
+
+  # --- Database ---
+  CloudDBforMySQL: [Service, Server]
+  VPCCloudDBforMySQL: [Service, Server]
+  CloudDBforRedis: [Service]
+  VPCCloudDBforRedis: [Service, Server, ConfigGroup]
+  CloudDBforMSSQL: [Service]
+  VPCCloudDBforMSSQL: [Service, Server, ConfigGroup]
+  VPCCloudDBforMongoDB: [Service, Server]
+  VPCCloudDBforPostgreSQL: [Service, Server]
+
+  # --- Management ---
+  ResourceManager: [Group, Tag, Observer]
+  CloudActivityTracer: [Tracer]
+  WMS: [URL]
+  # Sub Account 는 문서상 productCode 가 "IAM" 으로 표기됨 (본문: "Sub Account (IAM)")
+  IAM: [SubAccount, Group, Policy, Tenant, Role]
+  CloudInsight: [Dashboard, EventRule, PM, MetricExport]
+  PinpointCloud: [Repository]
+  CloudAdvisor: [Advisor]
+  Organization: [Organization, AccountGroup, QuotaPolicy]
+  APIWorkflow: [APITemplate, Authority, Workflow]
+  SSO: [Application, Tenant, Customer, SubAccount]
+
+  # --- AI / Application Service ---
+  SENS: [Project, SmsCallingNumber, SmsBlockTelNumber, PushChannel, KakaoTalkChannel, AlimTalkTemplate, Schedule]
+  APIGateway: [Product, API, APIKey, UsagePlan, Authorizer, Certificate]
+  CloudOutboundMailer: [RecipientGroup, Template, Unsubscribe]
+  GeoLocation: [GeoLocation]
+  Chatbot: [Domain, DomainGroup]
+  OCR: [Domain]
+  SimpleRabbitMQService: [Cluster]
+  VPCSimpleRabbitMQService: [Cluster]
+  AINAVERAPI: [Application]
+  CLOVADubbing: [Project, ProjectGroup]
+  CLOVASpeech: [Domain]
+  CLOVAAiCall: [Agent, ContactCenter, Keyword, PhoneNumber, ContactCenterCarecall]
+  CLOVAFaceSign: [Device, Event, EventTemplate, Service]
+  CLOVAStudio: [Product]
+
+  # --- Game ---
+  GAMEPOT: [Project, ProjectV2]
+
+  # --- Security ---
+  AppSafer: [App, Device]
+  FileSafer: [Safer]
+  WebSecurityChecker: [Checker]
+  SystemSecurityChecker: [Checker]
+  SecurityMonitoring: [IDS, IPS, WAF, AV, DDoS]
+  VPCSecurityMonitoring: [IDS, IPS, WAF, AV, DDoS]
+  KMS: [Key]
+  CertificateManager: [Certificate]
+  PrivateCA: [CA]
+  WebshellBehaviorDetector: [DetectionTarget, ExceptionRule, ServerGroup, Notification]
+
+  # --- Developer Tools ---
+  SourceCommit: [Repository]
+  SourceBuild: [Project]
+  SourceDeploy: [Project, Scenario, Stage]
+  SourcePipeline: [Project]
+  VPCSourceDeploy: [Project, Scenario, Stage]
+  VPCSourcePipeline: [Project]
+  SourceBand: [Project, Organization, Subscription]
+
+  # --- Big Data & Analytics ---
+  ELSA: [Project]
+  CloudHadoop: [Cluster]
+  VPCCloudHadoop: [Cluster, Server, Notebook]
+  CloudSearch: [Domain]
+  SearchEngine: [Cluster]
+  VPCSearchEngine: [Cluster, Server]
+  CloudLogAnalytics: [Analytics, Alarm]
+  CloudDataStreamingService: [Cluster, Server, ConfigGroup]
+  HEaaNHomomorphicAnalytics: [Key, Data, Project, Subscription]
+  DataForest: [Account, App]
+  CloudDataBox: [DataBox]
+  DataCatalog: [TagTemplate, Classifier, Connection, Scanner, Database, Catalog]
+  DataFlow: [Workflow, Trigger, Job]
+  DataQuery: [Project, DataSource]
+
+  # --- Hybrid & Private Cloud ---
+  VPCCloudConnect: [CloudConnect]
+
+  # --- Blockchain ---
+  BlockchainService: [Network, Channel, Orderer, Peer, CA, Organization]
+
+  # --- Business Application ---
+  RPAService: [Tenant, Robot, Process, Subscription]
+  NcloudChat: [Project]
+
+  # --- Migration ---
+  ObjectMigration: [Job]
+
+  # --- Digital Twin ---
+  ARCeye: [Project, Location, MapData, VLTask, API, Notification, Dashboard]

@@ -1,0 +1,1234 @@
+openapi: 3.0.3
+info:
+  title: platform
+  description: platform
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: true
+    gov: true
+
+  x-ncloud-nrn-todo: true
+servers:
+  - url: https://billingapi.apigw.ntruss.com/billing/v1
+    description: platform 민간
+    x-ncloud-env: public
+  - url: https://billingapi.apigw.fin-ntruss.com/billing/v1
+    description: platform 금융
+    x-ncloud-env: financial
+  - url: https://billingapi.apigw.gov-ntruss.com/billing/v1
+    description: platform 공공
+    x-ncloud-env: gov
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /cost/getContractDemandCostList:
+    get:
+      operationId: CostandUsageGetContractdemandcostList
+      summary: getContractDemandCostList
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - platform
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/platform-costandusage-getcontractdemandcostlist
+      parameters:
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지 번호
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 크기 1,000 이하(기본값: 1,000)'
+        - name: isOrganization
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: Organization 서비스 계정 통합 조회 여부 마스터만 사용 가능 isOrganization , isPartner 모두 true 이면 에러 응답
+        - name: isPartner
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: 파트너 계정 조회 여부 파트너 대표만 사용 가능 isOrganization , isPartner 모두 true 이면 에러 응답
+        - name: memberNoList
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 회원 번호 목록 마스터 또는 파트너 대표만 사용 가능
+        - name: contractNo
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 계약 번호
+        - name: startMonth
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 조회 시작 월(yyyyMM) 최대 3개월 조회 가능 <예시> 202401
+        - name: endMonth
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 조회 마지막 월(yyyyMM) 최대 3개월 조회 가능 <예시> 202403
+        - name: demandTypeCode
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 청구 유형 코드
+        - name: demandTypeDetailCode
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 청구 유형 상세 코드
+        - name: regionCode
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 리전 코드 getRegionList 액션을 통해 확인
+        - name: responseFormatType
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 응답 결과의 형식 xml (기본값) | json
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /cost/getContractSummaryList:
+    get:
+      operationId: CostandUsageGetContractSummaryList
+      summary: getContractSummaryList
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - platform
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/platform-costandusage-getcontractsummarylist
+      parameters:
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지 번호
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 크기 1,000 이하(기본값: 1,000)'
+        - name: isOrganization
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: Organization 하위 계정의 통합 사용량 조회 여부 마스터만 사용 가능 isOrganization , isPartner 모두 true 이면 에러 응답
+        - name: isPartner
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: 파트너 계정 조회 여부 파트너 대표만 사용 가능 isOrganization , isPartner 모두 true 이면 에러 응답
+        - name: memberNoList
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 회원 번호 목록 마스터 또는 파트너 대표만 사용 가능
+        - name: contractMonth
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 조회할 계약 연월(yyyyMM) <예시> 202404
+        - name: contractTypeCode
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 계약 유형 코드
+        - name: contractStatusCode
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '계약 상태 코드 ALL (기본값) | NOML | NLEND ALL : 모두 NOML : 정상 NLEND : 종료'
+        - name: regionCode
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 리전 코드 regionCode는 getRegionList 액션을 통해서 획득 가능
+        - name: responseFormatType
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 응답 결과의 형식 xml (기본값) | json
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /cost/getContractUsageList:
+    get:
+      operationId: CostandUsageGetContractUsageList
+      summary: getContractUsageList
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - platform
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/platform-costandusage-getcontractusagelist
+      parameters:
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지 번호
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 크기 1,000 이하(기본값: 1,000)'
+        - name: isOrganization
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: Organization 서비스 계정 통합 조회 여부 마스터만 사용 가능 isOrganization , isPartner 모두 true 이면 에러 응답
+        - name: isPartner
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: 파트너 계정 조회 여부 파트너 대표만 사용 가능 isOrganization , isPartner 모두 true 이면 에러 응답
+        - name: memberNoList
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 회원 번호 목록 마스터 또는 파트너 대표만 사용 가능
+        - name: contractNo
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 계약 번호
+        - name: startMonth
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 조회 시작 월(yyyyMM) 최대 3개월 조회 가능 <예시> 202401
+        - name: endMonth
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 조회 마지막 월(yyyyMM) 최대 3개월 조회 가능 <예시> 202403
+        - name: contractTypeCode
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 계약 유형 코드
+        - name: contractStatusCode
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '계약 상태 코드 NOML | NLEND NOML : 정상 NLEND : 종료'
+        - name: regionCode
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 리전 코드 getRegionList 액션을 통해서 획득 가능
+        - name: responseFormatType
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 응답 결과의 형식 xml (기본값) | json
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /cost/getContractUsageListByDaily:
+    get:
+      operationId: CostandUsageGetContractUsageListBydaily
+      summary: getContractUsageListByDaily
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - platform
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/platform-costandusage-getcontractusagelistbydaily
+      parameters:
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지 번호
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 크기 1,000 이하(기본값: 1,000)'
+        - name: isOrganization
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: Organization 서비스 계정 통합 조회 여부 마스터만 사용 가능 isOrganization , isPartner 모두 true 이면 에러 응답
+        - name: isPartner
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: 파트너 계정 조회 여부 파트너 대표만 사용 가능 isOrganization , isPartner 모두 true 이면 에러 응답
+        - name: memberNoList
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 회원 번호 목록 마스터 또는 파트너 대표만 사용 가능
+        - name: contractNo
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 계약 번호
+        - name: useStartDay
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 조회 시작 일(yyyyMMdd) 최대 3개월 조회 가능 <예시> 20240101
+        - name: useEndDay
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 조회 마지막 일(yyyyMMdd) 최대 3개월 조회 가능 <예시> 20240331
+        - name: contractTypeCode
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 계약 유형 코드
+        - name: productItemKindCode
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 서비스 품목 종류 코드
+        - name: regionCode
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 리전 코드 getRegionList 액션을 통해 확인
+        - name: responseFormatType
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 응답 결과의 형식 xml (기본값) | json
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /cost/getCostRelationCodeList:
+    get:
+      operationId: CostandUsageGetCostrelationCodeList
+      summary: getCostRelationCodeList
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - platform
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/platform-costandusage-getcostrelationcodelist
+      parameters:
+        - name: contractTypeCode
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 계약 유형 코드
+        - name: productItemKindCode
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 상품 품목 종류 코드
+        - name: productRatingTypeCode
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 상품 과금 유형 코드
+        - name: meteringTypeCode
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 미터링 구분 코드
+        - name: productCategoryCode
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 상품 카테고리 코드 getProductCategoryList 액션을 통해 확인
+        - name: responseFormatType
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 응답 결과의 형식 xml (기본값) | json
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /cost/getDemandCostList:
+    get:
+      operationId: CostandUsageGetDemandcostList
+      summary: getDemandCostList
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - platform
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/platform-costandusage-getdemandcostlist
+      parameters:
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지 번호
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 크기 1,000 이하(기본값: 1,000)'
+        - name: isOrganization
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: Organization 서비스 계정 통합 조회 여부 마스터만 사용 가능 isOrganization , isPartner 모두 true 이면 에러 응답
+        - name: isPartner
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: 파트너 계정 조회 여부 파트너 대표만 사용 가능 isOrganization , isPartner 모두 true 이면 에러 응답
+        - name: memberNoList
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 회원 번호 목록 마스터 또는 파트너 대표만 사용 가능
+        - name: startMonth
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 조회 시작 월(yyyyMM) 최대 3개월 조회 가능 <예시> 202401
+        - name: endMonth
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 조회 마지막 월(yyyyMM) 최대 3개월 조회 가능 <예시> 202403
+        - name: responseFormatType
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 응답 결과의 형식 xml (기본값) | json
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  getDemandCostListResponse:
+                    type: object
+                    additionalProperties: true
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /cost/getProductDemandCostList:
+    get:
+      operationId: CostandUsageGetProductDemandcostList
+      summary: getProductDemandCostList
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - platform
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/platform-costandusage-getproductdemandcostlist
+      parameters:
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지 번호
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 크기 1,000 이하(기본값: 1,000)'
+        - name: isOrganization
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: Organization 서비스 계정 통합 조회 여부 마스터만 사용 가능 isOrganization , isPartner 모두 true 이면 에러 응답
+        - name: isPartner
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: 파트너 계정 조회 여부 파트너 대표만 사용 가능 isOrganization , isPartner 모두 true 이면 에러 응답
+        - name: memberNoList
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 회원 번호 목록 마스터 또는 파트너 대표만 사용 가능
+        - name: startMonth
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 조회 시작 월(yyyyMM) 최대 3개월 조회 가능 <예시> 202401
+        - name: endMonth
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 조회 마지막 월(yyyyMM) 최대 3개월 조회 가능 <예시> 202403
+        - name: productDemandTypeCode
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 서비스 청구 유형 코드
+        - name: responseFormatType
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 응답 결과의 형식 xml (기본값) | json
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /discount/getCoinHistoryList:
+    get:
+      operationId: DisCountGetCoinHistoryList
+      summary: getCoinHistoryList
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - platform
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/platform-discount-getcoinhistorylist
+      parameters:
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지 번호
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 크기 1,000 이하(기본값: 1,000)'
+        - name: isOrganization
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: Organization 서비스 계정 통합 조회 여부 마스터만 사용 가능 isOrganization , isPartner 모두 true 이면 에러 응답
+        - name: isPartner
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: 파트너 계정 조회 여부 파트너 대표만 사용 가능 isOrganization , isPartner 모두 true 이면 에러 응답
+        - name: responseFormatType
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 응답 결과의 포맷 유형 xml (기본값) | json
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /discount/getCreditHistoryList:
+    get:
+      operationId: DisCountGetCreditHistoryList
+      summary: getCreditHistoryList
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - platform
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/platform-discount-getcredithistorylist
+      parameters:
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지 번호
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 크기 1,000 이하(기본값: 1,000)'
+        - name: isOrganization
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: Organization 서비스 계정 통합 조회 여부 마스터만 사용 가능 isOrganization , isPartner 모두 true 이면 에러 응답
+        - name: isPartner
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: 파트너 계정 조회 여부 파트너 대표만 사용 가능 isOrganization , isPartner 모두 true 이면 에러 응답
+        - name: memberNoList
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 회원 번호 목록 마스터 또는 파트너 대표만 사용 가능
+        - name: startMonth
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 시작 월(yyyyMM) <예시> 202401
+        - name: endMonth
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 마지막 월(yyyyMM) <예시> 202403
+        - name: responseFormatType
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 응답 결과의 형식 xml (기본값) | json
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /discount/getDiscountList:
+    get:
+      operationId: DisCountGetDisCountList
+      summary: getDiscountList
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - platform
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/platform-discount-getdiscountlist
+      parameters:
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지 번호
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 크기 1,000 이하(기본값: 1,000)'
+        - name: isOrganization
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: Organization 서비스 계정 통합 조회 여부 마스터만 사용 가능 isOrganization , isPartner 모두 true 이면 에러 응답
+        - name: isPartner
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: 파트너 계정 조회 여부 파트너 대표만 사용 가능 isOrganization , isPartner 모두 true 이면 에러 응답
+        - name: memberNoList
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 회원 번호 목록 마스터 또는 파트너 대표만 사용 가능
+        - name: discountTypeCode
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '할인 유형 PRODUCT | CREDIT | COIN PRODUCT : 서비스 요금 할인 CREDIT : 크레딧 COIN : 코인'
+        - name: startMonth
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 시작 월(yyyyMM) 최대 3개월 조회 가능 <예시> 202401
+        - name: endMonth
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 마지막 월(yyyyMM) 최대 3개월 조회 가능 <예시> 202403
+        - name: isValidDiscount
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: '유효한 할인만 조회 여부 true | false true : 유효한 할인만 조회 false : 모든 할인 조회'
+        - name: responseFormatType
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 응답 결과의 형식 xml (기본값) | json
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /discount/getProductDemandCostByDiscountList:
+    get:
+      operationId: DisCountGetProductDemandcostbydisCountList
+      summary: getProductDemandCostByDiscountList
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - platform
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/platform-discount-getproductdemandcostbydiscountlist
+      parameters:
+        - name: startMonth
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 조회 시작 월(yyyyMM) 최대 6개월 조회 가능 <예시> 202401
+        - name: endMonth
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 조회 마지막 월(yyyyMM) 최대 6개월 조회 가능 <예시> 202406
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지 번호
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 크기 1,000 이하(기본값: 1,000)'
+        - name: isOrganization
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: Organization 서비스 계정 통합 조회 여부 마스터만 사용 가능 isOrganization , isPartner 모두 true 이면 에러 응답
+        - name: isPartner
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: 파트너 계정 조회 여부 파트너 대표만 사용 가능 isOrganization , isPartner 모두 true 이면 에러 응답
+        - name: memberNoList
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 회원 번호 목록 마스터 또는 파트너 대표만 사용 가능
+        - name: responseFormatType
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 응답 결과의 형식 xml (기본값) | json
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /discount/getProductDiscountHistoryList:
+    get:
+      operationId: DisCountGetProductDisCountHistoryList
+      summary: getProductDiscountHistoryList
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - platform
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/platform-discount-getproductdiscounthistorylist
+      parameters:
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지 번호
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 크기 1,000 이하(기본값: 1,000)'
+        - name: isOrganization
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: Organization 서비스 계정 통합 조회 여부 마스터만 사용 가능 isOrganization , isPartner 모두 true 이면 에러 응답
+        - name: isPartner
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: 파트너 계정 조회 여부 파트너 대표만 사용 가능 isOrganization , isPartner 모두 true 이면 에러 응답
+        - name: memberNoList
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 회원 번호 목록 마스터 또는 파트너 대표만 사용 가능
+        - name: startMonth
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 시작 월(yyyyMM) <예시> 202401
+        - name: endMonth
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 마지막 월(yyyyMM) <예시> 202403
+        - name: responseFormatType
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 응답 결과의 형식 xml (기본값) | json
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /product/getPriceList:
+    get:
+      operationId: ListPriceGetPriceList
+      summary: getPriceList
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - platform
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/platform-listprice-getpricelist
+      parameters:
+        - name: payCurrencyCode
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 결제 통화 코드 KRW | USD | JPY
+        - name: responseFormatType
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 응답 결과의 형식 xml (기본값) | json
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /product/getProductCategoryList:
+    get:
+      operationId: ListPriceGetProductCategoryList
+      summary: getProductCategoryList
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - platform
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/platform-listprice-getproductcategorylist
+      parameters:
+        - name: productCategoryCode
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 상품 카테고리 코드
+        - name: responseFormatType
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 응답 결과의 형식 xml (기본값) | json
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /product/getProductList:
+    get:
+      operationId: ListPriceGetProductList
+      summary: getProductList
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - platform
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/platform-listprice-getproductlist
+      parameters:
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지 번호
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 크기 1,000 이하(기본값: 1,000)'
+        - name: regionCode
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 리전 코드 getRegionList 액션을 통해 확인
+        - name: productItemKindCode
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 상품 품목 종류 코드
+        - name: productCategoryCode
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 상품 카테고리 코드 getProductCategoryList 액션을 통해 확인
+        - name: productCode
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 상품 코드
+        - name: productName
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 상품명
+        - name: responseFormatType
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 응답 결과의 형식 xml (기본값) | json
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /product/getProductPriceList:
+    get:
+      operationId: ListPriceGetProductPriceList
+      summary: getProductPriceList
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - platform
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/platform-listprice-getproductpricelist
+      parameters:
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지 번호
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 크기 1,000 이하(기본값: 1,000)'
+        - name: regionCode
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 리전 코드 getRegionList 액션을 통해 확인
+        - name: productItemKindCode
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 상품 품목 종류 코드
+        - name: productCategoryCode
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 상품 카테고리 코드 getProductCategoryList 액션을 통해 확인
+        - name: productCode
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 상품 코드
+        - name: productName
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 상품명
+        - name: payCurrencyCode
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 결제 통화 코드 KRW | USD | JPY
+        - name: responseFormatType
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 응답 결과의 형식 xml (기본값) | json
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /region/getRegionList:
+    get:
+      operationId: RegionGetRegionList
+      summary: getRegionList
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - platform
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/platform-region-getregionlist
+      parameters:
+        - name: regionCode
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회할 리전 코드 getRegionList 액션을 통해 확인
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  getRegionListResponse:
+                    type: object
+                    additionalProperties: true
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+components:
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  schemas:
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

@@ -1,0 +1,677 @@
+openapi: 3.0.3
+info:
+  title: OCR
+  description: OCR
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: true
+    gov: true
+
+  x-ncloud-nrn:
+
+    productName: OCR
+    resource_types:
+      - Domain
+
+servers:
+  - url: https://ocr.apigw.ntruss.com
+    description: ocr 민간
+    x-ncloud-env: public
+  - url: https://ocr.apigw.fin-ntruss.com
+    description: ocr 금융
+    x-ncloud-env: financial
+  - url: https://ocr.apigw.gov-ntruss.com
+    description: ocr 공공
+    x-ncloud-env: gov
+security:
+  # CLOVA OCR uses a per-app secret header AND lives on a per-customer
+  # subdomain (the example host in docs is just one tenant's deployment).
+  - ocrSecret: []
+paths:
+  /biz-license:
+    post:
+      operationId: OcrDocumentOcrBizlicense
+      summary: 사업자등록증
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - ocr
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-ocr-ocrdocumentocr-bizlicense
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - version
+                - requestId
+                - timestamp
+                - images
+                - message
+                - file
+                - format
+                - name
+                - data
+              properties:
+                version:
+                  type: string
+                  description: 버전 정보 V2 만 사용
+                requestId:
+                  type: string
+                  description: 임의의 API 호출 UUID
+                timestamp:
+                  type: integer
+                  description: 임의의 API 호출 시각(밀리초) Unix Timestamp 형식
+                images:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: 'images 세부 정보: images'
+                message:
+                  type: object
+                  additionalProperties: true
+                  description: 요청 데이터 정보
+                file:
+                  type: string
+                  description: OCR 인식 이미지 파일
+                format:
+                  type: string
+                  description: '이미지 형식 jpg | jpeg | png | pdf | tif | tiff 이미지: jpg , jpeg , png 단일 페이지: pdf , tif , tiff 이미지 형식 중 하나를 선택하여 입력'
+                name:
+                  type: string
+                  description: 임의의 이미지 이름 이미지 식별 및 응답 결과 확인 시 사용
+                data:
+                  type: string
+                  description: 'Base64 인코딩된 이미지 데이터 Content-Type: application/json 일 때 입력 가능'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  version:
+                    type: string
+                    description: 버전 정보 V2 만 사용
+                  requestId:
+                    type: string
+                    description: API 호출 UUID
+                  timestamp:
+                    type: integer
+                    description: API 호출 시각(밀리초) Unix Timestamp 형식
+                  images:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 'images 세부 정보: images'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /credit-card:
+    post:
+      operationId: OcrDocumentOcrCreditcard
+      summary: 신용카드
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - ocr
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-ocr-ocrdocumentocr-creditcard
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - version
+                - requestId
+                - timestamp
+                - images
+                - message
+                - file
+                - format
+                - name
+                - data
+              properties:
+                version:
+                  type: string
+                  description: 버전 정보 V2 만 사용
+                requestId:
+                  type: string
+                  description: 임의의 API 호출 UUID
+                timestamp:
+                  type: integer
+                  description: 임의의 API 호출 시각(Timestamp)
+                images:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: 'images 세부 정보: images'
+                message:
+                  type: object
+                  additionalProperties: true
+                  description: 요청 데이터 정보
+                file:
+                  type: string
+                  description: OCR 인식 이미지 파일
+                format:
+                  type: string
+                  description: '이미지 형식 jpg | jpeg | png | pdf | tif | tiff 이미지: jpg , jpeg , png 단일 페이지: pdf , tif , tiff 이미지 형식 중 하나를 선택하여 입력'
+                name:
+                  type: string
+                  description: 임의의 이미지 이름 이미지 식별 및 응답 결과 확인 시 사용
+                data:
+                  type: string
+                  description: 'Base64 인코딩된 이미지 데이터 Content-Type: application/json 일 때 입력 가능'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  version:
+                    type: string
+                    description: 버전 정보 V2 만 사용
+                  requestId:
+                    type: string
+                    description: API 호출 UUID
+                  timestamp:
+                    type: integer
+                    description: API 호출 시각(Timestamp)
+                  images:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 'images 세부 정보: images'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /custom/v1/{DomainId}/{InvokeKey}/document/id-card:
+    post:
+      operationId: OcrDocumentOcrPassPort
+      summary: 여권
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - ocr
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-ocr-ocrdocumentocr-passport
+      parameters:
+        - name: DomainId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: InvokeKey
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - version
+                - requestId
+                - timestamp
+                - images
+                - message
+                - file
+                - format
+                - name
+                - data
+              properties:
+                version:
+                  type: string
+                  description: 버전 정보 V2 만 사용
+                requestId:
+                  type: string
+                  description: 임의의 API 호출 UUID
+                timestamp:
+                  type: integer
+                  description: 임의의 API 호출 시각(밀리초) Unix Timestamp 형식
+                images:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: 'images 세부 정보: images'
+                message:
+                  type: object
+                  additionalProperties: true
+                  description: 요청 데이터 정보
+                file:
+                  type: string
+                  description: OCR 인식 이미지 파일
+                format:
+                  type: string
+                  description: '이미지 형식 jpg | jpeg | png | pdf | tif | tiff 이미지: jpg , jpeg , png 단일 페이지: pdf , tif , tiff 이미지 형식 중 하나를 선택하여 입력'
+                name:
+                  type: string
+                  description: 임의의 이미지 이름 이미지 식별 및 응답 결과 확인 시 사용
+                data:
+                  type: string
+                  description: 'Base64 인코딩된 이미지 데이터 Content-Type: application/json 일 때 입력 가능'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  version:
+                    type: string
+                    description: 버전 정보 V2 만 사용
+                  requestId:
+                    type: string
+                    description: API 호출 UUID
+                  timestamp:
+                    type: integer
+                    description: API 호출 시각(밀리초) Unix Timestamp 형식
+                  images:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 'images 세부 정보: images'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /general:
+    post:
+      operationId: Ocr
+      summary: General OCR
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - ocr
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-ocr-ocr
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - version
+                - requestId
+                - timestamp
+                - images
+                - file
+                - message
+                - format
+                - name
+              properties:
+                version:
+                  type: string
+                  description: '버전 정보 V1 | V2 (권장) V1 : V1 엔진 호출 V2 : V2 엔진 호출'
+                requestId:
+                  type: string
+                  description: 임의의 API 호출 UUID
+                timestamp:
+                  type: integer
+                  description: 임의의 API 호출 시각(밀리초) Unix Timestamp 형식
+                lang:
+                  type: string
+                  description: 'OCR 인식 요청 언어 정보 ko | ja | zh-TW ko : 한국어 ja : 일본어 zh-TW : 중국어(번체) 미입력 시 도메인의 언어 설정값으로 자동 설정 콤마(,)를 통해 여러 언어 동시 호출 가능 <예시> "ko, ja, zh-TW"'
+                images:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: 'images 세부 정보: images JSON Array로 작성 호출당 1개의 이미지 Array 작성 가능 이미지 크기: 최대 50 MB'
+                enableTableDetection:
+                  type: boolean
+                  description: "문서 이미지 내 표(Table) 영역 인식 및 구조화된 형태 제공 여부 true | false (기본값) true : 표 인식 및 형태 제공 false : 표 미인식 및 형태 미제공 네이버 클라우드 플랫폼에 생성한 Domain에서 '표 추출 여부' 토글 버튼을 활성화(ON)해야 사용 가능"
+                file:
+                  type: string
+                  description: OCR 인식 이미지 파일
+                message:
+                  type: object
+                  additionalProperties: true
+                  description: 요청 데이터 정보
+                format:
+                  type: string
+                  description: '이미지 형식 jpg | jpeg | png | pdf | tif | tiff pdf : 최대 10 페이지 인식 가능'
+                name:
+                  type: string
+                  description: 이미지 이름 이미지 식별 및 응답 결과 확인 시 사용
+                url:
+                  type: string
+                  description: 이미지 URL 주소 이미지를 불러올 수 있는 공개된 URL images.url 또는 images.data 중 하나 필수 입력 둘 다 입력 시 images.data 우선
+                data:
+                  type: string
+                  description: Base64 인코딩된 이미지 데이터 images.url 또는 images.data 중 하나 필수 입력 둘 다 입력 시 images.data 우선
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  version:
+                    type: string
+                    description: '버전 정보 V1 | V2 V1 : V1 엔진 호출 V2 : V2 엔진 호출'
+                  requestId:
+                    type: string
+                    description: API 호출 UUID
+                  timestamp:
+                    type: integer
+                    description: API 호출 시각(Timestamp)
+                  images:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 'images 세부 정보: images'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /id-card:
+    post:
+      operationId: OcrDocumentOcrIdEntityCard
+      summary: 주민등록증
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - ocr
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-ocr-ocrdocumentocr-identitycard
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - version
+                - requestId
+                - timestamp
+                - images
+                - message
+                - file
+                - format
+                - name
+                - data
+              properties:
+                version:
+                  type: string
+                  description: 버전 정보 V2 만 사용
+                requestId:
+                  type: string
+                  description: 임의의 API 호출 UUID
+                timestamp:
+                  type: integer
+                  description: 임의의 API 호출 시각(밀리초) Unix Timestamp 형식
+                images:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: 'images 세부 정보: images'
+                message:
+                  type: object
+                  additionalProperties: true
+                  description: 요청 데이터 정보
+                file:
+                  type: string
+                  description: OCR 인식 이미지 파일
+                format:
+                  type: string
+                  description: '이미지 형식 jpg | jpeg | png | pdf | tif | tiff 이미지: jpg , jpeg , png 단일 페이지: pdf , tif , tiff 이미지 형식 중 하나를 선택하여 입력'
+                name:
+                  type: string
+                  description: 임의의 이미지 이름 이미지 식별 및 응답 결과 확인 시 사용
+                data:
+                  type: string
+                  description: 'Base64 인코딩된 이미지 데이터 Content-Type: application/json 일 때 입력 가능'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  version:
+                    type: string
+                    description: 버전 정보 V2 만 사용
+                  requestId:
+                    type: string
+                    description: API 호출 UUID
+                  timestamp:
+                    type: integer
+                    description: API 호출 시각(밀리초) Unix Timestamp 형식
+                  images:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 'images 세부 정보: images'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /name-card:
+    post:
+      operationId: OcrDocumentOcrNamecard
+      summary: 명함
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - ocr
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-ocr-ocrdocumentocr-namecard
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - version
+                - requestId
+                - timestamp
+                - images
+                - message
+                - file
+                - format
+                - name
+                - data
+              properties:
+                version:
+                  type: string
+                  description: 버전 정보 V2 만 사용
+                requestId:
+                  type: string
+                  description: 임의의 API 호출 UUID
+                timestamp:
+                  type: integer
+                  description: 임의의 API 호출 시각(밀리초) Unix Timestamp 형식
+                images:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: 'images 세부 정보: images'
+                message:
+                  type: object
+                  additionalProperties: true
+                  description: 요청 데이터 정보
+                file:
+                  type: string
+                  description: OCR 인식 이미지 파일
+                format:
+                  type: string
+                  description: '이미지 형식 jpg | jpeg | png | pdf | tif | tiff 이미지: jpg , jpeg , png 단일 페이지: pdf , tif , tiff 이미지 형식 중 하나를 선택하여 입력'
+                name:
+                  type: string
+                  description: 임의의 이미지 이름 이미지 식별 및 응답 결과 확인 시 사용
+                data:
+                  type: string
+                  description: 'Base64 인코딩된 이미지 데이터 Content-Type: application/json 일 때 입력 가능'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  version:
+                    type: string
+                    description: 버전 정보 V2 만 사용
+                  requestId:
+                    type: string
+                    description: API 호출 UUID
+                  timestamp:
+                    type: integer
+                    description: API 호출 시각(Timestamp)
+                  images:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 'images 세부 정보: images'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /receipt:
+    post:
+      operationId: OcrDocumentOcrReceipt
+      summary: 영수증
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - ocr
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-ocr-ocrdocumentocr-receipt
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - version
+                - requestId
+                - timestamp
+                - images
+                - message
+                - file
+                - format
+                - name
+                - data
+              properties:
+                version:
+                  type: string
+                  description: 버전 정보 V2 만 사용
+                requestId:
+                  type: string
+                  description: 임의의 API 호출 UUID
+                timestamp:
+                  type: integer
+                  description: 임의의 API 호출 시각(밀리초) Unix Timestamp 형식
+                images:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: images 세부 정보
+                message:
+                  type: object
+                  additionalProperties: true
+                  description: 요청 데이터 정보
+                file:
+                  type: string
+                  description: OCR 인식 이미지 파일
+                format:
+                  type: string
+                  description: '이미지 형식 jpg | jpeg | png | pdf | tif | tiff 이미지: jpg , jpeg , png 단일 페이지: pdf , tif , tiff 이미지 형식 중 하나를 선택하여 입력'
+                name:
+                  type: string
+                  description: 임의의 이미지 이름 이미지 식별 및 응답 결과 확인 시 사용
+                data:
+                  type: string
+                  description: 'Base64 인코딩된 이미지 데이터 Content-Type: application/json 일 때 입력 가능'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  version:
+                    type: string
+                    description: 버전 정보 V2 만 사용
+                  requestId:
+                    type: string
+                    description: API 호출 UUID
+                  timestamp:
+                    type: integer
+                    description: API 호출 시각(밀리초) Unix Timestamp 형식
+                  images:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 'images 세부 정보: images'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+components:
+  securitySchemes:
+    ocrSecret:
+      type: apiKey
+      in: header
+      name: X-OCR-SECRET
+      description: Per-app OCR Secret Key issued in NCP console.
+  schemas:
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

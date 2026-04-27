@@ -1,0 +1,728 @@
+openapi: 3.0.3
+info:
+  title: private-ca
+  description: private-ca
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: false
+    gov: true
+
+  x-ncloud-nrn:
+
+    productName: PrivateCA
+    resource_types:
+      - CA
+
+servers:
+  # /api/v1 prefix verified against the live NCP API on 2026-04-26 — without
+  # it the gateway returns errorCode 300 ("URL not found").
+  - url: https://pca.apigw.ntruss.com/api/v1
+    description: private-ca 민간
+    x-ncloud-env: public
+  - url: https://pca.apigw.gov-ntruss.com/api/v1
+    description: private-ca 공공
+    x-ncloud-env: gov
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /ca:
+    get:
+      operationId: GetCaList
+      summary: Get CA List
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - private-ca
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-privateca-getcalist
+      parameters:
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+          description: 페이지 번호
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 응답 코드
+                  msg:
+                    type: string
+                    description: 응답 메시지
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: CreateCa
+      summary: Create CA
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - private-ca
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-privateca-createca
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - caType
+                - alias
+                - keyType
+                - period
+                - x509Parameters
+              properties:
+                issuerTag:
+                  type: string
+                  description: 상위 CA 태그 값
+                caType:
+                  type: string
+                  description: '생성할 CA 타입 PRIVATE_ROOT | PRIVATE_SUB PRIVATE_ROOT : 루트 CA PRIVATE_SUB : 중간 CA'
+                alias:
+                  type: string
+                  description: CA 이름 영문자, 숫자, 특수문자 '-', '_'를 조합하여 3~15자 이내로 입력 문자열은 영문자로 시작
+                memo:
+                  type: string
+                  description: CA 메모
+                keyType:
+                  type: string
+                  description: 키 타입 RSA2048 | RSA4096 | EC256 | EC521
+                period:
+                  type: string
+                  description: 유효 기간(일) 1~3650 최대 허용 유효 기간으로 설정하려면 MAX 입력
+                x509Parameters:
+                  type: object
+                  additionalProperties: true
+                  description: 고급 설정 정보
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 응답 코드
+                  msg:
+                    type: string
+                    description: 응답 메시지
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /ca/{caTag}:
+    get:
+      operationId: GetCa
+      summary: Get CA
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - private-ca
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-privateca-getca
+      parameters:
+        - name: caTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: CA 태그 값 Get CA List 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 응답 코드
+                  msg:
+                    type: string
+                    description: 응답 메시지
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    put:
+      operationId: UpdateCa
+      summary: Update CA
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - private-ca
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-privateca-updateca
+      parameters:
+        - name: caTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: CA 태그 값 Get CA List 참조
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - status
+              properties:
+                status:
+                  type: string
+                  description: 'CA 상태 ACTIVE | DEACTIVATED | DESTROYING ACTIVE : 활성 DEACTIVATED : 비활성 DESTROYING : 삭제 예정'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 응답 코드
+                  msg:
+                    type: string
+                    description: 응답 메시지
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: Destroyca
+      summary: Destroy CA
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - private-ca
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-privateca-destroyca
+      parameters:
+        - name: caTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: CA 태그 값 Get CA List 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 응답 코드
+                  msg:
+                    type: string
+                    description: 응답 메시지
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /ca/{caTag}/activate:
+    post:
+      operationId: ActivateSubCa
+      summary: Activate Sub CA
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - private-ca
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-privateca-activatesubca
+      parameters:
+        - name: caTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: CA 태그 값 Get CA List 참조
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - certPem
+                - caChainPem
+              properties:
+                certPem:
+                  type: string
+                  description: CA 인증서(PEM) -----BEGIN CERTIFICATE----- 뒤, -----END CERTIFICATE----- 앞에 개행 문자( \n ) 입력
+                caChainPem:
+                  type: string
+                  description: 서명자 인증서 체인(PEM) -----BEGIN CERTIFICATE----- 뒤, -----END CERTIFICATE----- 앞에 개행 문자( \n ) 입력
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 응답 코드
+                  msg:
+                    type: string
+                    description: 응답 메시지
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /ca/{caTag}/cert:
+    get:
+      operationId: GetEndCertList
+      summary: Get End Cert List
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - private-ca
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-privateca-getendcertlist
+      parameters:
+        - name: caTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: CA 태그 값 Get CA List 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 응답 코드
+                  msg:
+                    type: string
+                    description: 응답 메시지
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: IssueEndCert
+      summary: Issue End Cert
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - private-ca
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-privateca-issueendcert
+      parameters:
+        - name: caTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: CA 태그 값 Get CA List 참조
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - x509Parameters
+              properties:
+                keyType:
+                  type: string
+                  description: 키 타입 RSA2048 | RSA4096 | EC256 | EC521
+                period:
+                  type: string
+                  description: 유효 기간 1~3650 최대 허용 유효 기간으로 설정하려면 MAX 입력
+                x509Parameters:
+                  type: object
+                  additionalProperties: true
+                  description: 고급 설정 정보
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  privateKey:
+                    type: string
+                    description: 인증서 개인 키(PEM)
+                  certificate:
+                    type: string
+                    description: 인증서(PEM)
+                  serialNo:
+                    type: string
+                    description: 인증서 일련 번호
+                  caChain:
+                    type: string
+                    description: CA 체인(PEM)
+                  ocspResponder:
+                    type: string
+                    description: OCSP(온라인 인증서 상태 프로토콜) 서버 인증서(PEM)
+                  issuer:
+                    type: string
+                    description: 발급 CA(PEM)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /ca/{caTag}/cert/{serialNo}:
+    get:
+      operationId: GetEndCert
+      summary: Get End Cert
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - private-ca
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-privateca-getendcert
+      parameters:
+        - name: caTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: CA 태그 값 Get CA List 참조
+        - name: serialNo
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 사설 인증서 일련 번호 Get End Cert List 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  commonName:
+                    type: string
+                    description: 일반 이름
+                  notAfterDate:
+                    type: integer
+                    format: int64
+                    description: 인증서 만료 일시 Timestamp 형식
+                  publicKeyAlgorithm:
+                    type: string
+                    description: 암호화 알고리즘
+                  notBeforeDate:
+                    type: integer
+                    format: int64
+                    description: 인증서 유효 시작 일시 Timestamp 형식
+                  certPem:
+                    type: string
+                    description: CA 인증서(PEM)
+                  caChain:
+                    type: string
+                    description: 인증서 체인(PEM)
+                  ocspResponder:
+                    type: string
+                    description: OSCP(온라인 인증서 상태 프로토콜) 서버 인증서(PEM)
+                  signatureAlgorithm:
+                    type: string
+                    description: 서명 알고리즘
+                  serialNo:
+                    type: string
+                    description: 사설 인증서 일련번호
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /ca/{caTag}/cert/{serialNo}/revoke:
+    post:
+      operationId: RevokeEndCert
+      summary: Revoke End Cert
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - private-ca
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-privateca-revokeendcert
+      parameters:
+        - name: caTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: CA 태그 값 Get CA List 참조
+        - name: serialNo
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 사설 인증서 일련 번호 Get End Cert List 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 응답 코드
+                  msg:
+                    type: string
+                    description: 응답 메시지
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /ca/{caTag}/chain:
+    get:
+      operationId: GetCachain
+      summary: Get CA Chain
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - private-ca
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-privateca-getcachain
+      parameters:
+        - name: caTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: CA 태그 값 Get CA List 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 응답 코드
+                  msg:
+                    type: string
+                    description: 응답 메시지
+                  data:
+                    type: string
+                    description: CA 체인 정보(PEM)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /ca/{caTag}/crl:
+    get:
+      operationId: GetCaCrl
+      summary: Get CA CRL
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - private-ca
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-privateca-getcacrl
+      parameters:
+        - name: caTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: CA 태그 값 Get CA List 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 응답 코드
+                  msg:
+                    type: string
+                    description: 응답 메시지
+                  data:
+                    type: string
+                    description: CA CRL 정보(PEM)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /ca/{caTag}/urls:
+    put:
+      operationId: UpdateOcspUrl
+      summary: Create OCSP
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - private-ca
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-privateca-updateocspurl
+      parameters:
+        - name: caTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: CA 태그 값 Get CA List 참조
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - ocsp_servers
+              properties:
+                ocsp_servers:
+                  type: string
+                  description: 'OCSP URL 제공 URL: https://pca.apigw.ntruss.com/ext/{caTag}/ocsp'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 응답 코드
+                  msg:
+                    type: string
+                    description: 응답 메시지
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: UnDeployOcspUrl
+      summary: Delete OCSP
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - private-ca
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-privateca-undeployocspurl
+      parameters:
+        - name: caTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: CA 태그 값 Get CA List 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 응답 코드
+                  msg:
+                    type: string
+                    description: 응답 메시지
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+components:
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  schemas:
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

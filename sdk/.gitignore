@@ -1,0 +1,13 @@
+.env
+.env.*
+!.env.example
+spec/
+
+# Compiled example binaries — keep source, drop binary
+examples/**
+!examples/**/
+!examples/**/*.go
+!examples/**/go.mod
+!examples/**/go.sum
+!examples/**/*.md
+!examples/**/README*

@@ -1,0 +1,1123 @@
+openapi: 3.0.3
+info:
+  title: object-storage
+  description: |
+    NCP Object Storage — Amazon S3-compatible REST API.
+
+    Authentication is **AWS Signature Version 4** (NOT NCP HMAC v2). The
+    same NCP IAM access-key/secret pair is used as the AWS-style signing
+    material. Responses are **application/xml** in the standard S3 shape
+    (ListBucketResult, ListAllMyBucketsResult, Error, …).
+
+    See https://api.ncloud-docs.com/docs/storage-objectstorage for the
+    NCP-published reference and
+    https://docs.aws.amazon.com/AmazonS3/latest/API/Welcome.html for the
+    underlying S3 protocol.
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: true
+    gov: true
+
+  x-ncloud-nrn:
+
+    productName: ObjectStorage
+    resource_types:
+      - Bucket
+      - LifeCyclePolicy
+
+# Object Storage exposes two routing styles against the same endpoint:
+#
+#   - Path-style:        https://{regionCode}.object.ncloudstorage.com/{bucket-name}/{object-name}
+#   - Virtual-host-style: https://{bucket-name}.{regionCode}.object.ncloudstorage.com/{object-name}
+#
+# This spec uses **path-style** to keep `{bucket-name}` as a normal path
+# parameter — codegen consumers get `client.HeadBucket(ctx, "name")`
+# rather than juggling a bucket through a server variable. Both styles
+# return identical responses (verified live 2026-04-26 against cmp-test).
+#
+# A separate "Ncloud Storage" namespace exists at *.kr.ncloudstorage.com
+# (without `.object.`) — same product, different bucket namespace, same
+# SigV4 auth. Override the base URL at client construction if needed.
+servers:
+  - url: 'https://{regionCode}.object.ncloudstorage.com'
+    description: object-storage 민간
+    x-ncloud-env: public
+    variables:
+      regionCode:
+        default: kr
+        enum: [kr]
+        description: NCP region. `kr` is currently the only documented region.
+  - url: 'https://fin-kr.object.ncloudstorage.com'
+    description: object-storage 금융
+    x-ncloud-env: financial
+  - url: 'https://kr.object.gov-ncloudstorage.com'
+    description: object-storage 공공
+    x-ncloud-env: gov
+
+security:
+  - awsSigV4: []
+
+tags:
+  - name: bucket
+    description: Bucket-level operations.
+  - name: object
+    description: Object-level operations.
+  - name: acl
+    description: Bucket and object ACL configuration.
+  - name: cors
+    description: CORS (Cross-Origin Resource Sharing) configuration.
+  - name: multipart
+    description: Multipart upload lifecycle.
+
+paths:
+
+  # ─── Service-level ─────────────────────────────────────────────────────
+
+  /:
+    get:
+      operationId: ListBuckets
+      summary: List all buckets owned by the authenticated account
+      description: |
+        Returns a list of all buckets the credentials own. Service-level
+        endpoint — no bucket in the URL.
+      tags: [bucket]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-objectstorage-listbuckets
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema: { $ref: '#/components/schemas/ListAllMyBucketsResult' }
+        4XX: { $ref: '#/components/responses/S3ClientError' }
+        5XX: { $ref: '#/components/responses/S3ServerError' }
+
+  # ─── Bucket-level ──────────────────────────────────────────────────────
+
+  /{bucket-name}:
+    parameters:
+      - $ref: '#/components/parameters/BucketName'
+    head:
+      operationId: HeadBucket
+      summary: Check if a bucket exists and the caller can access it
+      description: |
+        Returns 200 OK if the bucket exists and the caller has access.
+        404 if the bucket does not exist; 403 if access is denied.
+        No response body.
+      tags: [bucket]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-objectstorage-headbucket
+      responses:
+        '200': { description: Bucket exists and is accessible }
+        '404': { description: Bucket does not exist }
+        4XX: { $ref: '#/components/responses/S3ClientError' }
+        5XX: { $ref: '#/components/responses/S3ServerError' }
+    get:
+      operationId: ListObjects
+      summary: List objects in a bucket
+      description: |
+        ListObjects (v1 by default) returns up to 1000 keys per call.
+        Pass `list-type=2` to switch to the V2 listing format which
+        returns continuation-token-based pagination instead of marker.
+        Pass `uploads` (no value) to list in-progress multipart uploads
+        (ListMultipartUploads).
+      tags: [bucket]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-objectstorage-listobjects
+      parameters:
+        - { name: list-type, in: query, schema: { type: integer, enum: [2] }, description: Set to 2 to get the V2 response format. }
+        - { name: prefix, in: query, schema: { type: string }, description: Limits the response to keys that begin with this prefix. }
+        - { name: delimiter, in: query, schema: { type: string }, description: Groups keys that share a common delimiter (e.g. "/") under CommonPrefixes. }
+        - { name: encoding-type, in: query, schema: { type: string, enum: [url] }, description: Set to "url" if your object names contain XML-unsafe Unicode. }
+        - { name: max-keys, in: query, schema: { type: integer, default: 1000, minimum: 0, maximum: 1000 }, description: Maximum number of keys to return. }
+        - { name: marker, in: query, schema: { type: string }, description: V1 only — start listing after this key. }
+        - { name: continuation-token, in: query, schema: { type: string }, description: V2 only — opaque token from a previous truncated response. }
+        - { name: start-after, in: query, schema: { type: string }, description: V2 only — start listing after this key (in UTF-8 binary order). }
+        - { name: fetch-owner, in: query, schema: { type: boolean }, description: V2 only — include the Owner element in each Contents entry. }
+        - { name: uploads, in: query, schema: { type: string }, description: Set (no value) to list in-progress multipart uploads instead of objects. }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema: { $ref: '#/components/schemas/ListBucketResult' }
+        4XX: { $ref: '#/components/responses/S3ClientError' }
+        5XX: { $ref: '#/components/responses/S3ServerError' }
+    put:
+      operationId: CreateBucket
+      summary: Create a new bucket
+      description: |
+        Bucket name must be DNS-compliant: 3–63 chars, lowercase letters,
+        numbers, `-` and `.`; must start/end with a letter or number;
+        cannot look like an IP address. An account can hold up to 1000
+        buckets.
+      tags: [bucket]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-objectstorage-putbucket
+      responses:
+        '200': { description: Bucket created }
+        4XX: { $ref: '#/components/responses/S3ClientError' }
+        5XX: { $ref: '#/components/responses/S3ServerError' }
+    delete:
+      operationId: DeleteBucket
+      summary: Delete a bucket
+      description: |
+        The bucket must be empty (no objects, no in-progress multipart
+        uploads). Returns 204 on success, 409 BucketNotEmpty otherwise.
+      tags: [bucket]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-objectstorage-deletebucket
+      responses:
+        '204': { description: Bucket deleted }
+        4XX: { $ref: '#/components/responses/S3ClientError' }
+        5XX: { $ref: '#/components/responses/S3ServerError' }
+    post:
+      operationId: DeleteMultipleObjects
+      summary: Delete up to 1000 objects in a single request
+      description: |
+        Body is the standard S3 `Delete` XML document listing the keys
+        (and optional VersionId for each) to remove. Set the `delete`
+        query string (no value) so the gateway routes the call to the
+        bulk-delete handler. `Content-MD5` of the body is required.
+      tags: [object]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-objectstorage-deletemultipleobjects
+      parameters:
+        - { name: delete, in: query, required: true, schema: { type: string }, description: Set (no value) to route to bulk delete. }
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema: { $ref: '#/components/schemas/Delete' }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema: { $ref: '#/components/schemas/DeleteResult' }
+        4XX: { $ref: '#/components/responses/S3ClientError' }
+        5XX: { $ref: '#/components/responses/S3ServerError' }
+
+  # ─── Bucket sub-resources ──────────────────────────────────────────────
+
+  /{bucket-name}?acl:
+    parameters:
+      - $ref: '#/components/parameters/BucketName'
+    get:
+      operationId: GetBucketAcl
+      summary: Get the bucket ACL
+      tags: [acl, bucket]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-objectstorage-getbucketacl
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema: { $ref: '#/components/schemas/AccessControlPolicy' }
+        4XX: { $ref: '#/components/responses/S3ClientError' }
+        5XX: { $ref: '#/components/responses/S3ServerError' }
+    put:
+      operationId: PutBucketAcl
+      summary: Apply an ACL to a bucket
+      description: |
+        Either pass a canned ACL via `x-amz-acl` header
+        (private | public-read | public-read-write | authenticated-read)
+        or send a full `AccessControlPolicy` XML body.
+      tags: [acl, bucket]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-objectstorage-putbucketacl
+      parameters:
+        - { name: x-amz-acl, in: header, schema: { type: string, enum: [private, public-read, public-read-write, authenticated-read] }, description: Canned ACL. }
+      requestBody:
+        required: false
+        content:
+          application/xml:
+            schema: { $ref: '#/components/schemas/AccessControlPolicy' }
+      responses:
+        '200': { description: OK }
+        4XX: { $ref: '#/components/responses/S3ClientError' }
+        5XX: { $ref: '#/components/responses/S3ServerError' }
+
+  /{bucket-name}?cors:
+    parameters:
+      - $ref: '#/components/parameters/BucketName'
+    get:
+      operationId: GetBucketCors
+      summary: Get the bucket's CORS configuration
+      tags: [cors, bucket]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-objectstorage-getbucketcors
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema: { $ref: '#/components/schemas/CORSConfiguration' }
+        4XX: { $ref: '#/components/responses/S3ClientError' }
+        5XX: { $ref: '#/components/responses/S3ServerError' }
+    put:
+      operationId: PutBucketCors
+      summary: Replace the bucket's CORS configuration
+      description: Body is the full `CORSConfiguration`; replaces any prior config.
+      tags: [cors, bucket]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-objectstorage-putbucketcors
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema: { $ref: '#/components/schemas/CORSConfiguration' }
+      responses:
+        '200': { description: OK }
+        4XX: { $ref: '#/components/responses/S3ClientError' }
+        5XX: { $ref: '#/components/responses/S3ServerError' }
+    delete:
+      operationId: DeleteBucketCors
+      summary: Remove the bucket's CORS configuration
+      tags: [cors, bucket]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-objectstorage-deletebucketcors
+      responses:
+        '204': { description: CORS config removed }
+        4XX: { $ref: '#/components/responses/S3ClientError' }
+        5XX: { $ref: '#/components/responses/S3ServerError' }
+
+  # ─── Object-level ──────────────────────────────────────────────────────
+
+  /{bucket-name}/{object-name}:
+    parameters:
+      - $ref: '#/components/parameters/BucketName'
+      - $ref: '#/components/parameters/ObjectName'
+    head:
+      operationId: HeadObject
+      summary: Get object metadata without retrieving the body
+      tags: [object]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-objectstorage-headobject
+      parameters:
+        - { name: If-Match, in: header, schema: { type: string }, description: Return 200 only when current ETag matches. }
+        - { name: If-None-Match, in: header, schema: { type: string }, description: Return 304 when current ETag matches. }
+        - { name: If-Modified-Since, in: header, schema: { type: string, format: date-time } }
+        - { name: If-Unmodified-Since, in: header, schema: { type: string, format: date-time } }
+      responses:
+        '200':
+          description: Object exists; metadata returned in headers.
+          headers:
+            ETag:           { schema: { type: string }, description: Object ETag (MD5 for non-multipart objects). }
+            Content-Length: { schema: { type: integer, format: int64 } }
+            Content-Type:   { schema: { type: string } }
+            Last-Modified:  { schema: { type: string, format: date-time } }
+            x-amz-version-id: { schema: { type: string }, description: 'Object version ID, if versioning enabled.' }
+        '304': { description: Not Modified (conditional headers matched). }
+        '404': { description: Object does not exist. }
+        4XX: { $ref: '#/components/responses/S3ClientError' }
+        5XX: { $ref: '#/components/responses/S3ServerError' }
+    get:
+      operationId: GetObject
+      summary: Download an object
+      description: |
+        Returns the full object body. Use the `Range` header to request a
+        byte range. When `uploadId` is set, this acts as ListParts; when
+        `acl` is set, this acts as GetObjectAcl — see the dedicated paths
+        for typed responses for those variants.
+      tags: [object]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-objectstorage-getobject
+      parameters:
+        - { name: Range, in: header, schema: { type: string }, description: 'HTTP byte range, e.g. "bytes=0-1023".' }
+        - { name: If-Match, in: header, schema: { type: string } }
+        - { name: If-None-Match, in: header, schema: { type: string } }
+        - { name: versionId, in: query, schema: { type: string }, description: Specific object version to retrieve. }
+        - { name: response-content-type, in: query, schema: { type: string }, description: Override the Content-Type the server returns. }
+        - { name: response-content-disposition, in: query, schema: { type: string } }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/octet-stream:
+              schema: { type: string, format: binary }
+          headers:
+            ETag:           { schema: { type: string } }
+            Content-Length: { schema: { type: integer, format: int64 } }
+            Content-Type:   { schema: { type: string } }
+            Last-Modified:  { schema: { type: string, format: date-time } }
+        '206':
+          description: Partial Content (Range request).
+          content:
+            application/octet-stream:
+              schema: { type: string, format: binary }
+        '304': { description: Not Modified }
+        4XX: { $ref: '#/components/responses/S3ClientError' }
+        5XX: { $ref: '#/components/responses/S3ServerError' }
+    put:
+      operationId: PutObject
+      summary: Upload an object (or copy from another key)
+      description: |
+        Upload by sending the object body in the request body. To **copy**
+        from an existing key instead, set the `x-amz-copy-source` header
+        to `/{src-bucket}/{src-key}` and omit the body — this branches to
+        the CopyObject behavior.
+      tags: [object]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-objectstorage-putobject
+      parameters:
+        - { name: Content-Type, in: header, schema: { type: string } }
+        - { name: Content-MD5, in: header, schema: { type: string }, description: Base64-encoded MD5 digest of the body — server verifies. }
+        - { name: x-amz-acl, in: header, schema: { type: string, enum: [private, public-read, public-read-write, authenticated-read] } }
+        - { name: x-amz-copy-source, in: header, schema: { type: string }, description: 'Set to "/{src-bucket}/{src-key}" to make this a CopyObject call (no body).' }
+        - { name: x-amz-storage-class, in: header, schema: { type: string, enum: [STANDARD, DEEP_ARCHIVE, GLACIER] } }
+        - { name: x-amz-meta-*, in: header, schema: { type: string }, description: User-defined metadata (one header per key). }
+      requestBody:
+        required: false
+        content:
+          application/octet-stream:
+            schema: { type: string, format: binary }
+      responses:
+        '200':
+          description: Uploaded (or copied — body present for CopyObject).
+          content:
+            application/xml:
+              schema: { $ref: '#/components/schemas/CopyObjectResult' }
+          headers:
+            ETag: { schema: { type: string } }
+            x-amz-version-id: { schema: { type: string } }
+        4XX: { $ref: '#/components/responses/S3ClientError' }
+        5XX: { $ref: '#/components/responses/S3ServerError' }
+    delete:
+      operationId: DeleteObject
+      summary: Delete an object (or abort a multipart upload)
+      description: |
+        Without `uploadId`, deletes the named object. With `uploadId` set,
+        aborts an in-progress multipart upload (AbortMultipartUpload).
+      tags: [object]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-objectstorage-deleteobject
+      parameters:
+        - { name: versionId, in: query, schema: { type: string }, description: Delete a specific version. }
+        - { name: uploadId, in: query, schema: { type: string }, description: 'Set to abort a multipart upload (AbortMultipartUpload).' }
+      responses:
+        '204': { description: Deleted (or upload aborted). }
+        4XX: { $ref: '#/components/responses/S3ClientError' }
+        5XX: { $ref: '#/components/responses/S3ServerError' }
+    post:
+      operationId: InitiateMultipartUpload
+      summary: Begin a multipart upload (or complete one)
+      description: |
+        With `uploads` set (no value), this initiates a new multipart
+        upload — the response includes the `UploadId`. With `uploadId`
+        set to an existing ID, this completes the upload — body is the
+        `CompleteMultipartUpload` XML listing the parts in order.
+      tags: [multipart, object]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-objectstorage-initiatemultipartupload
+      parameters:
+        - { name: uploads, in: query, schema: { type: string }, description: Set (no value) to initiate a new multipart upload. }
+        - { name: uploadId, in: query, schema: { type: string }, description: Set to an existing upload ID to complete the upload. }
+      requestBody:
+        required: false
+        content:
+          application/xml:
+            schema: { $ref: '#/components/schemas/CompleteMultipartUpload' }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/InitiateMultipartUploadResult'
+                  - $ref: '#/components/schemas/CompleteMultipartUploadResult'
+        4XX: { $ref: '#/components/responses/S3ClientError' }
+        5XX: { $ref: '#/components/responses/S3ServerError' }
+
+  # ─── Object sub-resources ──────────────────────────────────────────────
+
+  /{bucket-name}/{object-name}?acl:
+    parameters:
+      - $ref: '#/components/parameters/BucketName'
+      - $ref: '#/components/parameters/ObjectName'
+    get:
+      operationId: GetObjectAcl
+      summary: Get an object's ACL
+      tags: [acl, object]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-objectstorage-getobjectacl
+      parameters:
+        - { name: versionId, in: query, schema: { type: string } }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema: { $ref: '#/components/schemas/AccessControlPolicy' }
+        4XX: { $ref: '#/components/responses/S3ClientError' }
+        5XX: { $ref: '#/components/responses/S3ServerError' }
+    put:
+      operationId: PutObjectAcl
+      summary: Apply an ACL to an object
+      tags: [acl, object]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-objectstorage-putobjectacl
+      parameters:
+        - { name: x-amz-acl, in: header, schema: { type: string, enum: [private, public-read, public-read-write, authenticated-read] } }
+        - { name: versionId, in: query, schema: { type: string } }
+      requestBody:
+        required: false
+        content:
+          application/xml:
+            schema: { $ref: '#/components/schemas/AccessControlPolicy' }
+      responses:
+        '200': { description: OK }
+        4XX: { $ref: '#/components/responses/S3ClientError' }
+        5XX: { $ref: '#/components/responses/S3ServerError' }
+
+  # ─── Multipart parts ───────────────────────────────────────────────────
+
+  /{bucket-name}/{object-name}?partNumber:
+    parameters:
+      - $ref: '#/components/parameters/BucketName'
+      - $ref: '#/components/parameters/ObjectName'
+    put:
+      operationId: UploadPart
+      summary: Upload one part of a multipart upload
+      description: |
+        Each part except the last must be at least 5 MiB. The response
+        carries an `ETag` per part — collect them and pass to
+        InitiateMultipartUpload (with uploadId) to complete.
+      tags: [multipart, object]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-objectstorage-uploadpart
+      parameters:
+        - { name: partNumber, in: query, required: true, schema: { type: integer, minimum: 1, maximum: 10000 }, description: 1-based part index. }
+        - { name: uploadId, in: query, required: true, schema: { type: string }, description: Upload ID from InitiateMultipartUpload. }
+        - { name: Content-Length, in: header, required: true, schema: { type: integer, format: int64 } }
+        - { name: Content-MD5, in: header, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/octet-stream:
+            schema: { type: string, format: binary }
+      responses:
+        '200':
+          description: Part uploaded.
+          headers:
+            ETag: { schema: { type: string }, description: ETag of the part — required for CompleteMultipartUpload. }
+        4XX: { $ref: '#/components/responses/S3ClientError' }
+        5XX: { $ref: '#/components/responses/S3ServerError' }
+
+  /{bucket-name}/{object-name}?uploadId:
+    parameters:
+      - $ref: '#/components/parameters/BucketName'
+      - $ref: '#/components/parameters/ObjectName'
+    get:
+      operationId: ListParts
+      summary: List uploaded parts of an in-progress multipart upload
+      tags: [multipart, object]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-objectstorage-listparts
+      parameters:
+        - { name: uploadId, in: query, required: true, schema: { type: string } }
+        - { name: max-parts, in: query, schema: { type: integer, default: 1000, maximum: 1000 } }
+        - { name: part-number-marker, in: query, schema: { type: integer }, description: Start listing after this part number. }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema: { $ref: '#/components/schemas/ListPartsResult' }
+        4XX: { $ref: '#/components/responses/S3ClientError' }
+        5XX: { $ref: '#/components/responses/S3ServerError' }
+
+  # ─── Bucket sub-resources (Ncloud Storage extensions) ─────────────────
+
+  /{bucket-name}?location:
+    parameters:
+      - $ref: '#/components/parameters/BucketName'
+    get:
+      operationId: GetBucketLocation
+      summary: Get the bucket's region (LocationConstraint)
+      tags: [bucket]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ncloudstorage-getbucketlocation
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema: { $ref: '#/components/schemas/LocationConstraint' }
+        4XX: { $ref: '#/components/responses/S3ClientError' }
+        5XX: { $ref: '#/components/responses/S3ServerError' }
+
+  /{bucket-name}?versioning:
+    parameters:
+      - $ref: '#/components/parameters/BucketName'
+    get:
+      operationId: GetBucketVersioning
+      summary: Get the bucket's versioning state
+      tags: [bucket]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ncloudstorage-getbucketversioning
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema: { $ref: '#/components/schemas/VersioningConfiguration' }
+        4XX: { $ref: '#/components/responses/S3ClientError' }
+        5XX: { $ref: '#/components/responses/S3ServerError' }
+    put:
+      operationId: PutBucketVersioning
+      summary: Enable or suspend versioning on the bucket
+      description: |
+        Body is a `VersioningConfiguration` with `Status: Enabled | Suspended`.
+        Once enabled, versioning cannot be permanently disabled — only suspended.
+      tags: [bucket]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ncloudstorage-putbucketversioning
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema: { $ref: '#/components/schemas/VersioningConfiguration' }
+      responses:
+        '200': { description: Versioning state updated. }
+        4XX: { $ref: '#/components/responses/S3ClientError' }
+        5XX: { $ref: '#/components/responses/S3ServerError' }
+
+  /{bucket-name}?versions:
+    parameters:
+      - $ref: '#/components/parameters/BucketName'
+    get:
+      operationId: ListObjectVersions
+      summary: List all versions of objects in a versioned bucket
+      tags: [bucket]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ncloudstorage-listobjectversions
+      parameters:
+        - { name: prefix,            in: query, schema: { type: string } }
+        - { name: delimiter,         in: query, schema: { type: string } }
+        - { name: encoding-type,     in: query, schema: { type: string, enum: [url] } }
+        - { name: max-keys,          in: query, schema: { type: integer, default: 1000, maximum: 1000 } }
+        - { name: key-marker,        in: query, schema: { type: string }, description: Start listing keys lexically after this. }
+        - { name: version-id-marker, in: query, schema: { type: string }, description: Start listing versions of the marker key after this version. }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema: { $ref: '#/components/schemas/ListVersionsResult' }
+        4XX: { $ref: '#/components/responses/S3ClientError' }
+        5XX: { $ref: '#/components/responses/S3ServerError' }
+
+  /{bucket-name}?encryption:
+    parameters:
+      - $ref: '#/components/parameters/BucketName'
+    get:
+      operationId: GetBucketEncryption
+      summary: Get the bucket's default server-side encryption configuration
+      tags: [bucket]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ncloudstorage-getbucketencryption
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema: { $ref: '#/components/schemas/ServerSideEncryptionConfiguration' }
+        '404': { description: No encryption configuration set on this bucket. }
+        4XX: { $ref: '#/components/responses/S3ClientError' }
+        5XX: { $ref: '#/components/responses/S3ServerError' }
+    put:
+      operationId: PutBucketEncryption
+      summary: Set the bucket's default server-side encryption
+      description: Body is a `ServerSideEncryptionConfiguration` listing one or more `Rule.ApplyServerSideEncryptionByDefault.SSEAlgorithm` (typically `AES256`).
+      tags: [bucket]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ncloudstorage-putbucketencryption
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema: { $ref: '#/components/schemas/ServerSideEncryptionConfiguration' }
+      responses:
+        '200': { description: Encryption applied. }
+        4XX: { $ref: '#/components/responses/S3ClientError' }
+        5XX: { $ref: '#/components/responses/S3ServerError' }
+    delete:
+      operationId: DeleteBucketEncryption
+      summary: Remove the bucket's default server-side encryption
+      tags: [bucket]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ncloudstorage-deletebucketencryption
+      responses:
+        '204': { description: Encryption configuration removed. }
+        4XX: { $ref: '#/components/responses/S3ClientError' }
+        5XX: { $ref: '#/components/responses/S3ServerError' }
+
+  /{bucket-name}?lifecycle:
+    parameters:
+      - $ref: '#/components/parameters/BucketName'
+    get:
+      operationId: GetBucketLifecycleConfiguration
+      summary: Get the bucket's lifecycle configuration
+      tags: [bucket]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ncloudstorage-getbucketlifecycleconfiguration
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema: { $ref: '#/components/schemas/LifecycleConfiguration' }
+        '404': { description: No lifecycle configuration set on this bucket. }
+        4XX: { $ref: '#/components/responses/S3ClientError' }
+        5XX: { $ref: '#/components/responses/S3ServerError' }
+    put:
+      operationId: PutBucketLifecycleConfiguration
+      summary: Replace the bucket's lifecycle configuration
+      description: |
+        Body is a `LifecycleConfiguration` with one or more `Rule` entries
+        defining transitions / expirations. Replaces any prior policy.
+      tags: [bucket]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ncloudstorage-putbucketlifecycleconfiguration
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema: { $ref: '#/components/schemas/LifecycleConfiguration' }
+      responses:
+        '200': { description: Lifecycle configuration applied. }
+        4XX: { $ref: '#/components/responses/S3ClientError' }
+        5XX: { $ref: '#/components/responses/S3ServerError' }
+    delete:
+      operationId: DeleteBucketLifecycle
+      summary: Remove the bucket's lifecycle configuration
+      tags: [bucket]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ncloudstorage-deletebucketlifecycle
+      responses:
+        '204': { description: Lifecycle configuration removed. }
+        4XX: { $ref: '#/components/responses/S3ClientError' }
+        5XX: { $ref: '#/components/responses/S3ServerError' }
+
+  /{bucket-name}/{object-name}?restore:
+    parameters:
+      - $ref: '#/components/parameters/BucketName'
+      - $ref: '#/components/parameters/ObjectName'
+    post:
+      operationId: RestoreObject
+      summary: Restore a Glacier-archived object for temporary access
+      description: |
+        Body is a `RestoreRequest` with `Days` (1–30) controlling how long
+        the restored copy stays accessible. Restoration takes minutes to
+        hours depending on the storage class.
+      tags: [object]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ncloudstorage-restoreobject
+      parameters:
+        - { name: versionId, in: query, schema: { type: string }, description: Restore a specific version. }
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema: { $ref: '#/components/schemas/RestoreRequest' }
+      responses:
+        '200': { description: Restoration in progress (object already accessible). }
+        '202': { description: Restoration accepted; object will be accessible after Tier-specific delay. }
+        4XX: { $ref: '#/components/responses/S3ClientError' }
+        5XX: { $ref: '#/components/responses/S3ServerError' }
+
+components:
+  parameters:
+    BucketName:
+      name: bucket-name
+      in: path
+      required: true
+      schema: { type: string, minLength: 3, maxLength: 63 }
+      description: |
+        DNS-compliant bucket name (3–63 chars, lowercase letters, digits,
+        '-' and '.', must start/end with a letter or number).
+    ObjectName:
+      name: object-name
+      in: path
+      required: true
+      schema: { type: string }
+      description: Object key. May contain '/' to express a path-like hierarchy.
+
+  securitySchemes:
+    awsSigV4:
+      # Signed with the same NCP IAM access-key/secret pair as HMAC v2
+      # services — only the canonicalisation differs. Generated clients
+      # are expected to wire `auth.SigV4Transport` (provided by the SDK)
+      # rather than the NCP HMAC v2 signer.
+      type: http
+      scheme: aws4-hmac-sha256
+      description: |
+        AWS Signature Version 4. The Authorization header carries
+        `AWS4-HMAC-SHA256 Credential=…/<scope>, SignedHeaders=…, Signature=…`
+        plus the `X-Amz-Date` and `X-Amz-Content-Sha256` companions.
+
+  responses:
+    S3ClientError:
+      description: |
+        Client error (4xx) — S3 XML error envelope. Common codes:
+        AccessDenied, NoSuchBucket, NoSuchKey, BucketAlreadyExists,
+        BucketAlreadyOwnedByYou, BucketNotEmpty, InvalidArgument,
+        SignatureDoesNotMatch, MalformedXML.
+      content:
+        application/xml:
+          schema: { $ref: '#/components/schemas/S3Error' }
+    S3ServerError:
+      description: Server error (5xx) — S3 XML error envelope.
+      content:
+        application/xml:
+          schema: { $ref: '#/components/schemas/S3Error' }
+
+  schemas:
+
+    # ─── Errors ─────────────────────────────────────────────────────────
+    # oapi-codegen generates Go types from response names too. For
+    # application/xml content (unlike application/json) it does NOT emit
+    # the implicit `type S3ClientError = S3Error` alias, so we declare
+    # both shapes explicitly. They are structurally identical to S3Error.
+    S3ClientError:
+      type: object
+      description: Alias of S3Error for the 4XX response.
+      properties:
+        Code:           { type: string }
+        Message:        { type: string }
+        Resource:       { type: string }
+        BucketName:     { type: string }
+        RequestId:      { type: string }
+        HostId:         { type: string }
+        httpStatusCode: { type: integer }
+    S3ServerError:
+      type: object
+      description: Alias of S3Error for the 5XX response.
+      properties:
+        Code:           { type: string }
+        Message:        { type: string }
+        Resource:       { type: string }
+        BucketName:     { type: string }
+        RequestId:      { type: string }
+        HostId:         { type: string }
+        httpStatusCode: { type: integer }
+
+    S3Error:
+      type: object
+      description: |
+        S3-style error envelope. NCP returns this XML shape for both 4xx
+        and 5xx, with `Code` matching standard S3 error codes plus a
+        few NCP-specific ones (httpStatusCode in particular).
+      properties:
+        Code:           { type: string, description: 'S3 error code (e.g. "AccessDenied", "NoSuchBucket").' }
+        Message:        { type: string }
+        Resource:       { type: string }
+        BucketName:     { type: string }
+        RequestId:      { type: string }
+        HostId:         { type: string }
+        httpStatusCode: { type: integer }
+
+    # ─── ListBuckets ────────────────────────────────────────────────────
+    Owner:
+      type: object
+      properties:
+        ID:          { type: string }
+        DisplayName: { type: string }
+    Bucket:
+      type: object
+      properties:
+        Name:         { type: string }
+        CreationDate: { type: string, format: date-time }
+    ListAllMyBucketsResult:
+      type: object
+      properties:
+        Owner:   { $ref: '#/components/schemas/Owner' }
+        Buckets:
+          type: array
+          items: { $ref: '#/components/schemas/Bucket' }
+
+    # ─── ListObjects ────────────────────────────────────────────────────
+    ObjectVersion:
+      type: object
+      properties:
+        Key:           { type: string }
+        LastModified:  { type: string, format: date-time }
+        ETag:          { type: string }
+        Size:          { type: integer, format: int64 }
+        StorageClass:  { type: string }
+        Owner:         { $ref: '#/components/schemas/Owner' }
+    CommonPrefix:
+      type: object
+      properties:
+        Prefix: { type: string }
+    ListBucketResult:
+      type: object
+      description: |
+        Response shape for ListObjects. V1 fields (`Marker`,
+        `NextMarker`) are populated for non-V2 calls; V2 fields
+        (`KeyCount`, `ContinuationToken`, `NextContinuationToken`,
+        `StartAfter`) populate when `list-type=2` is set.
+      properties:
+        Name:                   { type: string }
+        Prefix:                 { type: string }
+        Marker:                 { type: string }
+        NextMarker:             { type: string }
+        ContinuationToken:      { type: string }
+        NextContinuationToken:  { type: string }
+        StartAfter:             { type: string }
+        KeyCount:               { type: integer }
+        MaxKeys:                { type: integer }
+        Delimiter:              { type: string }
+        IsTruncated:            { type: boolean }
+        Contents:
+          type: array
+          items: { $ref: '#/components/schemas/ObjectVersion' }
+        CommonPrefixes:
+          type: array
+          items: { $ref: '#/components/schemas/CommonPrefix' }
+
+    # ─── DeleteMultipleObjects ──────────────────────────────────────────
+    ObjectIdentifier:
+      type: object
+      required: [Key]
+      properties:
+        Key:       { type: string }
+        VersionId: { type: string }
+    Delete:
+      type: object
+      properties:
+        Quiet: { type: boolean, description: 'When true, suppress per-object success entries.' }
+        Object:
+          type: array
+          items: { $ref: '#/components/schemas/ObjectIdentifier' }
+    DeletedObject:
+      type: object
+      properties:
+        Key:                   { type: string }
+        VersionId:             { type: string }
+        DeleteMarker:          { type: boolean }
+        DeleteMarkerVersionId: { type: string }
+    DeleteError:
+      type: object
+      properties:
+        Key:       { type: string }
+        VersionId: { type: string }
+        Code:      { type: string }
+        Message:   { type: string }
+    DeleteResult:
+      type: object
+      properties:
+        Deleted:
+          type: array
+          items: { $ref: '#/components/schemas/DeletedObject' }
+        Error:
+          type: array
+          items: { $ref: '#/components/schemas/DeleteError' }
+
+    # ─── ACL ────────────────────────────────────────────────────────────
+    Grantee:
+      type: object
+      properties:
+        Type:        { type: string, enum: [CanonicalUser, Group] }
+        ID:          { type: string }
+        DisplayName: { type: string }
+        URI:         { type: string }
+    Grant:
+      type: object
+      properties:
+        Grantee:    { $ref: '#/components/schemas/Grantee' }
+        Permission: { type: string, enum: [FULL_CONTROL, WRITE, WRITE_ACP, READ, READ_ACP] }
+    AccessControlPolicy:
+      type: object
+      properties:
+        Owner: { $ref: '#/components/schemas/Owner' }
+        AccessControlList:
+          type: array
+          items: { $ref: '#/components/schemas/Grant' }
+
+    # ─── CORS ───────────────────────────────────────────────────────────
+    CORSRule:
+      type: object
+      properties:
+        ID:             { type: string }
+        AllowedMethods: { type: array, items: { type: string, enum: [GET, PUT, POST, DELETE, HEAD] } }
+        AllowedOrigins: { type: array, items: { type: string } }
+        AllowedHeaders: { type: array, items: { type: string } }
+        ExposeHeaders:  { type: array, items: { type: string } }
+        MaxAgeSeconds:  { type: integer }
+    CORSConfiguration:
+      type: object
+      properties:
+        CORSRule:
+          type: array
+          items: { $ref: '#/components/schemas/CORSRule' }
+
+    # ─── Copy / Multipart ───────────────────────────────────────────────
+    CopyObjectResult:
+      type: object
+      description: Returned only when PutObject is invoked as a CopyObject (x-amz-copy-source header set).
+      properties:
+        ETag:         { type: string }
+        LastModified: { type: string, format: date-time }
+    InitiateMultipartUploadResult:
+      type: object
+      properties:
+        Bucket:   { type: string }
+        Key:      { type: string }
+        UploadId: { type: string }
+    CompletedPart:
+      type: object
+      required: [PartNumber, ETag]
+      properties:
+        PartNumber: { type: integer }
+        ETag:       { type: string }
+    CompleteMultipartUpload:
+      type: object
+      properties:
+        Part:
+          type: array
+          items: { $ref: '#/components/schemas/CompletedPart' }
+    CompleteMultipartUploadResult:
+      type: object
+      properties:
+        Location: { type: string }
+        Bucket:   { type: string }
+        Key:      { type: string }
+        ETag:     { type: string }
+    Part:
+      type: object
+      properties:
+        PartNumber:   { type: integer }
+        LastModified: { type: string, format: date-time }
+        ETag:         { type: string }
+        Size:         { type: integer, format: int64 }
+    ListPartsResult:
+      type: object
+      properties:
+        Bucket:               { type: string }
+        Key:                  { type: string }
+        UploadId:             { type: string }
+        Initiator:            { $ref: '#/components/schemas/Owner' }
+        Owner:                { $ref: '#/components/schemas/Owner' }
+        StorageClass:         { type: string }
+        PartNumberMarker:     { type: integer }
+        NextPartNumberMarker: { type: integer }
+        MaxParts:             { type: integer }
+        IsTruncated:          { type: boolean }
+        Part:
+          type: array
+          items: { $ref: '#/components/schemas/Part' }
+
+    # ─── Bucket sub-resource payloads (Ncloud Storage extensions) ───────
+    LocationConstraint:
+      type: object
+      description: GetBucketLocation response — bucket region as a string.
+      properties:
+        LocationConstraint: { type: string, description: '"kr" for Korea-region buckets.' }
+    VersioningConfiguration:
+      type: object
+      description: Get/PutBucketVersioning payload.
+      properties:
+        Status:    { type: string, enum: [Enabled, Suspended] }
+        MfaDelete: { type: string, enum: [Enabled, Disabled] }
+    DeleteMarkerEntry:
+      type: object
+      properties:
+        Key:          { type: string }
+        VersionId:    { type: string }
+        IsLatest:     { type: boolean }
+        LastModified: { type: string, format: date-time }
+        Owner:        { $ref: '#/components/schemas/Owner' }
+    ListVersionsResult:
+      type: object
+      description: ListObjectVersions response payload.
+      properties:
+        Name:                { type: string }
+        Prefix:              { type: string }
+        KeyMarker:           { type: string }
+        VersionIdMarker:     { type: string }
+        NextKeyMarker:       { type: string }
+        NextVersionIdMarker: { type: string }
+        MaxKeys:             { type: integer }
+        Delimiter:           { type: string }
+        IsTruncated:         { type: boolean }
+        Version:
+          type: array
+          items: { $ref: '#/components/schemas/ObjectVersion' }
+        DeleteMarker:
+          type: array
+          items: { $ref: '#/components/schemas/DeleteMarkerEntry' }
+        CommonPrefixes:
+          type: array
+          items: { $ref: '#/components/schemas/CommonPrefix' }
+
+    ApplyServerSideEncryptionByDefault:
+      type: object
+      properties:
+        SSEAlgorithm: { type: string, enum: [AES256] }
+    ServerSideEncryptionRule:
+      type: object
+      properties:
+        ApplyServerSideEncryptionByDefault: { $ref: '#/components/schemas/ApplyServerSideEncryptionByDefault' }
+        BucketKeyEnabled:                   { type: boolean }
+    ServerSideEncryptionConfiguration:
+      type: object
+      description: Get/PutBucketEncryption payload.
+      properties:
+        Rule:
+          type: array
+          items: { $ref: '#/components/schemas/ServerSideEncryptionRule' }
+
+    LifecycleExpiration:
+      type: object
+      properties:
+        Days:                      { type: integer, description: Number of days after object creation. }
+        Date:                      { type: string, format: date-time }
+        ExpiredObjectDeleteMarker: { type: boolean }
+    LifecycleTransition:
+      type: object
+      properties:
+        Days:         { type: integer }
+        Date:         { type: string, format: date-time }
+        StorageClass: { type: string, enum: [STANDARD, DEEP_ARCHIVE, GLACIER] }
+    LifecycleFilter:
+      type: object
+      properties:
+        Prefix: { type: string }
+    LifecycleRule:
+      type: object
+      properties:
+        ID:         { type: string }
+        Status:     { type: string, enum: [Enabled, Disabled] }
+        Filter:     { $ref: '#/components/schemas/LifecycleFilter' }
+        Expiration: { $ref: '#/components/schemas/LifecycleExpiration' }
+        Transition:
+          type: array
+          items: { $ref: '#/components/schemas/LifecycleTransition' }
+        AbortIncompleteMultipartUpload:
+          type: object
+          properties:
+            DaysAfterInitiation: { type: integer }
+    LifecycleConfiguration:
+      type: object
+      description: Get/PutBucketLifecycleConfiguration payload.
+      properties:
+        Rule:
+          type: array
+          items: { $ref: '#/components/schemas/LifecycleRule' }
+
+    GlacierJobParameters:
+      type: object
+      properties:
+        Tier: { type: string, enum: [Standard, Bulk, Expedited] }
+    RestoreRequest:
+      type: object
+      description: RestoreObject payload.
+      properties:
+        Days:                 { type: integer, minimum: 1, maximum: 30 }
+        GlacierJobParameters: { $ref: '#/components/schemas/GlacierJobParameters' }
+        Description:          { type: string }

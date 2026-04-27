@@ -1,0 +1,1396 @@
+openapi: 3.0.3
+info:
+  title: CLOVA Studio (HyperCLOVA X)
+  description: CLOVA Studio (HyperCLOVA X)
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: false
+    gov: true
+
+  x-ncloud-nrn:
+
+    productName: CLOVAStudio
+    resource_types:
+      - Product
+
+servers:
+  - url: https://clovastudio.stream.ntruss.com
+    description: clova-studio 민간
+    x-ncloud-env: public
+  - url: https://clovastudio.apigw.gov-ntruss.com
+    description: clova-studio 공공
+    x-ncloud-env: gov
+security:
+  # CLOVA Studio uses an Authorization: Bearer token (issued in the console)
+  # together with a per-request X-NCP-CLOVASTUDIO-REQUEST-ID side header.
+  - bearerAuth: []
+    clovaStudioRequestId: []
+paths:
+  /tuning/v2/tasks:
+    get:
+      operationId: GetTasks
+      summary: 학습 목록 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - clova-studio
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/clovastudio-gettasks
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 0~N (기본값: 0)'
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 출력 수 1~100 (기본값: 20)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 상태 참고
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: PostTask
+      summary: 학습 생성
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - clova-studio
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/clovastudio-posttask
+      parameters:
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 학습 이름 미 입력 시 학습 생성 날짜로 자동 생성
+        - name: model
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 튜닝에 사용할 모델 이름
+        - name: tuningType
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 튜닝 기법 PEFT (기본값)
+        - name: trainEpochs
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '모델을 학습한 에폭 수 1 ≤ trainEpochs ≤ 20 (기본값: 8)'
+        - name: learningRate
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '학습률(튜닝 시 모델 파라미터를 재학습하는 수준 및 정도) 1 ≤ learningRate ≤ 1.0E-6 (기본값: 1.0E-4)'
+        - name: validationSplitRatio
+          in: query
+          required: false
+          schema:
+            type: number
+          description: '검증에 사용할 데이터셋 비율 0.0~0.1 (기본값: 0.0)'
+        - name: loraR
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 'PEFT 학습 시 사용할 저차원 행렬의 차원 수 2~64 (기본값: 8)'
+        - name: loraAlpha
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 'PEFT 학습 결과 반영 시 적용할 스케일 계수 2~512 (기본값: 64)'
+        - name: trainingDatasetFilePath
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 학습할 데이터셋 파일 경로 (버킷명을 제외한 버킷 내 경로) Object Storage 서비스에 업로드한 경우 필수 입력
+        - name: trainingDatasetBucket
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 학습할 데이터셋 파일을 업로드한 버킷 이름 trainingDatasetFilePath 입력한 경우 필수 입력
+        - name: trainingDatasetAccessKey
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 학습할 데이터셋 파일 접근을 위한 Access key trainingDatasetFilePath 입력한 경우 필수 입력
+        - name: trainingDatasetSecretKey
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 학습할 데이터셋 파일 접근을 위한 Secret key trainingDatasetFilePath 입력한 경우 필수 입력
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 상태 참고
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /tuning/v2/tasks/{taskId}:
+    get:
+      operationId: GetTask
+      summary: 학습 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - clova-studio
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/clovastudio-gettask
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 학습 아이디 학습 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 상태 참조
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/api-tools/chat-tokenize/{modelName}:
+    post:
+      operationId: TokenIzerhcx
+      summary: 토큰 계산기(챗)
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - clova-studio
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/clovastudio-tokenizerhcx
+      parameters:
+        - name: modelName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 모델 이름 <예시> HCX-003
+        - name: messages
+          in: query
+          required: true
+          schema:
+            type: array
+            items:
+              type: object
+              additionalProperties: true
+          description: '토큰 수를 계산할 대화 메시지 목록: messages'
+        - name: role
+          in: query
+          required: true
+          schema:
+            type: string
+          description: '대화 메시지의 역할 system | user | assistant system : 역할을 규정하는 지시문 user : 사용자의 발화 또는 질문 assistant : 모델의 답변'
+        - name: content
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 대화 메시지 내용
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 상태 참조
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/api-tools/embedding/v2:
+    post:
+      operationId: Embeddingv2
+      summary: 임베딩 v2
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - clova-studio
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/clovastudio-embeddingv2
+      parameters:
+        - name: text
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 임베딩 수행 텍스트(토큰) ~8,192
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 상태 참조
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/api-tools/embedding/v2/tokenize:
+    post:
+      operationId: TokenIzerembedding
+      summary: 토큰 계산기(임베딩 v2)
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - clova-studio
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/clovastudio-tokenizerembedding
+      parameters:
+        - name: text
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 토큰 수를 계산할 대화 메시지 1~10,000자(한글 기준)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 상태 참조
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/api-tools/embedding/{modelName}:
+    post:
+      operationId: Embedding
+      summary: 임베딩
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - clova-studio
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/clovastudio-embedding
+      parameters:
+        - name: modelName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '임베딩 수행 모델 clir-emb-dolphin | clir-sts-dolphin clir-emb-dolphin : 모든 도메인에 적용 가능한 높은 범용성을 가진 모델 (기본값) clir-sts-dolphin : 문장의 의미를 정밀하게 측정하는 데 특화된 모델'
+        - name: text
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 임베딩 수행 텍스트(토큰) 1~500
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 상태 참조
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/api-tools/rag-reasoning:
+    post:
+      operationId: RagReasoning
+      summary: RAG Reasoning
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - clova-studio
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/clovastudio-ragreasoning
+      parameters:
+        - name: messages
+          in: query
+          required: true
+          schema:
+            type: array
+            items:
+              type: object
+              additionalProperties: true
+          description: '대화 메시지: messages'
+        - name: topP
+          in: query
+          required: false
+          schema:
+            type: number
+          description: '생성 토큰 후보군을 누적 확률을 기반으로 샘플링 0.00 ＜ topP ≤ 1.00 (기본값: 0.8)'
+        - name: topK
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '생성 토큰 후보군에서 확률이 높은 K 개를 후보로 지정하여 샘플링 0 ≤ topK ≤ 128 (기본값: 0)'
+        - name: maxTokens
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '최대 생성 토큰 수 1024 ≤ maxTokens ＜ 4096 (기본값: 1024)'
+        - name: temperature
+          in: query
+          required: false
+          schema:
+            type: number
+          description: '생성 토큰에 대한 다양성 정도(설정값이 높을수록 다양한 문장 생성) 0.00 ＜ temperature ≤ 1.00 (기본값: 0.50)'
+        - name: repetitionPenalty
+          in: query
+          required: false
+          schema:
+            type: number
+          description: '같은 토큰을 생성하는 것에 대한 패널티 정도(설정값이 높을수록 같은 결괏값을 반복 생성할 확률 감소) 0.0 ＜ repetitionPenalty ≤ 2.0 (기본값: 1.1)'
+        - name: stop
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: object
+              additionalProperties: true
+          description: 토큰 생성 중단 문자 [](기본값)
+        - name: seed
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '모델 반복 실행 시 결괏값의 일관성 수준 조정 0: 일관성 수준 랜덤 적용 (기본값) 1 ≤ seed ≤ 4294967295: 일관되게 생성하고자 하는 결괏값의 seed 값 또는 사용자가 지정하고자 하는 seed 값'
+        - name: includeAiFilters
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: 'AI 필터(생성된 결괏값에 대해 욕설, 비하/차별/혐오, 성희롱/음란 등 카테고리별로 해당하는 정도) 결과 표시 여부 true (기본값) | false true : 표시 false : 표시 안 함'
+        - name: tools
+          in: query
+          required: true
+          schema:
+            type: array
+            items:
+              type: object
+              additionalProperties: true
+          description: 'Function calling 사용 가능 도구 목록: tools'
+        - name: toolChoice
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Function calling 도구 호출 동작 방식 auto : 모델이 도구 자동 호출(String) none : 모델이 도구 호출 없이 일반 답변 생성(String) 모델이 특정도구 강제 호출(Object)'
+        - name: role
+          in: query
+          required: true
+          schema:
+            type: string
+          description: '대화 메시지 역할 system | user | assistant | tool system : 역할을 규정하는 지시문 user : 사용자의 발화 또는 질문 assistant : 사용자의 발화 또는 질문에 대한 답변 tool : assistant(모델)가 호출한 함수의 실행 결과'
+        - name: content
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 대화 메시지 내용 텍스트 입력(String)
+        - name: toolCalls
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: object
+              additionalProperties: true
+          description: assistant의 호출 도구 정보 role 이 tool 인 경우, assistant의 toolCalls 요청과 같이 입력
+        - name: toolCallId
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 도구 아이디 role 이 tool 인 경우, 필수 입력 assistant의 toolCalls 요청과 연결하는 용도
+        - name: type
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 도구 유형 function (유효 값)
+        - name: function
+          in: query
+          required: true
+          schema:
+            type: object
+            additionalProperties: true
+          description: 호출 function 정보
+        - name: id
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 도구 식별자
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 상태 참조
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/api-tools/reranker:
+    post:
+      operationId: Reranker
+      summary: 리랭커
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - clova-studio
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/clovastudio-reranker
+      parameters:
+        - name: documents
+          in: query
+          required: true
+          schema:
+            type: string
+          description: '검색한 문서 목록: documents'
+        - name: query
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 사용자 쿼리
+        - name: maxTokens
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '최대 생성 토큰 수 maxTokens ＜ 4096 (기본값: 1024)'
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 검색한 문서 아이디
+        - name: doc
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 검색한 문서 원본
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 상태 참조
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/api-tools/segmentation:
+    post:
+      operationId: Segmentation
+      summary: 문단 나누기
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - clova-studio
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/clovastudio-segmentation
+      parameters:
+        - name: text
+          in: query
+          required: true
+          schema:
+            type: array
+            items:
+              type: object
+              additionalProperties: true
+          description: 문단 나누기를 할 문서 1~120,000자(한글 기준, 공백 포함)
+        - name: alpha
+          in: query
+          required: false
+          schema:
+            type: number
+          description: '문단 나누기를 위한 Thresholds 값 클수록 나눠지는 문단 수 증가 -100 | -1.5~1.5 (기본값: 0.0) -100: 모델이 최적값으로 자동 수행'
+        - name: segCnt
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '문단 나누기 수 -1 (기본값) | 1 이상 -1: 모델이 최적값으로 자동 수행'
+        - name: postProcess
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: '문단 나누기 후 원하는 길이로 문단을 합치거나 나누는 후처리 수행 여부 true | false (기본값) true : 후처리 수행 및 관련 파라미터 적용 false : 후처리 수행하지 않음'
+        - name: postProcessMaxSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 'postProcess 후처리 후 한 문단의 최대 글자 수 1 이상 (기본값: 1,000)'
+        - name: postProcessMinSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 'postProcess 후처리 후 한 문단의 최소 글자 수 -1 | 0~ postProcessMaxSize 값 (기본값: 300) -1: 최소 단위로 자동 설정'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 상태 참조
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/api-tools/sliding/chat-messages/{modelName}:
+    post:
+      operationId: Sliding
+      summary: 슬라이딩 윈도우
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - clova-studio
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/clovastudio-sliding
+      parameters:
+        - name: modelName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 모델 이름 <예시> HCX-003
+        - name: maxTokens
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: '최대 생성 토큰 수 0 ＜ maxTokens ≤ 4096 (기본값: 100)'
+        - name: messages
+          in: query
+          required: true
+          schema:
+            type: array
+            items:
+              type: object
+              additionalProperties: true
+          description: '대화 메시지 목록: messages 최대 토큰 수에 맞게 조정 필요'
+        - name: role
+          in: query
+          required: true
+          schema:
+            type: string
+          description: '대화 메시지의 역할 system | user | assistant system : 역할을 규정하는 지시문 user : 사용자의 발화 또는 질문 assistant : 모델의 답변'
+        - name: content
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 대화 메시지 내용
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 상태 참조
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과 최대 토큰 수에 맞게 조정한 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/api-tools/summarization/v2:
+    post:
+      operationId: Summarization
+      summary: 요약
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - clova-studio
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/clovastudio-summarization
+      parameters:
+        - name: texts
+          in: query
+          required: true
+          schema:
+            type: array
+            items:
+              type: object
+              additionalProperties: true
+          description: 요약 대상 문장 1~35,000자(한글 기준, 공백 포함)
+        - name: autoSentenceSplitter
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: '요약 대상 문장의 문단 분리 허용 여부 true (기본값) | false true : 문단 분리 및 segCount , segMaxSize , segMinSize 적용 false : 문단 분리 안 함'
+        - name: segCount
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '요약 대상 문장의 문단 분리 수 -1 (기본값) | 1 이상 -1: 모델이 최적값으로 자동 수행'
+        - name: segMaxSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '문단 분리 시 한 문단의 최대 글자 수 1~3,000자(한글 기준, 공백 포함) (기본값: 1,000)'
+        - name: segMinSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '문단 분리 시 한 문단의 최소 글자 수 0~ segMaxSize 값 (기본값: 300)'
+        - name: includeAiFilters
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: 'AI 필터 적용 여부 true | false (기본값) true : 적용 false : 적용 안 함'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 상태 참조
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/chat-completions/{modelName}:
+    post:
+      operationId: ChatCompletions
+      summary: Chat Completions
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - clova-studio
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/clovastudio-chatcompletions
+      parameters:
+        - name: modelName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 모델 이름 모델을 사용하여 문장 생성을 하려는 경우 <예시> HCX-003
+        - name: messages
+          in: query
+          required: true
+          schema:
+            type: array
+            items:
+              type: object
+              additionalProperties: true
+          description: '대화 메시지: messages'
+        - name: temperature
+          in: query
+          required: false
+          schema:
+            type: number
+          description: '생성 토큰에 대한 다양성 정도(설정값이 높을수록 다양한 문장 생성) 0.00 ＜ temperature ≤ 1.00 (기본값: 0.50) 소수점 둘째 자리까지 표기'
+        - name: topK
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '생성 토큰 후보군에서 확률이 높은 K 개를 후보로 지정하여 샘플링 0 ≤ topK ≤ 128 (기본값: 0)'
+        - name: topP
+          in: query
+          required: false
+          schema:
+            type: number
+          description: '생성 토큰 후보군을 누적 확률을 기반으로 샘플링 0.00 ＜ topP ≤ 1.00 (기본값: 0.80) 소수점 둘째 자리까지 표기'
+        - name: repeatPenalty
+          in: query
+          required: false
+          schema:
+            type: number
+          description: '같은 토큰을 생성하는 것에 대한 패널티 정도(설정값이 높을수록 같은 결괏값을 반복 생성할 확률 감소) 0.0 ＜ repeatPenalty ≤ 10.0 (기본값: 5.0)'
+        - name: stopBefore
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: object
+              additionalProperties: true
+          description: 토큰 생성 중단 문자 [](기본값)
+        - name: maxTokens
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '최대 생성 토큰 수 0 ＜ maxTokens ≤ 4096 (기본값: 100)'
+        - name: includeAiFilters
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: 'AI 필터(생성된 결괏값에 대해 욕설, 비하/차별/혐오, 성희롱/음란 등 카테고리별로 해당하는 정도) 결과 표시 여부 false (기본값) | true false : 표시 안 함 true : 표시'
+        - name: seed
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '모델 반복 실행 시 결괏값의 일관성 수준 조정 0: 일관성 수준 랜덤 적용 (기본값) 1 ≤ seed ≤ 4294967295: 일관되게 생성하고자 하는 결괏값의 seed 값 또는 사용자가 지정하고자 하는 seed 값'
+        - name: role
+          in: query
+          required: true
+          schema:
+            type: string
+          description: '대화 메시지 역할 system | user | assistant system : 역할을 규정하는 지시문 user : 사용자의 발화 또는 질문 assistant : 사용자의 발화 또는 질문에 대한 답변'
+        - name: content
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 대화 메시지 내용
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 상태 참조
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/routers/{router-id}/versions/{version}/route:
+    post:
+      operationId: RouteR
+      summary: 라우터
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - clova-studio
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/clovastudio-router
+      parameters:
+        - name: router-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 라우터 아이디
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 라우터 버전 1 ≤ version
+        - name: query
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 입력
+        - name: chatHistory
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: object
+              additionalProperties: true
+          description: '대화 메시지 이력: chatHistory'
+        - name: role
+          in: query
+          required: true
+          schema:
+            type: string
+          description: '대화 메시지 역할 user : 사용자의 발화/질문'
+        - name: content
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 대화 메시지 내용
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 상태
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/skillsets/{skillset-id}/versions/{version}/final-answer:
+    post:
+      operationId: GenerateskillSetFinalanswer
+      summary: 스킬셋
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - clova-studio
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/clovastudio-generateskillsetfinalanswer
+      parameters:
+        - name: skillset-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 스킬셋 아이디
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 스킬셋 버전 1 ≤ version
+        - name: query
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 질의 내용
+        - name: tokenStream
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: '답변 생성 시 토큰 스트리밍 사용 여부 false | true false : 사용 안 함 true : 사용'
+        - name: chatHistory
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: object
+              additionalProperties: true
+          description: '답변 생성 이력: chatHistory'
+        - name: requestOverride
+          in: query
+          required: false
+          schema:
+            type: object
+            additionalProperties: true
+          description: 모든 API에 적용할 호출 옵션
+        - name: role
+          in: query
+          required: true
+          schema:
+            type: string
+          description: '대화 메시지 역할 user | assistant user : 사용자의 발화 또는 질문 assistant : 모델의 답변'
+        - name: content
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 대화 메시지 내용
+        - name: operationId
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 특정 API의 오퍼레이션 아이디 operations 를 입력할 경우 필수 입
+        - name: header
+          in: query
+          required: false
+          schema:
+            type: object
+            additionalProperties: true
+          description: 특정 API에 적용할 요청 헤더
+        - name: requestBody
+          in: query
+          required: false
+          schema:
+            type: object
+            additionalProperties: true
+          description: 특정 API에 적용할 요청 바디 GET 메서드 API인 경우 미적용
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 상태
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v2/tasks/{taskId}:
+    delete:
+      operationId: DeleteTask
+      summary: 학습 삭제
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - clova-studio
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/clovastudio-deletetask
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 학습 아이디 학습 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 상태 참고
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v3/api-tools/chat-tokenize/{modelName}:
+    post:
+      operationId: Tokenizerhcxv3
+      summary: 토큰 계산기(챗 v3)
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - clova-studio
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/clovastudio-tokenizerhcxv3
+      parameters:
+        - name: modelName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 모델 이름 <예시> HCX-005
+        - name: messages
+          in: query
+          required: true
+          schema:
+            type: array
+            items:
+              type: object
+              additionalProperties: true
+          description: '토큰 수를 계산할 대화 메시지 목록: messages'
+        - name: tools
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: object
+              additionalProperties: true
+          description: 'Function Calling 사용 가능 도구 목록: tools'
+        - name: toolChoice
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Function Calling 도구 호출 동작 방식 auto : 모델이 도구 자동 호출 (String) none : 모델이 도구 호출 없이 일반 답변 생성(String) 모델이 특정 도구 강제 호출(Object)'
+        - name: responseFormat
+          in: query
+          required: false
+          schema:
+            type: object
+            additionalProperties: true
+          description: 모델이 출력하는 답변 형식
+        - name: role
+          in: query
+          required: true
+          schema:
+            type: string
+          description: '대화 메시지 역할 system | user | assistant | tool system : 역할을 규정하는 지시문 user : 사용자의 발화 또는 질문 assistant : 사용자의 발화 또는 질문에 대한 답변 tool : Function Calling 에 따른 처리 결과 입력'
+        - name: content
+          in: query
+          required: true
+          schema:
+            type: string
+          description: '대화 메시지 내용 텍스트 입력(String) 텍스트, 이미지 URL로 구성하여 입력(Array): content'
+        - name: toolCalls
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: object
+              additionalProperties: true
+          description: assistant의 호출 도구 정보 role이 tool인 경우 assistant의 toolCalls 요청과 같이 입력
+        - name: toolCallId
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 도구 아이디 role이 tool인 경우, 필수 입력 assistant의 toolCalls 요청과 연결하는 용도
+        - name: type
+          in: query
+          required: true
+          schema:
+            type: string
+          description: '대화 메시지 내용의 형식 text | image_url text : 텍스트 image_url : 이미지 URL'
+        - name: text
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 대화 메시지 내용 텍스트 입력 type 이 text 인 경우, 필수 입력
+        - name: imageUrl
+          in: query
+          required: false
+          schema:
+            type: object
+            additionalProperties: true
+          description: 이미지 목록 type 이 image_url 인 경우, imageUrl 과 dataUri 중 필수 입력 턴당 이미지 1개 포함 가능 최적의 결과를 위해 text 와 함께 요청 권장
+        - name: dataUri
+          in: query
+          required: false
+          schema:
+            type: object
+            additionalProperties: true
+          description: 이미지 목록 type 이 image_url 인 경우, imageUrl 과 dataUri 중 필수 입력 턴당 이미지 1개 포함 가능 최적의 결과를 위해 text 와 함께 요청 권장
+        - name: function
+          in: query
+          required: true
+          schema:
+            type: object
+            additionalProperties: true
+          description: 호출 function 정보
+        - name: id
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 도구 식별자
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 상태 참조
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v3/chat-completions/{modelName}:
+    post:
+      operationId: Chatcompletionsv3Thinking
+      summary: 권장 사항
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - clova-studio
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/clovastudio-chatcompletionsv3-thinking
+      parameters:
+        - name: modelName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 모델 이름 <예시> HCX-007
+        - name: messages
+          in: query
+          required: true
+          schema:
+            type: array
+            items:
+              type: object
+              additionalProperties: true
+          description: 대화 메시지
+        - name: thinking
+          in: query
+          required: false
+          schema:
+            type: object
+            additionalProperties: true
+          description: 추론 모델 설정 정보
+        - name: topP
+          in: query
+          required: false
+          schema:
+            type: number
+          description: '생성 토큰 후보군을 누적 확률을 기반으로 샘플링 0.00＜ topP ≤ 1.00 (기본값: 0.80)'
+        - name: topK
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '생성 토큰 후보군에서 확률이 높은 K 개를 후보로 지정하여 샘플링 0 ≤ topK ≤ 128 (기본값: 0)'
+        - name: maxCompletionTokens
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '최대 생성 토큰 수 (추론 내용을 포함한 대화 메시지 길이) 1 ≤ maxCompletionTokens ≤ 32768 (기본값: thinking.effort 에 따라 상이) none : 512 low : 5120 medium : 10240 high : 20480 maxTokens 사용 불가'
+        - name: temperature
+          in: query
+          required: false
+          schema:
+            type: number
+          description: '생성 토큰에 대한 다양성 정도(설정값이 높을수록 다양한 문장 생성) 0.00 ≤ temperature ≤ 1.00 (기본값: 0.50)'
+        - name: repetitionPenalty
+          in: query
+          required: false
+          schema:
+            type: number
+          description: '같은 토큰을 생성하는 것에 대한 패널티 정도 0.0 ＜ repetitionPenalty ≤ 2.0 (기본값: 1.1) 설정값이 높을수록 같은 결괏값을 반복 생성할 확률 감소 1.0~1.1에서 0.05 단위로 미세 조정 권장'
+        - name: seed
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '모델 반복 실행 시 결괏값의 일관성 수준 조정 0: 일관성 수준 랜덤 적용 (기본값) 1 ≤ seed ≤ 4294967295: 일관되게 생성하고자 하는 결괏값의 seed 값 또는 사용자가 지정하고자 하는 seed 값'
+        - name: includeAiFilters
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: 'AI 필터(생성된 결괏값에 대해 욕설, 비하/차별/혐오, 성희롱/음란 등 카테고리별로 해당하는 정도) 결과 표시 여부 true | false (기본값) true : 표시 false : 표시 안 함'
+        - name: role
+          in: query
+          required: true
+          schema:
+            type: string
+          description: '대화 메시지 역할 system | user | assistant system : 역할을 규정하는 지시문 user : 사용자의 발화 또는 질문 assistant : 사용자의 발화 또는 질문에 대한 답변'
+        - name: content
+          in: query
+          required: true
+          schema:
+            type: string
+          description: '대화 메시지 내용 텍스트 입력(String) 텍스트 입력(Array): content'
+        - name: type
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 대화 메시지 내용의 형식 text (유효 값)
+        - name: text
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 대화 메시지 내용 텍스트 입력 type 이 text 인 경우, 필수 입력
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 상태 참조
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: CLOVA Studio API Key as a Bearer token.
+    clovaStudioRequestId:
+      type: apiKey
+      in: header
+      name: X-NCP-CLOVASTUDIO-REQUEST-ID
+      description: Caller-supplied request ID. Echoed back in error responses for tracing.
+  schemas:
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

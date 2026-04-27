@@ -1,0 +1,1748 @@
+openapi: 3.0.3
+info:
+  title: mongodb
+  description: ''
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: false
+    gov: true
+
+  x-ncloud-nrn:
+
+    productName: VPCCloudDBforMongoDB
+    resource_types:
+      - Service
+      - Server
+
+servers:
+  - url: https://ncloud.apigw.ntruss.com/vmongodb/v2
+    description: mongodb 민간
+    x-ncloud-env: public
+  - url: https://ncloud.apigw.gov-ntruss.com/vmongodb/v2
+    description: mongodb 공공
+    x-ncloud-env: gov
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /addCloudMongoDbUserList:
+    post:
+      operationId: AddCloudMongoDbUserList
+      tags:
+        - mongodb
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AddCloudMongoDbUserListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddCloudMongoDbUserListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for MongoDB 인스턴스에 DB User를 추가합니다.
+  /changeCloudMongoDbConfigCount:
+    post:
+      operationId: ChangeCloudMongoDbConfigCount
+      tags:
+        - mongodb
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChangeCloudMongoDbConfigCountRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeCloudMongoDbConfigCountResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for MongoDB 인스턴스의 Config 서버 대수를 변경합니다.
+  /changeCloudMongoDbMongosCount:
+    post:
+      operationId: ChangeCloudMongoDbMongosCount
+      tags:
+        - mongodb
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChangeCloudMongoDbMongosCountRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeCloudMongoDbMongosCountResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for MongoDB 인스턴스의 Mongos 서버 대수를 변경합니다.
+  /changeCloudMongoDbSecondaryCount:
+    post:
+      operationId: ChangeCloudMongoDbSecondaryCount
+      tags:
+        - mongodb
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChangeCloudMongoDbSecondaryCountRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeCloudMongoDbSecondaryCountResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for MongoDB 인스턴스의 Secondary 서버 대수를 변경합니다.
+  /changeCloudMongoDbShardCount:
+    post:
+      operationId: ChangeCloudMongoDbShardCount
+      tags:
+        - mongodb
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChangeCloudMongoDbShardCountRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeCloudMongoDbShardCountResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for MongoDB 인스턴스의 Shard 수를 변경합니다.
+  /changeCloudMongoDbUserList:
+    post:
+      operationId: ChangeCloudMongoDbUserList
+      tags:
+        - mongodb
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChangeCloudMongoDbUserListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeCloudMongoDbUserListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for MongoDB 인스턴스에 등록된 DB User의 정보를 수정합니다.
+  /createCloudMongoDbInstance:
+    post:
+      operationId: CreateCloudMongoDbInstance
+      tags:
+        - mongodb
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateCloudMongoDbInstanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCloudMongoDbInstanceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Create cloud mongo DB instance
+  /deleteCloudMongoDbInstance:
+    post:
+      operationId: DeleteCloudMongoDbInstance
+      tags:
+        - mongodb
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteCloudMongoDbInstanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteCloudMongoDbInstanceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for MongoDB 인스턴스를 삭제합니다.
+  /deleteCloudMongoDbUserList:
+    post:
+      operationId: DeleteCloudMongoDbUserList
+      summary: Cloud DB for MongoDB User 를 삭제합니다.
+      tags:
+        - mongodb
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteCloudMongoDbUserListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteCloudMongoDbUserListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /exportBackupToObjectStorage:
+    post:
+      operationId: ExportBackupToObjectStorage
+      summary: Cloud DB for MongoDb 백업 파일을 Object Storage 로 전송합니다.
+      tags:
+        - mongodb
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ExportBackupToObjectStorageRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExportBackupToObjectStorageResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /exportDbServerLogToObjectStorage:
+    post:
+      operationId: ExportDbServerLogToObjectStorage
+      tags:
+        - mongodb
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ExportDbServerLogToObjectStorageRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExportDbServerLogToObjectStorageResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Export DB server log to object storage
+  /getCloudMongoDbBackupDetailList:
+    post:
+      operationId: GetCloudMongoDbBackupDetailList
+      tags:
+        - mongodb
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudMongoDbBackupDetailListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudMongoDbBackupDetailListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for MongoDB 인스턴스의 백업 상세 정보를 목록으로 조회합니다.
+  /getCloudMongoDbBackupList:
+    post:
+      operationId: GetCloudMongoDbBackupList
+      tags:
+        - mongodb
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudMongoDbBackupListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudMongoDbBackupListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for MongoDB 인스턴스의 백업 목록을 조회합니다.
+  /getCloudMongoDbBucketList:
+    post:
+      operationId: GetCloudMongoDbBucketList
+      summary: Cloud DB for MongoDb 버킷을 조회합니다.
+      tags:
+        - mongodb
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudMongoDbBucketListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudMongoDbBucketListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getCloudMongoDbImageProductList:
+    post:
+      operationId: GetCloudMongoDbImageProductList
+      tags:
+        - mongodb
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudMongoDbImageProductListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudMongoDbImageProductListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for MongoDB 이미지 상품 코드 목록을 조회합니다.
+  /getCloudMongoDbInstanceDetail:
+    post:
+      operationId: GetCloudMongoDbInstanceDetail
+      tags:
+        - mongodb
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudMongoDbInstanceDetailRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudMongoDbInstanceDetailResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for MongoDB 인스턴스의 상세 정보를 조회합니다.
+  /getCloudMongoDbInstanceList:
+    post:
+      operationId: GetCloudMongoDbInstanceList
+      tags:
+        - mongodb
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudMongoDbInstanceListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudMongoDbInstanceListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for MongoDB 인스턴스 목록을 조회합니다.
+  /getCloudMongoDbProductList:
+    post:
+      operationId: GetCloudMongoDbProductList
+      tags:
+        - mongodb
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudMongoDbProductListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudMongoDbProductListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for MongoDB에서 사용할 수 있는 서버 스펙 코드 목록을 조회합니다.
+  /getCloudMongoDbTargetSubnetList:
+    post:
+      operationId: GetCloudMongoDbTargetSubnetList
+      tags:
+        - mongodb
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudMongoDbTargetSubnetListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudMongoDbTargetSubnetListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for MongoDB에서 사용할 수 있는 Subnet 목록을 조회합니다.
+  /getCloudMongoDbTargetVpcList:
+    post:
+      operationId: GetCloudMongoDbTargetVpcList
+      tags:
+        - mongodb
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudMongoDbTargetVpcListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudMongoDbTargetVpcListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for MongoDB에서 사용할 수 있는 VPC 목록을 조회합니다.
+  /getCloudMongoDbUserList:
+    post:
+      operationId: GetCloudMongoDbUserList
+      tags:
+        - mongodb
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudMongoDbUserListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudMongoDbUserListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for MongoDB 인스턴스의 DB User 목록을 조회합니다.
+  /getDbServerLogList:
+    post:
+      operationId: GetDbServerLogList
+      tags:
+        - mongodb
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetDbServerLogListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetDbServerLogListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for MongoDB 인스턴스의 DB Server 로그 목록을 조회합니다.
+  /rebootCloudMongoDbServerInstance:
+    post:
+      operationId: RebootCloudMongoDbServerInstance
+      tags:
+        - mongodb
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RebootCloudMongoDbServerInstanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RebootCloudMongoDbServerInstanceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Reboot cloud mongo DB server instance
+components:
+  schemas:
+    AddCloudMongoDbUserListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudMongoDbInstanceNo:
+          type: string
+          description: Cloud DB for MongoDB 인스턴스 번호
+        cloudMongoDbUserList:
+          type: array
+          description: Cloud DB for MongoDB User 리스트
+          items:
+            $ref: '#/components/schemas/AddOrChangeCloudMongoDbUserParameter'
+      required:
+        - cloudMongoDbUserList
+    AddCloudMongoDbUserListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+    AddOrChangeCloudMongoDbUserParameter:
+      type: object
+      properties:
+        userName:
+          type: string
+          description: User 이름
+        databaseName:
+          type: string
+          description: Database 이름
+        password:
+          type: string
+          description: Password
+        authority:
+          type: string
+          description: DB 접근 권한
+    ChangeCloudMongoDbConfigCountRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudMongoDbInstanceNo:
+          type: string
+          description: CloudMongoDb 인스턴스 번호
+        configServerCount:
+          type: integer
+          format: int32
+          description: Cloud DB for MongoDB config 서버 대수
+    ChangeCloudMongoDbConfigCountResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudMongoDbInstanceList:
+          type: array
+          description: CloudMongoDb 인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudMongoDbInstance'
+    ChangeCloudMongoDbMongosCountRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudMongoDbInstanceNo:
+          type: string
+          description: CloudMongoDb 인스턴스 번호
+        mongosServerCount:
+          type: integer
+          format: int32
+          description: Cloud DB for MongoDB mongos 서버 대수
+    ChangeCloudMongoDbMongosCountResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudMongoDbInstanceList:
+          type: array
+          description: CloudMongoDb 인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudMongoDbInstance'
+    ChangeCloudMongoDbSecondaryCountRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudMongoDbInstanceNo:
+          type: string
+          description: CloudMongoDb 인스턴스 번호
+        memberServerCount:
+          type: integer
+          format: int32
+          description: Cloud DB for MongoDB config 서버 대수
+        arbiterServerCount:
+          type: integer
+          format: int32
+          description: Cloud DB for MongoDB arbiter 서버 대수
+        arbiterProductCode:
+          type: string
+          description: CloudMongoDb Arbiter 상품코드
+    ChangeCloudMongoDbSecondaryCountResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudMongoDbInstanceList:
+          type: array
+          description: CloudMongoDb 인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudMongoDbInstance'
+    ChangeCloudMongoDbShardCountRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudMongoDbInstanceNo:
+          type: string
+          description: CloudMongoDb 인스턴스 번호
+        shardCount:
+          type: integer
+          format: int32
+          description: Cloud DB for MongoDB 샤드 대수
+    ChangeCloudMongoDbShardCountResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudMongoDbInstanceList:
+          type: array
+          description: CloudMongoDb 인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudMongoDbInstance'
+    ChangeCloudMongoDbUserListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudMongoDbInstanceNo:
+          type: string
+          description: Cloud DB for MongoDB 인스턴스 번호
+        cloudMongoDbUserList:
+          type: array
+          description: Cloud DB for MongoDB User 리스트
+          items:
+            $ref: '#/components/schemas/AddOrChangeCloudMongoDbUserParameter'
+      required:
+        - cloudMongoDbUserList
+    ChangeCloudMongoDbUserListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+    CloudMongoDbBackup:
+      type: object
+      properties:
+        cloudMongoDbInstanceNo:
+          type: string
+          description: CloudMongoDb 인스턴스 번호
+        cloudMongoDbServiceName:
+          type: string
+          description: CloudMongoDb 서비스이름
+        backupFileRetentionPeriod:
+          type: integer
+          format: int32
+          description: 백업파일보관기간
+        backupTime:
+          type: string
+          description: 백업시간
+        backupSize:
+          type: integer
+          format: int64
+          description: 백업사이즈
+        lastBackupDate:
+          type: string
+          description: 마지막백업일시
+    CloudMongoDbBackupDetail:
+      type: object
+      properties:
+        startTime:
+          type: string
+          description: 백업시작시간
+        endTime:
+          type: string
+          description: 백업종료시간
+        backupSize:
+          type: integer
+          format: int64
+          description: 백업사이즈
+        dataStorageSize:
+          type: integer
+          format: int64
+          description: 데이터스토리지사이즈
+        backupParallel:
+          type: integer
+          format: int32
+          description: 백업속도
+        shard:
+          type: string
+          description: 샤드(Replica Set)이름
+    CloudMongoDbBucket:
+      type: object
+      properties:
+        bucketName:
+          type: string
+          description: CloudMongoDb 버킷이름
+    CloudMongoDbDbServerLog:
+      type: object
+      properties:
+        fileName:
+          type: string
+          description: 데이터베이스서버로그파일이름
+        fileSize:
+          type: integer
+          format: int64
+          description: 데이터베이스서버로그파일사이즈
+        fileDate:
+          type: string
+          description: 데이터베이스서버로그파일수정일시
+    CloudMongoDbInstance:
+      type: object
+      properties:
+        cloudMongoDbInstanceNo:
+          type: string
+          description: CloudMongoDb 인스턴스 번호
+        cloudMongoDbServiceName:
+          type: string
+          description: CloudMongoDb 서비스이름
+        cloudMongoDbInstanceStatusName:
+          type: string
+          description: CloudMongoDb 인스턴스 상태이름
+        cloudMongoDbInstanceStatus:
+          $ref: '#/components/schemas/CommonCode'
+        cloudMongoDbInstanceOperation:
+          $ref: '#/components/schemas/CommonCode'
+        generationCode:
+          type: string
+          description: 세대코드
+        cloudMongoDbImageProductCode:
+          type: string
+          description: CloudMongoDb 이미지상품코드
+        engineVersion:
+          type: string
+          description: CloudMongoDb 엔진버전
+        license:
+          $ref: '#/components/schemas/CommonCode'
+        memberPort:
+          type: integer
+          format: int32
+          description: CloudMongoDb Member 포트
+        mongosPort:
+          type: integer
+          format: int32
+          description: CloudMongoDb Mongos 포트
+        configPort:
+          type: integer
+          format: int32
+          description: CloudMongoDb Config 포트
+        arbiterPort:
+          type: integer
+          format: int32
+          description: CloudMongoDb Arbiter 포트
+        backupFileRetentionPeriod:
+          type: integer
+          format: int32
+          description: 백업파일보관기간
+        backupTime:
+          type: string
+          description: 백업시간
+        backupParallel:
+          type: integer
+          format: int32
+          description: 백업속도
+        createDate:
+          type: string
+          description: 생성일자
+        accessControlGroupNoList:
+          type: array
+          description: ACG 번호 리스트
+          items:
+            type: string
+        shardCount:
+          type: integer
+          format: int32
+          description: 샤드수
+        compress:
+          $ref: '#/components/schemas/CommonCode'
+        clusterType:
+          $ref: '#/components/schemas/CommonCode'
+        CloudMongoDbServerInstanceList:
+          type: array
+          description: CloudMongoDb 서버인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudMongoDbServerInstance'
+    CloudMongoDbServerInstance:
+      type: object
+      properties:
+        cloudMongoDbServerInstanceNo:
+          type: string
+          description: CloudMongoDb 서버인스턴스 번호
+        cloudMongoDbServerName:
+          type: string
+          description: CloudMongoDb 서버 이름
+        cloudMongoDbServerRole:
+          $ref: '#/components/schemas/CommonCode'
+        cloudMongoDbServerInstanceStatusName:
+          type: string
+          description: CloudMongoDb 인스턴스 상태이름
+        cloudMongoDbServerInstanceStatus:
+          $ref: '#/components/schemas/CommonCode'
+        cloudMongoDbServerInstanceOperation:
+          $ref: '#/components/schemas/CommonCode'
+        clusterRole:
+          $ref: '#/components/schemas/CommonCode'
+        cloudMongoDbProductCode:
+          type: string
+          description: CloudMongoDb 상품코드
+        regionCode:
+          type: string
+          description: REGION 코드
+        zoneCode:
+          type: string
+          description: ZONE 코드
+        vpcNo:
+          type: string
+          description: VPC 번호
+        subnetNo:
+          type: string
+          description: Subnet 번호
+        privateDomain:
+          type: string
+          description: 사설도메인명
+        publicDomain:
+          type: string
+          description: 공인도메인명
+        memorySize:
+          type: integer
+          format: int64
+          description: 메모리사이즈
+        cpuCount:
+          type: integer
+          format: int64
+          description: CPU 개수
+        dataStorageSize:
+          type: integer
+          format: int64
+          description: 데이터 스토리지 사이즈
+        usedDataStorageSize:
+          type: integer
+          format: int64
+          description: 사용한 데이터 스토리지 사이즈
+        replicaSetName:
+          type: string
+          description: Replica Set 이름
+        dataStorageType:
+          $ref: '#/components/schemas/CommonCode'
+        uptime:
+          type: string
+          description: 업시간
+        createDate:
+          type: string
+          description: 생성일자
+    CloudMongoDbUser:
+      type: object
+      properties:
+        userName:
+          type: string
+          description: User 이름
+        databaseName:
+          type: string
+          description: Database 이름
+        authority:
+          type: string
+          description: User 의 Database 접근 권한
+    CommonCode:
+      type: object
+      properties:
+        code:
+          type: string
+          description: 코드
+        codeName:
+          type: string
+          description: 코드명
+    CreateCloudMongoDbInstanceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        vpcNo:
+          type: string
+          description: VPC 번호
+        cloudMongoDbImageProductCode:
+          type: string
+          description: CloudMongoDb 이미지상품코드
+        memberProductCode:
+          type: string
+          description: CloudMongoDb Member 상품코드
+        arbiterProductCode:
+          type: string
+          description: CloudMongoDb Arbiter 상품코드
+        mongosProductCode:
+          type: string
+          description: CloudMongoDb Mongos 상품코드
+        configProductCode:
+          type: string
+          description: CloudMongoDb Config 상품코드
+        shardCount:
+          type: integer
+          format: int32
+          description: 샤드수
+        memberServerCount:
+          type: integer
+          format: int32
+          description: CloudMongoDb Member 서버 대수
+        arbiterServerCount:
+          type: integer
+          format: int32
+          description: CloudMongoDb Arbiter 서버 대수
+        mongosServerCount:
+          type: integer
+          format: int32
+          description: CloudMongoDb Mongos 서버 대수
+        configServerCount:
+          type: integer
+          format: int32
+          description: CloudMongoDb Config 서버 대수
+        cloudMongoDbUserName:
+          type: string
+          description: 접근 유저명
+        cloudMongoDbUserPassword:
+          type: string
+          description: 접근 패스워드
+        backupFileRetentionPeriod:
+          type: integer
+          format: int32
+          description: 백업파일보관기간
+        backupTime:
+          type: string
+          description: 백업시간
+        dataStorageTypeCode:
+          type: string
+          description: 데이터 스토리지 타입 코드
+        memberPort:
+          type: integer
+          format: int32
+          description: Cloud MongoDb Member 서버 포트
+        mongosPort:
+          type: integer
+          format: int32
+          description: Cloud MongoDb Mongos 서버 포트
+        configPort:
+          type: integer
+          format: int32
+          description: Cloud MongoDb Config 서버 포트
+        cloudMongoDbServiceName:
+          type: string
+          description: CloudMongoDb 서비스이름
+        cloudMongoDbServerNamePrefix:
+          type: string
+          description: CloudMongoDb 서버 이름
+        subnetNo:
+          type: string
+          description: Subnet 번호
+        compressCode:
+          type: string
+          description: Cloud DB for MongoDB Data 압축 알고리즘
+        clusterTypeCode:
+          type: string
+          description: Cloud DB for MongoDB 클러스터 타입
+        engineVersionCode:
+          type: string
+          description: 엔진 버전 코드
+    CreateCloudMongoDbInstanceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudMongoDbInstanceList:
+          type: array
+          description: CloudMongoDb 인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudMongoDbInstance'
+    DeleteCloudMongoDbInstanceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudMongoDbInstanceNo:
+          type: string
+          description: CloudMongoDb 인스턴스 번호
+    DeleteCloudMongoDbInstanceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudMongoDbInstanceList:
+          type: array
+          description: CloudMongoDb 인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudMongoDbInstance'
+    DeleteCloudMongoDbUserListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudMongoDbInstanceNo:
+          type: string
+          description: Cloud DB for MongoDB 인스턴스 번호
+        cloudMongoDbUserList:
+          type: array
+          description: Cloud DB for MongoDB User 리스트
+          items:
+            $ref: '#/components/schemas/DeleteCloudMongoDbUserParameter'
+      required:
+        - cloudMongoDbUserList
+    DeleteCloudMongoDbUserListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+    DeleteCloudMongoDbUserParameter:
+      type: object
+      properties:
+        userName:
+          type: string
+          description: User 이름
+        databaseName:
+          type: string
+          description: Database 이름
+    ExportBackupToObjectStorageRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudMongoDbInstanceNo:
+          type: string
+          description: CloudMongoDb 인스턴스 번호
+        objectName:
+          type: string
+          description: Backup 이름
+        bucketName:
+          type: string
+          description: 버킷이름
+    ExportBackupToObjectStorageResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+    ExportDbServerLogToObjectStorageRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        logType:
+          type: string
+          description: 데이터베이스서버로그파일타입
+        fileName:
+          type: string
+          description: 데이터베이스서버로그파일이름
+        bucketName:
+          type: string
+          description: ObjectStorage 버킷이름
+        cloudMongoDbServerInstanceNo:
+          type: string
+          description: CloudMongodb 서버인스턴스 번호
+    ExportDbServerLogToObjectStorageResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+    GetCloudMongoDbBackupDetailListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudMongoDbInstanceNo:
+          type: string
+          description: CloudMongoDb 인스턴스 번호
+    GetCloudMongoDbBackupDetailListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudMongoDbBackupDetailList:
+          type: array
+          description: CloudMongoDb 백업상세리스트
+          items:
+            $ref: '#/components/schemas/CloudMongoDbBackupDetail'
+    GetCloudMongoDbBackupListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+    GetCloudMongoDbBackupListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudMongoDbBackupList:
+          type: array
+          description: CloudMongoDb 백업리스트
+          items:
+            $ref: '#/components/schemas/CloudMongoDbBackup'
+    GetCloudMongoDbBucketListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudMongoDbInstanceNo:
+          type: string
+          description: CloudMongoDb 인스턴스 번호
+    GetCloudMongoDbBucketListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudMongoDbBucketList:
+          type: array
+          description: CloudMongoDb 버킷리스트
+          items:
+            $ref: '#/components/schemas/CloudMongoDbBucket'
+    GetCloudMongoDbImageProductListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        productCode:
+          type: string
+          description: 조회할상품코드
+        exclusionProductCode:
+          type: string
+          description: 제외할상품코드
+        generationCode:
+          type: string
+          description: 서버 세대 코드
+    GetCloudMongoDbImageProductListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        productList:
+          type: array
+          description: 상품리스트
+          items:
+            $ref: '#/components/schemas/Product'
+    GetCloudMongoDbInstanceDetailRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudMongoDbInstanceNo:
+          type: string
+          description: CloudMongoDb 인스턴스 번호
+    GetCloudMongoDbInstanceDetailResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudMongoDbInstanceList:
+          type: array
+          description: CloudMongoDb 인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudMongoDbInstance'
+    GetCloudMongoDbInstanceListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        zoneCode:
+          type: string
+          description: ZONE 코드
+        vpcNo:
+          type: string
+          description: VPC 번호
+        subnetNo:
+          type: string
+          description: Subnet 번호
+        cloudMongoDbServiceName:
+          type: string
+          description: CloudMongoDb 서비스이름
+        cloudMongoDbInstanceNoList:
+          type: array
+          description: CloudMongoDb 인스턴스 번호 리스트
+          items:
+            type: string
+        cloudMongoDbServerName:
+          type: string
+          description: CloudMongoDb 서버 이름
+        cloudMongoDbServerInstanceNoList:
+          type: array
+          description: CloudMongoDb 서버인스턴스 번호 리스트
+          items:
+            type: string
+        generationCode:
+          type: string
+          description: 서버 세대 구분 코드
+        pageNo:
+          type: integer
+          format: int32
+          description: 페이지번호
+        pageSize:
+          type: integer
+          format: int32
+          description: 페이지사이즈
+    GetCloudMongoDbInstanceListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudMongoDbInstanceList:
+          type: array
+          description: CloudMongoDb 인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudMongoDbInstance'
+    GetCloudMongoDbProductListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        zoneCode:
+          type: string
+          description: ZONE 코드
+        cloudMongoDbImageProductCode:
+          type: string
+          description: CloudMongoDb 이미지상품코드
+        productCode:
+          type: string
+          description: 조회할상품코드
+        infraResourceDetailTypeCode:
+          type: string
+          description: Cloud for MongoDb 기타 서버 infra 상세 상품 코드
+        exclusionProductCode:
+          type: string
+          description: 제외할상품코드
+    GetCloudMongoDbProductListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        productList:
+          type: array
+          description: 상품리스트
+          items:
+            $ref: '#/components/schemas/Product'
+    GetCloudMongoDbTargetSubnetListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        vpcNo:
+          type: string
+          description: VPC 번호
+        cloudMongoDbImageProductCode:
+          type: string
+          description: CloudMongoDb 이미지상품코드
+    GetCloudMongoDbTargetSubnetListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        targetSubnetList:
+          type: array
+          description: 상품리스트
+          items:
+            $ref: '#/components/schemas/TargetSubnet'
+    GetCloudMongoDbTargetVpcListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+    GetCloudMongoDbTargetVpcListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        targetVpcList:
+          type: array
+          description: 상품리스트
+          items:
+            $ref: '#/components/schemas/TargetVpc'
+    GetCloudMongoDbUserListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudMongoDbInstanceNo:
+          type: string
+          description: Cloud DB for MongoDB 인스턴스 번호
+    GetCloudMongoDbUserListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudMongoDbUserList:
+          type: array
+          description: Cloud DB for MongoDB User 리스트
+          items:
+            $ref: '#/components/schemas/CloudMongoDbUser'
+    GetDbServerLogListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        logType:
+          type: string
+          description: 데이터베이스서버로그파일타입
+        cloudMongoDbServerInstanceNo:
+          type: string
+          description: CloudMongoDb 서버인스턴스 번호
+    GetDbServerLogListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudMongoDbDbServerLogList:
+          type: array
+          description: CloudMongoDb 데이터베이스서버로그리스트
+          items:
+            $ref: '#/components/schemas/CloudMongoDbDbServerLog'
+    Product:
+      type: object
+      properties:
+        productCode:
+          type: string
+          description: 상품코드
+        productName:
+          type: string
+          description: 상품이름
+        productType:
+          $ref: '#/components/schemas/CommonCode'
+        productDescription:
+          type: string
+          description: 상품설명
+        infraResourceType:
+          $ref: '#/components/schemas/CommonCode'
+        infraResourceDetailType:
+          $ref: '#/components/schemas/CommonCode'
+        cpuCount:
+          type: integer
+          format: int32
+          description: CPU 개수
+        memorySize:
+          type: integer
+          format: int64
+          description: 메모리사이즈
+        baseBlockStorageSize:
+          type: integer
+          format: int64
+          description: 기본블록스토리지사이즈
+        platformType:
+          $ref: '#/components/schemas/CommonCode'
+        osInformation:
+          type: string
+          description: OS 정보
+        diskType:
+          $ref: '#/components/schemas/CommonCode'
+        dbKindCode:
+          type: string
+          description: DB 유형 코드
+        addBlockStorageSize:
+          type: integer
+          format: int64
+          description: 추가블록스토리지사이즈
+        generationCode:
+          type: string
+          description: 세대코드
+        engineVersionCode:
+          type: string
+          description: engineVersionCode
+    RebootCloudMongoDbServerInstanceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudMongoDbServerInstanceNo:
+          type: string
+          description: CloudMongoDb 서버인스턴스 번호
+    RebootCloudMongoDbServerInstanceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudMongoDbInstanceList:
+          type: array
+          description: CloudMongoDb 인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudMongoDbInstance'
+    TargetSubnet:
+      type: object
+      properties:
+        subnetNo:
+          type: string
+          description: Subnet 번호
+        subnetName:
+          type: string
+          description: Subnet 이름
+        vpcNo:
+          type: string
+          description: VPC 번호
+        vpcName:
+          type: string
+          description: VPC 이름
+        zoneCode:
+          type: string
+          description: ZONE 코드
+        subnet:
+          type: string
+          description: Subnet
+        isPublic:
+          type: string
+          description: Public 여부
+        createdDate:
+          type: string
+          description: 생성시간
+    TargetVpc:
+      type: object
+      properties:
+        vpcNo:
+          type: string
+          description: VPC 번호
+        vpcName:
+          type: string
+          description: VPC 이름
+        ipv4Cidr:
+          type: string
+          description: IPv4 CIDR
+        regionCode:
+          type: string
+          description: REGION 코드
+        createdDate:
+          type: string
+          description: 생성시간
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

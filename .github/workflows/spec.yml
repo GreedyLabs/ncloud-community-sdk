@@ -1,0 +1,56 @@
+name: spec
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'spec/**'
+      - '.github/workflows/spec.yml'
+  pull_request:
+    paths:
+      - 'spec/**'
+      - '.github/workflows/spec.yml'
+
+concurrency:
+  group: spec-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.14'
+          cache: pip
+          cache-dependency-path: spec/requirements.txt
+      - run: pip install -r spec/requirements.txt
+      - run: cd spec && make lint
+
+  deploy-pages:
+    needs: lint
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/configure-pages@v5
+      # Stage viewer-only assets (drop Makefile, docs/, etc.) so the
+      # deployed site root has just the runtime files index.html fetches.
+      - name: Stage viewer assets
+        run: |
+          mkdir -p _site
+          cp spec/index.html _site/
+          cp spec/openapi.yaml _site/
+          cp -r spec/services _site/
+      - uses: actions/upload-pages-artifact@v4
+        with: { path: '_site' }
+      - id: deployment
+        uses: actions/deploy-pages@v4

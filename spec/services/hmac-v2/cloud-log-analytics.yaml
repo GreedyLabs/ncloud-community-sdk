@@ -1,0 +1,1577 @@
+openapi: 3.0.3
+info:
+  title: Cloud Log Analytics
+  description: Cloud Log Analytics
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: true
+    gov: true
+
+  x-ncloud-nrn:
+
+    productName: CloudLogAnalytics
+    resource_types:
+      - Analytics
+      - Alarm
+
+servers:
+  - url: https://cloudloganalytics.apigw.ntruss.com
+    description: cloud-log-analytics 민간
+    x-ncloud-env: public
+  - url: https://cloudloganalytics.apigw.fin-ntruss.com
+    description: cloud-log-analytics 금융
+    x-ncloud-env: financial
+  - url: https://cloudloganalytics.apigw.gov-ntruss.com
+    description: cloud-log-analytics 공공
+    x-ncloud-env: gov
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /api/{regionCode}-v1/capacity:
+    get:
+      operationId: GetCapacity
+      summary: 사용량 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-log-analytics
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudloganalytics-getcapacity
+      parameters:
+        - name: regionCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '리전 코드 kr | sgn | jpn | uswn | den kr : 한국 리전 sgn : 싱가포르 리전 jpn : 일본 리전 uswn : 미국 서부 리전 den : 독일 리전'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 응답 상태 코드
+                  message:
+                    type: string
+                    description: 응답 상태 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /api/{regionCode}-v1/classic/baremetal:
+    get:
+      operationId: GetServerListClassicBaremetal
+      summary: Bare Metal Server
+      description: Classic 환경에서 이용 가능합니다.
+      tags:
+        - cloud-log-analytics
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudloganalytics-getserverlist-classic-baremetal
+      parameters:
+        - name: regionCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '리전 코드 kr | jpn | uswn | den kr : 한국 리전 jpn : 일본 리전'
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~100 (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지당 항목 수 10~100 (기본값: 10)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 응답 상태 코드
+                  message:
+                    type: string
+                    description: 응답 상태 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /api/{regionCode}-v1/classic/servers:
+    get:
+      operationId: GetServerListClassicServer
+      summary: Server
+      description: Classic 환경에서 이용 가능합니다.
+      tags:
+        - cloud-log-analytics
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudloganalytics-getserverlist-classic-server
+      parameters:
+        - name: regionCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '리전 코드 kr | sgn | jpn | uswn | den kr : 한국 리전 sgn : 싱가포르 리전 jpn : 일본 리전 uswn : 미국 서부 리전 den : 독일 리전'
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~100 (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지당 항목 수 10~100 (기본값: 10)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 응답 상태 코드
+                  message:
+                    type: string
+                    description: 응답 상태 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /api/{regionCode}-v1/classic/servers/collecting-infos:
+    post:
+      operationId: ChangeServerLogSetTingClassicServer
+      summary: 서버 로그 수집 설정
+      description: Classic 환경에서 이용 가능합니다.
+      tags:
+        - cloud-log-analytics
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudloganalytics-changeserverlogsetting-classic-server
+      parameters:
+        - name: regionCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '리전 코드 kr | sgn | jpn | uswn | den kr : 한국 리전 sgn : 싱가포르 리전 jpn : 일본 리전 uswn : 미국 서부 리전 den : 독일 리전'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - collectingInfos
+                - logPath
+                - logTemplate
+                - logType
+                - servername
+                - osType
+                - instanceNo
+                - ip
+              properties:
+                collectingInfos:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: '로그 수집 설정: collectingInfos'
+                logPath:
+                  type: string
+                  description: 수집할 로그 경로 Cloud Log Analytics 콘솔의 Management 메뉴 참고 <예시>/var/log/messages, /var/log/secure*
+                logTemplate:
+                  type: string
+                  description: 수집할 로그 템플릿 Cloud Log Analytics 콘솔의 Management 메뉴 참고 <예시>APACHE, TOMCAT
+                logType:
+                  type: string
+                  description: 수집할 로그 유형 Cloud Log Analytics 콘솔의 Management 메뉴 참고 <예시>SYSLOG, security_log
+                servername:
+                  type: string
+                  description: 로그 수집 대상 서버 이름 서버 목록 조회 , Bare Metal Server 목록 조회 의 servername 참조
+                osType:
+                  type: string
+                  description: 로그 수집 대상 서버 운영 체제 서버 목록 조회 , Bare Metal Server 목록 조회 의 osName 참조
+                instanceNo:
+                  type: integer
+                  description: 로그 수집 대상 서버 인스턴스 번호 서버 목록 조회 , Bare Metal Server 목록 조회 의 instanceNo 참조
+                ip:
+                  type: string
+                  description: 로그 수집 대상 서버 IP 주소 서버 목록 조회 , Bare Metal Server 목록 조회 의 privateIp 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 응답 상태 코드
+                  message:
+                    type: string
+                    description: 응답 상태 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /api/{regionCode}-v1/classic/servers/collecting-infos/{instanceNo}:
+    delete:
+      operationId: GetLogStatusClassicServer
+      summary: 서버 로그 수집 해제
+      description: Classic 환경에서 이용 가능합니다.
+      tags:
+        - cloud-log-analytics
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudloganalytics-getlogstatus-classic-server
+      parameters:
+        - name: regionCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '리전 코드 kr | sgn | jpn | uswn | den kr : 한국 리전 sgn : 싱가포르 리전 jpn : 일본 리전 uswn : 미국 서부 리전 den : 독일 리전'
+        - name: instanceNo
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 로그 수집 해제 대상 서버 인스턴스 번호 서버 목록 조회 , Bare Metal Server 목록 조회 의 instanceNo 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 응답 상태 코드
+                  message:
+                    type: string
+                    description: 응답 상태 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /api/{regionCode}-v1/classic/servers/mssql:
+    get:
+      operationId: GetServerListClassicMssql
+      summary: Cloud DB for MSSQL
+      description: Classic 환경에서 이용 가능합니다.
+      tags:
+        - cloud-log-analytics
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudloganalytics-getserverlist-classic-mssql
+      parameters:
+        - name: regionCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '리전 코드 kr | sgn | jpn | uswn | den kr : 한국 리전 sgn : 싱가포르 리전 jpn : 일본 리전 uswn : 미국 서부 리전 den : 독일 리전'
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~100 (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지당 항목 수 10~100 (기본값: 10)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 응답 상태 코드
+                  message:
+                    type: string
+                    description: 응답 상태 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /api/{regionCode}-v1/classic/servers/mysql:
+    get:
+      operationId: GetServerListClassicMysql
+      summary: Cloud DB for MySQL
+      description: Classic 환경에서 이용 가능합니다.
+      tags:
+        - cloud-log-analytics
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudloganalytics-getserverlist-classic-mysql
+      parameters:
+        - name: regionCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '리전 코드 kr | sgn | jpn | uswn | den kr : 한국 리전 sgn : 싱가포르 리전 jpn : 일본 리전 uswn : 미국 서부 리전 den : 독일 리전'
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~100 (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지당 항목 수 10~100 (기본값: 10)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 응답 상태 코드
+                  message:
+                    type: string
+                    description: 응답 상태 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /api/{regionCode}-v1/export/buckets:
+    get:
+      operationId: GetBucketList
+      summary: 버킷 목록 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-log-analytics
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudloganalytics-getbucketlist
+      parameters:
+        - name: regionCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '리전 코드 kr | sgn | jpn | uswn | den kr : 한국 리전 sgn : 싱가포르 리전 jpn : 일본 리전 uswn : 미국 서부 리전 den : 독일 리전'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 응답 상태 코드
+                  message:
+                    type: string
+                    description: 응답 상태 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /api/{regionCode}-v1/export/config:
+    get:
+      operationId: GetExportConfigS
+      summary: 자동 내보내기 설정 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-log-analytics
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudloganalytics-getexportconfigs
+      parameters:
+        - name: regionCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '리전 코드 kr | sgn | jpn | uswn | den kr : 한국 리전 sgn : 싱가포르 리전 jpn : 일본 리전 uswn : 미국 서부 리전 den : 독일 리전'
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~100 (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지당 항목 수 20~100 (기본값: 20)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 응답 상태 코드
+                  message:
+                    type: string
+                    description: 응답 상태 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: SetExportConfig
+      summary: 자동 내보내기 설정
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-log-analytics
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudloganalytics-setexportconfig
+      parameters:
+        - name: regionCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '리전 코드 kr | sgn | jpn | uswn | den kr : 한국 리전 sgn : 싱가포르 리전 jpn : 일본 리전 uswn : 미국 서부 리전 den : 독일 리전'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - exportBucket
+                - logTypes
+                - regionNo
+              properties:
+                exportBucket:
+                  type: integer
+                  description: Object Storage의 버킷 이름 버킷 목록 조회 참조
+                logTypes:
+                  type: string
+                  description: 로그 유형
+                regionNo:
+                  type: integer
+                  description: 리전 번호
+                obsPathType:
+                  type: string
+                  description: '자동 내보내기 경로 2 (기본값) | 3 2 : /CLA/AutoExport/{logtype}/{YYYY}/{MM}/{DD}/{logtype}{hh}.json.gz 3 : /CLA/AutoExport/{YYYY}/{MM}/{DD}/{logtype}{hh}.json.gz'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 응답 상태 코드
+                  message:
+                    type: string
+                    description: 응답 상태 메시지
+                  result:
+                    type: string
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: DeleteExportConfig
+      summary: 자동 내보내기 해제
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-log-analytics
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudloganalytics-deleteexportconfig
+      parameters:
+        - name: regionCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '리전 코드 kr | sgn | jpn | uswn | den kr : 한국 리전 sgn : 싱가포르 리전 jpn : 일본 리전 uswn : 미국 서부 리전 den : 독일 리전'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 응답 상태 코드
+                  message:
+                    type: string
+                    description: 응답 상태 메시지
+                  result:
+                    type: string
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /api/{regionCode}-v1/export/history:
+    get:
+      operationId: GetExportHistory
+      summary: 내보내기 이력 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-log-analytics
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudloganalytics-getexporthistory
+      parameters:
+        - name: regionCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '리전 코드 kr | sgn | jpn | uswn | den kr : 한국 리전 sgn : 싱가포르 리전 jpn : 일본 리전 uswn : 미국 서부 리전 den : 독일 리전'
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~100 (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지당 항목 수 20~100 (기본값: 20)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 응답 상태 코드
+                  message:
+                    type: string
+                    description: 응답 상태 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /api/{regionCode}-v1/logs/count/aggregation:
+    get:
+      operationId: GetLogStatusType
+      summary: 종류별 로그 수 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-log-analytics
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudloganalytics-getlogstatus-type
+      parameters:
+        - name: regionCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '리전 코드 kr | sgn | jpn | uswn | den kr : 한국 리전 sgn : 싱가포르 리전 jpn : 일본 리전 uswn : 미국 서부 리전 den : 독일 리전'
+        - name: type
+          in: query
+          required: true
+          schema:
+            type: string
+          description: '조회 기준 server | log_name server : 서버 log_name : 로그 유형'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 응답 상태 코드
+                  message:
+                    type: string
+                    description: 응답 상태 메시지
+                  result:
+                    type: integer
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /api/{regionCode}-v1/logs/count/interval:
+    get:
+      operationId: GetLogStatusPerIod
+      summary: 기간별 로그 수 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-log-analytics
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudloganalytics-getlogstatus-period
+      parameters:
+        - name: regionCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '리전 코드 kr | sgn | jpn | uswn | den kr : 한국 리전 sgn : 싱가포르 리전 jpn : 일본 리전 uswn : 미국 서부 리전 den : 독일 리전'
+        - name: startTime
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 시작 일시 Unix Timestamp 형식 또는 파라미터 입력 now-1h (기본값) <예시> 1720828861 , now-1h , now-1d
+        - name: endTime
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 종료 일시 Unix Timestamp 형식 또는 파라미터 입력 now-1h (기본값) <예시> 1720828861 , now-1h , now-1d
+        - name: interval
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 주기 now-1d (기본값) <예시> 1d , 1h , 1m
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 응답 상태 코드
+                  message:
+                    type: string
+                    description: 응답 상태 메시지
+                  result:
+                    type: integer
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /api/{regionCode}-v1/logs/count/recent:
+    get:
+      operationId: GetLogStatusRecent
+      summary: 최근 로그 수 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-log-analytics
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudloganalytics-getlogstatus-recent
+      parameters:
+        - name: regionCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '리전 코드 kr | sgn | jpn | uswn | den kr : 한국 리전 sgn : 싱가포르 리전 jpn : 일본 리전 uswn : 미국 서부 리전 den : 독일 리전'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 응답 상태 코드
+                  message:
+                    type: string
+                    description: 응답 상태 메시지
+                  result:
+                    type: string
+                    description: 응답 결과 로그 수
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /api/{regionCode}-v1/logs/count/total:
+    get:
+      operationId: GetLogStatusTotal
+      summary: 전체 로그 수 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-log-analytics
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudloganalytics-getlogstatus-total
+      parameters:
+        - name: regionCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '리전 코드 kr | sgn | jpn | uswn | den kr : 한국 리전 sgn : 싱가포르 리전 jpn : 일본 리전 uswn : 미국 서부 리전 den : 독일 리전'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 응답 상태 코드
+                  message:
+                    type: string
+                    description: 응답 상태 메시지
+                  result:
+                    type: string
+                    description: 응답 결과 로그 수
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /api/{regionCode}-v1/logs/search:
+    post:
+      operationId: SearchLogS
+      summary: 로그 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-log-analytics
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudloganalytics-searchlogs
+      parameters:
+        - name: regionCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '리전 코드 kr | sgn | jpn | uswn | den kr : 한국 리전 sgn : 싱가포르 리전 jpn : 일본 리전 uswn : 미국 서부 리전 den : 독일 리전'
+        - name: interval
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 주기 5m (기본값) <예시> 1d , 1h , 1m
+        - name: keyword
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 키워드 전체 검색 (기본값)
+        - name: logTypes
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 로그 유형 전체 검색 (기본값) <예시> SYSLOG , security_log , tomcat
+        - name: timestampFrom
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 시작 일시 Unix Timestamp 형식
+        - name: timestampTo
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 종료 일시 Unix Timestamp 형식
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~100 (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지당 항목 수 10~100 (기본값: 10)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 응답 상태 코드
+                  message:
+                    type: string
+                    description: 응답 상태 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /api/{regionCode}-v1/logs/search/export:
+    post:
+      operationId: ExportLogS
+      summary: 내보내기
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-log-analytics
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudloganalytics-exportlogs
+      parameters:
+        - name: regionCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '리전 코드 kr | sgn | jpn | uswn | den kr : 한국 리전 sgn : 싱가포르 리전 jpn : 일본 리전 uswn : 미국 서부 리전 den : 독일 리전'
+        - name: bucketname
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Object Storage의 버킷 이름 버킷 목록 조회 참조
+        - name: keyword
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 키워드 전체 검색 (기본값)
+        - name: logTypes
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 로그 유형 전체 검색 (기본값) <예시> SYSLOG , security_log , tomcat
+        - name: timestampFrom
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 시작 일시 now-1h (기본값) Unix Timestamp 형식 <예시> 1720828861
+        - name: timestampTo
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 종료 일시 now (기본값) Unix Timestamp 형식 <예시> 1720828861
+        - name: regionNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 리전 번호
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 응답 상태 코드
+                  message:
+                    type: string
+                    description: 응답 상태 메시지
+                  result:
+                    type: boolean
+                    description: '응답 결과 true | false true : 성공 false : 실패'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /api/{regionCode}-v1/vpc/servers:
+    get:
+      operationId: GetServerListVpcServer
+      summary: Server
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-log-analytics
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudloganalytics-getserverlist-vpc-server
+      parameters:
+        - name: regionCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '리전 코드 kr | sgn | jpn kr : 한국 리전 sgn : 싱가포르 리전 jpn : 일본 리전'
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~100 (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지당 항목 수 10~100 (기본값: 10)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /api/{regionCode}-v1/vpc/servers/baremetal:
+    get:
+      operationId: GetServerListVpcBaremetal
+      summary: Bare Metal Server
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-log-analytics
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudloganalytics-getserverlist-vpc-baremetal
+      parameters:
+        - name: regionCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '리전 코드 kr | jpn kr : 한국 리전 jpn : 일본 리전'
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~100 (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지당 항목 수 10~100 (기본값: 10)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 응답 상태 코드
+                  message:
+                    type: string
+                    description: 응답 상태 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /api/{regionCode}-v1/vpc/servers/cdss:
+    get:
+      operationId: GetServerListVpcCdss
+      summary: Cloud Data Streaming Service
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-log-analytics
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudloganalytics-getserverlist-vpc-cdss
+      parameters:
+        - name: regionCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '리전 코드 kr | sgn | jpn kr : 한국 리전 sgn : 싱가포르 리전 jpn : 일본 리전'
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~100 (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지당 항목 수 10~100 (기본값: 10)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 응답 상태 코드
+                  message:
+                    type: string
+                    description: 응답 상태 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /api/{regionCode}-v1/vpc/servers/collecting-infos:
+    post:
+      operationId: ChangeServerLogSetTingVpcServer
+      summary: 서버 로그 수집 설정
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-log-analytics
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudloganalytics-changeserverlogsetting-vpc-server
+      parameters:
+        - name: regionCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '리전 코드 kr | sgn | jpn kr : 한국 리전 sgn : 싱가포르 리전 jpn : 일본 리전'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - collectingInfos
+                - logPath
+                - logTemplate
+                - logType
+                - servername
+                - osType
+                - instanceNo
+                - macAddr
+              properties:
+                collectingInfos:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: '로그 수집 설정: collectingInfos'
+                logPath:
+                  type: string
+                  description: 수집할 로그 경로 Cloud Log Analytics 콘솔의 Management 메뉴 참고 <예시>/var/log/messages, /var/log/secure*
+                logTemplate:
+                  type: string
+                  description: 수집할 로그 템플릿 Cloud Log Analytics 콘솔의 Management 메뉴 참고 <예시>APACHE, TOMCAT
+                logType:
+                  type: string
+                  description: 수집할 로그 유형 Cloud Log Analytics 콘솔의 Management 메뉴 참고 <예시>SYSLOG, security_log
+                servername:
+                  type: string
+                  description: 로그 수집 대상 서버 이름 서버 목록 조회 , Bare Metal Server 목록 조회 의 servername 참조
+                osType:
+                  type: string
+                  description: 로그 수집 대상 서버 운영 체제 서버 목록 조회 , Bare Metal Server 목록 조회 의 osName 참조
+                instanceNo:
+                  type: integer
+                  description: 로그 수집 대상 서버 인스턴스 번호 서버 목록 조회 , Bare Metal Server 목록 조회 의 instanceNo 참조
+                ip:
+                  type: string
+                  description: 로그 수집 대상 서버 IP 주소 서버 목록 조회 , Bare Metal Server 목록 조회 의 privateIp 참조
+                macAddr:
+                  type: string
+                  description: 로그 수집 대상 서버 Mac 주소 서버 목록 조회 , Bare Metal Server 목록 조회 의 macAddr 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 응답 상태 코드
+                  message:
+                    type: string
+                    description: 응답 상태 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /api/{regionCode}-v1/vpc/servers/collecting-infos/{instanceNo}:
+    delete:
+      operationId: GetLogStatusVpcServer
+      summary: 서버 로그 수집 해제
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-log-analytics
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudloganalytics-getlogstatus-vpc-server
+      parameters:
+        - name: regionCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '리전 코드 kr | sgn | jpn kr : 한국 리전 sgn : 싱가포르 리전 jpn : 일본 리전'
+        - name: instanceNo
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 로그 수집 해제 대상 서버 인스턴스 번호 서버 목록 조회 , Bare Metal Server 목록 조회 의 instanceNo 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 응답 상태 코드
+                  message:
+                    type: string
+                    description: 응답 상태 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /api/{regionCode}-v1/vpc/servers/kubernetes:
+    get:
+      operationId: GetServerListVpcNks
+      summary: Ncloud Kubernetes Service
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-log-analytics
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudloganalytics-getserverlist-vpc-nks
+      parameters:
+        - name: regionCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '리전 코드 kr | sgn | jpn kr : 한국 리전 sgn : 싱가포르 리전 jpn : 일본 리전'
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~100 (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지당 항목 수 10~100 (기본값: 10)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 응답 상태 코드
+                  message:
+                    type: string
+                    description: 응답 상태 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /api/{regionCode}-v1/vpc/servers/mongodb:
+    get:
+      operationId: GetServerListVpcMongoDb
+      summary: Cloud DB for MongoDB
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-log-analytics
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudloganalytics-getserverlist-vpc-mongodb
+      parameters:
+        - name: regionCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '리전 코드 kr | sgn | jpn kr : 한국 리전 sgn : 싱가포르 리전 jpn : 일본 리전'
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~100 (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지당 항목 수 10~100 (기본값: 10)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 응답 상태 코드
+                  message:
+                    type: string
+                    description: 응답 상태 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /api/{regionCode}-v1/vpc/servers/mssql:
+    get:
+      operationId: GetServerListVpcMssql
+      summary: Cloud DB for MSSQL
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-log-analytics
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudloganalytics-getserverlist-vpc-mssql
+      parameters:
+        - name: regionCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '리전 코드 kr | sgn | jpn kr : 한국 리전 sgn : 싱가포르 리전 jpn : 일본 리전'
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~100 (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지당 항목 수 10~100 (기본값: 10)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 응답 상태 코드
+                  message:
+                    type: string
+                    description: 응답 상태 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /api/{regionCode}-v1/vpc/servers/mysql:
+    get:
+      operationId: GetServerListVpcMysql
+      summary: Cloud DB for MySQL
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-log-analytics
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudloganalytics-getserverlist-vpc-mysql
+      parameters:
+        - name: regionCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '리전 코드 kr | sgn | jpn kr : 한국 리전 sgn : 싱가포르 리전 jpn : 일본 리전'
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~100 (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지당 항목 수 10~100 (기본값: 10)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 응답 상태 코드
+                  message:
+                    type: string
+                    description: 응답 상태 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /api/{regionCode}-v1/vpc/servers/postgresql:
+    get:
+      operationId: GetServerListVpcPostgresql
+      summary: Cloud DB for PostgreSQL
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-log-analytics
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudloganalytics-getserverlist-vpc-postgresql
+      parameters:
+        - name: regionCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '리전 코드 kr | sgn | jpn kr : 한국 리전 sgn : 싱가포르 리전 jpn : 일본 리전'
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~100 (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지당 항목 수 10~100 (기본값: 10)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 응답 상태 코드
+                  message:
+                    type: string
+                    description: 응답 상태 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /api/{regionCode}-v1/vpc/servers/ses:
+    get:
+      operationId: GetServerListVpcSes
+      summary: Search Engine Service
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-log-analytics
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-cloudloganalytics-getserverlist-vpc-ses
+      parameters:
+        - name: regionCode
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '리전 코드 kr | sgn | jpn kr : 한국 리전 sgn : 싱가포르 리전 jpn : 일본 리전'
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~100 (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지당 항목 수 10~100 (기본값: 10)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 응답 상태 코드
+                  message:
+                    type: string
+                    description: 응답 상태 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+components:
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  schemas:
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

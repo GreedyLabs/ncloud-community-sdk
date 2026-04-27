@@ -1,0 +1,244 @@
+openapi: 3.0.3
+info:
+  title: wms
+  description: |
+    Web Monitoring Service — 시나리오 기반 HTTP 합성 모니터링.
+    Classic/VPC 환경에서 이용 가능합니다.
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: true
+    gov: true
+
+  x-ncloud-nrn:
+
+    productName: WMS
+    resource_types:
+      - URL
+
+servers:
+  - url: https://wms.apigw.ntruss.com/api/v1
+    description: wms 민간
+    x-ncloud-env: public
+  - url: https://wms.apigw.fin-ntruss.com/api/v1
+    description: wms 금융
+    x-ncloud-env: financial
+  - url: https://wms.apigw.gov-ntruss.com/api/v1
+    description: wms 공공
+    x-ncloud-env: gov
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /scenarios:
+    get:
+      operationId: ListMonitoringScenarios
+      summary: 모니터링 목록 조회
+      tags:
+        - wms
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-wms-scripts
+      parameters:
+        - {name: name, in: query, schema: {type: string}, description: 모니터링 서비스 이름}
+        - {name: monitoringType, in: query, schema: {type: string, enum: [URL, SCENARIO]}, description: "모니터링 유형. URL: URL 접속 스텝만, SCENARIO: 시나리오 스텝"}
+        - {name: interval, in: query, schema: {type: integer, enum: [1, 5, 10]}, description: "모니터링 실행 주기(분)"}
+        - {name: requestTimeout, in: query, schema: {type: integer, enum: [5000, 10000, 30000]}, description: "요청 대기 시간(밀리초)"}
+        - {name: runTimeout, in: query, schema: {type: integer, enum: [30000, 40000, 50000, 60000]}, description: "시나리오 실행 대기 시간(밀리초)"}
+        - {name: serviceType, in: query, schema: {type: string, enum: [PC, MOBILE]}, description: 모니터링 서비스 유형}
+        - {name: serviceYn, in: query, schema: {type: boolean}, description: "모니터링 상태. true: 시작, false: 일시정지"}
+        - {name: methodType, in: query, schema: {type: string, enum: [GET, POST, DELETE, PUT]}, description: 모니터링 요청 유형}
+        - {name: url, in: query, schema: {type: string}, description: 웹 서비스 URL (모니터링 대상)}
+        - {name: historyId, in: query, schema: {type: string}, description: 이력 관리 아이디}
+        - {name: scenarioId, in: query, schema: {type: integer, format: int64}, description: 시나리오 아이디}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScenarioListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /scenarios/{scenarioId}:
+    get:
+      operationId: GetMonitoringScenario
+      summary: 모니터링 상세 조회
+      tags:
+        - wms
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-wms-scriptinfo
+      parameters:
+        - {name: scenarioId, in: path, required: true, schema: {type: integer, format: int64}, description: 시나리오 아이디}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Scenario'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /scenarios/{scenarioId}/settings:
+    put:
+      operationId: UpdateMonitoringScenarioSettings
+      summary: 모니터링 상태 변경
+      description: 모니터링 시나리오의 serviceYn(시작/일시정지) 등 설정을 변경합니다.
+      tags:
+        - wms
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-wms-scriptstop
+      parameters:
+        - {name: scenarioId, in: path, required: true, schema: {type: integer, format: int64}, description: 시나리오 아이디}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [serviceYn]
+              properties:
+                serviceYn:
+                  type: boolean
+                  description: "모니터링 상태. true: 시작, false: 일시정지"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  serviceYn: {type: boolean, description: 현재 모니터링 상태}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /scenarios/{scenarioId}/results:
+    get:
+      operationId: ListMonitoringResults
+      summary: 모니터링 결과 조회
+      tags:
+        - wms
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-wms-scriptresult
+      parameters:
+        - {name: scenarioId, in: path, required: true, schema: {type: integer, format: int64}, description: 시나리오 아이디}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  from: {type: integer, format: int64, description: "조회 시작 시간 (Unix Timestamp ms)"}
+                  to: {type: integer, format: int64, description: "조회 종료 시간 (Unix Timestamp ms)"}
+                  type: {type: string, enum: [RAW, MIN5, MIN30], description: "결과 데이터 유형. RAW: 전체, MIN5: 5분 집계, MIN30: 30분 집계"}
+                  resultStatus: {type: string, enum: [SUCCESS, ERROR]}
+                  locationTypeCodes:
+                    type: string
+                    description: "측정 Agent 위치 국가. KR | USW | JP | SG | DE"
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /scenarios/{scenarioId}/results/{resultId}:
+    get:
+      operationId: GetMonitoringResult
+      summary: 모니터링 상세 결과 조회
+      tags:
+        - wms
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-wms-scriptstart
+      parameters:
+        - {name: scenarioId, in: path, required: true, schema: {type: integer, format: int64}, description: 시나리오 아이디}
+        - {name: resultId, in: path, required: true, schema: {type: integer, format: int64}, description: 모니터링 결과 아이디}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type: {type: string, enum: [RAW, MIN5, MIN30], description: 결과 데이터 유형}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+components:
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  schemas:
+    ScenarioListResponse:
+      type: array
+      description: |
+        Top-level array of monitoring scenarios. Verified against the live
+        NCP API on 2026-04-26: NCP returns `[Scenario, ...]` directly, not
+        a wrapped object with pagination fields. The earlier docparse-derived
+        shape (page/size/itemCount/items) was a misread of the docs example.
+      items:
+        $ref: '#/components/schemas/Scenario'
+    Scenario:
+      type: object
+      description: |
+        모니터링 시나리오 상세. 전체 27개 필드 중 대표 필드만 모델링. 나머지는 addlProps 허용.
+      properties:
+        scenarioId: {type: integer, format: int64, description: 시나리오 아이디}
+        name: {type: string, description: 모니터링 서비스 이름}
+        monitoringType: {type: string, enum: [URL, SCENARIO]}
+        serviceType: {type: string, enum: [PC, MOBILE]}
+        interval: {type: integer, enum: [1, 5, 10]}
+        requestTimeout: {type: integer, enum: [5000, 10000, 30000]}
+        runTimeout: {type: integer, enum: [30000, 40000, 50000, 60000]}
+        serviceYn: {type: boolean, description: 모니터링 상태}
+        methodType: {type: string, enum: [GET, POST, DELETE, PUT]}
+        url: {type: string, description: 웹 서비스 URL (모니터링 대상)}
+      additionalProperties: true
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

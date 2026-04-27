@@ -1,0 +1,910 @@
+openapi: 3.0.3
+info:
+  title: source-pipeline
+  description: ''
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: true
+    gov: true
+
+  x-ncloud-nrn:
+
+    productName: VPCSourcePipeline
+    resource_types:
+      - Project
+
+servers:
+  - url: https://vpcsourcepipeline.apigw.ntruss.com/api/v1
+    description: source-pipeline 민간
+    x-ncloud-env: public
+  - url: https://vpcsourcepipeline.apigw.fin-ntruss.com/api/v1
+    description: source-pipeline 금융
+    x-ncloud-env: financial
+  - url: https://vpcsourcepipeline.apigw.gov-ntruss.com/api/v1
+    description: source-pipeline 공공
+    x-ncloud-env: gov
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /project:
+    get:
+      operationId: GetProjects
+      tags:
+        - source-pipeline
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetProjectListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get projects
+    post:
+      operationId: CreateProject
+      tags:
+        - source-pipeline
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProject'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateProjectResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Create project
+  /project/{projectId}:
+    delete:
+      operationId: DeleteProject
+      tags:
+        - source-pipeline
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteProjectResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Delete project
+    get:
+      operationId: GetProject
+      tags:
+        - source-pipeline
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetProjectDetailResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get project
+    patch:
+      operationId: ChangeProject
+      tags:
+        - source-pipeline
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeProject'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeProjectReponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Change project
+  /project/{projectId}/do:
+    post:
+      operationId: StartProject
+      tags:
+        - source-pipeline
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StartPipelineResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Start project
+  /project/{projectId}/history:
+    get:
+      operationId: GetProjectHistories
+      tags:
+        - source-pipeline
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetHistoryListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get project histories
+  /project/{projectId}/history/{historyId}:
+    get:
+      operationId: GetProjectHistory
+      tags:
+        - source-pipeline
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: historyId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetHistoryDetailResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get project history
+  /project/{projectId}/history/{historyId}/cancel:
+    post:
+      operationId: CancelProject
+      tags:
+        - source-pipeline
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: historyId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CancelPipelineResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cancel project
+  /sourcebuild/project:
+    get:
+      operationId: GetSourcebuildProjects
+      tags:
+        - source-pipeline
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSbProjectResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get sourcebuild projects
+  /sourcecommit/repository:
+    get:
+      operationId: GetSourcecommitRepositories
+      tags:
+        - source-pipeline
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetScRepositoryResposne'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get sourcecommit repositories
+  /sourcecommit/repository/{repositoryName}/branch:
+    get:
+      operationId: GetSourcecommitRepositoryBranches
+      tags:
+        - source-pipeline
+      parameters:
+        - name: repositoryName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetScBranchResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get sourcecommit repository branches
+  /sourcedeploy/project:
+    get:
+      operationId: GetSourcedeployProjects
+      tags:
+        - source-pipeline
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSdProjectResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get sourcedeploy projects
+  /sourcedeploy/project/{projectId}/stage:
+    get:
+      operationId: GetSourcedeployProjectStages
+      tags:
+        - source-pipeline
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSdStageResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get sourcedeploy project stages
+  /sourcedeploy/project/{projectId}/stage/{stageId}/scenario:
+    get:
+      operationId: GetSourcedeployProjectScenarios
+      tags:
+        - source-pipeline
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: stageId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSdScenarioResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get sourcedeploy project scenarios
+  /trigger/timezone:
+    get:
+      operationId: GetTimeZone
+      tags:
+        - source-pipeline
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTimeZone'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get time zone
+components:
+  schemas:
+    CancelPipelineResponse:
+      type: object
+      properties:
+        result:
+          type: boolean
+    ChangeProject:
+      type: object
+      properties:
+        description:
+          type: string
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateProjectTasks'
+        trigger:
+          $ref: '#/components/schemas/CreateProjectTrigger'
+      required:
+        - tasks
+    ChangeProjectReponse:
+      type: object
+      properties:
+        result:
+          type: boolean
+    CreateProject:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateProjectTasks'
+        trigger:
+          $ref: '#/components/schemas/CreateProjectTrigger'
+      required:
+        - tasks
+    CreateProjectConfig:
+      type: object
+      properties:
+        projectId:
+          type: integer
+          format: int32
+        stageId:
+          type: integer
+          format: int32
+        scenarioId:
+          type: integer
+          format: int32
+        target:
+          $ref: '#/components/schemas/CreateProjectConfigTarget'
+    CreateProjectConfigTarget:
+      type: object
+      properties:
+        info:
+          $ref: '#/components/schemas/CreateProjectConfigTargetInfo'
+    CreateProjectConfigTargetInfo:
+      type: object
+      properties:
+        branch:
+          type: string
+    CreateProjectResponse:
+      type: object
+      properties:
+        projectId:
+          type: integer
+          format: int32
+    CreateProjectTasks:
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+        config:
+          $ref: '#/components/schemas/CreateProjectConfig'
+        linkedTasks:
+          type: array
+          items:
+            type: string
+      required:
+        - linkedTasks
+    CreateProjectTrigger:
+      type: object
+      properties:
+        repository:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetRepositoryTrigger'
+        schedule:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetScheduleTrigger'
+        source-pipeline:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetPipelineTrigger'
+    DeleteProjectResponse:
+      type: object
+      properties:
+        result:
+          type: boolean
+    GetHistoryDetailResponse:
+      type: object
+      properties:
+        history:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetHistoryDetailResponseHistory'
+    GetHistoryDetailResponseConfig:
+      type: object
+      properties:
+        projectId:
+          type: number
+          format: float
+        target:
+          $ref: '#/components/schemas/GetHistoryDetailResponseConfigTarget'
+    GetHistoryDetailResponseConfigTarget:
+      type: object
+      properties:
+        type:
+          type: string
+        info:
+          $ref: '#/components/schemas/GetScTargetInfo'
+    GetHistoryDetailResponseHistory:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        projectId:
+          type: integer
+          format: int32
+        begin:
+          type: integer
+          format: int32
+        end:
+          type: integer
+          format: int32
+        status:
+          type: string
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetHistoryDetailResponseTasks'
+    GetHistoryDetailResponseTasks:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        type:
+          type: string
+        config:
+          $ref: '#/components/schemas/GetHistoryDetailResponseConfig'
+        linkedTasks:
+          type: array
+          items:
+            type: string
+        status:
+          type: string
+        resultId:
+          type: string
+    GetHistoryListResponse:
+      type: object
+      properties:
+        historyList:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetHistoryListResponseHistoryList'
+    GetHistoryListResponseHistoryList:
+      type: object
+      properties:
+        projectId:
+          type: integer
+          format: int32
+        id:
+          type: integer
+          format: int32
+        requestType:
+          type: string
+        requestId:
+          type: string
+        begin:
+          type: integer
+          format: int32
+        end:
+          type: integer
+          format: int32
+        status:
+          type: string
+    GetPipelineTrigger:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+    GetProjectDetailResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        description:
+          type: string
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetProjectDetailResponseTasks'
+        trigger:
+          $ref: '#/components/schemas/GetProjectTrigger'
+    GetProjectDetailResponseConfig:
+      type: object
+      properties:
+        projectId:
+          type: integer
+          format: int32
+        stageId:
+          type: integer
+          format: int32
+        scenarioId:
+          type: integer
+          format: int32
+        target:
+          $ref: '#/components/schemas/GetProjectDetailResponseConfigTarget'
+    GetProjectDetailResponseConfigTarget:
+      type: object
+      properties:
+        type:
+          type: string
+        info:
+          $ref: '#/components/schemas/GetProjectDetailResponseConfigTargetInfo'
+    GetProjectDetailResponseConfigTargetInfo:
+      type: object
+      properties:
+        repository:
+          type: string
+        branch:
+          type: string
+        workspace:
+          $ref: '#/components/schemas/GetProjectDetailResponseConfigTargetInfoWorkspace'
+        projectName:
+          type: string
+        file:
+          type: string
+        manifest:
+          type: string
+        fullManifest:
+          type: string
+    GetProjectDetailResponseConfigTargetInfoWorkspace:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    GetProjectDetailResponseTasks:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        type:
+          type: string
+        config:
+          $ref: '#/components/schemas/GetProjectDetailResponseConfig'
+        linkedTasks:
+          type: array
+          items:
+            type: string
+    GetProjectListInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+    GetProjectListResponse:
+      type: object
+      properties:
+        projectList:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetProjectListInfo'
+    GetProjectTrigger:
+      type: object
+      properties:
+        repository:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetRepositoryTrigger'
+        schedule:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetScheduleTrigger'
+        source-pipeline:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetPipelineTrigger'
+    GetRepositoryTrigger:
+      type: object
+      properties:
+        type:
+          type: string
+        name:
+          type: string
+        branch:
+          type: string
+    GetSbProjectResponse:
+      type: object
+      properties:
+        projectList:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetSbProjectResponseProjectList'
+    GetSbProjectResponseProjectList:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        source:
+          $ref: '#/components/schemas/GetSbProjectResponseSource'
+    GetSbProjectResponseSource:
+      type: object
+      properties:
+        type:
+          type: string
+        repository:
+          type: string
+        branch:
+          type: string
+    GetScBranchResponse:
+      type: object
+      properties:
+        branchList:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetScBranchResponseBranchList'
+    GetScBranchResponseBranchList:
+      type: object
+      properties:
+        name:
+          type: string
+    GetScRepositoryResposne:
+      type: object
+      properties:
+        repositoryList:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetScBranchResponseBranchList'
+    GetScTargetInfo:
+      type: object
+      properties:
+        repository:
+          type: string
+        branch:
+          type: string
+    GetScheduleTrigger:
+      type: object
+      properties:
+        day:
+          type: array
+          items:
+            type: string
+        time:
+          type: string
+        timeZone:
+          type: string
+        scheduleOnlyWithChange:
+          type: boolean
+    GetSdProjectResponse:
+      type: object
+      properties:
+        projectList:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetProjectListInfo'
+    GetSdScenarioResponse:
+      type: object
+      properties:
+        scenarioList:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetSdScenarioResponseResultScenarioList'
+    GetSdScenarioResponseResultScenarioList:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        source:
+          $ref: '#/components/schemas/GetSdScenarioResponseResultSource'
+    GetSdScenarioResponseResultSource:
+      type: object
+      properties:
+        type:
+          type: string
+        target:
+          $ref: '#/components/schemas/GetSdScenarioResponseResultSourceTarget'
+    GetSdScenarioResponseResultSourceTarget:
+      type: object
+      properties:
+        projectName:
+          type: string
+        manifest:
+          type: array
+          items:
+            type: string
+        file:
+          type: string
+    GetSdStageResponse:
+      type: object
+      properties:
+        stageList:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetProjectListInfo'
+    GetTimeZone:
+      type: object
+      properties:
+        timeZone:
+          type: array
+          items:
+            type: string
+    StartPipelineResponse:
+      type: object
+      properties:
+        historyId:
+          type: integer
+          format: int32
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

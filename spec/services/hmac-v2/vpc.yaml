@@ -1,0 +1,3140 @@
+openapi: 3.0.3
+info:
+  title: vpc
+  description: VPC Network 관련 API
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: true
+    gov: true
+
+  x-ncloud-nrn:
+
+    productName: VPC
+    resource_types:
+      - VPC
+      - Subnet
+      - NetworkACL
+      - NATGateway
+      - VPCPeering
+      - RouteTable
+      - VirtualPrivateGateway
+      - OnPremiseGateway
+      - NetworkACLDenyAllowGroup
+
+servers:
+  - url: https://ncloud.apigw.ntruss.com/vpc/v2
+    description: vpc 민간
+    x-ncloud-env: public
+  - url: https://ncloud.apigw.fin-ntruss.com/vpc/v2
+    description: vpc 금융
+    x-ncloud-env: financial
+  - url: https://ncloud.apigw.gov-ntruss.com/vpc/v2
+    description: vpc 공공
+    x-ncloud-env: gov
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /acceptOrRejectVpcPeering:
+    post:
+      operationId: AcceptOrRejectVpcPeering
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AcceptOrRejectVpcPeeringRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AcceptOrRejectVpcPeeringResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Accept or reject VPC peering
+  /addNetworkAclInboundRule:
+    post:
+      operationId: AddNetworkAclInboundRule
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AddNetworkAclInboundRuleRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddNetworkAclInboundRuleResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Add network acl inbound rule
+  /addNetworkAclOutboundRule:
+    post:
+      operationId: AddNetworkAclOutboundRule
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AddNetworkAclOutboundRuleRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddNetworkAclOutboundRuleResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Add network acl outbound rule
+  /addRoute:
+    post:
+      operationId: AddRoute
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AddRouteRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddRouteResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Add route
+  /addRouteTableSubnet:
+    post:
+      operationId: AddRouteTableSubnet
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AddRouteTableSubnetRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddRouteTableSubnetResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Add route table subnet
+  /createNatGatewayInstance:
+    post:
+      operationId: CreateNatGatewayInstance
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateNatGatewayInstanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateNatGatewayInstanceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Create nat gateway instance
+  /createNetworkAcl:
+    post:
+      operationId: CreateNetworkAcl
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateNetworkAclRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateNetworkAclResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Create network acl
+  /createNetworkAclDenyAllowGroup:
+    post:
+      operationId: CreateNetworkAclDenyAllowGroup
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateNetworkAclDenyAllowGroupRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateNetworkAclDenyAllowGroupResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Create network acl deny allow group
+  /createRouteTable:
+    post:
+      operationId: CreateRouteTable
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateRouteTableRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateRouteTableResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Create route table
+  /createSubnet:
+    post:
+      operationId: CreateSubnet
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateSubnetRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateSubnetResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Create subnet
+  /createVpc:
+    post:
+      operationId: CreateVpc
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateVpcRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateVpcResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Create VPC
+  /createVpcPeeringInstance:
+    post:
+      operationId: CreateVpcPeeringInstance
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateVpcPeeringInstanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateVpcPeeringInstanceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Create VPC peering instance
+  /deleteNatGatewayInstance:
+    post:
+      operationId: DeleteNatGatewayInstance
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteNatGatewayInstanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteNatGatewayInstanceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Delete nat gateway instance
+  /deleteNetworkAcl:
+    post:
+      operationId: DeleteNetworkAcl
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteNetworkAclRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteNetworkAclResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Delete network acl
+  /deleteNetworkAclDenyAllowGroup:
+    post:
+      operationId: DeleteNetworkAclDenyAllowGroup
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteNetworkAclDenyAllowGroupRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteNetworkAclDenyAllowGroupResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Delete network acl deny allow group
+  /deleteRouteTable:
+    post:
+      operationId: DeleteRouteTable
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteRouteTableRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteRouteTableResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Delete route table
+  /deleteSubnet:
+    post:
+      operationId: DeleteSubnet
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteSubnetRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteSubnetResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Delete subnet
+  /deleteVpc:
+    post:
+      operationId: DeleteVpc
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteVpcRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteVpcResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Delete VPC
+  /deleteVpcPeeringInstance:
+    post:
+      operationId: DeleteVpcPeeringInstance
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteVpcPeeringInstanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteVpcPeeringInstanceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Delete VPC peering instance
+  /getNatGatewayInstanceDetail:
+    post:
+      operationId: GetNatGatewayInstanceDetail
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetNatGatewayInstanceDetailRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetNatGatewayInstanceDetailResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get nat gateway instance detail
+  /getNatGatewayInstanceList:
+    post:
+      operationId: GetNatGatewayInstanceList
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetNatGatewayInstanceListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetNatGatewayInstanceListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get nat gateway instance list
+  /getNetworkAclDenyAllowGroupDetail:
+    post:
+      operationId: GetNetworkAclDenyAllowGroupDetail
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetNetworkAclDenyAllowGroupDetailRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetNetworkAclDenyAllowGroupDetailResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get network acl deny allow group detail
+  /getNetworkAclDenyAllowGroupList:
+    post:
+      operationId: GetNetworkAclDenyAllowGroupList
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetNetworkAclDenyAllowGroupListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetNetworkAclDenyAllowGroupListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get network acl deny allow group list
+  /getNetworkAclDetail:
+    post:
+      operationId: GetNetworkAclDetail
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetNetworkAclDetailRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetNetworkAclDetailResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get network acl detail
+  /getNetworkAclList:
+    post:
+      operationId: GetNetworkAclList
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetNetworkAclListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetNetworkAclListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get network acl list
+  /getNetworkAclRuleList:
+    post:
+      operationId: GetNetworkAclRuleList
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetNetworkAclRuleListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetNetworkAclRuleListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get network acl rule list
+  /getRouteList:
+    post:
+      operationId: GetRouteList
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetRouteListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRouteListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get route list
+  /getRouteTableDetail:
+    post:
+      operationId: GetRouteTableDetail
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetRouteTableDetailRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRouteTableDetailResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get route table detail
+  /getRouteTableList:
+    post:
+      operationId: GetRouteTableList
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetRouteTableListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRouteTableListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get route table list
+  /getRouteTableSubnetList:
+    post:
+      operationId: GetRouteTableSubnetList
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetRouteTableSubnetListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRouteTableSubnetListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get route table subnet list
+  /getSubnetDetail:
+    post:
+      operationId: GetSubnetDetail
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetSubnetDetailRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSubnetDetailResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get subnet detail
+  /getSubnetList:
+    post:
+      operationId: GetSubnetList
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetSubnetListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSubnetListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get subnet list
+  /getVpcDetail:
+    post:
+      operationId: GetVpcDetail
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetVpcDetailRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetVpcDetailResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get VPC detail
+  /getVpcList:
+    post:
+      operationId: GetVpcList
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetVpcListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetVpcListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get VPC list
+  /getVpcPeeringInstanceDetail:
+    post:
+      operationId: GetVpcPeeringInstanceDetail
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetVpcPeeringInstanceDetailRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetVpcPeeringInstanceDetailResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get VPC peering instance detail
+  /getVpcPeeringInstanceList:
+    post:
+      operationId: GetVpcPeeringInstanceList
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetVpcPeeringInstanceListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetVpcPeeringInstanceListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get VPC peering instance list
+  /removeNetworkAclInboundRule:
+    post:
+      operationId: RemoveNetworkAclInboundRule
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RemoveNetworkAclInboundRuleRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RemoveNetworkAclInboundRuleResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Remove network acl inbound rule
+  /removeNetworkAclOutboundRule:
+    post:
+      operationId: RemoveNetworkAclOutboundRule
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RemoveNetworkAclOutboundRuleRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RemoveNetworkAclOutboundRuleResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Remove network acl outbound rule
+  /removeRoute:
+    post:
+      operationId: RemoveRoute
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RemoveRouteRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RemoveRouteResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Remove route
+  /removeRouteTableSubnet:
+    post:
+      operationId: RemoveRouteTableSubnet
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RemoveRouteTableSubnetRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RemoveRouteTableSubnetResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Remove route table subnet
+  /setNatGatewayDescription:
+    post:
+      operationId: SetNatGatewayDescription
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetNatGatewayDescriptionRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetNatGatewayDescriptionResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Set nat gateway description
+  /setNetworkAclDenyAllowGroupDescription:
+    post:
+      operationId: SetNetworkAclDenyAllowGroupDescription
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetNetworkAclDenyAllowGroupDescriptionRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetNetworkAclDenyAllowGroupDescriptionResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Set network acl deny allow group description
+  /setNetworkAclDenyAllowGroupIpList:
+    post:
+      operationId: SetNetworkAclDenyAllowGroupIpList
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetNetworkAclDenyAllowGroupIpListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetNetworkAclDenyAllowGroupIpListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Set network acl deny allow group IP list
+  /setNetworkAclDescription:
+    post:
+      operationId: SetNetworkAclDescription
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetNetworkAclDescriptionRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetNetworkAclDescriptionResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Set network acl description
+  /setRouteTableDescription:
+    post:
+      operationId: SetRouteTableDescription
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetRouteTableDescriptionRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetRouteTableDescriptionResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Set route table description
+  /setSubnetNetworkAcl:
+    post:
+      operationId: SetSubnetNetworkAcl
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetSubnetNetworkAclRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetSubnetNetworkAclResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Set subnet network acl
+  /setVpcPeeringDescription:
+    post:
+      operationId: SetVpcPeeringDescription
+      tags:
+        - vpc
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetVpcPeeringDescriptionRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetVpcPeeringDescriptionResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Set VPC peering description
+components:
+  schemas:
+    AcceptOrRejectVpcPeeringRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        vpcPeeringInstanceNo:
+          type: string
+          description: "VPCPeering 인스턴스 번호"
+        isAccept:
+          type: boolean
+          description: "수락여부"
+    AcceptOrRejectVpcPeeringResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        vpcPeeringInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/VpcPeeringInstance'
+    AddNetworkAclInboundRuleRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        networkAclNo:
+          type: string
+          description: "네트워크 ACL 번호"
+        networkAclRuleList:
+          type: array
+          description: "네트워크 ACLRule 리스트"
+          items:
+            $ref: '#/components/schemas/AddNetworkAclRuleParameter'
+      required:
+        - networkAclRuleList
+    AddNetworkAclInboundRuleResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        networkAclRuleList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkAclRule'
+    AddNetworkAclOutboundRuleRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        networkAclNo:
+          type: string
+          description: "네트워크 ACL 번호"
+        networkAclRuleList:
+          type: array
+          description: "네트워크 ACLRule 리스트"
+          items:
+            $ref: '#/components/schemas/AddNetworkAclRuleParameter'
+      required:
+        - networkAclRuleList
+    AddNetworkAclOutboundRuleResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        networkAclRuleList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkAclRule'
+    AddNetworkAclRuleParameter:
+      type: object
+      properties:
+        networkAclRuleDescription:
+          type: string
+          description: "네트워크 ACLRule 설명"
+        ipBlock:
+          type: string
+          description: "IP 블록"
+        denyAllowGroupNo:
+          type: string
+          description: "허용차단그룹 번호"
+        ruleActionCode:
+          type: string
+          description: "Rule 액션코드"
+        portRange:
+          type: string
+          description: "포트범위"
+        priority:
+          type: integer
+          format: int32
+          description: "우선순위"
+        protocolTypeCode:
+          type: string
+          description: "프로토콜유형 코드"
+    AddRouteRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        routeList:
+          type: array
+          description: "라우트리스트"
+          items:
+            $ref: '#/components/schemas/RouteParameter'
+        routeTableNo:
+          type: string
+          description: "라우트테이블번호"
+        vpcNo:
+          type: string
+          description: "VPC 번호"
+      required:
+        - routeList
+    AddRouteResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        routeList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Route'
+    AddRouteTableSubnetRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        routeTableNo:
+          type: string
+          description: "라우트테이블번호"
+        subnetNoList:
+          type: array
+          description: "서브넷 번호 리스트"
+          items:
+            type: string
+        vpcNo:
+          type: string
+          description: "VPC 번호"
+      required:
+        - subnetNoList
+    AddRouteTableSubnetResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        subnetList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subnet'
+    CommonCode:
+      type: object
+      properties:
+        code:
+          type: string
+          description: "코드"
+        codeName:
+          type: string
+          description: "코드명"
+    CreateNatGatewayInstanceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        natGatewayDescription:
+          type: string
+          description: "NATGateway 설명"
+        natGatewayName:
+          type: string
+          description: "NATGateway 이름"
+        vpcNo:
+          type: string
+          description: "VPC 번호"
+        zoneCode:
+          type: string
+          description: "ZONE 코드"
+        subnetNo:
+          type: string
+          description: "Subnet 번호"
+        publicIpInstanceNo:
+          type: string
+          description: "공인아이피인스턴스 번호"
+        privateIp:
+          type: string
+          description: "사설 IP 주소"
+    CreateNatGatewayInstanceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        natGatewayInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NatGatewayInstance'
+    CreateNetworkAclDenyAllowGroupRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        vpcNo:
+          type: string
+          description: "VPC 번호"
+        networkAclDenyAllowGroupName:
+          type: string
+          description: "네트워크 ACL 허용차단그룹 이름"
+        networkAclDenyAllowGroupDescription:
+          type: string
+          description: "네트워크 ACL 허용차단그룹설명"
+    CreateNetworkAclDenyAllowGroupResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        networkAclDenyAllowGroupList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkAclDenyAllowGroup'
+    CreateNetworkAclRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        networkAclDescription:
+          type: string
+          description: "네트워크 ACL 설명"
+        networkAclName:
+          type: string
+          description: "네트워크 ACL 이름"
+        vpcNo:
+          type: string
+          description: "VPC 번호"
+    CreateNetworkAclResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        networkAclList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkAcl'
+    CreateRouteTableRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        routeTableDescription:
+          type: string
+          description: "라우트테이블설명"
+        supportedSubnetTypeCode:
+          type: string
+          description: "지원하는서브넷유형 코드"
+        routeTableName:
+          type: string
+          description: "라우트테이블이름"
+        vpcNo:
+          type: string
+          description: "VPC 번호"
+    CreateRouteTableResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        routeTableList:
+          type: array
+          items:
+            $ref: '#/components/schemas/RouteTable'
+    CreateSubnetRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        subnetTypeCode:
+          type: string
+          description: "서브넷유형 코드"
+        usageTypeCode:
+          type: string
+          description: "용도유형 코드"
+        networkAclNo:
+          type: string
+          description: "네트워크 ACL 번호"
+        subnet:
+          type: string
+          description: "서브넷"
+        subnetName:
+          type: string
+          description: "서브넷이름"
+        vpcNo:
+          type: string
+          description: "VPC 번호"
+        zoneCode:
+          type: string
+          description: "ZONE 코드"
+    CreateSubnetResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        subnetList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subnet'
+    CreateVpcPeeringInstanceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        vpcPeeringDescription:
+          type: string
+          description: "VPCPeering 설명"
+        sourceVpcNo:
+          type: string
+          description: "요청 VPC 번호"
+        targetVpcLoginId:
+          type: string
+          description: "수락 VPC 소유자 ID"
+        targetVpcName:
+          type: string
+          description: "수락 VPC 이름"
+        targetVpcNo:
+          type: string
+          description: "수락 VPC 번호"
+        vpcPeeringName:
+          type: string
+          description: "VPCPeering 이름"
+    CreateVpcPeeringInstanceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        vpcPeeringInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/VpcPeeringInstance'
+    CreateVpcRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        ipv4CidrBlock:
+          type: string
+          description: "IPv4 CIDR 블록"
+        vpcName:
+          type: string
+          description: "VPC 이름"
+    CreateVpcResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        vpcList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Vpc'
+    DeleteNatGatewayInstanceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        natGatewayInstanceNo:
+          type: string
+          description: "NATGateway 인스턴스 번호"
+    DeleteNatGatewayInstanceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        natGatewayInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NatGatewayInstance'
+    DeleteNetworkAclDenyAllowGroupRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        networkAclDenyAllowGroupNo:
+          type: string
+          description: "네트워크 ACL 허용차단그룹 번호"
+    DeleteNetworkAclDenyAllowGroupResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        networkAclDenyAllowGroupList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkAclDenyAllowGroup'
+    DeleteNetworkAclRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        networkAclNo:
+          type: string
+          description: "네트워크 ACL 번호"
+    DeleteNetworkAclResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        networkAclList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkAcl'
+    DeleteRouteTableRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        routeTableNo:
+          type: string
+          description: "라우트테이블번호"
+    DeleteRouteTableResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        routeTableList:
+          type: array
+          items:
+            $ref: '#/components/schemas/RouteTable'
+    DeleteSubnetRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        subnetNo:
+          type: string
+          description: "서브넷 번호"
+    DeleteSubnetResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        subnetList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subnet'
+    DeleteVpcPeeringInstanceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        vpcPeeringInstanceNo:
+          type: string
+          description: "VPCPeering 인스턴스 번호"
+    DeleteVpcPeeringInstanceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        vpcPeeringInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/VpcPeeringInstance'
+    DeleteVpcRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        vpcNo:
+          type: string
+          description: "VPC 번호"
+    DeleteVpcResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        VpcList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Vpc'
+    GetNatGatewayInstanceDetailRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        natGatewayInstanceNo:
+          type: string
+          description: "NATGatway 인스턴스 번호"
+    GetNatGatewayInstanceDetailResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        natGatewayInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NatGatewayInstance'
+    GetNatGatewayInstanceListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        zoneCode:
+          type: string
+          description: "ZONE 코드"
+        natGatewayInstanceNoList:
+          type: array
+          description: "NATGateway 인스턴스 번호 리스트"
+          items:
+            type: string
+        publicIp:
+          type: string
+          description: "공인 IP 주소"
+        vpcName:
+          type: string
+          description: "VPC 이름"
+        natGatewayName:
+          type: string
+          description: "natGatewayName"
+        natGatewayInstanceStatusCode:
+          type: string
+          description: "NATGateway 인스턴스 상태 코드"
+        natGatewayTypeCode:
+          type: string
+          description: "NATGateway 유형 (PRVT / PBLIP)"
+        subnetNo:
+          type: string
+          description: "Subnet 번호"
+        subnetName:
+          type: string
+          description: "Subnet 이름"
+        privateIp:
+          type: string
+          description: "사설 IP 주소"
+        pageNo:
+          type: integer
+          format: int32
+          description: "페이지번호"
+        pageSize:
+          type: integer
+          format: int32
+          description: "페이지사이즈"
+    GetNatGatewayInstanceListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        natGatewayInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NatGatewayInstance'
+    GetNetworkAclDenyAllowGroupDetailRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        networkAclDenyAllowGroupNo:
+          type: string
+          description: "네트워크 ACL 허용차단그룹 번호"
+    GetNetworkAclDenyAllowGroupDetailResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        networkAclDenyAllowGroupList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkAclDenyAllowGroup'
+    GetNetworkAclDenyAllowGroupListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        vpcNo:
+          type: string
+          description: "VPC 번호"
+        networkAclDenyAllowGroupName:
+          type: string
+          description: "네트워크 ACL 허용차단그룹 이름"
+        networkAclDenyAllowGroupStatusCode:
+          type: string
+          description: "네트워크 ACL 허용차단그룹상태 코드"
+        isApplied:
+          type: boolean
+          description: "네트워크 ACLRule 적용여부"
+        networkAclDenyAllowGroupNoList:
+          type: array
+          description: "네트워크 ACL 허용차단그룹 번호 리스트"
+          items:
+            type: string
+        pageNo:
+          type: integer
+          format: int32
+          description: "페이지번호"
+        pageSize:
+          type: integer
+          format: int32
+          description: "페이지사이즈"
+    GetNetworkAclDenyAllowGroupListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        networkAclDenyAllowGroupList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkAclDenyAllowGroup'
+    GetNetworkAclDetailRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        networkAclNo:
+          type: string
+          description: "네트워크 ACL 번호"
+    GetNetworkAclDetailResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        networkAclList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkAcl'
+    GetNetworkAclListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        networkAclName:
+          type: string
+          description: "네트워크 ACL 이름"
+        networkAclStatusCode:
+          type: string
+          description: "네트워크 ACL 상태 코드"
+        networkAclNoList:
+          type: array
+          description: "네트워크 ACL 번호 리스트"
+          items:
+            type: string
+        pageNo:
+          type: integer
+          format: int32
+          description: "페이지번호"
+        pageSize:
+          type: integer
+          format: int32
+          description: "페이지사이즈"
+        vpcNo:
+          type: string
+          description: "VPC 번호"
+    GetNetworkAclListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        networkAclList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkAcl'
+    GetNetworkAclRuleListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        networkAclNo:
+          type: string
+          description: "네트워크 ACL 번호"
+        networkAclRuleTypeCode:
+          type: string
+          description: "네트워크 ACLRule 유형 코드"
+    GetNetworkAclRuleListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        networkAclRuleList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkAclRule'
+    GetRouteListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        routeTableNo:
+          type: string
+          description: "라우트테이블번호"
+        vpcNo:
+          type: string
+          description: "VPC 번호"
+    GetRouteListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        routeList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Route'
+    GetRouteTableDetailRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        routeTableNo:
+          type: string
+          description: "라우트테이블번호"
+    GetRouteTableDetailResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        routeTableList:
+          type: array
+          items:
+            $ref: '#/components/schemas/RouteTable'
+    GetRouteTableListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        routeTableNoList:
+          type: array
+          description: "라우트테이블번호 리스트"
+          items:
+            type: string
+        routeTableName:
+          type: string
+          description: "라우트테이블이름"
+        supportedSubnetTypeCode:
+          type: string
+          description: "지원하는서브넷유형 코드"
+        pageNo:
+          type: integer
+          format: int32
+          description: "페이지번호"
+        pageSize:
+          type: integer
+          format: int32
+          description: "페이지사이즈"
+        sortedBy:
+          type: string
+          description: "정렬대상"
+        sortingOrder:
+          type: string
+          description: "정렬순서"
+        vpcNo:
+          type: string
+          description: "VPC 번호"
+    GetRouteTableListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        routeTableList:
+          type: array
+          items:
+            $ref: '#/components/schemas/RouteTable'
+    GetRouteTableSubnetListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        routeTableNo:
+          type: string
+          description: "라우트테이블번호"
+    GetRouteTableSubnetListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        subnetList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subnet'
+    GetSubnetDetailRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        subnetNo:
+          type: string
+          description: "서브넷 번호"
+    GetSubnetDetailResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        subnetList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subnet'
+    GetSubnetListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        subnetNoList:
+          type: array
+          description: "서브넷 번호 리스트"
+          items:
+            type: string
+        subnetName:
+          type: string
+          description: "서브넷이름"
+        subnet:
+          type: string
+          description: "서브넷"
+        subnetTypeCode:
+          type: string
+          description: "서브넷유형 코드"
+        usageTypeCode:
+          type: string
+          description: "용도유형 코드"
+        networkAclNo:
+          type: string
+          description: "네트워크 ACL 번호"
+        pageNo:
+          type: integer
+          format: int32
+          description: "페이지번호"
+        pageSize:
+          type: integer
+          format: int32
+          description: "페이지사이즈"
+        subnetStatusCode:
+          type: string
+          description: "서브넷상태 코드"
+        vpcNo:
+          type: string
+          description: "VPC 번호"
+        zoneCode:
+          type: string
+          description: "ZONE 코드"
+    GetSubnetListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        subnetList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subnet'
+    GetVpcDetailRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        vpcNo:
+          type: string
+          description: "VPC 번호"
+    GetVpcDetailResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        vpcList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Vpc'
+    GetVpcListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        vpcName:
+          type: string
+          description: "VPC 이름"
+        vpcStatusCode:
+          type: string
+          description: "VPC 상태 코드"
+        vpcNoList:
+          type: array
+          description: "VPC 번호 리스트"
+          items:
+            type: string
+    GetVpcListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        vpcList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Vpc'
+    GetVpcPeeringInstanceDetailRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        vpcPeeringInstanceNo:
+          type: string
+          description: "VPCPeering 인스턴스 번호"
+    GetVpcPeeringInstanceDetailResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        vpcPeeringInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/VpcPeeringInstance'
+    GetVpcPeeringInstanceListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        vpcPeeringInstanceNoList:
+          type: array
+          description: "VPCPeering 인스턴스 번호 리스트"
+          items:
+            type: string
+        sourceVpcName:
+          type: string
+          description: "요청 VPC 이름"
+        vpcPeeringName:
+          type: string
+          description: "VPCPeering 이름"
+        targetVpcName:
+          type: string
+          description: "수락 VPC 이름"
+        vpcPeeringInstanceStatusCode:
+          type: string
+          description: "VPCPeering 인스턴스 상태 코드"
+        pageNo:
+          type: integer
+          format: int32
+          description: "페이지번호"
+        pageSize:
+          type: integer
+          format: int32
+          description: "페이지사이즈"
+        sortedBy:
+          type: string
+          description: "정렬대상"
+        sortingOrder:
+          type: string
+          description: "정렬순서"
+    GetVpcPeeringInstanceListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        vpcPeeringInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/VpcPeeringInstance'
+    NatGatewayInstance:
+      type: object
+      properties:
+        vpcNo:
+          type: string
+          description: "VPC 번호"
+        vpcName:
+          type: string
+          description: "VPC 이름"
+        natGatewayInstanceNo:
+          type: string
+          description: "NATGateway 인스턴스 번호"
+        natGatewayName:
+          type: string
+          description: "NATGateway 이름"
+        publicIp:
+          type: string
+          description: "공인 IP 주소"
+        natGatewayInstanceStatus:
+          $ref: '#/components/schemas/CommonCode'
+        natGatewayInstanceStatusName:
+          type: string
+          description: "NATGateway 인스턴스 상태이름"
+        natGatewayInstanceOperation:
+          $ref: '#/components/schemas/CommonCode'
+        createDate:
+          type: string
+          description: "생성일시"
+        natGatewayDescription:
+          type: string
+          description: "NATGateway 설명"
+        zoneCode:
+          type: string
+          description: "ZONE 코드"
+        natGatewayType:
+          $ref: '#/components/schemas/CommonCode'
+        subnetNo:
+          type: string
+          description: "Subnet 번호"
+        subnetName:
+          type: string
+          description: "Subnet 이름"
+        publicIpInstanceNo:
+          type: string
+          description: "공인아이피인스턴스 번호"
+        privateIp:
+          type: string
+          description: "사설 IP 주소"
+    NetworkAcl:
+      type: object
+      properties:
+        networkAclNo:
+          type: string
+          description: "네트워크 ACL 번호"
+        networkAclName:
+          type: string
+          description: "네트워크 ACL 이름"
+        vpcNo:
+          type: string
+          description: "VPC 번호"
+        networkAclStatus:
+          $ref: '#/components/schemas/CommonCode'
+        networkAclDescription:
+          type: string
+          description: "네트워크 ACL 설명"
+        createDate:
+          type: string
+          description: "생성일시"
+        isDefault:
+          type: boolean
+          description: "Default 여부"
+    NetworkAclDenyAllowGroup:
+      type: object
+      properties:
+        networkAclDenyAllowGroupNo:
+          type: string
+          description: "네트워크 ACL 허용차단그룹 번호"
+        networkAclDenyAllowGroupName:
+          type: string
+          description: "네트워크 ACL 허용차단그룹 이름"
+        networkAclDenyAllowGroupStatus:
+          $ref: '#/components/schemas/CommonCode'
+        vpcNo:
+          type: string
+          description: "VPC 번호"
+        ipList:
+          type: array
+          description: "IP 리스트"
+          items:
+            type: string
+        networkAclDenyAllowGroupDescription:
+          type: string
+          description: "네트워크 ACL 허용차단그룹설명"
+        createDate:
+          type: string
+          description: "생성일시"
+        isApplied:
+          type: boolean
+          description: "네트워크 ACLRule 적용여부"
+    NetworkAclRule:
+      type: object
+      properties:
+        networkAclNo:
+          type: string
+          description: "네트워크 ACL 번호"
+        priority:
+          type: integer
+          format: int32
+          description: "우선순위"
+        protocolType:
+          $ref: '#/components/schemas/CommonCode'
+        portRange:
+          type: string
+          description: "포트범위"
+        ruleAction:
+          $ref: '#/components/schemas/CommonCode'
+        createDate:
+          type: string
+          description: "생성일시"
+        ipBlock:
+          type: string
+          description: "IP 블록"
+        denyAllowGroupNo:
+          type: string
+          description: "허용차단그룹 번호"
+        networkAclRuleType:
+          $ref: '#/components/schemas/CommonCode'
+        networkAclRuleDescription:
+          type: string
+          description: "네트워크 ACLRule 설명"
+    RemoveNetworkAclInboundRuleRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        networkAclNo:
+          type: string
+          description: "네트워크 ACL 번호"
+        networkAclRuleList:
+          type: array
+          description: "네트워크 ACLRule 리스트"
+          items:
+            $ref: '#/components/schemas/RemoveNetworkAclRuleParameter'
+      required:
+        - networkAclRuleList
+    RemoveNetworkAclInboundRuleResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        networkAclRuleList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkAclRule'
+    RemoveNetworkAclOutboundRuleRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        networkAclNo:
+          type: string
+          description: "네트워크 ACL 번호"
+        networkAclRuleList:
+          type: array
+          description: "네트워크 ACLRule 리스트"
+          items:
+            $ref: '#/components/schemas/RemoveNetworkAclRuleParameter'
+      required:
+        - networkAclRuleList
+    RemoveNetworkAclOutboundRuleResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        networkAclRuleList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkAclRule'
+    RemoveNetworkAclRuleParameter:
+      type: object
+      properties:
+        ipBlock:
+          type: string
+          description: "IP 블록"
+        denyAllowGroupNo:
+          type: string
+          description: "허용차단그룹 번호"
+        ruleActionCode:
+          type: string
+          description: "Rule 액션코드"
+        portRange:
+          type: string
+          description: "포트범위"
+        priority:
+          type: integer
+          format: int32
+          description: "우선순위"
+        protocolTypeCode:
+          type: string
+          description: "프로토콜유형 코드"
+    RemoveRouteRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        routeList:
+          type: array
+          description: "라우트리스트"
+          items:
+            $ref: '#/components/schemas/RouteParameter'
+        routeTableNo:
+          type: string
+          description: "라우트테이블번호"
+        vpcNo:
+          type: string
+          description: "VPC 번호"
+      required:
+        - routeList
+    RemoveRouteResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        routeList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Route'
+    RemoveRouteTableSubnetRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        routeTableNo:
+          type: string
+          description: "라우트테이블번호"
+        subnetNoList:
+          type: array
+          description: "서브넷 번호 리스트"
+          items:
+            type: string
+        vpcNo:
+          type: string
+          description: "VPC 번호"
+      required:
+        - subnetNoList
+    RemoveRouteTableSubnetResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        subnetList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subnet'
+    Route:
+      type: object
+      properties:
+        destinationCidrBlock:
+          type: string
+          description: "목적지 CIDR 블록"
+        targetName:
+          type: string
+          description: "목적지이름"
+        routeTableNo:
+          type: string
+          description: "라우트테이블번호"
+        targetType:
+          $ref: '#/components/schemas/CommonCode'
+        targetNo:
+          type: string
+          description: "목적지번호"
+        isDefault:
+          type: boolean
+          description: "Default 여부"
+    RouteParameter:
+      type: object
+      properties:
+        destinationCidrBlock:
+          type: string
+          description: "목적지 CIDR 블록"
+        targetTypeCode:
+          type: string
+          description: "목적지유형 코드"
+        targetNo:
+          type: string
+          description: "목적지번호"
+        targetName:
+          type: string
+          description: "목적지이름"
+    RouteTable:
+      type: object
+      properties:
+        routeTableNo:
+          type: string
+          description: "라우트테이블번호"
+        routeTableName:
+          type: string
+          description: "라우트테이블이름"
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        vpcNo:
+          type: string
+          description: "VPC 번호"
+        supportedSubnetType:
+          $ref: '#/components/schemas/CommonCode'
+        isDefault:
+          type: boolean
+          description: "Default 여부"
+        routeTableStatus:
+          $ref: '#/components/schemas/CommonCode'
+        routeTableDescription:
+          type: string
+          description: "라우트테이블설명"
+    SetNatGatewayDescriptionRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        natGatewayInstanceNo:
+          type: string
+          description: "NATGateway 인스턴스 번호"
+        natGatewayDescription:
+          type: string
+          description: "NATGateway 설명"
+    SetNatGatewayDescriptionResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        natGatewayInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NatGatewayInstance'
+    SetNetworkAclDenyAllowGroupDescriptionRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        networkAclDenyAllowGroupNo:
+          type: string
+          description: "네트워크 ACL 허용차단그룹 번호"
+        networkAclDenyAllowGroupDescription:
+          type: string
+          description: "네트워크 ACL 허용차단그룹설명"
+    SetNetworkAclDenyAllowGroupDescriptionResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        networkAclDenyAllowGroupList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkAclDenyAllowGroup'
+    SetNetworkAclDenyAllowGroupIpListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        networkAclDenyAllowGroupNo:
+          type: string
+          description: "네트워크 ACL 허용차단그룹 번호"
+        ipList:
+          type: array
+          description: "IP 리스트"
+          items:
+            type: string
+    SetNetworkAclDenyAllowGroupIpListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        networkAclDenyAllowGroupList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkAclDenyAllowGroup'
+    SetNetworkAclDescriptionRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        networkAclNo:
+          type: string
+          description: "네트워크 ACL 번호"
+        networkAclDescription:
+          type: string
+          description: "네트워크 ACL 설명"
+    SetNetworkAclDescriptionResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        networkAclList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkAcl'
+    SetRouteTableDescriptionRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        routeTableNo:
+          type: string
+          description: "라우트테이블번호"
+        routeTableDescription:
+          type: string
+          description: "라우트테이블설명"
+    SetRouteTableDescriptionResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        routeTableList:
+          type: array
+          items:
+            $ref: '#/components/schemas/RouteTable'
+    SetSubnetNetworkAclRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        networkAclNo:
+          type: string
+          description: "네트워크 ACL 번호"
+        subnetNo:
+          type: string
+          description: "서브넷 번호"
+    SetSubnetNetworkAclResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        networkAclList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkAcl'
+    SetVpcPeeringDescriptionRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        vpcPeeringInstanceNo:
+          type: string
+          description: "VPCPeering 인스턴스 번호"
+        vpcPeeringDescription:
+          type: string
+          description: "VPCPeering 설명"
+    SetVpcPeeringDescriptionResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        vpcPeeringInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/VpcPeeringInstance'
+    Subnet:
+      type: object
+      properties:
+        subnetNo:
+          type: string
+          description: "서브넷 번호"
+        vpcNo:
+          type: string
+          description: "VPC 번호"
+        zoneCode:
+          type: string
+          description: "ZONE 코드"
+        subnetName:
+          type: string
+          description: "서브넷이름"
+        subnet:
+          type: string
+          description: "서브넷"
+        subnetStatus:
+          $ref: '#/components/schemas/CommonCode'
+        createDate:
+          type: string
+          description: "생성일시"
+        subnetType:
+          $ref: '#/components/schemas/CommonCode'
+        usageType:
+          $ref: '#/components/schemas/CommonCode'
+        networkAclNo:
+          type: string
+          description: "네트워크 ACL 번호"
+    Vpc:
+      type: object
+      properties:
+        vpcNo:
+          type: string
+          description: "VPC 번호"
+        vpcName:
+          type: string
+          description: "VPC 이름"
+        ipv4CidrBlock:
+          type: string
+          description: "IPv4 CIDR 블록"
+        vpcStatus:
+          $ref: '#/components/schemas/CommonCode'
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        createDate:
+          type: string
+          description: "생성일시"
+    VpcPeeringInstance:
+      type: object
+      properties:
+        vpcPeeringInstanceNo:
+          type: string
+          description: "VPCPeering 인스턴스 번호"
+        vpcPeeringName:
+          type: string
+          description: "VPCPeering 이름"
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        createDate:
+          type: string
+          description: "생성일시"
+        lastModifiyDate:
+          type: string
+          description: "마지막수정일시"
+        vpcPeeringInstanceStatus:
+          $ref: '#/components/schemas/CommonCode'
+        vpcPeeringInstanceStatusName:
+          type: string
+          description: "VPCPeering 인스턴스 상태이름"
+        vpcPeeringInstanceOperation:
+          $ref: '#/components/schemas/CommonCode'
+        sourceVpcNo:
+          type: string
+          description: "요청 VPC 번호"
+        sourceVpcName:
+          type: string
+          description: "요청 VPC 이름"
+        sourceVpcIpv4CidrBlock:
+          type: string
+          description: "요청 VPC IPv4 CIDR 블록"
+        sourceVpcLoginId:
+          type: string
+          description: "요청 VPC 소유자 ID"
+        targetVpcNo:
+          type: string
+          description: "수락 VPC 번호"
+        targetVpcName:
+          type: string
+          description: "수락 VPC 이름"
+        targetVpcIpv4CidrBlock:
+          type: string
+          description: "수락 VPC IPv4 CIDR 블록"
+        targetVpcLoginId:
+          type: string
+          description: "수락 VPC 소유자 ID"
+        vpcPeeringDescription:
+          type: string
+          description: "VPCPeering 설명"
+        hasReverseVpcPeering:
+          type: boolean
+          description: "역방향 VPCPeering 존재여부"
+        isBetweenAccounts:
+          type: boolean
+          description: "계정간의 VPCPeering 여부"
+        reverseVpcPeeringInstanceNo:
+          type: string
+          description: "역방향 VPCPeering 인스턴스 번호"
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

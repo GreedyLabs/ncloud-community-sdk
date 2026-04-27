@@ -1,0 +1,1179 @@
+openapi: 3.0.3
+info:
+  title: Data Forest
+  description: Data Forest
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: false
+    gov: false
+
+  x-ncloud-nrn:
+
+    productName: DataForest
+    resource_types:
+      - Account
+      - App
+
+servers:
+  - url: https://df.apigw.ntruss.com
+    description: data-forest 민간
+    x-ncloud-env: public
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /accounts/checkAvailableName:
+    post:
+      operationId: AccountsCheckAvailableName
+      summary: checkAvailableName
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-forest
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-dataforest-accounts-checkavailablename
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                  description: 계정 이름 영문 소문자, 숫자, 특수문자 '-'를 조합하여 2~16자로 입력 문자열의 시작과 마지막은 영문 소문자 또는 숫자로 구성
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 'API 처리 결과 true | false true : 성공 false : 실패'
+                  message:
+                    type: string
+                    description: 결과 메시지 success 또는 availableName 이 false 인 경우, 표시
+                  availableName:
+                    type: string
+                    description: '계정 이름의 유효성 여부 true | false true : 유효함 false : 유효하지 않음'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /accounts/checkHasResource:
+    post:
+      operationId: AccountsCheckHasResource
+      summary: checkHasResource
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-forest
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-dataforest-accounts-checkhasresource
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: string
+                  description: 계정 고유 식별자 0~22자 UUID를 Base62로 변환한 형식 getList 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 'API 처리 결과 true | false true : 성공 false : 실패'
+                  message:
+                    type: string
+                    description: 결과 메시지 success 가 false 인 경우, 표시
+                  hasResource:
+                    type: boolean
+                    description: '리소스 존재 여부 true | false true : 존재함 false : 존재하지 않음'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /accounts/create:
+    post:
+      operationId: AccountsCreate
+      summary: create
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-forest
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-dataforest-accounts-create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - password
+              properties:
+                name:
+                  type: string
+                  description: 계정 이름 영문 소문자, 숫자, 특수문자 '-'를 조합하여 2~16자로 입력
+                password:
+                  type: string
+                  description: "계정 패스워드 영문자, 숫자, 특수문자를 각 1자 이상 포함하여 8~20자로 입력 사용 불가 특수문자: ', \", ₩, /, &, `, 공백"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 'API 처리 결과 true | false true : 성공 false : 실패'
+                  message:
+                    type: string
+                    description: 결과 메시지 success 가 false 인 경우, 표시
+                  id:
+                    type: string
+                    description: 계정 고유 식별자 UUID를 Base62로 변환한 형식
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /accounts/delete:
+    post:
+      operationId: AccountsDelete
+      summary: delete
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-forest
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-dataforest-accounts-delete
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: string
+                  description: 계정 고유 식별자 0~22자 UUID를 Base62로 변환한 형식 getList 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 'API 처리 결과 true | false true : 성공 false : 실패'
+                  message:
+                    type: string
+                    description: 결과 메시지 success 가 false 인 경우, 표시
+                  id:
+                    type: string
+                    description: 계정 고유 식별자 UUID를 Base62로 변환한 형식
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /accounts/getDetail:
+    post:
+      operationId: AccountsGetDetail
+      summary: getDetail
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-forest
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-dataforest-accounts-getdetail
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: string
+                  description: 계정 고유 식별자 0~22자 UUID를 Base62로 변환한 형식 getList 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: (inferred from JSON example)
+                  id:
+                    type: string
+                    description: (inferred from JSON example)
+                  name:
+                    type: string
+                    description: (inferred from JSON example)
+                  status:
+                    type: string
+                    description: (inferred from JSON example)
+                  createdAt:
+                    type: string
+                    description: (inferred from JSON example)
+                  quotas:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /accounts/getKerberosKeytab:
+    post:
+      operationId: AccountsGetKerberOsKeyTab
+      summary: getKerberosKeytab
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-forest
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-dataforest-accounts-getkerberoskeytab
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: string
+                  description: 계정 고유 식별자 0~22자 UUID를 Base62로 변환한 형식 getList 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /accounts/getList:
+    post:
+      operationId: AccountsGetList
+      summary: getList
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-forest
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-dataforest-accounts-getlist
+      requestBody:
+        description: '(Per NCP docs this endpoint takes no request body. Source: https://api.ncloud-docs.com/docs/analytics-dataforest-accounts-getlist)'
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: (inferred from JSON example)
+                  total:
+                    type: integer
+                    description: (inferred from JSON example)
+                  contents:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /accounts/resetKerberosKeytab:
+    post:
+      operationId: AccountsResetKerberOsKeyTab
+      summary: resetKerberosKeytab
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-forest
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-dataforest-accounts-resetkerberoskeytab
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: string
+                  description: 계정 고유 식별자 0~22자 UUID를 Base62로 변환한 형식 getList 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 'API 처리 결과 true | false true : 성공 false : 실패'
+                  message:
+                    type: string
+                    description: 결과 메시지 success 가 false 인 경우, 표시
+                  id:
+                    type: string
+                    description: 계정 고유 식별자 UUID를 Base62로 변환한 형식
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /accounts/resetPassword:
+    post:
+      operationId: AccountsResetPassword
+      summary: resetPassword
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-forest
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-dataforest-accounts-resetpassword
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - password
+              properties:
+                id:
+                  type: string
+                  description: 계정 고유 식별자 0~22자 UUID를 Base62로 변환한 형식 getList 참조
+                password:
+                  type: string
+                  description: "계정 비밀번호 영문자, 숫자, 특수문자를 각 1자 이상 포함하여 8~20자로 입력 사용 불가 특수문자: ', \", ₩, /, &, `, 공백"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 'API 처리 결과 true | false true : 성공 false : 실패'
+                  message:
+                    type: string
+                    description: 결과 메시지 success 가 false 인 경우, 표시
+                  id:
+                    type: string
+                    description: 계정 고유 식별자 UUID를 Base62로 변환한 형식
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /accounts/setQuota:
+    post:
+      operationId: AccountsSetQuota
+      summary: setQuota
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-forest
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-dataforest-accounts-setquota
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - namespace
+                - fileCountMillion
+                - spaceTb
+              properties:
+                id:
+                  type: string
+                  description: 계정 고유 식별자 0~22자 UUID를 Base62로 변환한 형식 getList 참조
+                namespace:
+                  type: string
+                  description: HDFS 네임스페이스 koya | tata
+                fileCountMillion:
+                  type: integer
+                  description: '파일 개수(백만) 1~5 (기본값: 1)'
+                spaceTb:
+                  type: integer
+                  description: '최대 용량(TB) 200~500 (기본값: 200) 100 TB 단위로 입력 가능'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 'API 처리 결과 true | false true : 성공 false : 실패'
+                  message:
+                    type: string
+                    description: 결과 메시지 success 가 false 인 경우, 표시
+                  id:
+                    type: string
+                    description: 계정 고유 식별자 UUID를 Base62로 변환한 형식
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /apps/checkAvailableName:
+    post:
+      operationId: AppsCheckAvailableName
+      summary: checkAvailableName
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-forest
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-dataforest-apps-checkavailablename
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - accountId
+                - name
+              properties:
+                accountId:
+                  type: string
+                  description: 계정 고유 식별자 0~22자 UUID를 Base62로 변환한 형식 Accounts의 getList 참조
+                name:
+                  type: string
+                  description: 앱 이름 영문 소문자, 숫자, 특수문자 '-'를 조합하여 3~15자로 입력 문자열의 시작과 마지막은 영문 소문자 또는 숫자로 구성 특수문자 '-' 연속 사용 불가
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 'API 처리 결과 true | false true : 성공 false : 실패'
+                  message:
+                    type: string
+                    description: 결과 메시지 success 또는 availableName 이 false 인 경우, 표시
+                  availableName:
+                    type: boolean
+                    description: '앱 이름의 유효성 여부 true | false true : 유효함 false : 유효하지 않음'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /apps/create:
+    post:
+      operationId: AppsCreate
+      summary: create
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-forest
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-dataforest-apps-create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - accountId
+                - queueName
+                - appTypeId
+                - name
+                - lifetime
+                - components
+              properties:
+                accountId:
+                  type: string
+                  description: 계정 고유 식별자 0~22자 UUID를 Base62로 변환한 형식 Accounts의 getList 참조
+                queueName:
+                  type: string
+                  description: YARN 큐 이름 longlived (기본값) 0~60자
+                appTypeId:
+                  type: string
+                  description: 앱 타입 및 버전 0~60자 getAppTypeIdList 참조 <예시> DEV-1.0.0
+                name:
+                  type: string
+                  description: 앱 이름 영문 소문자, 숫자, 특수문자 '-'를 조합하여 3~15자로 입력 문자열의 시작과 마지막은 영문 소문자 또는 숫자로 구성 특수문자 '-' 연속 사용 불가
+                lifetime:
+                  type: integer
+                  description: 앱 구동 시간(초) 300 ~ 604800, -1(영구)
+                description:
+                  type: string
+                  description: 앱 설명 0~2048자
+                dependentIds:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: 앱 생성 시 필요한 의존 앱 아이디 목록 getAppBasicSetting 참조
+                components:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: 앱 구성 컴포넌트 getAppBasicSetting 참조 요청 바디는 AppComponentRequest 데이터 타입 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: (inferred from JSON example)
+                  id:
+                    type: string
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /apps/delete:
+    post:
+      operationId: AppsDelete
+      summary: delete
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-forest
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-dataforest-apps-delete
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: string
+                  description: 앱 고유 식별자 0~22자 UUID를 Base62로 변환한 형식 getList 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 'API 처리 결과 true | false true : 성공 false : 실패'
+                  message:
+                    type: string
+                    description: 결과 메시지 success 가 false 인 경우, 표시
+                  id:
+                    type: string
+                    description: 앱 고유 식별자 UUID를 Base62로 변환한 형식
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /apps/getAppBasicSetting:
+    post:
+      operationId: AppsGetAppbasicSetTing
+      summary: getAppBasicSetting
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-forest
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-dataforest-apps-getappbasicsetting
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - accountId
+                - appTypeId
+              properties:
+                accountId:
+                  type: string
+                  description: 계정 고유 식별자 0~22자 UUID를 Base62로 변환한 형식 Accounts의 getList 참조
+                appTypeId:
+                  type: string
+                  description: 앱 타입 및 버전 0~60자 getAppTypeIdList 참조 <예시> DEV-1.0.0
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /apps/getAppTypeIdList:
+    post:
+      operationId: AppsGetAppTypeIdList
+      summary: getAppTypeIdList
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-forest
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-dataforest-apps-getapptypeidlist
+      requestBody:
+        description: '(Per NCP docs this endpoint takes no request body. Source: https://api.ncloud-docs.com/docs/analytics-dataforest-apps-getapptypeidlist)'
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 'API 처리 결과 true | false true : 성공 false : 실패'
+                  message:
+                    type: string
+                    description: 결과 메시지 success 가 false 인 경우, 표시
+                  contents:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 앱 타입 아이디 목록
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /apps/getAppTypeTemplate:
+    post:
+      operationId: AppsGetAppTypeTemplate
+      summary: getAppTypeTemplate
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-forest
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-dataforest-apps-getapptypetemplate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - appTypeId
+              properties:
+                appTypeId:
+                  type: string
+                  description: 앱 타입 및 버전 0~60자 getAppTypeIdList 참조 <예시> DEV-1.0.0
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 'API 처리 결과 true | false true : 성공 false : 실패'
+                  message:
+                    type: string
+                    description: 결과 메시지 success 가 false 인 경우, 표시
+                  template:
+                    type: string
+                    description: 앱 타입 템플릿 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /apps/getDetail:
+    post:
+      operationId: AppsGetDetail
+      summary: getDetail
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-forest
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-dataforest-apps-getdetail
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: string
+                  description: 앱 고유 식별자 0~22자 UUID를 Base62로 변환한 형식 getList 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: (inferred from JSON example)
+                  id:
+                    type: string
+                    description: (inferred from JSON example)
+                  appId:
+                    type: string
+                    description: (inferred from JSON example)
+                  name:
+                    type: string
+                    description: (inferred from JSON example)
+                  appTypeId:
+                    type: string
+                    description: (inferred from JSON example)
+                  version:
+                    type: string
+                    description: (inferred from JSON example)
+                  lifetime:
+                    type: string
+                    description: (inferred from JSON example)
+                  queueName:
+                    type: string
+                    description: (inferred from JSON example)
+                  description:
+                    type: string
+                    description: (inferred from JSON example)
+                  state:
+                    type: string
+                    description: (inferred from JSON example)
+                  links:
+                    type: object
+                    additionalProperties: true
+                    description: (inferred from JSON example)
+                  components:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /apps/getList:
+    post:
+      operationId: AppsGetList
+      summary: getList
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-forest
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-dataforest-apps-getlist
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - search
+              properties:
+                search:
+                  type: object
+                  additionalProperties: true
+                  description: 조회 조건 정보
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: (inferred from JSON example)
+                  total:
+                    type: integer
+                    description: (inferred from JSON example)
+                  contents:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /apps/killContainer:
+    post:
+      operationId: AppsKillContainer
+      summary: killContainer
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-forest
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-dataforest-apps-killcontainer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - containerName
+              properties:
+                id:
+                  type: string
+                  description: 앱 고유 식별자 0~22자 UUID를 Base62로 변환한 형식 getList 참조
+                containerName:
+                  type: string
+                  description: 컨테이너 이름 0~60자 getDetail 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 'API 처리 결과 true | false true : 성공 false : 실패'
+                  message:
+                    type: string
+                    description: 결과 메시지 success 가 false 인 경우, 표시
+                  id:
+                    type: string
+                    description: 앱 고유 식별자 UUID를 Base62로 변환한 형식
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /apps/killMaster:
+    post:
+      operationId: AppsKillmaster
+      summary: killMaster
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-forest
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-dataforest-apps-killmaster
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: string
+                  description: 앱 고유 식별자 0~22자 UUID를 Base62로 변환한 형식 getList 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 'API 처리 결과 true | false true : 성공 false : 실패'
+                  message:
+                    type: string
+                    description: 결과 메시지 success 가 false 인 경우, 표시
+                  id:
+                    type: string
+                    description: 앱 고유 식별자 UUID를 Base62로 변환한 형식
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /apps/setContainerCount:
+    post:
+      operationId: AppsSetContainerCount
+      summary: setContainerCount
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-forest
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-dataforest-apps-setcontainercount
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - componentName
+                - containerCount
+              properties:
+                id:
+                  type: string
+                  description: 앱 고유 식별자 0~22자 UUID를 Base62로 변환한 형식 getList 참조
+                componentName:
+                  type: string
+                  description: 컴포넌트 이름 getDetail 참조
+                containerCount:
+                  type: integer
+                  description: 컨테이너 개수
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 'API 처리 결과 true | false true : 성공 false : 실패'
+                  message:
+                    type: string
+                    description: 결과 메시지 success 가 false 인 경우, 표시
+                  id:
+                    type: string
+                    description: 앱 고유 식별자 UUID를 Base62로 변환한 형식
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /apps/setLifetime:
+    post:
+      operationId: AppsSetLifeTime
+      summary: setLifetime
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-forest
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-dataforest-apps-setlifetime
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: string
+                  description: 앱 고유 식별자 0~22자 UUID를 Base62로 변환한 형식 getList 참조
+                lifetime:
+                  type: integer
+                  description: '앱 구동 시간(초) 300~604800 (기본값: 604800)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 'API 처리 결과 true | false true : 성공 false : 실패'
+                  message:
+                    type: string
+                    description: 결과 메시지 success 가 false 인 경우, 표시
+                  id:
+                    type: string
+                    description: 앱 고유 식별자 UUID를 Base62로 변환한 형식
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /apps/start:
+    post:
+      operationId: AppsStart
+      summary: Start
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-forest
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-dataforest-apps-start
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: string
+                  description: 앱 고유 식별자 0~22자 UUID를 Base62로 변환한 형식 getList 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 'API 처리 결과 true | false true : 성공 false : 실패'
+                  message:
+                    type: string
+                    description: 결과 메시지 success 가 false 인 경우, 표시
+                  id:
+                    type: string
+                    description: 앱 고유 식별자 UUID를 Base62로 변환한 형식
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /apps/stop:
+    post:
+      operationId: AppsStop
+      summary: stop
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-forest
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-dataforest-apps-stop
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: string
+                  description: 앱 고유 식별자 0~22자 UUID를 Base62로 변환한 형식 getList 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 'API 처리 결과 true | false true : 성공 false : 실패'
+                  message:
+                    type: string
+                    description: 결과 메시지 success 가 false 인 경우, 표시
+                  id:
+                    type: string
+                    description: 앱 고유 식별자 UUID를 Base62로 변환한 형식
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+components:
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  schemas:
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

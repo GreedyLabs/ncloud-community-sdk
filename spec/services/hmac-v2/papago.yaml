@@ -1,0 +1,475 @@
+openapi: 3.0.3
+info:
+  title: Papago
+  description: Papago
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: true
+    gov: true
+
+  x-ncloud-nrn-todo: true
+servers:
+  - url: https://papago.apigw.ntruss.com
+    description: papago 민간
+    x-ncloud-env: public
+  - url: https://papago.apigw.fin-ntruss.com
+    description: papago 금융
+    x-ncloud-env: financial
+  - url: https://papago.apigw.gov-ntruss.com
+    description: papago 공공
+    x-ncloud-env: gov
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /:
+    get:
+      operationId: GlossaryList
+      summary: 용어집 목록 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - papago
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/papago-glossarylist
+      parameters:
+        - name: currentPage
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: 현재 페이지 번호
+        - name: pageSize
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: '페이지당 용어집 출력 개수 최대 값: 30'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '용어집 목록 조회 상세 정보: data'
+                  currentPage:
+                    type: integer
+                    description: 현재 페이지 번호
+                  totalPage:
+                    type: integer
+                    description: 전체 페이지 개수
+                  currentGlossaryCount:
+                    type: integer
+                    description: 현재 페이지 내 용어집 개수
+                  totalGlossaryCount:
+                    type: integer
+                    description: 전체 용어집 개수
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /create:
+    post:
+      operationId: CreateGlossary
+      summary: 용어집 생성
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - papago
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/papago-createglossary
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - glossaryName
+              properties:
+                glossaryName:
+                  type: string
+                  description: 용어집 이름 최대 20자
+                description:
+                  type: string
+                  description: 용어집 상세 설명 최대 50자
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 용어집 생성 상세 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /glossary/v1/replacer:
+    post:
+      operationId: GlossaryCreate
+      summary: 용어 추가
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - papago
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/papago-glossary-create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - replacers
+                - glossaryKey
+                - source
+                - target
+                - triggerText
+                - replaceText
+              properties:
+                replacers:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: '추가할 용어 목록 (최대 20개): replacers'
+                glossaryKey:
+                  type: string
+                  description: 용어집 ID
+                source:
+                  type: string
+                  description: 원문 언어 코드 <예시> ko , en
+                target:
+                  type: string
+                  description: 번역 언어 코드 <예시> ko , en
+                triggerText:
+                  type: string
+                  description: 원문 텍스트
+                replaceText:
+                  type: string
+                  description: 번역 텍스트
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  replacers:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '용어 등록 결과 목록: replacers'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    patch:
+      operationId: GlossaryUpdate
+      summary: 용어 수정
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - papago
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/papago-glossary-update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - replacers
+                - glossaryKey
+                - id
+                - replaceText
+              properties:
+                replacers:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: '수정할 용어 목록 (최대 20개): replacers'
+                glossaryKey:
+                  type: string
+                  description: 용어집 ID
+                id:
+                  type: integer
+                  format: int64
+                  description: 수정할 용어 ID (1 이상)
+                replaceText:
+                  type: string
+                  description: 수정할 번역 텍스트
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  replacers:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '수정된 용어 목록: replacers'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: GlossaryDelete
+      summary: 용어 삭제
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - papago
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/papago-glossary-delete
+      parameters:
+        - name: glossaryKey
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 용어집 ID
+        - name: ids
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: 삭제할 용어 ID 목록 (최대 20개)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /glossary/v1/{glossaryKey}:
+    delete:
+      operationId: DeleteGlossary
+      summary: 용어집 삭제
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - papago
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/papago-deleteglossary
+      parameters:
+        - name: glossaryKey
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 용어집 아이디 용어집 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 용어집 삭제 상세 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /glossary/v1/{glossaryKey}/download:
+    post:
+      operationId: DownloadGlossaryFile
+      summary: 용어집 다운로드
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - papago
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/papago-downloadglossaryfile
+      parameters:
+        - name: glossaryKey
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 용어집 아이디 용어집 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  file:
+                    type: string
+                    description: 용어 목록(.csv)이 포함된 ZIP 형식의 파일
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /glossary/v1/{glossaryKey}/replacer:
+    get:
+      operationId: GlossaryListGET
+      summary: 용어 목록 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - papago
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/papago-glossary-list
+      parameters:
+        - name: glossaryKey
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 용어집 ID 용어집 목록 조회 참조
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+          description: 페이지 번호 1~N
+        - name: count
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+          description: 페이지당 항목 수
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  replacerList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '용어집의 용어 목록: replacerList'
+                  paging:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과의 페이징 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /glossary/v1/{glossaryKey}/upload:
+    post:
+      operationId: UpdateGlossaryFile
+      summary: 용어집 업로드
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - papago
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/papago-updateglossaryfile
+      parameters:
+        - name: glossaryKey
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 용어집 아이디 용어집 목록 조회 참조
+        - name: file
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 용어 목록 파일 언어쌍(원어-번역어)별 CSV 형식의 파일 자세한 내용은 네이버 클라우드 플랫폼의 사용 가이드 용어집 파일 업로드 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 용어집 생성 상세 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+components:
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  schemas:
+    SuccessResponse:
+      type: object
+      description: Trivial success envelope — returned by mutations that don't carry a body.
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: API 호출 성공 여부
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

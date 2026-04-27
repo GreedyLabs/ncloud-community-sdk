@@ -1,0 +1,1589 @@
+openapi: 3.0.3
+info:
+  title: source-deploy
+  description: ''
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: true
+    gov: true
+
+  x-ncloud-nrn:
+
+    productName: VPCSourceDeploy
+    resource_types:
+      - Project
+      - Scenario
+      - Stage
+
+servers:
+  - url: https://vpcsourcedeploy.apigw.ntruss.com/api/v1
+    description: source-deploy 민간
+    x-ncloud-env: public
+  - url: https://vpcsourcedeploy.apigw.fin-ntruss.com/api/v1
+    description: source-deploy 금융
+    x-ncloud-env: financial
+  - url: https://vpcsourcedeploy.apigw.gov-ntruss.com/api/v1
+    description: source-deploy 공공
+    x-ncloud-env: gov
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /autoscaling:
+    get:
+      operationId: GetAutoscalingGroups
+      tags:
+        - source-deploy
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAutoScalingGroupListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get autoscaling groups
+  /autoscaling/{autoscalingName}:
+    get:
+      operationId: GetAutoscalingGroupTargetGroup
+      tags:
+        - source-deploy
+      parameters:
+        - name: autoscalingName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTargetGroupListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get autoscaling group target group
+  /kubernetes/cluster:
+    get:
+      operationId: GetKubernetesClusters
+      tags:
+        - source-deploy
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetKubernetesServiceClusterListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get kubernetes clusters
+  /objectstorage/bucket:
+    get:
+      operationId: GetObjectstorageBuckets
+      tags:
+        - source-deploy
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetObjectStorageBucketListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get objectstorage buckets
+  /objectstorage/bucket/{bucketName}:
+    get:
+      operationId: GetObjectstorageObjects
+      tags:
+        - source-deploy
+      parameters:
+        - name: bucketName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetObjectStorageObjectListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get objectstorage objects
+  /project:
+    get:
+      operationId: GetProjects
+      tags:
+        - source-deploy
+      parameters:
+        - name: localVarOptionals
+          in: query
+          schema:
+            type: object
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetProjectListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get projects
+    post:
+      operationId: CreateProject
+      tags:
+        - source-deploy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProject'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetIdNameResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Create project
+  /project/{projectId}:
+    delete:
+      operationId: DeleteProject
+      tags:
+        - source-deploy
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OkResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Delete project
+  /project/{projectId}/history:
+    get:
+      operationId: GetHistories
+      tags:
+        - source-deploy
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: localVarOptionals
+          in: query
+          schema:
+            type: object
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetDeployHistoryListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get histories
+  /project/{projectId}/history/{historyId}:
+    get:
+      operationId: GetHistory
+      tags:
+        - source-deploy
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: historyId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetDeployHistoryDetailResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get history
+  /project/{projectId}/history/{historyId}/approval/accept:
+    post:
+      operationId: AcceptDeployApproval
+      tags:
+        - source-deploy
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: historyId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OkResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Accept deploy approval
+  /project/{projectId}/history/{historyId}/approval/reject:
+    post:
+      operationId: RejectDeployApproval
+      tags:
+        - source-deploy
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: historyId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OkResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Reject deploy approval
+  /project/{projectId}/history/{historyId}/canary/accept:
+    post:
+      operationId: AcceptDeployCanary
+      tags:
+        - source-deploy
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: historyId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OkResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Accept deploy canary
+  /project/{projectId}/history/{historyId}/canary/reject:
+    post:
+      operationId: RejectDeployCanary
+      tags:
+        - source-deploy
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: historyId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OkResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Reject deploy canary
+  /project/{projectId}/history/{historyId}/cancel:
+    post:
+      operationId: CancelDeploy
+      tags:
+        - source-deploy
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: historyId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OkResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cancel deploy
+  /project/{projectId}/history/{historyId}/report:
+    get:
+      operationId: GetCanaryReportEndtime
+      tags:
+        - source-deploy
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: historyId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCanaryAnalysisStageListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get canary report endtime
+  /project/{projectId}/history/{historyId}/report/{endtime}:
+    get:
+      operationId: GetCanaryReport
+      tags:
+        - source-deploy
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: historyId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: endtime
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCanaryAnalysisReportResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get canary report
+  /project/{projectId}/stage:
+    get:
+      operationId: GetStages
+      tags:
+        - source-deploy
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: localVarOptionals
+          in: query
+          schema:
+            type: object
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetStageListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get stages
+    post:
+      operationId: CreateStage
+      tags:
+        - source-deploy
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStage'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetIdNameResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Create stage
+  /project/{projectId}/stage/{stageId}:
+    delete:
+      operationId: DeleteStage
+      tags:
+        - source-deploy
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: stageId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OkResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Delete stage
+    get:
+      operationId: GetStage
+      tags:
+        - source-deploy
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: stageId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetStageDetailResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get stage
+    patch:
+      operationId: ChangeStage
+      tags:
+        - source-deploy
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: stageId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStage'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetIdNameResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Change stage
+  /project/{projectId}/stage/{stageId}/scenario:
+    get:
+      operationId: GetScenarioes
+      tags:
+        - source-deploy
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: stageId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: localVarOptionals
+          in: query
+          schema:
+            type: object
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetScenarioListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get scenarioes
+    post:
+      operationId: CreateScenario
+      tags:
+        - source-deploy
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: stageId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateScenario'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetIdNameResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Create scenario
+  /project/{projectId}/stage/{stageId}/scenario/{scenarioId}:
+    delete:
+      operationId: DeleteScenario
+      tags:
+        - source-deploy
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: stageId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: scenarioId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OkResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Delete scenario
+    get:
+      operationId: GetScenario
+      tags:
+        - source-deploy
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: stageId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: scenarioId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetScenarioDetailResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get scenario
+    patch:
+      operationId: ChangeScenario
+      tags:
+        - source-deploy
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: stageId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: scenarioId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeScenario'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetIdNameResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Change scenario
+  /project/{projectId}/stage/{stageId}/scenario/{scenarioId}/deploy:
+    post:
+      operationId: Deploy
+      tags:
+        - source-deploy
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: stageId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: scenarioId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeployRequestResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Deploy
+  /project/{projectId}/stage/{stageId}/scenario/{scenarioId}/deploy/request:
+    post:
+      operationId: DeployRequest
+      tags:
+        - source-deploy
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: stageId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: scenarioId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeployRequestResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Deploy request
+  /server:
+    get:
+      operationId: GetServers
+      tags:
+        - source-deploy
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetServerListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get servers
+  /sourcebuild/project:
+    get:
+      operationId: GetSourcebuildProjects
+      tags:
+        - source-deploy
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSourceBuildProjectListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get sourcebuild projects
+  /sourcecommit/repository:
+    get:
+      operationId: GetSourcecommitRepositories
+      tags:
+        - source-deploy
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSourceCommitRepositoryListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get sourcecommit repositories
+  /sourcecommit/repository/{repositoryName}/branch:
+    get:
+      operationId: GetSourceCommitBranches
+      tags:
+        - source-deploy
+      parameters:
+        - name: repositoryName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSourceCommitBranchListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get source commit branches
+components:
+  schemas:
+    ChangeScenario:
+      type: object
+      properties:
+        description:
+          type: string
+        config:
+          $ref: '#/components/schemas/ScenarioConfig'
+    CreateProject:
+      type: object
+      properties:
+        name:
+          type: string
+    CreateScenario:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        config:
+          $ref: '#/components/schemas/ScenarioConfig'
+    CreateStage:
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+        config:
+          $ref: '#/components/schemas/StageConfig'
+    DeployRequestResponse:
+      type: object
+      properties:
+        historyId:
+          type: integer
+          format: int32
+    GetAutoScalingGroupListResponse:
+      type: object
+      properties:
+        autoscalingList:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetAutoScalingGroupListResponseAutoscalingList'
+    GetAutoScalingGroupListResponseAutoscalingList:
+      type: object
+      properties:
+        groupNo:
+          type: integer
+          format: int32
+        name:
+          type: string
+        instanceCount:
+          type: integer
+          format: int32
+    GetCanaryAnalysisReportResponse:
+      type: object
+      properties:
+        project:
+          $ref: '#/components/schemas/GetIdNameResponse'
+        stage:
+          $ref: '#/components/schemas/GetIdNameResponse'
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        type:
+          type: string
+        description:
+          type: string
+        config:
+          $ref: '#/components/schemas/GetScenarioConfig'
+    GetCanaryAnalysisStageListResponse:
+      type: object
+      properties:
+        stageList:
+          type: array
+          items:
+            type: integer
+            format: int32
+    GetDeployHistoryDetailResponse:
+      type: object
+      properties:
+        project:
+          $ref: '#/components/schemas/GetIdNameResponse'
+        stage:
+          $ref: '#/components/schemas/GetIdNameResponse'
+        scenario:
+          $ref: '#/components/schemas/GetIdNameResponse'
+        id:
+          type: string
+        status:
+          type: string
+        strategy:
+          type: string
+        executor:
+          type: string
+        startTime:
+          type: integer
+          format: int32
+        endTime:
+          type: integer
+          format: int32
+        type:
+          type: string
+        config:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetDeployHistoryDetailResponseConfig'
+    GetDeployHistoryDetailResponseConfig:
+      type: object
+      properties:
+        strategy:
+          type: string
+        file:
+          $ref: '#/components/schemas/GetDeployHistoryDetailResponseFile'
+        targets:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetDeployHistoryDetailResponseTargets'
+    GetDeployHistoryDetailResponseFile:
+      type: object
+      properties:
+        file:
+          type: string
+        type:
+          type: string
+    GetDeployHistoryDetailResponseServer:
+      type: object
+      properties:
+        'no':
+          type: string
+        name:
+          type: string
+    GetDeployHistoryDetailResponseStep:
+      type: object
+      properties:
+        pre:
+          type: string
+        deploy:
+          type: string
+        post:
+          type: string
+    GetDeployHistoryDetailResponseTargets:
+      type: object
+      properties:
+        server:
+          $ref: '#/components/schemas/GetDeployHistoryDetailResponseServer'
+        status:
+          type: string
+        time:
+          $ref: '#/components/schemas/GetDeployHistoryDetailResponseTime'
+        step:
+          $ref: '#/components/schemas/GetDeployHistoryDetailResponseStep'
+    GetDeployHistoryDetailResponseTime:
+      type: object
+      properties:
+        pre:
+          type: integer
+          format: int32
+        deploy:
+          type: integer
+          format: int32
+        post:
+          type: integer
+          format: int32
+    GetDeployHistoryListResponse:
+      type: object
+      properties:
+        historyList:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetDeployHistoryListResponseHistoryList'
+    GetDeployHistoryListResponseHistoryList:
+      type: object
+      properties:
+        project:
+          $ref: '#/components/schemas/GetIdNameResponse'
+        stage:
+          $ref: '#/components/schemas/GetIdNameResponse'
+        scenario:
+          $ref: '#/components/schemas/GetIdNameResponse'
+        id:
+          type: string
+        startTime:
+          type: integer
+          format: int32
+        status:
+          type: string
+    GetIdNameResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+    GetKubernetesServiceClusterListResponse:
+      type: object
+      properties:
+        clusterList:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetIdNameResponse'
+    GetObjectStorageBucketListResponse:
+      type: object
+      properties:
+        bucketList:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetSourceCommitRepositoryListResponseRepositoryList'
+    GetObjectStorageObjectListResponse:
+      type: object
+      properties:
+        objectList:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetObjectStorageObjectListResponseObjectList'
+    GetObjectStorageObjectListResponseObjectList:
+      type: object
+      properties:
+        key:
+          type: string
+        size:
+          type: integer
+          format: int32
+    GetProjectListResponse:
+      type: object
+      properties:
+        projectList:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetIdNameResponse'
+    GetScenarioConfig:
+      type: object
+      properties:
+        strategy:
+          type: string
+        file:
+          $ref: '#/components/schemas/GetScenarioConfigFile'
+        rollback:
+          type: boolean
+        cmd:
+          $ref: '#/components/schemas/ScenarioConfigCmd'
+        loadBalancer:
+          $ref: '#/components/schemas/GetScenarioConfigLoadBalancer'
+        manifest:
+          $ref: '#/components/schemas/ScenarioConfigManifest'
+        canaryConfig:
+          $ref: '#/components/schemas/ScenarioConfigCanaryConfig'
+        path:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScenarioConfigCmdDeploy'
+    GetScenarioConfigFile:
+      type: object
+      properties:
+        type:
+          type: string
+        ObjectStorage:
+          $ref: '#/components/schemas/ScenarioConfigFileObjectStorage'
+        SourceBuild:
+          $ref: '#/components/schemas/GetIdNameResponse'
+    GetScenarioConfigLoadBalancer:
+      type: object
+      properties:
+        loadBalancerTargetGroupNo:
+          type: integer
+          format: int32
+        loadBalancerTargetGroupName:
+          type: string
+        deleteServer:
+          type: boolean
+    GetScenarioDetailResponse:
+      type: object
+      properties:
+        project:
+          $ref: '#/components/schemas/GetIdNameResponse'
+        stage:
+          $ref: '#/components/schemas/GetIdNameResponse'
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        type:
+          type: string
+        description:
+          type: string
+        config:
+          $ref: '#/components/schemas/GetScenarioConfig'
+    GetScenarioListResponse:
+      type: object
+      properties:
+        project:
+          $ref: '#/components/schemas/GetIdNameResponse'
+        stage:
+          $ref: '#/components/schemas/GetIdNameResponse'
+        scenarioList:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetIdNameResponse'
+    GetServerListResponse:
+      type: object
+      properties:
+        serverList:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetServerListResponseServerList'
+    GetServerListResponseServerList:
+      type: object
+      properties:
+        serverNo:
+          type: integer
+          format: int32
+        name:
+          type: string
+    GetSourceBuildProjectListResponse:
+      type: object
+      properties:
+        projectList:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetIdNameResponse'
+    GetSourceCommitBranchListResponse:
+      type: object
+      properties:
+        branchList:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetSourceCommitRepositoryListResponseRepositoryList'
+    GetSourceCommitRepositoryListResponse:
+      type: object
+      properties:
+        repositoryList:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetSourceCommitRepositoryListResponseRepositoryList'
+    GetSourceCommitRepositoryListResponseRepositoryList:
+      type: object
+      properties:
+        name:
+          type: string
+    GetStageDetailResponse:
+      type: object
+      properties:
+        project:
+          $ref: '#/components/schemas/GetIdNameResponse'
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        type:
+          type: string
+        config:
+          $ref: '#/components/schemas/GetStageDetailResponseConfig'
+    GetStageDetailResponseConfig:
+      type: object
+      properties:
+        serverNo:
+          type: array
+          items:
+            type: integer
+            format: int32
+        serverName:
+          type: array
+          items:
+            type: string
+        autoScalingGroupNo:
+          type: integer
+          format: int32
+        autoScalingGroupName:
+          type: string
+        clusterUuid:
+          type: string
+        clusterName:
+          type: string
+        bucketName:
+          type: string
+    GetStageListResponse:
+      type: object
+      properties:
+        project:
+          $ref: '#/components/schemas/GetIdNameResponse'
+        stageList:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetIdNameResponse'
+    GetTargetGroupListResponse:
+      type: object
+      properties:
+        targetGroupList:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetIdNameResponse'
+    OkResponse:
+      type: object
+      properties:
+        result:
+          type: boolean
+    ScenarioConfig:
+      type: object
+      properties:
+        strategy:
+          type: string
+        file:
+          $ref: '#/components/schemas/ScenarioConfigFile'
+        rollback:
+          type: boolean
+        cmd:
+          $ref: '#/components/schemas/ScenarioConfigCmd'
+        loadBalancer:
+          $ref: '#/components/schemas/ScenarioConfigLoadBalancer'
+        manifest:
+          $ref: '#/components/schemas/ScenarioConfigManifest'
+        canaryConfig:
+          $ref: '#/components/schemas/ScenarioConfigCanaryConfig'
+        path:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScenarioConfigCmdDeploy'
+    ScenarioConfigCanaryConfig:
+      type: object
+      properties:
+        canaryCount:
+          type: integer
+          format: int32
+        analysisType:
+          type: string
+        timeout:
+          type: integer
+          format: int32
+        prometheus:
+          type: string
+        env:
+          $ref: '#/components/schemas/ScenarioConfigCanaryConfigEnv'
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScenarioConfigCanaryConfigMetrics'
+        analysisConfig:
+          $ref: '#/components/schemas/ScenarioConfigCanaryConfigAnalysisConfig'
+        passScore:
+          type: integer
+          format: int32
+    ScenarioConfigCanaryConfigAnalysisConfig:
+      type: object
+      properties:
+        duration:
+          type: integer
+          format: int32
+        delay:
+          type: integer
+          format: int32
+        interval:
+          type: integer
+          format: int32
+        step:
+          type: integer
+          format: int32
+    ScenarioConfigCanaryConfigEnv:
+      type: object
+      properties:
+        baseline:
+          type: string
+        canary:
+          type: string
+    ScenarioConfigCanaryConfigMetrics:
+      type: object
+      properties:
+        name:
+          type: string
+        successCriteria:
+          type: string
+        queryType:
+          type: string
+        weight:
+          type: integer
+          format: int32
+        metric:
+          type: string
+        filter:
+          type: string
+        query:
+          type: string
+    ScenarioConfigCmd:
+      type: object
+      properties:
+        pre:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScenarioConfigCmdPrePost'
+        deploy:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScenarioConfigCmdDeploy'
+        post:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScenarioConfigCmdPrePost'
+    ScenarioConfigCmdDeploy:
+      type: object
+      properties:
+        sourcePath:
+          type: string
+        deployPath:
+          type: string
+    ScenarioConfigCmdPrePost:
+      type: object
+      properties:
+        user:
+          type: string
+        cmd:
+          type: string
+    ScenarioConfigFile:
+      type: object
+      properties:
+        type:
+          type: string
+        ObjectStorage:
+          $ref: '#/components/schemas/ScenarioConfigFileObjectStorage'
+        SourceBuild:
+          $ref: '#/components/schemas/ScenarioConfigFileSourceBuild'
+    ScenarioConfigFileObjectStorage:
+      type: object
+      properties:
+        bucket:
+          type: string
+        object:
+          type: string
+    ScenarioConfigFileSourceBuild:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+    ScenarioConfigLoadBalancer:
+      type: object
+      properties:
+        loadBalancerTargetGroupNo:
+          type: integer
+          format: int32
+        deleteServer:
+          type: boolean
+    ScenarioConfigManifest:
+      type: object
+      properties:
+        type:
+          type: string
+        repository:
+          type: string
+        branch:
+          type: string
+        path:
+          type: array
+          items:
+            type: string
+    StageConfig:
+      type: object
+      properties:
+        serverNo:
+          type: array
+          items:
+            type: integer
+            format: int32
+        autoScalingGroupNo:
+          type: integer
+          format: int32
+        clusterUuid:
+          type: string
+        bucketName:
+          type: string
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

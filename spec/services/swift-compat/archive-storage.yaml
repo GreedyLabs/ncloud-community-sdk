@@ -1,0 +1,491 @@
+openapi: 3.0.3
+info:
+  title: archive-storage
+  description: |
+    NCP Archive Storage — OpenStack Swift implementation. Distinct from
+    Object Storage in protocol AND auth: it uses Keystone token auth
+    (X-Auth-Token) issued from a separate identity endpoint, then talks
+    Swift's resource hierarchy at `/v1/AUTH_{projectId}/{container}/{object}`.
+
+    Verified against the live NCP doc pages 2026-04-26 — every operation
+    URL example is `curl -X <METHOD> "https://kr.archive.ncloudstorage.com/v1/AUTH_{projectId}/..."` with `X-Auth-Token`.
+
+    Response bodies are typically text (one line per item) by default;
+    pass `?format=json` or `?format=xml` to most listing operations to
+    get a structured response.
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: false
+    gov: false
+
+  x-ncloud-nrn:
+
+    productName: ArchiveStorage
+    resource_types:
+      - Container
+      - Object
+
+# Three endpoint roles. Generated clients pick the service URL by default
+# (the first listed); switch to identity for token issuance, or to the
+# subaccount external API gateway when calling sub-account endpoints.
+servers:
+  - url: 'https://{regionCode}.archive.ncloudstorage.com'
+    description: archive-storage 민간 — service endpoint (KR)
+    x-ncloud-env: public
+    x-ncloud-purpose: service
+    variables:
+      regionCode: { default: kr, enum: [kr] }
+  - url: 'https://{regionCode}.archive.ncloudstorage.com:5000'
+    description: archive-storage 민간 — identity endpoint (Keystone, port 5000)
+    x-ncloud-env: public
+    x-ncloud-purpose: identity
+    variables:
+      regionCode: { default: kr, enum: [kr] }
+  - url: https://archive-storage-external-api.apigw.ntruss.com
+    description: archive-storage 민간 — sub-account external gateway
+    x-ncloud-env: public
+    x-ncloud-purpose: subaccount
+
+security:
+  # Two-step Keystone-style flow: obtain a token from the identity
+  # endpoint, then send it on every subsequent request as X-Auth-Token.
+  - swiftAuthToken: []
+
+tags:
+  - name: account
+    description: Account-level operations (one account per NCP customer).
+  - name: container
+    description: Container CRUD and metadata.
+  - name: container-subaccount
+    description: Container operations routed through the sub-account external gateway.
+  - name: object
+    description: Object CRUD, copy, and metadata.
+
+paths:
+
+  # ─── Account ───────────────────────────────────────────────────────────
+
+  /v1/AUTH_{projectId}:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+    head:
+      operationId: HeadAccount
+      summary: Get account metadata (HEAD)
+      description: |
+        Returns 204 with account-level headers populated:
+        `X-Account-Container-Count`, `X-Account-Object-Count`,
+        `X-Account-Bytes-Used`, plus any custom `X-Account-Meta-*`.
+      tags: [account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-archivestorage-headaccount
+      responses:
+        '204':
+          description: No Content (metadata in headers).
+          headers:
+            X-Account-Container-Count: { schema: { type: integer } }
+            X-Account-Object-Count:    { schema: { type: integer } }
+            X-Account-Bytes-Used:      { schema: { type: integer, format: int64 } }
+        '401': { description: Unauthorized — token missing or expired. }
+        4XX: { description: 'Swift error envelope (text or JSON).' }
+        5XX: { description: 'Swift error envelope (text or JSON).' }
+    get:
+      operationId: GetAccount
+      summary: List containers in this account
+      description: |
+        Default response is one container name per line. Pass
+        `format=json` or `format=xml` for a structured listing.
+      tags: [account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-archivestorage-getaccount
+      parameters:
+        - { name: format,    in: query, schema: { type: string, enum: [json, xml] } }
+        - { name: limit,     in: query, schema: { type: integer, default: 10000 } }
+        - { name: marker,    in: query, schema: { type: string }, description: Return names lexically after this. }
+        - { name: end_marker, in: query, schema: { type: string } }
+        - { name: prefix,    in: query, schema: { type: string } }
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:    { schema: { type: string } }
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/AccountContainer' }
+            application/xml: { schema: { $ref: '#/components/schemas/AccountListing' } }
+        '204': { description: No Content (account is empty). }
+        4XX: { description: Swift error. }
+        5XX: { description: Swift error. }
+    post:
+      operationId: PostAccount
+      summary: Set or remove account-level metadata
+      description: |
+        Add custom metadata via `X-Account-Meta-{name}` headers.
+        Remove via `X-Remove-Account-Meta-{name}` (any value).
+      tags: [account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-archivestorage-postaccount
+      responses:
+        '204': { description: Metadata updated. }
+        4XX: { description: Swift error. }
+        5XX: { description: Swift error. }
+
+  # ─── Container ─────────────────────────────────────────────────────────
+
+  /v1/AUTH_{projectId}/{container}:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/Container'
+    head:
+      operationId: HeadContainer
+      summary: Get container metadata (HEAD)
+      tags: [container]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-archivestorage-headcontainer
+      responses:
+        '204':
+          description: No Content (metadata in headers).
+          headers:
+            X-Container-Object-Count: { schema: { type: integer } }
+            X-Container-Bytes-Used:   { schema: { type: integer, format: int64 } }
+            X-Container-Read:         { schema: { type: string }, description: Container read ACL. }
+            X-Container-Write:        { schema: { type: string }, description: Container write ACL. }
+        '404': { description: Container does not exist. }
+        4XX: { description: Swift error. }
+        5XX: { description: Swift error. }
+    get:
+      operationId: GetContainer
+      summary: List objects in a container
+      tags: [container]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-archivestorage-getcontainer
+      parameters:
+        - { name: format,     in: query, schema: { type: string, enum: [json, xml] } }
+        - { name: limit,      in: query, schema: { type: integer, default: 10000 } }
+        - { name: marker,     in: query, schema: { type: string } }
+        - { name: end_marker, in: query, schema: { type: string } }
+        - { name: prefix,     in: query, schema: { type: string } }
+        - { name: delimiter,  in: query, schema: { type: string }, description: Group keys sharing this delimiter into pseudo-folders. }
+        - { name: path,       in: query, schema: { type: string }, description: Limit to objects under this pseudo-folder. }
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:        { schema: { type: string } }
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/ContainerObject' }
+            application/xml:   { schema: { $ref: '#/components/schemas/ContainerListing' } }
+        '204': { description: No Content (container is empty). }
+        '404': { description: Container does not exist. }
+        4XX: { description: Swift error. }
+        5XX: { description: Swift error. }
+    put:
+      operationId: PutContainer
+      summary: Create a container (idempotent — succeeds even if it exists)
+      description: |
+        Set ACLs via `X-Container-Read` / `X-Container-Write` headers.
+        Apply metadata via `X-Container-Meta-{name}` headers.
+      tags: [container]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-archivestorage-putcontainer
+      responses:
+        '201': { description: Container created. }
+        '202': { description: Container already existed (idempotent). }
+        4XX: { description: Swift error. }
+        5XX: { description: Swift error. }
+    post:
+      operationId: PostContainer
+      summary: Set or remove container metadata / ACL
+      tags: [container]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-archivestorage-postcontainer
+      responses:
+        '204': { description: Metadata updated. }
+        '404': { description: Container does not exist. }
+        4XX: { description: Swift error. }
+        5XX: { description: Swift error. }
+    delete:
+      operationId: DeleteContainer
+      summary: Delete a container
+      description: Container must be empty. Returns 409 ContainerNotEmpty otherwise.
+      tags: [container]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-archivestorage-deletecontainer
+      responses:
+        '204': { description: Container deleted. }
+        '404': { description: Container does not exist. }
+        '409': { description: Container is not empty. }
+        4XX: { description: Swift error. }
+        5XX: { description: Swift error. }
+
+  # ─── Container — sub-account external gateway routes ───────────────────
+
+  /v1/AUTH_{projectId}/{container}?subaccount-list:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/Container'
+    get:
+      operationId: GetContainerListSubaccount
+      summary: List containers visible to the sub-account
+      description: |
+        Sub-account specific listing — issued through the
+        archive-storage-external-api.apigw.ntruss.com gateway. Same
+        response shape as GetAccount/GetContainer but scoped to the
+        sub-account's permitted view.
+      tags: [container-subaccount]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/AccountContainer' }
+        4XX: { description: Swift error. }
+        5XX: { description: Swift error. }
+    head:
+      operationId: HeadContainerSubaccount
+      summary: HEAD container via sub-account external gateway
+      tags: [container-subaccount]
+      responses:
+        '204': { description: No Content. }
+        '404': { description: Container does not exist. }
+    put:
+      operationId: PutContainerSubaccount
+      summary: Create container via sub-account external gateway
+      tags: [container-subaccount]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-archivestorage-putcontainer-subaccount
+      responses:
+        '201': { description: Container created. }
+        '202': { description: Container already existed. }
+    post:
+      operationId: PostContainerSubaccount
+      summary: Update container metadata via sub-account external gateway
+      tags: [container-subaccount]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-archivestorage-postcontainer-subaccount
+      responses:
+        '204': { description: Metadata updated. }
+    delete:
+      operationId: DeleteContainerSubaccount
+      summary: Delete container via sub-account external gateway
+      tags: [container-subaccount]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-archivestorage-deletecontainer-subaccount
+      responses:
+        '204': { description: Container deleted. }
+        '409': { description: Container is not empty. }
+
+  # ─── Object ────────────────────────────────────────────────────────────
+
+  /v1/AUTH_{projectId}/{container}/{object}:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/Container'
+      - $ref: '#/components/parameters/ObjectName'
+    head:
+      operationId: HeadObject
+      summary: Get object metadata
+      tags: [object]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-archivestorage-headobject
+      responses:
+        '200':
+          description: OK
+          headers:
+            ETag:           { schema: { type: string } }
+            Content-Length: { schema: { type: integer, format: int64 } }
+            Content-Type:   { schema: { type: string } }
+            Last-Modified:  { schema: { type: string, format: date-time } }
+        '404': { description: Object does not exist. }
+        4XX: { description: Swift error. }
+        5XX: { description: Swift error. }
+    get:
+      operationId: GetObject
+      summary: Download an object
+      description: |
+        Returns the object body. Use `Range` to request a byte range.
+        Archive Storage is cold storage — large objects may incur
+        retrieval delay; check `X-Object-Manifest` for segmented objects.
+      tags: [object]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-archivestorage-getobject
+      parameters:
+        - { name: Range,       in: header, schema: { type: string }, description: 'HTTP byte range, e.g. "bytes=0-1023".' }
+        - { name: If-Match,    in: header, schema: { type: string } }
+        - { name: If-None-Match,    in: header, schema: { type: string } }
+        - { name: If-Modified-Since,   in: header, schema: { type: string, format: date-time } }
+        - { name: If-Unmodified-Since, in: header, schema: { type: string, format: date-time } }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/octet-stream: { schema: { type: string, format: binary } }
+        '206': { description: Partial Content (Range request). }
+        '304': { description: Not Modified. }
+        '404': { description: Object does not exist. }
+        4XX: { description: Swift error. }
+        5XX: { description: Swift error. }
+    put:
+      operationId: PutObject
+      summary: Upload an object
+      description: |
+        Body is the object bytes. Set custom metadata via
+        `X-Object-Meta-{name}` headers. For segmented uploads, set
+        `X-Object-Manifest: {container}/{prefix}` and upload each
+        segment as its own object first.
+      tags: [object]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-archivestorage-putobject
+      parameters:
+        - { name: Content-Type,        in: header, schema: { type: string } }
+        - { name: Content-Length,      in: header, schema: { type: integer, format: int64 } }
+        - { name: ETag,                in: header, schema: { type: string }, description: Pre-computed MD5 of the body for server-side verification. }
+        - { name: X-Object-Manifest,   in: header, schema: { type: string }, description: 'Set to "{container}/{prefix}" to declare a segmented object.' }
+        - { name: X-Delete-At,         in: header, schema: { type: integer }, description: Unix timestamp at which the object should auto-expire. }
+        - { name: X-Delete-After,      in: header, schema: { type: integer }, description: Seconds from now until auto-expiry. }
+      requestBody:
+        required: true
+        content:
+          application/octet-stream: { schema: { type: string, format: binary } }
+      responses:
+        '201':
+          description: Object created.
+          headers:
+            ETag: { schema: { type: string } }
+        4XX: { description: Swift error. }
+        5XX: { description: Swift error. }
+    post:
+      operationId: PostObject
+      summary: Set or remove object metadata
+      description: |
+        Replaces ALL `X-Object-Meta-*` headers with the supplied set —
+        unsupplied custom metadata is removed. Use
+        `X-Remove-Object-Meta-{name}` (any value) to remove a specific
+        key while keeping others.
+      tags: [object]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-archivestorage-postobject
+      responses:
+        '202': { description: Metadata updated. }
+        '404': { description: Object does not exist. }
+        4XX: { description: Swift error. }
+        5XX: { description: Swift error. }
+  # Swift's canonical COPY uses the non-standard HTTP `COPY` verb, which
+  # OpenAPI 3.0 does not enumerate. Per the Archive Storage docs it can
+  # equivalently be expressed as PUT-on-destination with `X-Copy-From:
+  # {src-container}/{src-object}` — a separate path lets us model that
+  # variant cleanly without conflicting with PutObject above.
+  /v1/AUTH_{projectId}/{container}/{object}?copy:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/Container'
+      - $ref: '#/components/parameters/ObjectName'
+    put:
+      operationId: CopyObject
+      summary: Copy an object (server-side)
+      description: |
+        PUT-form of Swift's COPY. The `X-Copy-From` header names the
+        source as `{src-container}/{src-object}`. Two equivalent
+        request shapes per the doc:
+          - PUT  /v1/AUTH_{p}/{dst}/{obj} with X-Copy-From: {src}/{obj}
+          - COPY /v1/AUTH_{p}/{src}/{obj} with Destination: {dst}/{obj}
+        OpenAPI 3.0 lacks a COPY method so this spec exposes only the
+        PUT-form. Bare `?copy` query is a no-op marker that lets us
+        give CopyObject its own path entry without colliding with
+        PutObject above.
+      tags: [object]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-archivestorage-copyobject
+      parameters:
+        - { name: X-Copy-From, in: header, required: true, schema: { type: string }, description: 'Source as "{src-container}/{src-object}".' }
+        - { name: Destination, in: header, schema: { type: string }, description: 'Optional alternative — used if calling with the COPY verb.' }
+      responses:
+        '201': { description: Object copied. }
+        '404': { description: Source or destination missing. }
+        4XX: { description: Swift error. }
+        5XX: { description: Swift error. }
+    delete:
+      operationId: DeleteObject
+      summary: Delete an object
+      tags: [object]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/storage-archivestorage-deleteobject
+      responses:
+        '204': { description: Deleted. }
+        '404': { description: Object does not exist. }
+        4XX: { description: Swift error. }
+        5XX: { description: Swift error. }
+
+components:
+  parameters:
+    ProjectId:
+      name: projectId
+      in: path
+      required: true
+      schema: { type: string }
+      description: |
+        NCP project ID — supplied as the path segment after the literal
+        `AUTH_` prefix (e.g. `AUTH_5678abc...`). Get the value via the
+        Keystone token-issuance response.
+    Container:
+      name: container
+      in: path
+      required: true
+      schema: { type: string }
+      description: Container name (Swift's analogue of an S3 bucket).
+    ObjectName:
+      name: object
+      in: path
+      required: true
+      schema: { type: string }
+      description: Object name. May contain '/' to express a path-like hierarchy.
+
+  securitySchemes:
+    swiftAuthToken:
+      type: apiKey
+      in: header
+      name: X-Auth-Token
+      description: |
+        OpenStack Keystone token. Issue via POST to the identity
+        endpoint at `https://kr.archive.ncloudstorage.com:5000` (the
+        token issuance API itself is out of scope for this spec); the
+        response carries `X-Subject-Token` which becomes this header
+        on subsequent service-endpoint calls. Tokens expire — refresh
+        as needed.
+
+  schemas:
+    # ─── Listing payloads ───────────────────────────────────────────────
+    AccountContainer:
+      type: object
+      properties:
+        name:    { type: string }
+        count:   { type: integer, description: Object count in this container. }
+        bytes:   { type: integer, format: int64, description: Total bytes used. }
+        last_modified: { type: string, format: date-time }
+    ContainerObject:
+      type: object
+      properties:
+        name:           { type: string }
+        bytes:          { type: integer, format: int64 }
+        hash:           { type: string, description: MD5 of the object body. }
+        content_type:   { type: string }
+        last_modified:  { type: string, format: date-time }
+    AccountListing:
+      type: object
+      description: XML listing root (when format=xml).
+      properties:
+        container:
+          type: array
+          items: { $ref: '#/components/schemas/AccountContainer' }
+    ContainerListing:
+      type: object
+      description: XML listing root (when format=xml).
+      properties:
+        object:
+          type: array
+          items: { $ref: '#/components/schemas/ContainerObject' }

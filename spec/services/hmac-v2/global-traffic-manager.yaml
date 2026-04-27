@@ -1,0 +1,263 @@
+openapi: 3.0.3
+info:
+  title: global-traffic-manager
+  description: global-traffic-manager
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: false
+    gov: true
+
+  x-ncloud-nrn-todo: true
+servers:
+  - url: https://globaltrafficmanager.apigw.ntruss.com
+    description: global-traffic-manager 민간
+    x-ncloud-env: public
+  - url: https://globaltrafficmanager.apigw.gov-ntruss.com
+    description: global-traffic-manager 공공
+    x-ncloud-env: gov
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /gtm/v1/domains:
+    get:
+      operationId: View
+      summary: Traffic Profile 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - global-traffic-manager
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/globaltrafficmanager-profile-view
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이징된 결과의 페이지 번호 0 (기본값)
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 한 페이지에 보여줄 결과 개수 20 (기본값)
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Profile 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: Creat
+      summary: Traffic Profile 생성
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - global-traffic-manager
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/globaltrafficmanager-profile-creat
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfileRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: (inferred from JSON example)
+                  policyId:
+                    type: integer
+                    description: (inferred from JSON example)
+                  ttl:
+                    type: integer
+                    description: (inferred from JSON example)
+                  claRegion:
+                    type: string
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /gtm/v1/domains/{domainId}:
+    get:
+      operationId: DetailView
+      summary: Traffic Profile 상세 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - global-traffic-manager
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/globaltrafficmanager-profile-detailview
+      parameters:
+        - name: domainId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Profile ID Profile 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    put:
+      operationId: Edit
+      summary: Traffic Profile 수정
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - global-traffic-manager
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/globaltrafficmanager-profile-edit
+      parameters:
+        - name: domainId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Profile ID Profile 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  policyId:
+                    type: integer
+                    description: (inferred from JSON example)
+                  ttl:
+                    type: integer
+                    description: (inferred from JSON example)
+                  claRegion:
+                    type: string
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: Delete
+      summary: Traffic Profile 삭제
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - global-traffic-manager
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/globaltrafficmanager-profile-delete
+      parameters:
+        - name: domainId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Profile ID Profile 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: (inferred from JSON example)
+                  error:
+                    type: object
+                    additionalProperties: true
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+components:
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  schemas:
+    ProfileRequest:
+      type: object
+      description: 'Request body for Creat (Traffic Profile 생성). Source: https://api.ncloud-docs.com/docs/profile-request'
+      properties:
+        policyId:
+          type: integer
+          format: int64
+          description: 정책 ID
+        name:
+          type: string
+          description: 도메인(Profile) 이름
+        claYn:
+          type: boolean
+          description: Cloud Log Analytics 사용 여부 (true | false)
+        ttl:
+          type: integer
+          format: int64
+          description: 도메인(Profile) TTL
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

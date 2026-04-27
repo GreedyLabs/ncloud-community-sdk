@@ -1,0 +1,2525 @@
+openapi: 3.0.3
+info:
+  title: cdss
+  description: Cloud Data Streaming Service Open API
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: true
+    gov: true
+
+  x-ncloud-nrn-todo: true
+servers:
+  - url: https://clouddatastreamingservice.apigw.ntruss.com/api/v1
+    description: cdss 민간
+    x-ncloud-env: public
+  - url: https://clouddatastreamingservice.apigw.fin-ntruss.com/api/v1
+    description: cdss 금융
+    x-ncloud-env: financial
+  - url: https://clouddatastreamingservice.apigw.gov-ntruss.com/api/v1
+    description: cdss 공공
+    x-ncloud-env: gov
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /cluster/changeCountOfBrokerNode/{serviceGroupInstanceNo}:
+    post:
+      operationId: ClusterChangeCountOfBrokerNodeServiceGroupInstanceNoPost
+      tags:
+        - cdss
+      parameters:
+        - name: changeCountOfBrokerNode
+          in: query
+          schema:
+            $ref: '#/components/schemas/AddNodesInCluster'
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoBoolean'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster change count of broker node service group instance no post
+  /cluster/changeSpecNode/{serviceGroupInstanceNo}:
+    post:
+      operationId: ClusterChangeSpecNodeServiceGroupInstanceNoPost
+      tags:
+        - cdss
+      parameters:
+        - name: changeSpecNodeRequestVo
+          in: query
+          schema:
+            $ref: '#/components/schemas/ChangeSpecNodeRequestVo'
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoChangeSpecNodeResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster change spec node service group instance no post
+  /cluster/createCDSSCluster:
+    post:
+      operationId: ClusterCreateCDSSClusterPost
+      tags:
+        - cdss
+      parameters:
+        - name: createCluster
+          in: query
+          schema:
+            $ref: '#/components/schemas/CreateCluster'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoBoolean'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster create cdss cluster post
+  /cluster/createCDSSClusterReturnServiceGroupInstanceNo:
+    post:
+      operationId: ClusterCreateCDSSClusterReturnServiceGroupInstanceNoPost
+      summary: cluster 생성 후 serviceGroupInstanceNo 반환
+      tags:
+        - cdss
+      parameters:
+        - name: createCluster
+          in: query
+          schema:
+            $ref: '#/components/schemas/CreateCluster'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoCreateClusterResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /cluster/deleteCDSSCluster/{serviceGroupInstanceNo}:
+    delete:
+      operationId: ClusterDeleteCDSSClusterServiceGroupInstanceNoDelete
+      tags:
+        - cdss
+      parameters:
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoBoolean'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster delete cdss cluster service group instance no delete
+  /cluster/disableBrokerNodePublicEndpoint/{serviceGroupInstanceNo}:
+    get:
+      operationId: ClusterDisableBrokerNodePublicEndpointServiceGroupInstanceNoGet
+      tags:
+        - cdss
+      parameters:
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoBoolean'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster disable broker node public endpoint service group instance no get
+  /cluster/disablePublicDomain/{serviceGroupInstanceNo}:
+    get:
+      operationId: ClusterDisablePublicDomainServiceGroupInstanceNoGet
+      tags:
+        - cdss
+      parameters:
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoBoolean'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster disable public domain service group instance no get
+  /cluster/downloadCertificate/{serviceGroupInstanceNo}:
+    get:
+      operationId: ClusterDownloadCertificateServiceGroupInstanceNoGet
+      tags:
+        - cdss
+      parameters:
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoGetCertFileResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster download certificate service group instance no get
+  /cluster/enableBrokerNodePublicEndpoint/{serviceGroupInstanceNo}:
+    post:
+      operationId: ClusterEnableBrokerNodePublicEndpointServiceGroupInstanceNoPost
+      tags:
+        - cdss
+      parameters:
+        - name: enableBrokerNodePublicEndpoint
+          in: query
+          schema:
+            $ref: '#/components/schemas/EnableBrokerNodePublicEndpoint'
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoBoolean'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster enable broker node public endpoint service group instance no post
+  /cluster/enablePublicDomain/{serviceGroupInstanceNo}:
+    get:
+      operationId: ClusterEnablePublicDomainServiceGroupInstanceNoGet
+      tags:
+        - cdss
+      parameters:
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoBoolean'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster enable public domain service group instance no get
+  /cluster/getAcgInfoList/{serviceGroupInstanceNo}:
+    get:
+      operationId: ClusterGetAcgInfoListServiceGroupInstanceNoGet
+      tags:
+        - cdss
+      parameters:
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoGetOpenApiAcgInfoList'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster get ACG info list service group instance no get
+  /cluster/getBrokerInfo/{serviceGroupInstanceNo}:
+    get:
+      operationId: ClusterGetBrokerInfoServiceGroupInstanceNoGet
+      tags:
+        - cdss
+      parameters:
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoGetBrokerNodeListsResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster get broker info service group instance no get
+  /cluster/getCDSSVersionList:
+    get:
+      operationId: ClusterGetCDSSVersionListGet
+      tags:
+        - cdss
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoGetKafkaVersionListResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster get cdss version list get
+  /cluster/getClusterInfoList:
+    post:
+      operationId: ClusterGetClusterInfoListPost
+      tags:
+        - cdss
+      parameters:
+        - name: clusterInfoRequest
+          in: query
+          schema:
+            $ref: '#/components/schemas/GetClusterRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoOpenApiGetClusterInfoListResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster get cluster info list post
+  /cluster/getClusterInfoList/{serviceGroupInstanceNo}:
+    post:
+      operationId: ClusterGetClusterInfoListServiceGroupInstanceNoPost
+      summary: cluster 단건 조회
+      tags:
+        - cdss
+      parameters:
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoOpenApiGetClusterInfoResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /cluster/getClusterNodeList/{serviceGroupInstanceNo}:
+    get:
+      operationId: ClusterGetClusterNodeListServiceGroupInstanceNoGet
+      tags:
+        - cdss
+      parameters:
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoGetOpenApiServiceGroupResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster get cluster node list service group instance no get
+  /cluster/getClusterStatus/{serviceGroupInstanceNo}:
+    get:
+      operationId: ClusterGetClusterStatusServiceGroupInstanceNoGet
+      tags:
+        - cdss
+      parameters:
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoGetClusterStatusPerNodeResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster get cluster status service group instance no get
+  /cluster/getLoadBalancerInstanceList/{serviceGroupInstanceNo}:
+    get:
+      operationId: ClusterGetLoadBalancerInstanceListServiceGroupInstanceNoGet
+      tags:
+        - cdss
+      parameters:
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoGetLoadBalancerListsResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster get load balancer instance list service group instance no get
+  /cluster/getNodeProductList:
+    post:
+      operationId: ClusterGetNodeProductListPost
+      tags:
+        - cdss
+      parameters:
+        - name: getNodeProductList
+          in: query
+          schema:
+            $ref: '#/components/schemas/NodeProduct'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoGetOpenApiHwProductListResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster get node product list post
+  /cluster/getNodeProductListForSpecChange/{serviceGroupInstanceNo}:
+    post:
+      operationId: ClusterGetNodeProductListForSpecChangeServiceGroupInstanceNoPost
+      tags:
+        - cdss
+      parameters:
+        - name: getNodeProductListForSpecChangeRequestVo
+          in: query
+          schema:
+            $ref: '#/components/schemas/GetNodeProductListForSpecChangeRequestVo'
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoGetNodeProductListForSpecChangeResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster get node product list for spec change service group instance no post
+  /cluster/getNodeSpecDetail/{serviceGroupInstanceNo}:
+    get:
+      operationId: ClusterGetNodeSpecDetailServiceGroupInstanceNoGet
+      summary: 클러스터 노드 현재스펙 조회
+      tags:
+        - cdss
+      parameters:
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoGetNodeSpecDetailResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /cluster/getOsProductList:
+    get:
+      operationId: ClusterGetOsProductListGet
+      tags:
+        - cdss
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoGetOpenApiOsProductListResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster get OS product list get
+  /cluster/getSubnetList:
+    post:
+      operationId: ClusterGetSubnetListPost
+      tags:
+        - cdss
+      parameters:
+        - name: getSubnetList
+          in: query
+          schema:
+            $ref: '#/components/schemas/GetSubnetList'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoGetOpenApiVpcSubnetListResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster get subnet list post
+  /cluster/getVpcList:
+    get:
+      operationId: ClusterGetVpcListGet
+      tags:
+        - cdss
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoGetOpenApiVpcConfigListResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster get VPC list get
+  /cluster/resetCMAKPassword/{serviceGroupInstanceNo}:
+    post:
+      operationId: ClusterResetCMAKPasswordServiceGroupInstanceNoPost
+      tags:
+        - cdss
+      parameters:
+        - name: cmakPassword
+          in: query
+          schema:
+            $ref: '#/components/schemas/ResetCmakPassword'
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoBoolean'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster reset cmak password service group instance no post
+  /cluster/restartAllServices/{serviceGroupInstanceNo}:
+    get:
+      operationId: ClusterRestartAllServicesServiceGroupInstanceNoGet
+      tags:
+        - cdss
+      parameters:
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoBoolean'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster restart all services service group instance no get
+  /cluster/restartCMAKService/{serviceGroupInstanceNo}:
+    get:
+      operationId: ClusterRestartCMAKServiceServiceGroupInstanceNoGet
+      tags:
+        - cdss
+      parameters:
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoBoolean'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster restart cmak service service group instance no get
+  /cluster/restartKafkaService/{serviceGroupInstanceNo}:
+    get:
+      operationId: ClusterRestartKafkaServiceServiceGroupInstanceNoGet
+      tags:
+        - cdss
+      parameters:
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoBoolean'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster restart kafka service service group instance no get
+  /cluster/restartKafkaServicePerNode/{serviceGroupInstanceNo}:
+    post:
+      operationId: ClusterRestartKafkaServicePerNodeServiceGroupInstanceNoPost
+      tags:
+        - cdss
+      parameters:
+        - name: restartKafkaServicePerNode
+          in: query
+          schema:
+            $ref: '#/components/schemas/RestartKafkaServicePerNode'
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoBoolean'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster restart kafka service per node service group instance no post
+  /configGroup/createConfigGroup:
+    post:
+      operationId: ConfigGroupCreateConfigGroupPost
+      tags:
+        - cdss
+      parameters:
+        - name: createConfigGroup
+          in: query
+          schema:
+            $ref: '#/components/schemas/CreateConfigGroup'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoCreateConfigGroupResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Config group create config group post
+  /configGroup/deleteConfigGroup/{configGroupNo}:
+    delete:
+      operationId: ConfigGroupDeleteConfigGroupConfigGroupNoDelete
+      tags:
+        - cdss
+      parameters:
+        - name: configGroupNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoDeleteConfigGroupResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Config group delete config group config group no delete
+  /configGroup/getConfigGroupUsingClusterList/{configGroupNo}:
+    post:
+      operationId: ConfigGroupGetConfigGroupUsingClusterListConfigGroupNoPost
+      tags:
+        - cdss
+      parameters:
+        - name: getConfigGroupUsingClusterList
+          in: query
+          schema:
+            $ref: '#/components/schemas/GetConfigGroupUsingClusterListRequest'
+        - name: configGroupNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoGetConfigGroupUsingClusterListResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Config group get config group using cluster list config group no post
+  /configGroup/getKafkaConfigGroup/{configGroupNo}:
+    post:
+      operationId: ConfigGroupGetKafkaConfigGroupConfigGroupNoPost
+      tags:
+        - cdss
+      parameters:
+        - name: getKafkaConfigGroup
+          in: query
+          schema:
+            $ref: '#/components/schemas/GetKafkaConfigGroupRequest'
+        - name: configGroupNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoGetKafkaConfigGroupResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Config group get kafka config group config group no post
+  /configGroup/getKafkaConfigGroupDetailList/{configGroupNo}:
+    post:
+      operationId: ConfigGroupGetKafkaConfigGroupDetailListConfigGroupNoPost
+      tags:
+        - cdss
+      parameters:
+        - name: getKafkaConfigGroupDetailList
+          in: query
+          schema:
+            $ref: '#/components/schemas/GetKafkaConfigGroupDetailListRequest'
+        - name: configGroupNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoGetKafkaConfigGroupDetailListResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Config group get kafka config group detail list config group no post
+  /configGroup/getKafkaConfigGroupList:
+    post:
+      operationId: ConfigGroupGetKafkaConfigGroupListPost
+      tags:
+        - cdss
+      parameters:
+        - name: getKafkaConfigGroupList
+          in: query
+          schema:
+            $ref: '#/components/schemas/Pager'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoGetKafkaConfigGroupListResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Config group get kafka config group list post
+  /configGroup/getKafkaVersionConfigGroupList:
+    post:
+      operationId: ConfigGroupGetKafkaVersionConfigGroupListPost
+      tags:
+        - cdss
+      parameters:
+        - name: getKafkaVersionConfigGroupList
+          in: query
+          schema:
+            $ref: '#/components/schemas/GetKafkaVersionConfigGroupListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoGetKafkaConfigGroupListResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Config group get kafka version config group list post
+  /configGroup/setClusterKafkaConfigGroup/{configGroupNo}:
+    post:
+      operationId: ConfigGroupSetClusterKafkaConfigGroupConfigGroupNoPost
+      tags:
+        - cdss
+      parameters:
+        - name: setClusterKafkaConfigGroup
+          in: query
+          schema:
+            $ref: '#/components/schemas/SetClusterKafkaConfigGroupRequest'
+        - name: configGroupNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoBoolean'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Config group set cluster kafka config group config group no post
+  /configGroup/setKafkaConfigGroupDetail/{configGroupNo}:
+    post:
+      operationId: ConfigGroupSetKafkaConfigGroupDetailConfigGroupNoPost
+      tags:
+        - cdss
+      parameters:
+        - name: setKafkaConfigGroupDetail
+          in: query
+          schema:
+            $ref: '#/components/schemas/SetKafkaConfigGroupDetailRequest'
+        - name: configGroupNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoSetKafkaConfigGroupDetailResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Config group set kafka config group detail config group no post
+  /configGroup/setKafkaConfigGroupMemo/{configGroupNo}:
+    post:
+      operationId: ConfigGroupSetKafkaConfigGroupMemoConfigGroupNoPost
+      tags:
+        - cdss
+      parameters:
+        - name: setKafkaConfigGroupMemo
+          in: query
+          schema:
+            $ref: '#/components/schemas/SetKafkaConfigGroupMemoRequest'
+        - name: configGroupNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoBoolean'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Config group set kafka config group memo config group no post
+  /monitoring/getCdssMonitoringData/{serviceGroupInstanceNo}:
+    post:
+      operationId: MonitoringGetCdssMonitoringDataServiceGroupInstanceNoPost
+      tags:
+        - cdss
+      parameters:
+        - name: getCdssMonitoringData
+          in: query
+          schema:
+            $ref: '#/components/schemas/GetCdssMonitoringData'
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoQueryMultipleDataResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Monitoring get cdss monitoring data service group instance no post
+  /monitoring/getOsMonitoringData/{serviceGroupInstanceNo}:
+    post:
+      operationId: MonitoringGetOsMonitoringDataServiceGroupInstanceNoPost
+      tags:
+        - cdss
+      parameters:
+        - name: getOsMonitoringData
+          in: query
+          schema:
+            $ref: '#/components/schemas/GetOsMonitoringData'
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoQueryMultipleDataResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Monitoring get OS monitoring data service group instance no post
+components:
+  schemas:
+    AcgRuleResponseDetailVo:
+      type: object
+      properties:
+        accessControlGroupName:
+          type: string
+        accessControlGroupNo:
+          type: integer
+          format: int32
+        accessControlGroupRuleNo:
+          type: integer
+          format: int32
+        accessControlGroupSequence:
+          type: integer
+          format: int32
+        createdYmdt:
+          $ref: '#/components/schemas/DateTimeVo'
+        description:
+          type: string
+        ipBlock:
+          type: string
+        isInboundRule:
+          type: boolean
+        portRange:
+          type: string
+        protocolTypeCode:
+          type: string
+        statusCode:
+          type: string
+    AddNodesInCluster:
+      type: object
+      properties:
+        newBrokerNodeCount:
+          type: integer
+          format: int32
+      required:
+        - newBrokerNodeCount
+    AllowedClusterInfo:
+      type: object
+      properties:
+        applicationVersion:
+          type: string
+        brokerNodeAccessControlGroupName:
+          type: string
+        brokerNodeAccessControlGroupSequence:
+          type: integer
+          format: int32
+        brokerNodeCount:
+          type: integer
+          format: int32
+        brokerNodeProductName:
+          type: string
+        brokerNodeSubnetName:
+          type: string
+        brokerNodeSubnetNo:
+          type: integer
+          format: int32
+        brokerNodeType:
+          type: string
+        brokerStorageVolumeSize:
+          type: integer
+          format: int64
+        clusterName:
+          type: string
+        clusterPublicDomain:
+          type: string
+        cmakPort:
+          type: integer
+          format: int32
+        cmakVersion:
+          type: string
+        createDate:
+          type: string
+        isUsePublicDomain:
+          type: boolean
+        kafkaBrokerPort:
+          type: integer
+          format: int32
+        kafkaBrokerTlsPort:
+          type: integer
+          format: int32
+        kafkaManagerUserName:
+          type: string
+        kafkaVersion:
+          type: string
+        managerNodeAccessControlGroupName:
+          type: string
+        managerNodeAccessControlGroupSequence:
+          type: integer
+          format: int32
+        managerNodeCount:
+          type: integer
+          format: int32
+        managerNodeSubnetName:
+          type: string
+        managerNodeSubnetNo:
+          type: integer
+          format: int32
+        managerNodeType:
+          type: string
+        memberNo:
+          type: string
+        serverStatus:
+          type: string
+          description: serverStatus (creating[blue], changing[yelllow], running[green], error[red], deleting[gray], return[gray])
+        serviceGroupInstanceNo:
+          type: string
+        softwareProductName:
+          type: string
+        vpcName:
+          type: string
+        vpcNo:
+          type: integer
+          format: int32
+        zookeeperPort:
+          type: integer
+          format: int32
+      required:
+        - serverStatus
+    ChangeSpecNodeRequestVo:
+      type: object
+      properties:
+        managerNodeProductCode:
+          type: string
+        brokerNodeProductCode:
+          type: string
+    ChangeSpecNodeResponseVo:
+      type: object
+      properties:
+        isAllPossible:
+          type: boolean
+    ConfigGroupClusterInfo:
+      type: object
+      properties:
+        clusterName:
+          type: string
+        serviceGroupInstanceNo:
+          type: integer
+          format: int32
+    CreateCluster:
+      type: object
+      properties:
+        clusterName:
+          type: string
+        kafkaVersionCode:
+          type: string
+        kafkaManagerUserName:
+          type: string
+        kafkaManagerUserPassword:
+          type: string
+        softwareProductCode:
+          type: string
+        vpcNo:
+          type: integer
+          format: int32
+        managerNodeProductCode:
+          type: string
+        managerNodeSubnetNo:
+          type: integer
+          format: int32
+        brokerNodeProductCode:
+          type: string
+        brokerNodeCount:
+          type: integer
+          format: int32
+        brokerNodeSubnetNo:
+          type: integer
+          format: int32
+        brokerNodeStorageSize:
+          type: integer
+          format: int32
+        configGroupNo:
+          type: integer
+          format: int32
+      required:
+        - clusterName
+        - kafkaVersionCode
+        - kafkaManagerUserName
+        - kafkaManagerUserPassword
+        - softwareProductCode
+        - vpcNo
+        - managerNodeProductCode
+        - managerNodeSubnetNo
+        - brokerNodeCount
+        - brokerNodeSubnetNo
+        - brokerNodeStorageSize
+    CreateClusterResponseVo:
+      type: object
+      properties:
+        serviceGroupInstanceNo:
+          type: integer
+          format: int32
+          description: 서비스 그룹 인스턴스 번호
+      required:
+        - serviceGroupInstanceNo
+    CreateConfigGroup:
+      type: object
+      properties:
+        configGroupName:
+          type: string
+        description:
+          type: string
+        kafkaVersionCode:
+          type: string
+      required:
+        - configGroupName
+        - kafkaVersionCode
+    CreateConfigGroupResponseVo:
+      type: object
+      properties:
+        configGroupNo:
+          type: integer
+          format: int32
+    DateTimeVo:
+      type: object
+      properties:
+        formattedDate:
+          type: string
+        formattedDateTime:
+          type: string
+        utc:
+          type: integer
+          format: int64
+    DeleteConfigGroupResponseVo:
+      type: object
+      properties:
+        isDelete:
+          type: boolean
+    DimensionsVo:
+      type: object
+      properties:
+        instanceNo:
+          type: string
+    DisallowedClusterInfo:
+      type: object
+      properties:
+        clusterName:
+          type: string
+        serviceGroupInstanceNo:
+          type: string
+    EnableBrokerNodePublicEndpoint:
+      type: object
+      properties:
+        loadBalancerInstanceNo:
+          type: integer
+          format: int32
+      required:
+        - loadBalancerInstanceNo
+    ErrorVo:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        stackTrace:
+          type: string
+    GetBrokerNodeListsResponseVo:
+      type: object
+      properties:
+        brokerNodeList:
+          type: string
+        brokerTlsNodeList:
+          type: string
+        localDnsList:
+          type: string
+        localDnsTlsList:
+          type: string
+        publicEndpointBrokerNodeList:
+          type: string
+        publicEndpointBrokerNodeListenerPortList:
+          type: string
+        publicEndpointBrokerTlsNodeList:
+          type: string
+        publicEndpointBrokerTlsNodeListenerPortList:
+          type: string
+        zookeeperList:
+          type: string
+    GetCdssMonitoringData:
+      type: object
+      properties:
+        timeStart:
+          type: integer
+          format: int32
+        timeEnd:
+          type: integer
+          format: int32
+        metric:
+          type: string
+        computeInstanceNo:
+          type: string
+        interval:
+          type: string
+      required:
+        - timeStart
+        - timeEnd
+        - metric
+        - computeInstanceNo
+    GetCertFileResponseVo:
+      type: object
+      properties:
+        certification:
+          type: string
+    GetClusterRequest:
+      type: object
+      properties:
+        inputText:
+          type: string
+        vpcName:
+          type: string
+        pageNo:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+    GetClusterStatusPerNodeResponseVo:
+      type: object
+      properties:
+        brokerNodeTotalNumber:
+          type: integer
+          format: int32
+        brokerNumber:
+          type: integer
+          format: int32
+        brokerStatus:
+          type: string
+        brokerStatusPerNode:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProcessStatusVo'
+        clusterName:
+          type: string
+        cmakStatus:
+          type: string
+        zookeeperNumber:
+          type: integer
+          format: int32
+        zookeeperStatus:
+          type: string
+        zookeeperStatusPerNode:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProcessStatusVo'
+        zookeeperTotalNumber:
+          type: integer
+          format: int32
+    GetConfigGroupUsingClusterListRequest:
+      type: object
+      properties:
+        pageNo:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+    GetConfigGroupUsingClusterListResponseVo:
+      type: object
+      properties:
+        currentPage:
+          type: integer
+          format: int32
+        isFirst:
+          type: boolean
+        isLast:
+          type: boolean
+        pageSize:
+          type: integer
+          format: int32
+        totalCount:
+          type: integer
+          format: int64
+        totalPage:
+          type: integer
+          format: int32
+        usingClusterNameList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConfigGroupClusterInfo'
+    GetKafkaConfigGroupDetailListRequest:
+      type: object
+      properties:
+        kafkaVersionCode:
+          type: string
+    GetKafkaConfigGroupDetailListResponseVo:
+      type: object
+      properties:
+        configGroupNo:
+          type: integer
+          format: int32
+        kafkaConfigGroupDetailList:
+          type: array
+          items:
+            $ref: '#/components/schemas/KafkaConfigDetail'
+        kafkaVersionCode:
+          type: string
+        memberNo:
+          type: string
+    GetKafkaConfigGroupListResponseVo:
+      type: object
+      properties:
+        currentPage:
+          type: integer
+          format: int32
+        isFirst:
+          type: boolean
+        isLast:
+          type: boolean
+        kafkaConfigGroupList:
+          type: array
+          items:
+            $ref: '#/components/schemas/KafkaConfigGroup'
+        pageSize:
+          type: integer
+          format: int32
+        totalCount:
+          type: integer
+          format: int64
+        totalPage:
+          type: integer
+          format: int32
+    GetKafkaConfigGroupRequest:
+      type: object
+      properties:
+        kafkaVersionCode:
+          type: string
+    GetKafkaConfigGroupResponseVo:
+      type: object
+      properties:
+        configGroupName:
+          type: string
+        configGroupNo:
+          type: integer
+          format: int32
+        description:
+          type: string
+        kafkaVersionCode:
+          type: string
+        memberNo:
+          type: string
+    GetKafkaVersionConfigGroupListRequest:
+      type: object
+      properties:
+        kafkaVersionCode:
+          type: string
+        pageNo:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+      required:
+        - kafkaVersionCode
+    GetKafkaVersionListResponseVo:
+      type: object
+      properties:
+        kafkaVersionList:
+          type: array
+          items:
+            $ref: '#/components/schemas/KafkaVersion'
+    GetLoadBalancerListsResponseVo:
+      type: object
+      properties:
+        responses:
+          type: array
+          items:
+            $ref: '#/components/schemas/LoadBalancerInstance'
+        returnCode:
+          type: string
+        userRequestId:
+          type: string
+    GetNodeProductListForSpecChangeRequestVo:
+      type: object
+      properties:
+        softwareProductCode:
+          type: string
+      required:
+        - softwareProductCode
+    GetNodeProductListForSpecChangeResponseVo:
+      type: object
+      properties:
+        brokerNodeProductList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductListForCreation'
+        managerNodeProductList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductListForCreation'
+    GetNodeSpecDetailResponseVo:
+      type: object
+      properties:
+        brokerNodeCount:
+          type: integer
+          format: int32
+        brokerNodeProductCode:
+          type: string
+        brokerNodeProductName:
+          type: string
+        clusterName:
+          type: string
+        managerNodeCount:
+          type: integer
+          format: int32
+        managerNodeProductCode:
+          type: string
+        managerNodeProductName:
+          type: string
+        serviceGroupInstanceNo:
+          type: integer
+          format: int32
+        softwareProductCode:
+          type: string
+        zoneNo:
+          type: string
+    GetOpenApiAccessControlGroupRuleListResponseVo:
+      type: object
+      properties:
+        inboundAcgRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/AcgRuleResponseDetailVo'
+        outboundAcgRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/AcgRuleResponseDetailVo'
+    GetOpenApiAcgInfoList:
+      type: object
+      properties:
+        brokerNodeAcgRule:
+          $ref: '#/components/schemas/GetOpenApiAccessControlGroupRuleListResponseVo'
+        managerNodeAcgRule:
+          $ref: '#/components/schemas/GetOpenApiAccessControlGroupRuleListResponseVo'
+    GetOpenApiHwProductListResponseVo:
+      type: object
+      properties:
+        productList:
+          type: array
+          items:
+            $ref: '#/components/schemas/OpenApiHwProductVo'
+    GetOpenApiOsProductListResponseVo:
+      type: object
+      properties:
+        productList:
+          type: array
+          items:
+            $ref: '#/components/schemas/OpenApiOsProductVo'
+    GetOpenApiServiceGroupResponseVo:
+      type: object
+      properties:
+        computeList:
+          type: array
+          items:
+            $ref: '#/components/schemas/OpenApiGetComputeInstanceListResponseDetailVo'
+        contractNo:
+          type: integer
+          format: int32
+        createdDate:
+          $ref: '#/components/schemas/DateTimeVo'
+        productCode:
+          type: string
+        regionNo:
+          type: integer
+          format: int32
+        serviceGroupInstanceNo:
+          type: integer
+          format: int32
+        serviceGroupInstanceTypeCode:
+          type: string
+        serviceGroupName:
+          type: string
+        statusCode:
+          type: string
+        vpcNo:
+          type: integer
+          format: int32
+    GetOpenApiVpcConfigListResponseVo:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/OpenApiVpcConfigListResponseDetailVo'
+        error:
+          $ref: '#/components/schemas/ErrorVo'
+    GetOpenApiVpcSubnetListResponseVo:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/OpenApiVpcSubnetListResponseDetailVo'
+        error:
+          $ref: '#/components/schemas/ErrorVo'
+    GetOsMonitoringData:
+      type: object
+      properties:
+        timeStart:
+          type: integer
+          format: int32
+        timeEnd:
+          type: integer
+          format: int32
+        metric:
+          type: string
+        computeInstanceNo:
+          type: string
+        interval:
+          type: string
+      required:
+        - timeStart
+        - timeEnd
+        - metric
+        - computeInstanceNo
+    GetSubnetList:
+      type: object
+      properties:
+        vpcNo:
+          type: integer
+          format: int32
+        softwareProductCode:
+          type: string
+      required:
+        - vpcNo
+        - softwareProductCode
+    KafkaConfigDetail:
+      type: object
+      properties:
+        configName:
+          type: string
+        configNameKey:
+          type: string
+        customValue:
+          type: string
+        defaultValue:
+          type: string
+        modifyYn:
+          type: boolean
+        range:
+          type: string
+        type:
+          type: string
+    KafkaConfigGroup:
+      type: object
+      properties:
+        configGroupName:
+          type: string
+        configGroupNo:
+          type: integer
+          format: int32
+        description:
+          type: string
+        kafkaVersion:
+          type: string
+        kafkaVersionCode:
+          type: string
+    KafkaVersion:
+      type: object
+      properties:
+        applicationVersionName:
+          type: string
+        cmakVersionName:
+          type: string
+        kafkaVersionCode:
+          type: string
+        kafkaVersionName:
+          type: string
+    LoadBalancerInstance:
+      type: object
+      properties:
+        actionName:
+          type: string
+        createYmdt:
+          type: string
+        disable:
+          type: boolean
+        instanceNo:
+          type: integer
+          format: int32
+        instanceStatusCode:
+          type: string
+        instanceStatusName:
+          type: string
+        ipTypeCode:
+          type: string
+        layerTypeCode:
+          type: string
+        loadBalancerDomain:
+          type: string
+        loadBalancerIp:
+          type: string
+        loadBalancerName:
+          type: string
+        memberNo:
+          type: integer
+          format: int32
+        permission:
+          type: string
+        regionNo:
+          type: integer
+          format: int32
+        zoneList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ZoneInfo'
+    MetricInfoResponseVo:
+      type: object
+      properties:
+        aggregation:
+          type: string
+        dimensions:
+          $ref: '#/components/schemas/DimensionsVo'
+        dps:
+          type: array
+          items:
+            type: array
+            items: {}
+        graphName:
+          type: string
+        interval:
+          type: string
+        metric:
+          type: string
+        productName:
+          type: string
+    NodeProduct:
+      type: object
+      properties:
+        softwareProductCode:
+          type: string
+        subnetNo:
+          type: integer
+          format: int32
+      required:
+        - softwareProductCode
+        - subnetNo
+    OpenApiGetClusterInfoListResponseVo:
+      type: object
+      properties:
+        allowedClusters:
+          type: array
+          items:
+            $ref: '#/components/schemas/AllowedClusterInfo'
+        currentPage:
+          type: integer
+          format: int32
+        disallowedClusters:
+          type: array
+          items:
+            $ref: '#/components/schemas/DisallowedClusterInfo'
+        isFirst:
+          type: boolean
+        isLast:
+          type: boolean
+        pageSize:
+          type: integer
+          format: int32
+        totalCount:
+          type: integer
+          format: int64
+        totalPage:
+          type: integer
+          format: int32
+    OpenApiGetClusterInfoResponseVo:
+      type: object
+      properties:
+        brokerNodeCount:
+          type: integer
+          format: int32
+        brokerNodeProductCode:
+          type: string
+        brokerNodeStorageSize:
+          type: integer
+          format: int64
+        brokerNodeSubnetNo:
+          type: integer
+          format: int32
+        clusterName:
+          type: string
+        configGroupNo:
+          type: integer
+          format: int32
+        kafkaManagerUserName:
+          type: string
+        kafkaManagerUserPassword:
+          type: string
+        kafkaVersionCode:
+          type: string
+        managerNodeProductCode:
+          type: string
+        managerNodeSubnetNo:
+          type: integer
+          format: int32
+        softwareProductCode:
+          type: string
+        status:
+          type: string
+        vpcNo:
+          type: integer
+          format: int32
+    OpenApiGetComputeInstanceListResponseDetailVo:
+      type: object
+      properties:
+        computeInstanceNo:
+          type: integer
+          format: int32
+        computeInstanceProductCode:
+          type: string
+        computeInstanceStatus:
+          type: string
+        cpuCount:
+          type: integer
+          format: int32
+        createdYmdt:
+          $ref: '#/components/schemas/DateTimeVo'
+        hostName:
+          type: string
+        macAddress:
+          type: string
+        memorySize:
+          type: integer
+          format: int64
+        nodeRoleCode:
+          type: string
+        operationYmdt:
+          $ref: '#/components/schemas/DateTimeVo'
+        osInfo:
+          type: string
+        privateIp:
+          type: string
+        regionCode:
+          type: string
+        regionName:
+          type: string
+        regionNo:
+          type: string
+        selfManaged:
+          type: boolean
+        serviceGroupInstanceNo:
+          type: integer
+          format: int32
+        subnetName:
+          type: string
+        subnetNo:
+          type: integer
+          format: int32
+        uuid:
+          type: string
+        vpcName:
+          type: string
+        vpcNo:
+          type: integer
+          format: int32
+        zoneName:
+          type: string
+        zoneNo:
+          type: integer
+          format: int32
+    OpenApiHwProductVo:
+      type: object
+      properties:
+        cpuCount:
+          type: string
+        diskType2Code:
+          type: string
+        infraResourceTypeCode:
+          type: string
+        memorySize:
+          type: string
+        productCode:
+          type: string
+        productEnglishDesc:
+          type: string
+        productName:
+          type: string
+        productType2Code:
+          type: string
+    OpenApiOsProductVo:
+      type: object
+      properties:
+        infraResourceTypeCode:
+          type: string
+        productCode:
+          type: string
+        productEnglishDesc:
+          type: string
+        productName:
+          type: string
+        productType2Code:
+          type: string
+        softwareTypeCode:
+          type: string
+    OpenApiVpcConfigListResponseDetailVo:
+      type: object
+      properties:
+        createdDate:
+          $ref: '#/components/schemas/DateTimeVo'
+        ipv4Cidr:
+          type: string
+        permission:
+          type: string
+        regionNo:
+          type: string
+        statusCode:
+          type: string
+        vpcName:
+          type: string
+        vpcNo:
+          type: integer
+          format: int32
+    OpenApiVpcSubnetListResponseDetailVo:
+      type: object
+      properties:
+        isPublic:
+          type: boolean
+        permission:
+          type: string
+        subnet:
+          type: string
+        subnetName:
+          type: string
+        subnetNo:
+          type: integer
+          format: int32
+        vpcName:
+          type: string
+        vpcNo:
+          type: integer
+          format: int32
+        zoneName:
+          type: string
+        zoneNo:
+          type: integer
+          format: int32
+    Pager:
+      type: object
+      properties:
+        pageNo:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+    ProcessStatusVo:
+      type: object
+      properties:
+        hostname:
+          type: string
+        status:
+          type: string
+    ProductListForCreation:
+      type: object
+      properties:
+        baseBlockStorageProductCode:
+          type: string
+        cpuCount:
+          type: string
+        diskType2Code:
+          type: string
+        infraResourceDetailTypeCode:
+          type: string
+        infraResourceTypeCode:
+          type: string
+        isChangeSpec:
+          type: boolean
+        isSelected:
+          type: boolean
+        memorySize:
+          type: integer
+          format: int64
+        productCode:
+          type: string
+        productDesc:
+          type: string
+        productEnglishDesc:
+          type: string
+        productEnglishName:
+          type: string
+        productJapaneseDesc:
+          type: string
+        productJapaneseName:
+          type: string
+        productKoreanDesc:
+          type: string
+        productKoreanName:
+          type: string
+        productName:
+          type: string
+        productType2Code:
+          type: string
+    QueryMultipleDataResponseVo:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetricInfoResponseVo'
+    ResetCmakPassword:
+      type: object
+      properties:
+        kafkaManagerUserPassword:
+          type: string
+      required:
+        - kafkaManagerUserPassword
+    ResponseVoBoolean:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          type: boolean
+    ResponseVoChangeSpecNodeResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/ChangeSpecNodeResponseVo'
+    ResponseVoCreateClusterResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/CreateClusterResponseVo'
+    ResponseVoCreateConfigGroupResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/CreateConfigGroupResponseVo'
+    ResponseVoDeleteConfigGroupResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/DeleteConfigGroupResponseVo'
+    ResponseVoGetBrokerNodeListsResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/GetBrokerNodeListsResponseVo'
+    ResponseVoGetCertFileResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/GetCertFileResponseVo'
+    ResponseVoGetClusterStatusPerNodeResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/GetClusterStatusPerNodeResponseVo'
+    ResponseVoGetConfigGroupUsingClusterListResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/GetConfigGroupUsingClusterListResponseVo'
+    ResponseVoGetKafkaConfigGroupDetailListResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/GetKafkaConfigGroupDetailListResponseVo'
+    ResponseVoGetKafkaConfigGroupListResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/GetKafkaConfigGroupListResponseVo'
+    ResponseVoGetKafkaConfigGroupResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/GetKafkaConfigGroupResponseVo'
+    ResponseVoGetKafkaVersionListResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/GetKafkaVersionListResponseVo'
+    ResponseVoGetLoadBalancerListsResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/GetLoadBalancerListsResponseVo'
+    ResponseVoGetNodeProductListForSpecChangeResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/GetNodeProductListForSpecChangeResponseVo'
+    ResponseVoGetNodeSpecDetailResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/GetNodeSpecDetailResponseVo'
+    ResponseVoGetOpenApiAcgInfoList:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/GetOpenApiAcgInfoList'
+    ResponseVoGetOpenApiHwProductListResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/GetOpenApiHwProductListResponseVo'
+    ResponseVoGetOpenApiOsProductListResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/GetOpenApiOsProductListResponseVo'
+    ResponseVoGetOpenApiServiceGroupResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/GetOpenApiServiceGroupResponseVo'
+    ResponseVoGetOpenApiVpcConfigListResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/GetOpenApiVpcConfigListResponseVo'
+    ResponseVoGetOpenApiVpcSubnetListResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/GetOpenApiVpcSubnetListResponseVo'
+    ResponseVoOpenApiGetClusterInfoListResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/OpenApiGetClusterInfoListResponseVo'
+    ResponseVoOpenApiGetClusterInfoResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/OpenApiGetClusterInfoResponseVo'
+    ResponseVoQueryMultipleDataResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/QueryMultipleDataResponseVo'
+    ResponseVoSetKafkaConfigGroupDetailResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/SetKafkaConfigGroupDetailResponseVo'
+    RestartKafkaServicePerNode:
+      type: object
+      properties:
+        computeInstanceNoList:
+          type: array
+          items:
+            type: integer
+            format: int32
+      required:
+        - computeInstanceNoList
+    SetClusterKafkaConfigGroupRequest:
+      type: object
+      properties:
+        kafkaVersionCode:
+          type: string
+        serviceGroupInstanceNo:
+          type: integer
+          format: int32
+    SetKafkaConfigGroupDetailRequest:
+      type: object
+      properties:
+        kafkaVersionCode:
+          type: string
+        autoCreateTopicsEnable:
+          type: boolean
+        deleteTopicEnable:
+          type: boolean
+        logCleanerEnable:
+          type: boolean
+        logCleanupPolicy:
+          type: string
+        logCleanerThreads:
+          type: integer
+          format: int32
+        logFlushIntervalMessages:
+          type: integer
+          format: int32
+        logRetentionBytes:
+          type: integer
+          format: int32
+        logRetentionHours:
+          type: integer
+          format: int32
+        logSegmentBytes:
+          type: integer
+          format: int32
+        numIoThreads:
+          type: integer
+          format: int32
+        numNetworkThreads:
+          type: integer
+          format: int32
+        numPartitions:
+          type: integer
+          format: int32
+        allowEveryoneIfNoAclFound:
+          type: boolean
+    SetKafkaConfigGroupDetailResponseVo:
+      type: object
+      properties:
+        configGroupNo:
+          type: integer
+          format: int32
+    SetKafkaConfigGroupMemoRequest:
+      type: object
+      properties:
+        kafkaVersionCode:
+          type: string
+        description:
+          type: string
+    ZoneInfo:
+      type: object
+      properties:
+        subnetName:
+          type: string
+        subnetNo:
+          type: integer
+          format: int32
+        zoneName:
+          type: string
+        zoneNo:
+          type: integer
+          format: int32
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

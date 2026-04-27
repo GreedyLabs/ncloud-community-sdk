@@ -1,0 +1,422 @@
+openapi: 3.0.3
+info:
+  title: Data Query (Trino-compat)
+  description: Data Query (Trino-compat)
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: false
+    gov: false
+
+  x-ncloud-nrn:
+
+    productName: DataQuery
+    resource_types:
+      - Project
+      - DataSource
+
+# Real base URL is kr.dataquery.naverncp.com/api/v2 (verified live 2026-04-26
+# against the curl example at analytics-dataquery-query-getqueries). The
+# previously-listed dataquery.apigw.ntruss.com host returns "URL not found"
+# from the gateway — only the naverncp.com region-prefixed host serves this
+# product. /api/v2 prefix encoded here so paths stay unprefixed.
+servers:
+  - url: https://kr.dataquery.naverncp.com/api/v2
+    description: data-query 민간 — 한국(KR)
+    x-ncloud-env: public
+    x-ncloud-region: KR
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /queries:
+    get:
+      operationId: GetQueries
+      summary: 쿼리 이력 조회
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-query
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-dataquery-query-getqueries
+      parameters:
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '쿼리 상태로 필터링 QUEUED | STARTING | RUNNING | FINISHED | FAILED | CANCELED QUEUED : 대기 중 STARTING : 실행 시작 RUNNING : 실행 중 FINISHED : 실행 완료 FAILED : 실행 실패 CANCELED : 실행 취소'
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~N (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지당 항목 수 1~500 (기본값: 20)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pageNo:
+                    type: integer
+                    description: 페이지 번호
+                  pageSize:
+                    type: integer
+                    description: 페이지당 항목 수
+                  hasMore:
+                    type: boolean
+                    description: '다음 페이지 존재 여부 true | false true : 존재 false : 존재 안 함'
+                  queryList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '쿼리 실행 이력: QueryHistory'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: Queries
+      summary: 쿼리 실행
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-query
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-dataquery-query-queries
+      parameters:
+        - name: query
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 실행 쿼리문
+        - name: executionParameters
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: object
+              additionalProperties: true
+          description: 쿼리 실행 파라미터
+        - name: timeout
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '쿼리 실행 최대 시간(초) 1~60 (기본값: 20)'
+        - name: isReuse
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: '쿼리 결과 재사용 여부 true | false (기본값) true : 재사용 false : 재사용 안 함'
+        - name: reuseMaxAge
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '쿼리 결과 재사용 허용 시간(분) 1~10080 (기본값: 60) isReuse 가 true 인 경우, 필수 입력 <예시> 60을 입력한 경우: 쿼리 실행 시점으로부터 60분 전에 반환 가능한 유효 결과 존재 시 해당 결과 재사용'
+        - name: dataSource
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 쿼리 실행 데이터 소스 이름
+        - name: database
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 쿼리 실행 데이터베이스 이름
+        - name: projectId
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 쿼리 실행 프로젝트 아이디
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: 실행 아이디
+                  columns:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '컬럼 정보: Column'
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 쿼리 실행 결과 각 행이 Column 의 컬럼 순서와 일대일 매핑된 배열로 반환 복합 타입( row ) 컬럼인 경우, {필드명=값} 형태의 문자열로 직렬화 2개 이상 반환 시 쉼표(,)로 구분
+                  offset:
+                    type: integer
+                    format: int64
+                    description: 페이지 조회 시 사용할 오프셋 isFinished 가 false 인 경우, 다음 페이지 조회 요청에 사용
+                  isFinished:
+                    type: boolean
+                    description: '전체 페이지 조회 완료 여부 true | false true : 완료 (다음 페이지 존재 안 함) false : 미완료 (다음 페이지 존재)'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /queries/async:
+    post:
+      operationId: AsyncQueries
+      summary: 쿼리 비동기 실행
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-query
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-dataquery-query-asyncqueries
+      parameters:
+        - name: query
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 실행 쿼리문
+        - name: executionParameters
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: object
+              additionalProperties: true
+          description: 쿼리 실행 파라미터
+        - name: isReuse
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: '쿼리 결과 재사용 여부 true | false true : 재사용 false : 재사용 안 함'
+        - name: reuseMaxAge
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '쿼리 결과 재사용 허용 시간(분) 1~10080 (기본값: 60) isReuse 가 true 인 경우, 필수 입력 <예시> 60을 입력한 경우: 쿼리 실행 시점으로부터 60분 전에 반환 가능한 유효 결과 존재 시 해당 결과 재사용'
+        - name: dataSource
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 쿼리 실행 데이터 소스 이름
+        - name: database
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 쿼리 실행 데이터베이스 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: 실행 아이디
+                  columns:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '컬럼 정보 [] (비동기 실행 시 유효 값) 응답 결과 확인: 쿼리 결과 조회 참조'
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '쿼리 실행 결과 [] (비동기 실행 시 유효 값) 응답 결과 확인: 쿼리 결과 조회 참조'
+                  offset:
+                    type: integer
+                    format: int64
+                    description: 페이지 조회 시 사용할 오프셋 isFinished 가 false 인 경우, 다음 페이지 조회 요청에 사용
+                  isFinished:
+                    type: boolean
+                    description: '전체 페이지 조회 완료 여부 true | false true : 완료 (다음 페이지 존재 안 함) false : 미완료 (다음 페이지 존재)'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /queries/{executionId}:
+    get:
+      operationId: GetResult
+      summary: 쿼리 결과 조회
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-query
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-dataquery-query-getresult
+      parameters:
+        - name: executionId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 쿼리 아이디 쿼리 이력 조회 참조
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+          description: '페이지 조회 시 사용할 오프셋 (기본값: 0)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지당 항목 수 1~1000 (기본값: 100)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: 실행 아이디
+                  columns:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '컬럼 정보: Column'
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 쿼리 실행 결과 각 행이 Column 의 컬럼 순서와 일대일 매핑된 배열로 반환 복합 타입( row ) 컬럼인 경우, {필드명=값} 형태의 문자열로 직렬화 2개 이상 반환 시 쉼표(,)로 구분
+                  offset:
+                    type: integer
+                    format: int64
+                    description: 페이지 조회 시 사용할 오프셋 isFinished 가 false 인 경우, 다음 페이지 조회 요청에 사용
+                  isFinished:
+                    type: boolean
+                    description: '전체 페이지 조회 완료 여부 true | false true : 완료 (다음 페이지 존재 안 함) false : 미완료 (다음 페이지 존재)'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: Cancel
+      summary: 쿼리 취소
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-query
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-dataquery-query-cancel
+      parameters:
+        - name: executionId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 실행 아이디 쿼리 이력 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: 실행 아이디
+                  columns:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 컬럼 정보 [] (실행 취소 시 유효 값)
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 쿼리 응답값 [] (실행 취소 시 유효 값)
+                  offset:
+                    type: integer
+                    format: int64
+                    description: 페이지 조회 시 사용할 오프셋 isFinished 가 false 인 경우, 다음 페이지 조회 요청에 사용
+                  isFinished:
+                    type: boolean
+                    description: '전체 페이지 조회 완료 여부 true | false true : 완료 (다음 페이지 존재 안 함) false : 미완료 (다음 페이지 존재)'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+components:
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  schemas:
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

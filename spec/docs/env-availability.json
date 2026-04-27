@@ -1,0 +1,1103 @@
+{
+  "version": "2026-04-24",
+  "hosts": {
+    "public": "api.ncloud-docs.com",
+    "financial": "api-fin.ncloud-docs.com",
+    "gov": "api-gov.ncloud-docs.com"
+  },
+  "services": {
+    "ai-tems": {
+      "public": true,
+      "financial": false,
+      "gov": false,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/ai-application-service-aitems-dataset-list",
+        "financial": "https://api-fin.ncloud-docs.com/docs/ai-application-service-aitems-dataset-list",
+        "gov": "https://api-gov.ncloud-docs.com/docs/ai-application-service-aitems-dataset-list"
+      },
+      "evidence": {
+        "public": "데이터셋 목록 조회"
+      }
+    },
+    "api-gateway": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/apigateway-apikey-apikeys",
+        "financial": "https://api-fin.ncloud-docs.com/docs/apigateway-apikey-apikeys",
+        "gov": "https://api-gov.ncloud-docs.com/docs/apigateway-apikey-apikeys"
+      },
+      "evidence": {
+        "public": "API Key 조회",
+        "financial": "API Key 조회",
+        "gov": "API Key 조회"
+      }
+    },
+    "application-maps": {
+      "public": true,
+      "financial": false,
+      "gov": false,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/application-maps-directions15",
+        "financial": "https://api-fin.ncloud-docs.com/docs/application-maps-directions15",
+        "gov": "https://api-gov.ncloud-docs.com/docs/application-maps-directions15"
+      },
+      "evidence": {
+        "public": "Directions 15"
+      }
+    },
+    "arc-eye": {
+      "public": true,
+      "financial": false,
+      "gov": false,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/arc-eye-mapdata-download-urls-api",
+        "financial": "https://api-fin.ncloud-docs.com/docs/arc-eye-mapdata-download-urls-api",
+        "gov": "https://api-gov.ncloud-docs.com/docs/arc-eye-mapdata-download-urls-api"
+      },
+      "evidence": {
+        "public": "다운로드 URL 조회"
+      }
+    },
+    "auto-scaling": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/compute-vautoscaling",
+        "financial": "https://api-fin.ncloud-docs.com/docs/compute-vautoscaling",
+        "gov": "https://api-gov.ncloud-docs.com/docs/compute-vautoscaling"
+      },
+      "evidence": {
+        "public": "Auto Scaling (VPC) 개요",
+        "financial": "Auto Scaling 개요",
+        "gov": "Auto Scaling (VPC) 개요"
+      }
+    },
+    "blockchain": {
+      "public": true,
+      "financial": false,
+      "gov": false,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/blockchainservice-viewnetworklist",
+        "financial": "https://api-fin.ncloud-docs.com/docs/blockchainservice-viewnetworklist",
+        "gov": "https://api-gov.ncloud-docs.com/docs/blockchainservice-viewnetworklist"
+      },
+      "evidence": {
+        "public": "Network 목록 조회"
+      }
+    },
+    "cache": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/database-vcache",
+        "financial": "https://api-fin.ncloud-docs.com/docs/database-vcache",
+        "gov": "https://api-gov.ncloud-docs.com/docs/database-vcache"
+      },
+      "evidence": {
+        "public": "Cloud DB for Cache (VPC) 개요",
+        "financial": "Cloud DB for Cache 개요",
+        "gov": "Cloud DB for Cache (VPC) 개요"
+      }
+    },
+    "cdn": {
+      "public": true,
+      "financial": false,
+      "gov": false,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/networking-cdn",
+        "financial": "https://api-fin.ncloud-docs.com/docs/networking-cdn",
+        "gov": "https://api-gov.ncloud-docs.com/docs/networking-cdn"
+      },
+      "evidence": {
+        "public": "Global CDN 개요"
+      }
+    },
+    "cdss": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/analytics-clouddatastreamingservice",
+        "financial": "https://api-fin.ncloud-docs.com/docs/analytics-clouddatastreamingservice",
+        "gov": "https://api-gov.ncloud-docs.com/docs/analytics-clouddatastreamingservice"
+      },
+      "evidence": {
+        "public": "Cloud Data Streaming Service 개요",
+        "financial": "Cloud Data Streaming Service 개요",
+        "gov": "Cloud Data Streaming Service 개요"
+      }
+    },
+    "certificate-manager": {
+      "public": true,
+      "financial": false,
+      "gov": false,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/security-certificatemanager-listcertificatetypes",
+        "financial": "https://api-fin.ncloud-docs.com/docs/security-certificatemanager-listcertificatetypes",
+        "gov": "https://api-gov.ncloud-docs.com/docs/security-certificatemanager-listcertificatetypes"
+      },
+      "evidence": {
+        "public": "ListCertificateTypes"
+      }
+    },
+    "chatbot": {
+      "public": true,
+      "financial": true,
+      "gov": false,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/ai-application-service-chatbot",
+        "financial": "https://api-fin.ncloud-docs.com/docs/ai-application-service-chatbot",
+        "gov": "https://api-gov.ncloud-docs.com/docs/ai-application-service-chatbot"
+      },
+      "evidence": {
+        "public": "CLOVA Chatbot 개요",
+        "financial": "CLOVA Chatbot 개요"
+      }
+    },
+    "cloud-activity-tracer": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/management-cloudactivitytracer-getactivitylist",
+        "financial": "https://api-fin.ncloud-docs.com/docs/management-cloudactivitytracer-getactivitylist",
+        "gov": "https://api-gov.ncloud-docs.com/docs/management-cloudactivitytracer-getactivitylist"
+      },
+      "evidence": {
+        "public": "GetActivityList",
+        "financial": "GetActivityList",
+        "gov": "GetActivityList"
+      }
+    },
+    "cloud-advisor": {
+      "public": true,
+      "financial": false,
+      "gov": false,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/management-cloud-advisor-categories",
+        "financial": "https://api-fin.ncloud-docs.com/docs/management-cloud-advisor-categories",
+        "gov": "https://api-gov.ncloud-docs.com/docs/management-cloud-advisor-categories"
+      },
+      "evidence": {
+        "public": "점검 카테고리 조회"
+      }
+    },
+    "cloud-functions": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/compute-cloudfunctions-getactivationlist",
+        "financial": "https://api-fin.ncloud-docs.com/docs/compute-cloudfunctions-getactivationlist",
+        "gov": "https://api-gov.ncloud-docs.com/docs/compute-cloudfunctions-getactivationlist"
+      },
+      "evidence": {
+        "public": "Get Activation List",
+        "financial": "Get Activation List",
+        "gov": "Get Activation List"
+      }
+    },
+    "cloud-insight": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/management-cloudinsight-senddata",
+        "financial": "https://api-fin.ncloud-docs.com/docs/management-cloudinsight-senddata",
+        "gov": "https://api-gov.ncloud-docs.com/docs/management-cloudinsight-senddata"
+      },
+      "evidence": {
+        "public": "SendData",
+        "financial": "SendData",
+        "gov": "SendData"
+      }
+    },
+    "cloud-log-analytics": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/analytics-cloudloganalytics-getcapacity",
+        "financial": "https://api-fin.ncloud-docs.com/docs/analytics-cloudloganalytics-getcapacity",
+        "gov": "https://api-gov.ncloud-docs.com/docs/analytics-cloudloganalytics-getcapacity"
+      },
+      "evidence": {
+        "public": "사용량 조회",
+        "financial": "사용량 조회",
+        "gov": "사용량 조회"
+      }
+    },
+    "cloud-outbound-mailer": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-getaddressbook",
+        "financial": "https://api-fin.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-getaddressbook",
+        "gov": "https://api-gov.ncloud-docs.com/docs/ai-application-service-cloudoutboundmailer-getaddressbook"
+      },
+      "evidence": {
+        "public": "getAddressBook",
+        "financial": "getAddressBook",
+        "gov": "getAddressBook"
+      }
+    },
+    "cloud-search": {
+      "public": true,
+      "financial": false,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/analytics-cloudsearch-postdbuploadcheckconnection",
+        "financial": "https://api-fin.ncloud-docs.com/docs/analytics-cloudsearch-postdbuploadcheckconnection",
+        "gov": "https://api-gov.ncloud-docs.com/docs/analytics-cloudsearch-postdbuploadcheckconnectionvpc"
+      },
+      "evidence": {
+        "public": "DB Connection 확인",
+        "gov": "DB Connection 확인 (VPC)"
+      }
+    },
+    "clova-speech": {
+      "public": true,
+      "financial": true,
+      "gov": false,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/ai-application-service-clovaspeech-shortsentence",
+        "financial": "https://api-fin.ncloud-docs.com/docs/ai-application-service-clovaspeech-shortsentence",
+        "gov": "https://api-gov.ncloud-docs.com/docs/ai-application-service-clovaspeech-shortsentence"
+      },
+      "evidence": {
+        "public": "단문 인식",
+        "financial": "단문 인식"
+      }
+    },
+    "clova-studio": {
+      "public": true,
+      "financial": false,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/clovastudio-gettasks",
+        "financial": "https://api-fin.ncloud-docs.com/docs/clovastudio-gettasks",
+        "gov": "https://api-gov.ncloud-docs.com/docs/clovastudio-gettasks"
+      },
+      "evidence": {
+        "public": "학습 목록 조회",
+        "gov": "학습 목록 조회"
+      }
+    },
+    "data-box-frame": {
+      "public": true,
+      "financial": false,
+      "gov": false,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/get-bucket-list",
+        "financial": "https://api-fin.ncloud-docs.com/docs/get-bucket-list",
+        "gov": "https://api-gov.ncloud-docs.com/docs/get-bucket-list"
+      },
+      "evidence": {
+        "public": "get-bucket-list"
+      }
+    },
+    "data-catalog": {
+      "public": true,
+      "financial": false,
+      "gov": false,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/analytics-datacatalog-catalog-getcatalogs",
+        "financial": "https://api-fin.ncloud-docs.com/docs/analytics-datacatalog-catalog-getcatalogs",
+        "gov": "https://api-gov.ncloud-docs.com/docs/analytics-datacatalog-catalog-getcatalogs"
+      },
+      "evidence": {
+        "public": "getCatalogs"
+      }
+    },
+    "data-fence": {
+      "public": true,
+      "financial": false,
+      "gov": false,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/change-box-block-external-network",
+        "financial": "https://api-fin.ncloud-docs.com/docs/change-box-block-external-network",
+        "gov": "https://api-gov.ncloud-docs.com/docs/change-box-block-external-network"
+      },
+      "evidence": {
+        "public": "change-box-block-external-network"
+      }
+    },
+    "data-flow": {
+      "public": true,
+      "financial": false,
+      "gov": false,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/analytics-dataflow-getjobs",
+        "financial": "https://api-fin.ncloud-docs.com/docs/analytics-dataflow-getjobs",
+        "gov": "https://api-gov.ncloud-docs.com/docs/analytics-dataflow-getjobs"
+      },
+      "evidence": {
+        "public": "getJobs"
+      }
+    },
+    "data-forest": {
+      "public": true,
+      "financial": false,
+      "gov": false,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/analytics-dataforest-accounts-checkavailablename",
+        "financial": "https://api-fin.ncloud-docs.com/docs/analytics-dataforest-accounts-checkavailablename",
+        "gov": "https://api-gov.ncloud-docs.com/docs/analytics-dataforest-accounts-checkavailablename"
+      },
+      "evidence": {
+        "public": "checkAvailableName"
+      }
+    },
+    "data-query": {
+      "public": true,
+      "financial": false,
+      "gov": false,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/analytics-dataquery-query-getqueries",
+        "financial": "https://api-fin.ncloud-docs.com/docs/analytics-dataquery-query-getqueries",
+        "gov": "https://api-gov.ncloud-docs.com/docs/analytics-dataquery-query-getqueries"
+      },
+      "evidence": {
+        "public": "쿼리 이력 조회"
+      }
+    },
+    "data-stream": {
+      "public": true,
+      "financial": false,
+      "gov": false,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/datastream-postproduce",
+        "financial": "https://api-fin.ncloud-docs.com/docs/datastream-postproduce",
+        "gov": "https://api-gov.ncloud-docs.com/docs/datastream-postproduce"
+      },
+      "evidence": {
+        "public": "메시지 전송"
+      }
+    },
+    "drm": {
+      "public": true,
+      "financial": false,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/drm-license-statistics",
+        "financial": "https://api-fin.ncloud-docs.com/docs/drm-license-statistics",
+        "gov": "https://api-gov.ncloud-docs.com/docs/drm-license-statistics"
+      },
+      "evidence": {
+        "public": "라이선스 발급 이력 조회",
+        "gov": "라이선스 발급 이력 조회"
+      }
+    },
+    "edge": {
+      "public": true,
+      "financial": false,
+      "gov": false,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/edge-create",
+        "financial": "https://api-fin.ncloud-docs.com/docs/edge-create",
+        "gov": "https://api-gov.ncloud-docs.com/docs/edge-create"
+      },
+      "evidence": {
+        "public": "엣지 생성"
+      }
+    },
+    "file-safer": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/security-filesafer-getinputfilelog",
+        "financial": "https://api-fin.ncloud-docs.com/docs/security-filesafer-getinputfilelog",
+        "gov": "https://api-gov.ncloud-docs.com/docs/security-filesafer-getinputfilelog"
+      },
+      "evidence": {
+        "public": "getInputFileLog",
+        "financial": "getInputFileLog",
+        "gov": "getInputFileLog"
+      }
+    },
+    "gamepot": {
+      "public": true,
+      "financial": false,
+      "gov": false,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/game-gamepot-coupon",
+        "financial": "https://api-fin.ncloud-docs.com/docs/game-gamepot-coupon",
+        "gov": "https://api-gov.ncloud-docs.com/docs/game-gamepot-coupon"
+      },
+      "evidence": {
+        "public": "일반 쿠폰 사용 조회"
+      }
+    },
+    "geo-cidr": {
+      "public": true,
+      "financial": false,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/geocidr-map-create",
+        "financial": "https://api-fin.ncloud-docs.com/docs/geocidr-view",
+        "gov": "https://api-gov.ncloud-docs.com/docs/geocidr-view"
+      },
+      "evidence": {
+        "public": "Geo and CIDR Map 생성",
+        "gov": "Geo and CIDR Map 조회"
+      }
+    },
+    "geo-location": {
+      "public": true,
+      "financial": false,
+      "gov": false,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/ai-application-service-geolocation-getquota",
+        "financial": "https://api-fin.ncloud-docs.com/docs/ai-application-service-geolocation-geolocation",
+        "gov": "https://api-gov.ncloud-docs.com/docs/ai-application-service-geolocation-geolocation"
+      },
+      "evidence": {
+        "public": "getQuota"
+      }
+    },
+    "global-dns": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/networking-globaldns-record-getdomainlist",
+        "financial": "https://api-fin.ncloud-docs.com/docs/networking-globaldns-record-getdomainlist",
+        "gov": "https://api-gov.ncloud-docs.com/docs/networking-globaldns-record-getdomainlist"
+      },
+      "evidence": {
+        "public": "도메인 조회",
+        "financial": "도메인 조회",
+        "gov": "도메인 조회"
+      }
+    },
+    "global-traffic-manager": {
+      "public": true,
+      "financial": false,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/globaltrafficmanager-profile-view",
+        "financial": "https://api-fin.ncloud-docs.com/docs/globaltrafficmanager-profile-view",
+        "gov": "https://api-gov.ncloud-docs.com/docs/globaltrafficmanager-profile-view"
+      },
+      "evidence": {
+        "public": "Traffic Profile 조회",
+        "gov": "Traffic Profile 조회"
+      }
+    },
+    "hadoop": {
+      "public": true,
+      "financial": false,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/analytics-vhadoop",
+        "financial": "https://api-fin.ncloud-docs.com/docs/analytics-vhadoop",
+        "gov": "https://api-gov.ncloud-docs.com/docs/analytics-vhadoop"
+      },
+      "evidence": {
+        "public": "Cloud Hadoop (VPC) 개요",
+        "gov": "Cloud Hadoop (VPC) 개요"
+      }
+    },
+    "kms": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/security-kms-createusercustomkey",
+        "financial": "https://api-fin.ncloud-docs.com/docs/security-kms-createusercustomkey",
+        "gov": "https://api-gov.ncloud-docs.com/docs/security-kms-createusercustomkey"
+      },
+      "evidence": {
+        "public": "Create Custom Key",
+        "financial": "Create Custom Key",
+        "gov": "Create Custom Key"
+      }
+    },
+    "kms2": {
+      "public": true,
+      "financial": false,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/security-kms2-key-list",
+        "financial": "https://api-fin.ncloud-docs.com/docs/security-kms2-key-list",
+        "gov": "https://api-gov.ncloud-docs.com/docs/security-kms2-key-list"
+      },
+      "evidence": {
+        "public": "Get Key List",
+        "gov": "Get Key List"
+      }
+    },
+    "live-station": {
+      "public": true,
+      "financial": true,
+      "gov": false,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/media-livestation-recording-recordingupload",
+        "financial": "https://api-fin.ncloud-docs.com/docs/media-livestation-recording-recordingupload",
+        "gov": "https://api-gov.ncloud-docs.com/docs/media-livestation-recording-recordingupload"
+      },
+      "evidence": {
+        "public": "녹화 파일 업로드",
+        "financial": "녹화 파일 업로드"
+      }
+    },
+    "load-balancer": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/networking-vloadbalancer",
+        "financial": "https://api-fin.ncloud-docs.com/docs/networking-vloadbalancer",
+        "gov": "https://api-gov.ncloud-docs.com/docs/networking-vloadbalancer"
+      },
+      "evidence": {
+        "public": "Load Balancer 개요",
+        "financial": "Load Balancer 개요",
+        "gov": "Load Balancer 개요"
+      }
+    },
+    "maiu": {
+      "public": true,
+      "financial": false,
+      "gov": false,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/maiu-upload-asset-query-status",
+        "financial": "https://api-fin.ncloud-docs.com/docs/maiu-upload-asset-query-status",
+        "gov": "https://api-gov.ncloud-docs.com/docs/maiu-upload-asset-query-status"
+      },
+      "evidence": {
+        "public": "검색 에셋 업로드 상태 조회"
+      }
+    },
+    "media-connect-center": {
+      "public": true,
+      "financial": true,
+      "gov": false,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/mediaconnectcenter-deptslistview",
+        "financial": "https://api-fin.ncloud-docs.com/docs/mediaconnectcenter-deptslistview",
+        "gov": "https://api-gov.ncloud-docs.com/docs/mediaconnectcenter-deptslistview"
+      },
+      "evidence": {
+        "public": "부서 목록 조회",
+        "financial": "부서 목록 조회"
+      }
+    },
+    "mongodb": {
+      "public": true,
+      "financial": false,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/database-vmongodb",
+        "financial": "https://api-fin.ncloud-docs.com/docs/database-vmongodb",
+        "gov": "https://api-gov.ncloud-docs.com/docs/database-vmongodb"
+      },
+      "evidence": {
+        "public": "Cloud DB for MongoDB (VPC) 개요",
+        "gov": "Cloud DB for MongoDB (VPC) 개요"
+      }
+    },
+    "mssql": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/database-vmssql",
+        "financial": "https://api-fin.ncloud-docs.com/docs/database-vmssql",
+        "gov": "https://api-gov.ncloud-docs.com/docs/database-vmssql"
+      },
+      "evidence": {
+        "public": "Cloud DB for MSSQL (VPC) 개요",
+        "financial": "Cloud DB for MSSQL 개요",
+        "gov": "Cloud DB for MSSQL (VPC) 개요"
+      }
+    },
+    "mysql": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/database-vmysql",
+        "financial": "https://api-fin.ncloud-docs.com/docs/database-vmysql",
+        "gov": "https://api-gov.ncloud-docs.com/docs/database-vmysql"
+      },
+      "evidence": {
+        "public": "Cloud DB for MySQL (VPC) 개요",
+        "financial": "Cloud DB for MySQL 개요",
+        "gov": "Cloud DB for MySQL (VPC) 개요"
+      }
+    },
+    "nas": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/storage-vnas",
+        "financial": "https://api-fin.ncloud-docs.com/docs/storage-vnas",
+        "gov": "https://api-gov.ncloud-docs.com/docs/storage-vnas"
+      },
+      "evidence": {
+        "public": "NAS 개요",
+        "financial": "NAS 개요",
+        "gov": "NAS 개요"
+      }
+    },
+    "naver": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/ai-naver-papagolanguagedetection-dect",
+        "financial": "https://api-fin.ncloud-docs.com/docs/ai-naver-papagolanguagedetection-dect",
+        "gov": "https://api-gov.ncloud-docs.com/docs/ai-naver-papagolanguagedetection-dect"
+      },
+      "evidence": {
+        "public": "언어 감지",
+        "financial": "언어 감지",
+        "gov": "언어 감지"
+      }
+    },
+    "ncloud-chat": {
+      "public": true,
+      "financial": false,
+      "gov": false,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/bizapp-ncloudchat-channellist",
+        "financial": "https://api-fin.ncloud-docs.com/docs/bizapp-ncloudchat-channellist",
+        "gov": "https://api-gov.ncloud-docs.com/docs/bizapp-ncloudchat-channellist"
+      },
+      "evidence": {
+        "public": "채널 목록 조회"
+      }
+    },
+    "nclue": {
+      "public": true,
+      "financial": false,
+      "gov": false,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/nclue-postfeature",
+        "financial": "https://api-fin.ncloud-docs.com/docs/nclue-getfeaturelist",
+        "gov": "https://api-gov.ncloud-docs.com/docs/nclue-getfeaturelist"
+      },
+      "evidence": {
+        "public": "Feature 생성"
+      }
+    },
+    "nks": {
+      "public": true,
+      "financial": false,
+      "gov": false,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/compute-vpckubernetesservice",
+        "financial": "https://api-fin.ncloud-docs.com/docs/compute-vpckubernetesservice",
+        "gov": "https://api-gov.ncloud-docs.com/docs/compute-vpckubernetesservice"
+      },
+      "evidence": {
+        "public": "Ncloud Kubernetes Service 개요"
+      }
+    },
+    "object-storage": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/storage-objectstorage-listbuckets",
+        "financial": "https://api-fin.ncloud-docs.com/docs/storage-objectstorage-listbuckets",
+        "gov": "https://api-gov.ncloud-docs.com/docs/storage-objectstorage-listbuckets"
+      },
+      "evidence": {
+        "public": "ListBuckets",
+        "financial": "ListBuckets",
+        "gov": "ListBuckets"
+      }
+    },
+    "ocr": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/ai-application-service-ocr-ocrdocumentocr-bizlicense",
+        "financial": "https://api-fin.ncloud-docs.com/docs/ai-application-service-ocr-ocrdocumentocr-bizlicense",
+        "gov": "https://api-gov.ncloud-docs.com/docs/ai-application-service-ocr-ocrdocumentocr-creditcard"
+      },
+      "evidence": {
+        "public": "사업자등록증",
+        "financial": "사업자등록증",
+        "gov": "신용카드"
+      }
+    },
+    "organization": {
+      "public": true,
+      "financial": false,
+      "gov": false,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/organization-post-account-accept",
+        "financial": "https://api-fin.ncloud-docs.com/docs/organization-post-account-accept",
+        "gov": "https://api-gov.ncloud-docs.com/docs/organization-post-account-accept"
+      },
+      "evidence": {
+        "public": "초대 승인"
+      }
+    },
+    "papago": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/papago-glossarylist",
+        "financial": "https://api-fin.ncloud-docs.com/docs/papago-glossarylist",
+        "gov": "https://api-gov.ncloud-docs.com/docs/papago-glossarylist"
+      },
+      "evidence": {
+        "public": "용어집 목록 조회",
+        "financial": "용어집 목록 조회",
+        "gov": "용어집 목록 조회"
+      }
+    },
+    "platform": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/platform-costandusage-getcontractdemandcostlist",
+        "financial": "https://api-fin.ncloud-docs.com/docs/platform-costandusage-getcontractdemandcostlist",
+        "gov": "https://api-gov.ncloud-docs.com/docs/platform-costandusage-getcontractdemandcostlist"
+      },
+      "evidence": {
+        "public": "getContractDemandCostList",
+        "financial": "getContractDemandCostList",
+        "gov": "getContractDemandCostList"
+      }
+    },
+    "postgresql": {
+      "public": true,
+      "financial": false,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/database-vpostgresql",
+        "financial": "https://api-fin.ncloud-docs.com/docs/database-vpostgresql",
+        "gov": "https://api-gov.ncloud-docs.com/docs/database-vpostgresql"
+      },
+      "evidence": {
+        "public": "Cloud DB for PostgreSQL (VPC) 개요",
+        "gov": "Cloud DB for PostgreSQL  개요"
+      }
+    },
+    "private-ca": {
+      "public": true,
+      "financial": false,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/security-privateca-getcalist",
+        "financial": "https://api-fin.ncloud-docs.com/docs/security-privateca-getcalist",
+        "gov": "https://api-gov.ncloud-docs.com/docs/security-privateca-getcalist"
+      },
+      "evidence": {
+        "public": "Get CA List",
+        "gov": "Get CA List"
+      }
+    },
+    "resource-manager": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/management-resourcemanager-getgrouplist",
+        "financial": "https://api-fin.ncloud-docs.com/docs/management-resourcemanager-getgrouplist",
+        "gov": "https://api-gov.ncloud-docs.com/docs/management-resourcemanager-attachgroup"
+      },
+      "evidence": {
+        "public": "GetGroupList",
+        "financial": "GetGroupList",
+        "gov": "AttachGroup"
+      }
+    },
+    "secret-manager": {
+      "public": true,
+      "financial": false,
+      "gov": false,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/secretmanager-complete-rotation-job",
+        "financial": "https://api-fin.ncloud-docs.com/docs/secretmanager-complete-rotation-job",
+        "gov": "https://api-gov.ncloud-docs.com/docs/secretmanager-complete-rotation-job"
+      },
+      "evidence": {
+        "public": "Complete Rotation Job"
+      }
+    },
+    "security-monitoring": {
+      "public": true,
+      "financial": false,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/security-securitymonitoring-getavlist",
+        "financial": "https://api-fin.ncloud-docs.com/docs/security-securitymonitoring-getavlist",
+        "gov": "https://api-gov.ncloud-docs.com/docs/security-securitymonitoring-getavlist"
+      },
+      "evidence": {
+        "public": "getAVList",
+        "gov": "getAVList"
+      }
+    },
+    "sens": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/sens-alimtalk-kakao-channel-get",
+        "financial": "https://api-fin.ncloud-docs.com/docs/sens-alimtalk-kakao-channel-get",
+        "gov": "https://api-gov.ncloud-docs.com/docs/sens-alimtalk-kakao-channel-get"
+      },
+      "evidence": {
+        "public": "채널 조회",
+        "financial": "채널 조회",
+        "gov": "채널 조회"
+      }
+    },
+    "server": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/compute-vserver",
+        "financial": "https://api-fin.ncloud-docs.com/docs/compute-vserver",
+        "gov": "https://api-gov.ncloud-docs.com/docs/compute-vserver"
+      },
+      "evidence": {
+        "public": "Server (VPC) 개요",
+        "financial": "Server 개요",
+        "gov": "Server (VPC) 개요"
+      }
+    },
+    "ses": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/analytics-vpcsearchengine",
+        "financial": "https://api-fin.ncloud-docs.com/docs/analytics-vpcsearchengine",
+        "gov": "https://api-gov.ncloud-docs.com/docs/analytics-vpcsearchengine"
+      },
+      "evidence": {
+        "public": "Search Engine Service 개요",
+        "financial": "Search Engine Service 개요",
+        "gov": "Search Engine Service 개요"
+      }
+    },
+    "ses2": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/analytics-vpcsearchengine",
+        "financial": "https://api-fin.ncloud-docs.com/docs/analytics-vpcsearchengine",
+        "gov": "https://api-gov.ncloud-docs.com/docs/analytics-vpcsearchengine"
+      },
+      "evidence": {
+        "public": "Search Engine Service 개요",
+        "financial": "Search Engine Service 개요",
+        "gov": "Search Engine Service 개요"
+      }
+    },
+    "source-build": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/devtools-sourcebuild",
+        "financial": "https://api-fin.ncloud-docs.com/docs/devtools-sourcebuild",
+        "gov": "https://api-gov.ncloud-docs.com/docs/devtools-sourcebuild"
+      },
+      "evidence": {
+        "public": "SourceBuild 개요",
+        "financial": "SourceBuild 개요",
+        "gov": "SourceBuild 개요"
+      }
+    },
+    "source-commit": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/devtools-sourcecommit",
+        "financial": "https://api-fin.ncloud-docs.com/docs/devtools-sourcecommit",
+        "gov": "https://api-gov.ncloud-docs.com/docs/devtools-sourcecommit"
+      },
+      "evidence": {
+        "public": "SourceCommit 개요",
+        "financial": "SourceCommit 개요",
+        "gov": "SourceCommit 개요"
+      }
+    },
+    "source-deploy": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/devtools-sourcedeploy",
+        "financial": "https://api-fin.ncloud-docs.com/docs/devtools-sourcedeploy",
+        "gov": "https://api-gov.ncloud-docs.com/docs/devtools-sourcedeploy"
+      },
+      "evidence": {
+        "public": "SourceDeploy 개요",
+        "financial": "SourceDeploy 개요",
+        "gov": "SourceDeploy  개요"
+      }
+    },
+    "source-pipeline": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/devtools-sourcepipeline",
+        "financial": "https://api-fin.ncloud-docs.com/docs/devtools-sourcepipeline",
+        "gov": "https://api-gov.ncloud-docs.com/docs/devtools-sourcepipeline"
+      },
+      "evidence": {
+        "public": "SourcePipeline 개요",
+        "financial": "SourcePipeline 개요",
+        "gov": "SourcePipeline 개요"
+      }
+    },
+    "sso": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/get-applications",
+        "financial": "https://api-fin.ncloud-docs.com/docs/get-applications",
+        "gov": "https://api-gov.ncloud-docs.com/docs/get-applications"
+      },
+      "evidence": {
+        "public": "Application 목록 조회",
+        "financial": "Application 목록 조회",
+        "gov": "Application 목록 조회"
+      }
+    },
+    "sts": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/management-sts-creatests",
+        "financial": "https://api-fin.ncloud-docs.com/docs/management-sts-creatests",
+        "gov": "https://api-gov.ncloud-docs.com/docs/management-sts-creatests"
+      },
+      "evidence": {
+        "public": "임시 자격 증명 생성",
+        "financial": "임시 자격 증명 생성",
+        "gov": "임시 자격 증명 생성"
+      }
+    },
+    "sub-account": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/management-subaccount-getsubaccounts",
+        "financial": "https://api-fin.ncloud-docs.com/docs/management-subaccount-getsubaccounts",
+        "gov": "https://api-gov.ncloud-docs.com/docs/management-subaccount-getsubaccounts"
+      },
+      "evidence": {
+        "public": "서브 계정 목록 조회",
+        "financial": "서브 계정 목록 조회",
+        "gov": "서브계정 목록 조회"
+      }
+    },
+    "vod-station": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/vodstation-category-list",
+        "financial": "https://api-fin.ncloud-docs.com/docs/vodstation-category-list",
+        "gov": "https://api-gov.ncloud-docs.com/docs/vodstation-category-list"
+      },
+      "evidence": {
+        "public": "카테고리 목록 조회",
+        "financial": "카테고리 목록 조회",
+        "gov": "카테고리 목록 조회"
+      }
+    },
+    "vpc": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/networking-vpc",
+        "financial": "https://api-fin.ncloud-docs.com/docs/networking-vpc",
+        "gov": "https://api-gov.ncloud-docs.com/docs/networking-vpc"
+      },
+      "evidence": {
+        "public": "VPC 개요",
+        "financial": "VPC 개요",
+        "gov": "VPC 개요"
+      }
+    },
+    "vpe": {
+      "public": true,
+      "financial": false,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/vpe-api-list",
+        "financial": "https://api-fin.ncloud-docs.com/docs/vpe-api-list",
+        "gov": "https://api-gov.ncloud-docs.com/docs/vpe-api-list"
+      },
+      "evidence": {
+        "public": "플레이어 목록 조회",
+        "gov": "플레이어 목록 조회"
+      }
+    },
+    "web-security-checker": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/security-websecuritychecker-createjob",
+        "financial": "https://api-fin.ncloud-docs.com/docs/security-websecuritychecker-createjob",
+        "gov": "https://api-gov.ncloud-docs.com/docs/security-websecuritychecker-createjob"
+      },
+      "evidence": {
+        "public": "createJob",
+        "financial": "createJob",
+        "gov": "createJob"
+      }
+    },
+    "webshell-behavior-detector": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/security-webshellbehaviordetector-notification-getnotificationinterval",
+        "financial": "https://api-fin.ncloud-docs.com/docs/security-webshellbehaviordetector-notification-updatenotificationinterval",
+        "gov": "https://api-gov.ncloud-docs.com/docs/security-webshellbehaviordetector-notification-getnotificationinterval"
+      },
+      "evidence": {
+        "public": "GetNotificationInterval",
+        "financial": "UpdateNotificationInterval",
+        "gov": "GetNotificationInterval"
+      }
+    },
+    "wms": {
+      "public": true,
+      "financial": true,
+      "gov": true,
+      "probe_urls": {
+        "public": "https://api.ncloud-docs.com/docs/management-wms-scripts",
+        "financial": "https://api-fin.ncloud-docs.com/docs/management-wms-scripts",
+        "gov": "https://api-gov.ncloud-docs.com/docs/management-wms-scripts"
+      },
+      "evidence": {
+        "public": "모니터링 목록 조회",
+        "financial": "모니터링 목록 조회",
+        "gov": "모니터링 목록 조회"
+      }
+    }
+  }
+}

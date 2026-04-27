@@ -1,0 +1,557 @@
+openapi: 3.0.3
+info:
+  title: global-dns
+  description: global-dns
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: true
+    gov: true
+
+  x-ncloud-nrn:
+
+    productName: GlobalDNS
+    resource_types:
+      - Domain
+      - Record
+
+servers:
+  - url: https://globaldns.apigw.ntruss.com
+    description: global-dns 민간
+    x-ncloud-env: public
+  - url: https://globaldns.apigw.fin-ntruss.com
+    description: global-dns 금융
+    x-ncloud-env: financial
+  - url: https://globaldns.apigw.gov-ntruss.com
+    description: global-dns 공공
+    x-ncloud-env: gov
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /dns/v1/ncpdns/domain:
+    get:
+      operationId: RecordGetDomainList
+      summary: 도메인 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - global-dns
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/networking-globaldns-record-getdomainlist
+      parameters:
+        - name: page
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: 페이징된 결과의 페이지 번호 0부터 입력 가능
+        - name: size
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: 한 페이지에 보여줄 결과 개수
+        - name: domainName
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 도메인 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: RecordCreateDomain
+      summary: 도메인 생성
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - global-dns
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/networking-globaldns-record-createdomain
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DomainCreateRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: (inferred from JSON example)
+                  error:
+                    type: object
+                    additionalProperties: true
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /dns/v1/ncpdns/domain/monitoring:
+    get:
+      operationId: MonitoringGetMonitoring
+      summary: 도메인 쿼리 수 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - global-dns
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/networking-globaldns-monitoring-getmonitoring
+      parameters:
+        - name: baseTimeUnit
+          in: query
+          required: true
+          schema:
+            type: string
+          description: '시간 간격 MINUTE_1 | MINUTE_5 | MINUTE_30 | HOUR_3 | DAY_1 MINUTE_1 : 1분 MINUTE_5 : 5분 MINUTE_30 : 30분 HOUR_3 : 3시간 DAY_1 : 1일'
+        - name: domainId
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 조회할 도메인 ID 도메인 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: (inferred from JSON example)
+                  error:
+                    type: object
+                    additionalProperties: true
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /dns/v1/ncpdns/domain/{domainId}:
+    get:
+      operationId: RecordGetDomainDetail
+      summary: 도메인 상세 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - global-dns
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/networking-globaldns-record-getdomaindetail
+      parameters:
+        - name: domainId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 도메인 ID 도메인 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: RecordDeleteDomain
+      summary: 도메인 삭제
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - global-dns
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/networking-globaldns-record-deletedomain
+      parameters:
+        - name: domainId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 도메인 ID 도메인 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: (inferred from JSON example)
+                  error:
+                    type: object
+                    additionalProperties: true
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /dns/v1/ncpdns/lb-record/{platformType}/{recordType}:
+    get:
+      operationId: RecordGetLbrecordList
+      summary: LB 레코드 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - global-dns
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/networking-globaldns-record-getlbrecordlist
+      parameters:
+        - name: platformType
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 플랫폼 구분 VPC | CLASSIC
+        - name: recordType
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 로드밸런서 레코드 구분 A | AAAA | CNAME | MX | PTR | SPF | TXT | NS | SRV | CAA | DS
+        - name: searchContent
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회할 로드밸런서 레코드 이름
+        - name: lbRegionCode
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '조회할 로드밸런서 레코드 리전 (KR/SGN) default : KR'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: (inferred from JSON example)
+                  error:
+                    type: object
+                    additionalProperties: true
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /dns/v1/ncpdns/record/apply/{domainId}:
+    put:
+      operationId: RecordApplyDomain
+      summary: 도메인 설정 적용
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - global-dns
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/networking-globaldns-record-applydomain
+      parameters:
+        - name: domainId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 도메인 ID 도메인 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: (inferred from JSON example)
+                  error:
+                    type: object
+                    additionalProperties: true
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /dns/v1/ncpdns/record/rollback/{domainId}:
+    put:
+      operationId: RecordRollbackDomain
+      summary: 도메인 설정 롤백
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - global-dns
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/networking-globaldns-record-rollbackdomain
+      parameters:
+        - name: domainId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 도메인 ID 도메인 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: (inferred from JSON example)
+                  error:
+                    type: object
+                    additionalProperties: true
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /dns/v1/ncpdns/record/{domainId}:
+    get:
+      operationId: RecordGetRecordList
+      summary: 레코드 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - global-dns
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/networking-globaldns-record-getrecordlist
+      parameters:
+        - name: domainId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 도메인 ID 도메인 조회 참조
+        - name: page
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: 페이징된 결과의 페이지 번호 0부터 입력 가능
+        - name: size
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: 한 페이지에 보여줄 결과 개수
+        - name: recordType
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 레코드 타입 A | AAAA | CNAME | MX | PTR | SPF | TXT | NS | SRV | CAA | DS
+        - name: searchContent
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 검색어 레코드 이름을 기준으로 검색
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: RecordCreateRecordList
+      summary: 레코드 생성
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - global-dns
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/networking-globaldns-record-createrecordlist
+      parameters:
+        - name: domainId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 도메인 ID 도메인 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: (inferred from JSON example)
+                  error:
+                    type: object
+                    additionalProperties: true
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    put:
+      operationId: RecordUpdateRecordList
+      summary: 레코드 수정
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - global-dns
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/networking-globaldns-record-updaterecordlist
+      parameters:
+        - name: domainId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 도메인 ID 도메인 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: (inferred from JSON example)
+                  error:
+                    type: object
+                    additionalProperties: true
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: RecordDeleteRecordList
+      summary: 레코드 삭제
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - global-dns
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/networking-globaldns-record-deleterecordlist
+      parameters:
+        - name: domainId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 도메인 ID 도메인 조회 참조
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - list
+              properties:
+                list:
+                  type: string
+                  description: 레코드 ID 목록 레코드 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: (inferred from JSON example)
+                  error:
+                    type: object
+                    additionalProperties: true
+                    description: (inferred from JSON example)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+components:
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  schemas:
+    DomainCreateRequest:
+      type: object
+      description: |
+        Request body for RecordCreateDomain. Source:
+        https://api.ncloud-docs.com/docs/common-apidatatype-domaincreaterequest
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: 도메인 이름
+        comments:
+          type: boolean
+          description: '도메인 설명 사용 여부 (true | false)'
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

@@ -1,0 +1,2132 @@
+openapi: 3.0.3
+info:
+  title: Cloud Functions
+  description: Cloud Functions
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: true
+    gov: true
+
+  x-ncloud-nrn:
+
+    productName: VPCCloudFunctions
+    resource_types:
+      - Namespace
+      - Action
+      - Trigger
+      - Package
+
+servers:
+  - url: https://cloudfunctions.apigw.ntruss.com
+    description: cloud-functions 민간
+    x-ncloud-env: public
+  - url: https://cloudfunctions.apigw.fin-ntruss.com
+    description: cloud-functions 금융
+    x-ncloud-env: financial
+  - url: https://cloudfunctions.apigw.gov-ntruss.com
+    description: cloud-functions 공공
+    x-ncloud-env: gov
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /activations:
+    get:
+      operationId: GetActivationList
+      summary: Get Activation List
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-getactivationlist
+      parameters:
+        - name: platform
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 플랫폼 구분 vpc | classic (기본값)
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 조회 결과의 페이지 크기 20 (기본값)
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 조회 결과의 페이지 번호 1 (기본값)
+        - name: start
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 시작 시간 yyyy-MM-ddTHH:mm:ss 형식 한국과 싱가포르 리전은 자국의 표준시로 적용 요청 시각의 1개월 이전 시점(기본값)
+        - name: end
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 종료 시간 yyyy-MM-ddTHH:mm:ss 형식 한국과 싱가포르 리전은 자국의 표준시로 적용 요청 시각(기본값)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: object
+                    additionalProperties: true
+                    description: 액션 실행 결과 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /ncf/api/v2/activations:
+    get:
+      operationId: V2GetActivationList
+      summary: Get Activation List
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-v2-getactivationlist
+      parameters:
+        - name: platform
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 플랫폼 구분 vpc (기본값) | classic
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 조회 결과의 페이지 크기 20 (기본값)
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 조회 결과의 페이지 번호 1 (기본값)
+        - name: start
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 조회 시작 시간의 타임스탬프(밀리초) 요청 시각의 1개월 이전 시점(기본값)
+        - name: end
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 조회 종료 시간의 타임스탬프(밀리초) 요청 시각 (기본값)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: object
+                    additionalProperties: true
+                    description: 액션 실행 결과 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /ncf/api/v2/packages:
+    get:
+      operationId: V2GetPackageList
+      summary: Get Package List
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-v2-getpackagelist
+      parameters:
+        - name: platform
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 플랫폼 구분 vpc (기본값) | classic
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '패키지 목록: content'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /ncf/api/v2/packages/{packageName}:
+    get:
+      operationId: V2GetPackage
+      summary: Get Package
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-v2-getpackage
+      parameters:
+        - name: packageName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 패키지 이름
+        - name: platform
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 플랫폼 구분 vpc (기본값) | classic
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: object
+                    additionalProperties: true
+                    description: 패키지 상세 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    put:
+      operationId: V2PutPackage
+      summary: Put Package
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-v2-putpackage
+      parameters:
+        - name: packageName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 패키지 이름 영문자, 숫자, 특수문자 '-', '_'을 조합하여 1~50자 이내로 입력 '-'로 시작 불가
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                platform:
+                  type: string
+                  description: 플랫폼 구분 vpc (기본값) | classic
+                description:
+                  type: string
+                  description: 패키지 설명(Byte) 0~3,000
+                parameters:
+                  type: object
+                  additionalProperties: true
+                  description: '패키지의 기본 파라미터 {"key" : "value"} 형태의 JSON 액션 실행 시 파라미터 적용 우선순위 1순위: 실행 시점에 전달되는 런타임 파라미터 2순위: 연결된 트리거의 기본 파라미터 3순위: 액션의 기본 파라미터 4순위: 포함된 패키지의 기본 파라미터'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: string
+                    description: 패키지 생성, 수정 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: V2DeletePackage
+      summary: Delete Package
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-v2-deletepackage
+      parameters:
+        - name: packageName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 패키지 이름
+        - name: platform
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 플랫폼 구분 vpc (기본값) | classic
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /ncf/api/v2/packages/{packageName}/actions:
+    get:
+      operationId: V2GetActionList
+      summary: Get Action List
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-v2-getactionlist
+      parameters:
+        - name: packageName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 패키지 이름 패키지에 속하지 않은 액션인 경우 특수문자 '-' 입력 <예시> /packages/-/actions
+        - name: platform
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 플랫폼 구분 vpc (기본값) | classic
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: object
+                    additionalProperties: true
+                    description: 액션 목록 상세 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /ncf/api/v2/packages/{packageName}/actions/{actionName}:
+    get:
+      operationId: V2GetAction
+      summary: Get Action
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-v2-getaction
+      parameters:
+        - name: packageName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 패키지 이름 패키지에 속하지 않은 액션인 경우 특수문자 '-' 입력 <예시> /packages/-/actions/myaction?platform=vpc
+        - name: actionName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 액션 이름
+        - name: platform
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 플랫폼 유형 vpc (기본값) | classic
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: object
+                    additionalProperties: true
+                    description: 액션 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: V2PostAction
+      summary: Post Action
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-v2-postaction
+      parameters:
+        - name: packageName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 패키지 이름 패키지에 속하지 않은 액션인 경우 특수문자 '-' 입력
+        - name: actionName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 액션 이름
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                platform:
+                  type: string
+                  description: 플랫폼 구분 vpc (기본값) | classic
+                timeout:
+                  type: integer
+                  description: '액션 응답 최대 대기 시간(밀리초) 0~60,000 (기본값: 60,000) 타임아웃 이상 액션이 실행될 경우, 응답 바디에 액션 실행 이력 ID 값만 포함됨'
+              additionalProperties: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: object
+                    additionalProperties: true
+                    description: 액션 실행 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    put:
+      operationId: V2PutAction
+      summary: Put Action
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-v2-putaction
+      parameters:
+        - name: packageName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 패키지 이름 영문자, 숫자, 특수문자 '-', '_'을 조합하여 1~50자 이내로 입력 '-'로 시작 불가 다른 리소스(패키지, 액션, 트리거) 이름과 중복 불가 패키지에 속하지 않은 액션인 경우 특수문자 '-' 입력
+        - name: actionName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 액션 이름 영문자, 숫자, 특수문자 '-', '_'을 조합하여 1~50자 이내로 입력 '-'로 시작 불가 다른 리소스(패키지, 액션, 트리거) 이름과 중복 불가
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - vpc
+                - vpcNo
+                - subnetNo
+              properties:
+                platform:
+                  type: string
+                  description: 플랫폼 구분 vpc (기본값) | classic
+                type:
+                  type: string
+                  description: '액션 유형 basic (기본값) | web | sequence | sequence-web basic : 일반 액션 web : 웹 액션 sequence : 시퀀스 액션 sequence-web : 시퀀스 웹 액션 다른 타입으로 변경 불가'
+                description:
+                  type: string
+                  description: 액션 설명(Byte) 0~3,000
+                parameters:
+                  type: object
+                  additionalProperties: true
+                  description: '액션의 기본 파라미터 {"key" : "value"} 형태의 JSON 액션 실행 시 파라미터 적용 우선순위 1순위: 실행 시점에 전달되는 런타임 파라미터 2순위: 연결된 트리거의 기본 파라미터 3순위: 액션의 기본 파라미터 4순위: 포함된 패키지의 기본 파라미터'
+                vpc:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: '연결할 VPC 정보: vpc VPC 플랫폼만 해당'
+                raw-http:
+                  type: boolean
+                  description: HTTP 원문 사용 여부 웹 액션 타입만 지원
+                custom-options:
+                  type: boolean
+                  description: HTTP 헤더 옵션 설정 웹 액션 타입만 지원
+                vpcNo:
+                  type: integer
+                  description: 연결할 VPC ID
+                subnetNo:
+                  type: integer
+                  description: 연결할 Subnet ID
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: object
+                    additionalProperties: true
+                    description: 액션 생성, 수정 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: V2DeleteAction
+      summary: Delete Action
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-v2-deleteaction
+      parameters:
+        - name: packageName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 패키지 이름 패키지에 속하지 않은 액션인 경우 특수문자 '-' 입력
+        - name: actionName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 액션 이름
+        - name: platform
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 플랫폼 구분 vpc (기본값) | classic
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /ncf/api/v2/packages/{packageName}/actions/{actionName}/activations:
+    get:
+      operationId: V2GetActionActivationList
+      summary: Get Action's Activation List
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-v2-getactionactivationlist
+      parameters:
+        - name: packageName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 패키지 이름 패키지에 속하지 않은 액션인 경우 특수문자 '-' 입력
+        - name: actionName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 액션 이름
+        - name: platform
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 플랫폼 구분 vpc (기본값) | classic
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 조회 결과 페이지 크기 20 (기본값)
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 조회 결과 페이지 번호 1 (기본값)
+        - name: start
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 조회 시작 시간(밀리초) Timestamp 형식 요청 시각의 1개월 이전 시점(기본값)
+        - name: end
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 조회 종료 시간(밀리초) Timestamp 형식 요청 시각(기본값)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: object
+                    additionalProperties: true
+                    description: 액션 실행 결과 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /ncf/api/v2/packages/{packageName}/actions/{actionName}/activations/{activationId}:
+    get:
+      operationId: V2GetActionActivationDetail
+      summary: Get Action's Activation Detail
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-v2-getactionactivationdetail
+      parameters:
+        - name: packageName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 패키지 이름 패키지에 속하지 않은 액션인 경우 특수문자 '-' 입력
+        - name: actionName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 액션 이름
+        - name: activationId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 실행 결과 ID
+        - name: platform
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 플랫폼 구분 vpc (기본값) | classic
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: object
+                    additionalProperties: true
+                    description: 액션 실행 상세 정보
+                additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /ncf/api/v2/triggers:
+    get:
+      operationId: V2GetTriggerList
+      summary: Get Trigger List
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-v2-gettriggerlist
+      parameters:
+        - name: platform
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 플랫폼 구분 vpc (기본값) | classic
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: object
+                    additionalProperties: true
+                    description: 트리거 리스트 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /ncf/api/v2/triggers/{triggerName}:
+    get:
+      operationId: V2GetTrigger
+      summary: Get Trigger
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-v2-gettrigger
+      parameters:
+        - name: triggerName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 트리거 이름
+        - name: platform
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 플랫폼 구분 vpc (기본값) | classic
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: object
+                    additionalProperties: true
+                    description: 트리거 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: V2PostTrigger
+      summary: Post Trigger
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-v2-posttrigger
+      parameters:
+        - name: triggerName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 트리거 이름
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                platform:
+                  type: string
+                  description: 플랫폼 구분 vpc (기본값) | classic
+              additionalProperties: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: object
+                    additionalProperties: true
+                    description: 트리거 실행 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    put:
+      operationId: V2PutTrigger
+      summary: Put Trigger
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-v2-puttrigger
+      parameters:
+        - name: triggerName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 트리거 이름 영문자, 숫자, 특수문자 '-', '_'을 조합하여 1~50자 이내로 입력 '-'로 시작 불가 다른 리소스(패키지, 액션, 트리거) 이름과 중복 불가
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - type
+                - cronOption
+                - credential
+                - events
+                - objectStorageLink
+                - bucketName
+                - eventRuleName
+                - sourceCommitLink
+                - repositoryName
+                - webhookName
+                - secretManagerLink
+                - secretName
+              properties:
+                platform:
+                  type: string
+                  description: 플랫폼 구분 vpc (기본값) | classic
+                type:
+                  type: string
+                  description: 트리거 유형 cron | github | insight | object_storage | source_commit | secret_manager 생성 후 변경 불가
+                description:
+                  type: string
+                  description: 트리거 설명(Byte) 0~3,000
+                parameters:
+                  type: object
+                  additionalProperties: true
+                  description: '트리거의 기본 파라미터 {"key": "value"} 형태의 JSON 트리거 실행 시 파라미터 적용 우선순위 1순위: 실행 시점에 전달되는 런타임 파라미터 2순위: 연결된 트리거의 기본 파라미터 3순위: 액션의 기본 파라미터 4순위: 포함된 패키지의 기본 파라미터'
+                cronOption:
+                  type: string
+                  description: cron 실행 옵션 cron 트리거 (VPC) , cron 트리거 (Classic) 참조
+                credential:
+                  type: object
+                  additionalProperties: true
+                  description: GitHub 정보
+                events:
+                  type: string
+                  description: 트리거할 이벤트 * | check_run | check_suite | commit_comment | create | delete | deployment | deployment_status | fork | gollum | issue_comment | issues | label | member | milestone | page_build | project_card | project_column | project | public | pull_request_review_comment | pull_request_review_thread | pull_request_review | pull_request | push | repository | repository_import | repository_vulnerability_alert | release | status | team_add | watch | branch_protection_rule | code_scanning_alert | deploy_key | discussion_comment | discussion | meta | package | registry_package | secret_scanning_alert_location | secret_scanning_alert | security_and_analysis | star | workflow_job | workflow_run
+                link:
+                  type: object
+                  additionalProperties: true
+                  description: API Gateway 정보 트리거 생성 시에만 유효하며 입력 필수
+                insightLink:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: '연결할 Cloud Insight 이벤트 규칙 정보: insightLink'
+                prodKey:
+                  type: string
+                  description: Cloud Insight 이벤트 규칙의 prodKey insightLink 입력 시 필수
+                ruleGrpId:
+                  type: string
+                  description: Cloud Insight 이벤트 규칙의 ruleGrpId insightLink 입력 시 필수
+                reminderTime:
+                  type: integer
+                  description: Cloud Insight 이벤트 규칙의 리마인드 알림 주기(분) 5~720
+                enableNotiWhenEventClose:
+                  type: boolean
+                  description: 이벤트 종료 시 Cloud Insight 이벤트 규칙 호출 여부 true | false (기본값)
+                objectStorageLink:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: '연결할 Object Storage 이벤트 규칙 정보: objectStorageLink'
+                bucketName:
+                  type: string
+                  description: Object Storage의 버킷 이름
+                eventRuleName:
+                  type: string
+                  description: Object Storage의 이벤트 규칙 이름
+                sourceCommitLink:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: '연결할 SourceCommit 리포지토리의 웹훅 정보: sourceCommitLink'
+                enable:
+                  type: boolean
+                  description: SourceCommit 웹훅 활성화 여부 true (기본값) | false
+                repositoryName:
+                  type: string
+                  description: SourceCommit 리포지토리 이름
+                webhookName:
+                  type: string
+                  description: SourceCommit 웹훅 이름
+                secretManagerLink:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: '연결할 Secret Manager 시크릿 정보: secretManagerLink'
+                secretName:
+                  type: string
+                  description: Secret Manager의 시크릿 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: object
+                    additionalProperties: true
+                    description: 트리거 생성, 수정 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: V2DeleteTrigger
+      summary: Delete Trigger
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-v2-deletetrigger
+      parameters:
+        - name: triggerName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 트리거 이름
+        - name: platform
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 플랫폼 구분 vpc (기본값) | classic
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /ncf/api/v2/triggers/{triggerName}/activations:
+    get:
+      operationId: V2GetTriggerActivationList
+      summary: Get Trigger's Activation List
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-v2-gettriggeractivationlist
+      parameters:
+        - name: triggerName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 트리거 이름
+        - name: platform
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 플랫폼 구분 vpc (기본값) | classic
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 조회 결과의 페이지 크기 20 (기본값)
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 조회 결과의 페이지 번호 1 (기본값)
+        - name: start
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 조회 시작 시간의 타임스탬프(밀리초) 요청 시각의 1개월 이전 시점(기본값)
+        - name: end
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 조회 종료 시간의 타임스탬프(밀리초) 요청 시각(기본값)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: object
+                    additionalProperties: true
+                    description: 트리거 실행 결과 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /ncf/api/v2/triggers/{triggerName}/activations/{activationId}:
+    get:
+      operationId: V2GetTriggerActivationDetail
+      summary: Get Trigger's Activation Detail
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-v2-gettriggeractivationdetail
+      parameters:
+        - name: triggerName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 트리거 이름
+        - name: activationId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 실행 결과 ID
+        - name: platform
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 플랫폼 구분 vpc (기본값) | classic
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: string
+                    description: 트리거 실행 상세 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /ncf/api/v2/triggers/{triggerName}/link-action:
+    post:
+      operationId: V2PostTriggerLinkAction
+      summary: Post Trigger Link Action
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-v2-posttriggerlinkaction
+      parameters:
+        - name: triggerName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 트리거 이름
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - action
+              properties:
+                platform:
+                  type: string
+                  description: 플랫폼 구분 vpc (기본값) | classic
+                action:
+                  type: string
+                  description: 트리거와 연결할 액션 이름
+                package:
+                  type: string
+                  description: 트리거와 연결할 액션의 패키지 이름 - (기본값)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: object
+                    additionalProperties: true
+                    description: 트리거 연결 액션 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: V2DeleteTriggerLinkAction
+      summary: Delete Trigger Link Action
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-v2-deletetriggerlinkaction
+      parameters:
+        - name: triggerName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 트리거 이름
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - action
+              properties:
+                platform:
+                  type: string
+                  description: 플랫폼 구분 vpc (기본값) | classic
+                action:
+                  type: string
+                  description: 트리거에서 연결 해제할 액션 이름
+                package:
+                  type: string
+                  description: 트리거에서 연결 해제할 액션의 패키지 이름 - (기본값)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /packages:
+    get:
+      operationId: GetPackageList
+      summary: Get Package List
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-getpackagelist
+      parameters:
+        - name: platform
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 플랫폼 구분 vpc | classic (기본값)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: string
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /packages/{packageName}:
+    get:
+      operationId: GetPackage
+      summary: Get Package
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-getpackage
+      parameters:
+        - name: packageName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 패키지 이름
+        - name: platform
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 플랫폼 구분 vpc | classic (기본값)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: object
+                    additionalProperties: true
+                    description: 패키지 상세 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    put:
+      operationId: PutPackage
+      summary: Put Package
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-putpackage
+      parameters:
+        - name: packageName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 패키지 이름 영문자, 숫자, 특수문자 '-', '_'을 조합하여 1~50자 이내로 입력 '-'로 시작 불가
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                platform:
+                  type: string
+                  description: 플랫폼 구분 vpc | classic (기본값)
+                description:
+                  type: string
+                  description: 패키지 설명(Byte) 0~3,000
+                parameters:
+                  type: object
+                  additionalProperties: true
+                  description: '패키지의 기본 파라미터 {"key": "value"} 형태의 JSON 액션 실행 시 파라미터 적용 우선순위 1순위: 실행 시점에 전달되는 런타임 파라미터 2순위: 연결된 트리거의 기본 파라미터 3순위: 액션의 기본 파라미터 4순위: 포함된 패키지의 기본 파라미터'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: string
+                    description: 패키지 생성, 수정 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: DeletePackage
+      summary: Delete Package
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-deletepackage
+      parameters:
+        - name: packageName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 패키지 이름
+        - name: platform
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 플랫폼 구분 vpc | classic (기본값)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /packages/{packageName}/actions:
+    get:
+      operationId: GetActionList
+      summary: Get Action List
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-getactionlist
+      parameters:
+        - name: packageName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 패키지 이름 패키지에 속하지 않은 액션인 경우 특수문자 '-' 입력 <예시> /packages/-
+        - name: platform
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 플랫폼 구분 vpc | classic (기본값)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: object
+                    additionalProperties: true
+                    description: 액션 목록 상세 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /packages/{packageName}/actions/{actionName}:
+    get:
+      operationId: GetAction
+      summary: Get Action
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-getaction
+      parameters:
+        - name: packageName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 패키지 이름 패키지에 속하지 않은 액션인 경우 특수문자 '-' 입력 <예시> /packages/-/actions/myaction
+        - name: actionName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 액션 이름
+        - name: platform
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 플랫폼 구분 vpc | classic (기본값)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: object
+                    additionalProperties: true
+                    description: 액션 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: PostAction
+      summary: Post Action
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-postaction
+      parameters:
+        - name: packageName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 패키지 이름 패키지에 속하지 않은 액션인 경우 특수문자 '-' 입력 <예시> /packages/-/actions/myaction
+        - name: actionName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 액션 이름
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                platform:
+                  type: string
+                  description: 플랫폼 구분 vpc | classic (기본값)
+                timeout:
+                  type: integer
+                  description: '액션 응답 최대 대기 시간(밀리초) 0~60,000 (기본값: 60,000) 액션이 설정된 타임아웃 이상 실행될 경우, 응답 바디에 액션 실행 ID 값만 포함됨'
+              additionalProperties: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: object
+                    additionalProperties: true
+                    description: 액션 실행 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    put:
+      operationId: PutAction
+      summary: Put Action
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-putaction
+      parameters:
+        - name: packageName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 패키지 이름 영문자, 숫자, 특수문자 '-', '_'을 조합하여 1~50자 이내로 입력 '-'로 시작 불가 다른 리소스(패키지, 액션, 트리거) 이름과 중복 불가 패키지에 속하지 않는 액션을 생성하려면 특수문자 '-' 입력 <예시> /packages/-/actions/myaction
+        - name: actionName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 액션 이름 영문자, 숫자, 특수문자 '-', '_'을 조합하여 1~50자 이내로 입력 '-'로 시작 불가 다른 리소스(패키지, 액션, 트리거) 이름과 중복 불가
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                platform:
+                  type: string
+                  description: 플랫폼 구분 vpc | classic (기본값)
+                description:
+                  type: string
+                  description: 액션 설명(Byte) 0~3,000
+                web:
+                  type: boolean
+                  description: '웹 액션 설정 true | false true : 웹 액션 false : 일반 액션 기본값 새로운 액션 생성 시: false 기존 액션 수정 시: true 기존 액션의 유형 변경 불가'
+                raw-http:
+                  type: boolean
+                  description: HTTP 원문 사용 여부 true | false (기본값) web 이 false 인 경우 false 만 입력 가능 웹 액션만 지원
+                custom-options:
+                  type: boolean
+                  description: 헤더 옵션 설정 true | false (기본값) web 이 false 인 경우 false 만 입력 가능 웹 액션만 지원
+                parameters:
+                  type: object
+                  additionalProperties: true
+                  description: '액션 디폴트 파라미터 {"key": "value"} 형태의 JSON 액션 실행 시 파라미터 적용 우선순위 1순위: 실행 시점에 전달되는 런타임 파라미터 2순위: 연결된 트리거의 기본 파라미터 3순위: 액션의 기본 파라미터 4순위: 포함된 패키지의 기 파라미터'
+                vpc:
+                  type: object
+                  additionalProperties: true
+                  description: 연결할 VPC 정보 platform 이 vpc 인 경우에만 입력
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: object
+                    additionalProperties: true
+                    description: 액션 생성, 수정 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: DeleteAction
+      summary: Delete Action
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-deleteaction
+      parameters:
+        - name: packageName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 패키지 이름 패키지에 속하지 않은 액션인 경우 특수문자 '-' 입력 <예시> /packages/-/actions/myaction
+        - name: actionName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 액션 이름
+        - name: platform
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 플랫폼 구분 vpc | classic (기본값)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /packages/{packageName}/actions/{actionName}/activations:
+    get:
+      operationId: GetActionActiviation
+      summary: Get Action's Activation List
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-getactionactiviation
+      parameters:
+        - name: packageName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 패키지 이름 패키지에 속하지 않은 액션인 경우 특수문자 '-' 입력 <예시> /packages/-/actions/myaction
+        - name: actionName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 액션 이름
+        - name: platform
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 플랫폼 구분 vpc | classic (기본값)
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 조회 결과 페이지 크기 20 (기본값)
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 조회 결과 페이지 번호 1 (기본값)
+        - name: start
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 시작 시간 yyyy-MM-ddTHH:mm:ss 형식 요청 시각의 1개월 이전 시점(기본값) 한국 리전은 대한민국 표준시(KST / UTC+9), 싱가포르 리전은 싱가포르 표준시(SST / UTC+8) 적용
+        - name: end
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 종료 시간 yyyy-MM-ddTHH:mm:ss 형식 요청 시각(기본값) 한국 리전은 대한민국 표준시(KST / UTC+9), 싱가포르 리전은 싱가포르 표준시(SST / UTC+8) 적용
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: object
+                    additionalProperties: true
+                    description: 액션 실행 결과 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /packages/{packageName}/actions/{actionName}/activations/{activationId}:
+    get:
+      operationId: GetActionActivationDetail
+      summary: Get Action's Activation Detail
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-getactionactivationdetail
+      parameters:
+        - name: packageName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 패키지 이름 패키지에 속하지 않은 액션인 경우 특수문자 '-' 입력 <예시> /packages/-/actions/myaction
+        - name: actionName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 액션 이름
+        - name: activationId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 액션 실행 ID
+        - name: platform
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 플랫폼 구분 vpc | classic (기본값)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: object
+                    additionalProperties: true
+                    description: 액션 실행 상세 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /triggers:
+    get:
+      operationId: GetTriggerList
+      summary: Get Trigger List
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-gettriggerlist
+      parameters:
+        - name: platform
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 플랫폼 구분 vpc | classic (기본값)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: object
+                    additionalProperties: true
+                    description: 트리거 리스트 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /triggers/{triggerName}:
+    get:
+      operationId: GetTrigger
+      summary: Get Trigger
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-gettrigger
+      parameters:
+        - name: triggerName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 트리거 이름
+        - name: platform
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 플랫폼 구분 vpc | classic (기본값)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: object
+                    additionalProperties: true
+                    description: 트리거 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: PostTrigger
+      summary: Post Trigger
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-posttrigger
+      parameters:
+        - name: triggerName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 트리거 이름
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                platform:
+                  type: string
+                  description: 플랫폼 구분 vpc | classic (기본값)
+              additionalProperties: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: object
+                    additionalProperties: true
+                    description: 트리거 실행 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    put:
+      operationId: PutTrigger
+      summary: Put Trigger
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-puttrigger
+      parameters:
+        - name: triggerName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 트리거 이름 영문자, 숫자, 특수문자 '-', '_'을 조합하여 1~50자 이내로 입력 '-'로 시작 불가 다른 리소스(패키지, 액션, 트리거) 이름과 중복 불가
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - type
+                - trigger
+                - prodKey
+                - ruleGrpId
+                - bucketName
+                - eventRuleName
+                - repositoryName
+                - webhookName
+              properties:
+                platform:
+                  type: string
+                  description: 플랫폼 구분 vpc | classic (기본값)
+                type:
+                  type: string
+                  description: 트리거 유형 cron | github | insight | object_storage | source_commit 생성 후 변경 불가
+                trigger:
+                  type: object
+                  additionalProperties: true
+                  description: 트리거 정보
+                link:
+                  type: object
+                  additionalProperties: true
+                  description: API Gateway 정보 트리거 생성 시에만 유효하며 입력 필수
+                prodKey:
+                  type: string
+                  description: Cloud Insight 이벤트 규칙의 prodKey
+                ruleGrpId:
+                  type: string
+                  description: Cloud Insight 이벤트 규칙의 ruleGrpId
+                reminderTime:
+                  type: integer
+                  description: Cloud Insight 이벤트 규칙의 리마인드 알림 주기(분) 5~720
+                enableNotiWhenEventClose:
+                  type: boolean
+                  description: 이벤트 종료 시 Cloud Insight 이벤트 규칙 호출 여부 true | false (기본값)
+                bucketName:
+                  type: string
+                  description: Object Storage의 버킷 이름
+                eventRuleName:
+                  type: string
+                  description: Object Storage의 이벤트 규칙 이름
+                enable:
+                  type: boolean
+                  description: SourceCommit 웹훅 활성화 여부 true (기본값) | false
+                repositoryName:
+                  type: string
+                  description: SourceCommit 리포지토리 이름
+                webhookName:
+                  type: string
+                  description: SourceCommit 웹훅 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: object
+                    additionalProperties: true
+                    description: 트리거 생성, 수정 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: DeleteTrigger
+      summary: Delete Trigger
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-deletetrigger
+      parameters:
+        - name: triggerName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 트리거 이름
+        - name: platform
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 플랫폼 구분 vpc | classic (기본값)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /triggers/{triggerName}/activations:
+    get:
+      operationId: GetTriggerActivation
+      summary: Get Trigger's Activation List
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-gettriggeractivation
+      parameters:
+        - name: triggerName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 트리거 이름
+        - name: platform
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 플랫폼 구분 vpc | classic (기본값)
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 조회 결과의 페이지 크기 20 (기본값)
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 조회 결과의 페이지 번호 1 (기본값)
+        - name: start
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 시작 시간 yyyy-MM-ddTHH:mm:ss 형식 한국과 싱가포르 리전은 자국의 표준시로 적용 요청 시각의 1개월 이전 시점(기본값)
+        - name: end
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 종료 시간 yyyy-MM-ddTHH:mm:ss 형식 한국과 싱가포르 리전은 자국의 표준시로 적용 요청 시각(기본값)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: object
+                    additionalProperties: true
+                    description: 트리거 실행 결과 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /triggers/{triggerName}/activations/{activationId}:
+    get:
+      operationId: GetTriggerActivationDetail
+      summary: Get Trigger's Activation Detail
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-gettriggeractivationdetail
+      parameters:
+        - name: triggerName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 트리거 이름
+        - name: activationId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 실행 결과 ID
+        - name: platform
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 플랫폼 구분 vpc | classic (기본값)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: string
+                    description: 트리거 실행 상세 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /triggers/{triggerName}/link-action:
+    post:
+      operationId: PostTriggerLinkAction
+      summary: Post Trigger Link Action
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-posttriggerlinkaction
+      parameters:
+        - name: triggerName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 트리거 이름
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - action
+                - package
+              properties:
+                platform:
+                  type: string
+                  description: 플랫폼 구분 vpc | classic (기본값)
+                action:
+                  type: string
+                  description: 트리거와 연결할 액션 이름
+                package:
+                  type: string
+                  description: 트리거와 연결할 액션의 패키지 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: object
+                    additionalProperties: true
+                    description: 트리거 연결 액션 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: DeleteTriggerLinkAction
+      summary: Delete Trigger Link Action
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - cloud-functions
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/compute-cloudfunctions-deletetriggerlinkaction
+      parameters:
+        - name: triggerName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 트리거 이름
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - action
+                - package
+              properties:
+                platform:
+                  type: string
+                  description: 플랫폼 구분 vpc | classic (기본값)
+                action:
+                  type: string
+                  description: 트리거에서 연결 해제할 액션 이름
+                package:
+                  type: string
+                  description: 트리거에서 연결 해제할 액션의 패키지 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+components:
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  schemas:
+    SuccessResponse:
+      type: object
+      description: Trivial success envelope — returned by mutations that don't carry a body.
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: API 호출 성공 여부
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

@@ -1,0 +1,173 @@
+openapi: 3.0.3
+info:
+  title: cloud-activity-tracer
+  description: |
+    Cloud Activity Tracer — audit log of NCP control-plane actions (AWS CloudTrail equivalent).
+    Classic/VPC 환경에서 이용 가능합니다.
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: true
+    gov: true
+
+  x-ncloud-nrn:
+
+    productName: CloudActivityTracer
+    resource_types:
+      - Tracer
+
+servers:
+  - url: https://cloudactivitytracer.apigw.ntruss.com/api/v1
+    description: cloud-activity-tracer 민간
+    x-ncloud-env: public
+  - url: https://cloudactivitytracer.apigw.fin-ntruss.com/api/v1
+    description: cloud-activity-tracer 금융
+    x-ncloud-env: financial
+  - url: https://cloudactivitytracer.apigw.gov-ntruss.com/api/v1
+    description: cloud-activity-tracer 공공
+    x-ncloud-env: gov
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /activities:
+    post:
+      operationId: GetActivityList
+      summary: 활동 이력 조회
+      description: 지정된 기간의 계정 활동 이력을 페이지 단위로 조회합니다.
+      tags:
+        - cloud-activity-tracer
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-cloudactivitytracer-getactivitylist
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetActivityListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetActivityListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+components:
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  schemas:
+    GetActivityListRequest:
+      type: object
+      properties:
+        fromEventTime:
+          type: integer
+          format: int64
+          description: 조회 기간 시작 일시 (밀리초, Unix Timestamp). 기본값은 조회 일시로부터 30일 전.
+        toEventTime:
+          type: integer
+          format: int64
+          description: 조회 기간 종료 일시 (밀리초, Unix Timestamp). 기본값은 조회 일시.
+        nrn:
+          type: string
+          description: 네이버 클라우드 플랫폼 리소스 식별 값
+        page:
+          type: integer
+          default: 0
+          description: 페이지 번호 (0~N)
+        size:
+          type: integer
+          default: 20
+          maximum: 100
+          description: 페이지 출력 수 (100 이하)
+    GetActivityListResponse:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: 페이지 번호
+        size:
+          type: integer
+          description: 페이지 출력 수
+        itemCount:
+          type: integer
+          description: 응답 결과 수
+        hasMore:
+          type: boolean
+          description: 추가 페이지 존재 여부
+        items:
+          type: array
+          description: 활동 이력 목록
+          items:
+            $ref: '#/components/schemas/ActivityItem'
+    ActivityItem:
+      type: object
+      description: |
+        Document360에는 activity 항목의 개별 필드가 스키마 테이블로 열거되지 않고 응답 예시로만 제시되어
+        있어 필드를 예시 기반으로 모델링했습니다. 향후 공식 스펙 나오면 교정 필요.
+      properties:
+        historyId: {type: string}
+        nrn: {type: string, description: "NRN 형식: nrn:PUB:<service>:<region>:<account>:<type>/<id>"}
+        eventTime: {type: integer, format: int64, description: "Unix Timestamp (ms)"}
+        platformType: {type: string, enum: [Classic, VPC, BOTH]}
+        productName: {type: string}
+        productDisplayName: {type: string}
+        regionCode: {type: string}
+        regionDisplayName: {type: string}
+        resourceType: {type: string}
+        resourceId: {type: string}
+        actionDisplayName: {type: string}
+        actionResultType: {type: string, enum: [SUCCESS, FAIL]}
+        actionUserType: {type: string}
+        sourceType: {type: string, description: "예: PORTAL, API"}
+        sourceIp: {type: string}
+        productData:
+          type: object
+          description: 액션 유형별 상세 데이터 (free-form key/value)
+          additionalProperties: true
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

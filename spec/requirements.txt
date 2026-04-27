@@ -1,0 +1,6 @@
+# Pinned dependencies for the spec/ lint pipeline
+# (used by .github/workflows/spec.yml + Makefile `lint` target).
+# Pinning keeps CI runs reproducible and lets actions/setup-python
+# hash this file for the pip cache key.
+openapi-spec-validator==0.7.1
+PyYAML==6.0.2

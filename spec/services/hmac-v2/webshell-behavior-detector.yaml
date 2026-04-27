@@ -1,0 +1,2122 @@
+openapi: 3.0.3
+info:
+  title: webshell-behavior-detector
+  description: webshell-behavior-detector
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: true
+    gov: true
+
+  x-ncloud-nrn:
+
+    productName: WebshellBehaviorDetector
+    resource_types:
+      - DetectionTarget
+      - ExceptionRule
+      - ServerGroup
+      - Notification
+
+servers:
+  - url: https://wbd.apigw.ntruss.com
+    description: webshell-behavior-detector 민간
+    x-ncloud-env: public
+  - url: https://wbd.apigw.fin-ntruss.com
+    description: webshell-behavior-detector 금융
+    x-ncloud-env: financial
+  - url: https://wbd.apigw.gov-ntruss.com
+    description: webshell-behavior-detector 공공
+    x-ncloud-env: gov
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /alarm/interval:
+    get:
+      operationId: NotificationGetNotificationInterval
+      summary: GetNotificationInterval
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - webshell-behavior-detector
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-webshellbehaviordetector-notification-getnotificationinterval
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 요청 처리 여부
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '알림 설정 내역: result'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    patch:
+      operationId: NotificationUpdateNotificationInterval
+      summary: UpdateNotificationInterval
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - webshell-behavior-detector
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-webshellbehaviordetector-notification-updatenotificationinterval
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - interval
+              properties:
+                interval:
+                  type: string
+                  description: '알림 전송 주기 one_min | two_min | three_min | four_min | five_min | ten_min | thirty_min | one_hour | three_hour | six_hour | twelve_hour | twenty_four_hour one_min : 1분 two_min : 2분 three_min : 3분 four_min : 4분 five_min : 5분 ten_min : 10분 thirty_min : 30분 one_hour : 1시간 three_hour : 3시간 six_hour : 6시간 twelve_hour : 12시간 twenty_four_hour : 24시간'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 요청 처리 여부
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /deleted-exception-rules:
+    get:
+      operationId: DeleteDexceptioNruLeGetDeleteDexceptioNruLe
+      summary: GetDeletedExceptionRule
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - webshell-behavior-detector
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-webshellbehaviordetector-deletedexceptionrule-getdeletedexceptionrule
+      parameters:
+        - name: pageIndex
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지 번호
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지 출력 개수
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 요청 처리 여부
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '예외 규칙 내역 목록: content'
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 개수
+                  pageSize:
+                    type: integer
+                    description: 페이지 출력 개수
+                  pageIndex:
+                    type: integer
+                    description: 페이지 번호
+                  totalPages:
+                    type: integer
+                    description: 총 페이지 개수
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: DeleteDexceptioNruLe
+      summary: SearchDeletedExceptionRule
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - webshell-behavior-detector
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-webshellbehaviordetector-deletedexceptionrule
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - pageIndex
+                - pageSize
+              properties:
+                createdTimeFrom:
+                  type: integer
+                  description: 예외 규칙 생성 일자 검색 시작 일시 Timestamp 형식
+                createdTimeTo:
+                  type: integer
+                  description: 예외 규칙 생성 일자 검색 종료 일시 Timestamp 형식
+                deletedTimeFrom:
+                  type: integer
+                  description: 예외 규칙 삭제 일자 검색 시작 일시 Timestamp 형식
+                deletedTimeTo:
+                  type: integer
+                  description: 예외 규칙 삭제 일자 검색 종료 일시 Timestamp 형식
+                exceptTarget:
+                  type: string
+                  description: 예외 대상의 인스턴스 ID
+                exceptedRuleName:
+                  type: string
+                  description: 예외 규칙 이름
+                executor:
+                  type: string
+                  description: 프로세스의 실행 계정
+                executorOfParent:
+                  type: string
+                  description: 부모 프로세스의 실행 계정
+                pageIndex:
+                  type: integer
+                  description: 페이지 번호
+                pageSize:
+                  type: integer
+                  description: 페이지 출력 개수
+                processArg:
+                  type: string
+                  description: 프로세스 인자
+                processArgOfParent:
+                  type: string
+                  description: 부모 프로세스 인자
+                processName:
+                  type: string
+                  description: 프로세스 이름
+                processNameOfParent:
+                  type: string
+                  description: 부모 프로세스 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 요청 처리 여부
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '예외 규칙 내역 목록: content'
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 개수
+                  pageSize:
+                    type: integer
+                    description: 페이지 출력 개수
+                  pageIndex:
+                    type: integer
+                    description: 페이지 번호
+                  totalPages:
+                    type: integer
+                    description: 총 페이지 개수
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /deleted-exception-rules/{rule-id}/memo:
+    patch:
+      operationId: DeleteDexceptioNruLeUpdateDeleteDexceptioNruL
+      summary: UpdateDeletedExceptionRuleMemo
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - webshell-behavior-detector
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-webshellbehaviordetector-deletedexceptionrule-updatedeletedexceptionrul
+      parameters:
+        - name: rule-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 예외 규칙 ID GetDeletedExceptionRule 을 통해 exceptedRuleId 확인
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - content
+              properties:
+                content:
+                  type: string
+                  description: 수정할 메모 내용
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 요청 처리 여부
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /deleted-exception-rules/{rule-id}/recover:
+    post:
+      operationId: DeleteDexceptioNruLeRecoverDeleteDexceptioNru
+      summary: RecoverDeletedExceptionRule
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - webshell-behavior-detector
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-webshellbehaviordetector-deletedexceptionrule-recoverdeletedexceptionru
+      parameters:
+        - name: rule-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 예외 규칙 ID GetDeletedExceptionRule 을 통해 exceptedRuleId 확인
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 요청 처리 여부
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /detections:
+    get:
+      operationId: WebshellGetWebshell
+      summary: GetWebshell
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - webshell-behavior-detector
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-webshellbehaviordetector-webshell-getwebshell
+      parameters:
+        - name: pageIndex
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지 번호
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지 출력 개수
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 요청 처리 여부
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '웹쉘 행위 탐지 내역 목록: content'
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 개수
+                  pageSize:
+                    type: integer
+                    description: 페이지 출력 개수
+                  pageIndex:
+                    type: integer
+                    description: 페이지 번호
+                  totalPages:
+                    type: integer
+                    description: 총 페이지 개수
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: WebshellSearchWebshell
+      summary: SearchWebshell
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - webshell-behavior-detector
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-webshellbehaviordetector-webshell-searchwebshell
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - pageIndex
+                - pageSize
+              properties:
+                actionStatus:
+                  type: string
+                  description: '문제에 대한 대응 상태 confirmed | blank confirmed : 확인 완료 blank : 미확인'
+                detectTimeFrom:
+                  type: integer
+                  description: 검색 시작 일시 Timestamp 형식
+                detectTimeTo:
+                  type: integer
+                  description: 검색 종료 일시 Timestamp 형식
+                executor:
+                  type: string
+                  description: 프로세스 실행 계정
+                executorOfParent:
+                  type: string
+                  description: 부모 프로세스 실행 계정
+                hostName:
+                  type: string
+                  description: VM의 호스트 이름
+                memo:
+                  type: string
+                  description: 메모
+                pageIndex:
+                  type: integer
+                  description: 페이지 번호
+                pageSize:
+                  type: integer
+                  description: 페이지 출력 개수
+                privateIPofServer:
+                  type: string
+                  description: VM의 사설 IP
+                processArg:
+                  type: string
+                  description: 프로세스 인자값
+                processArgOfParent:
+                  type: string
+                  description: 부모 프로세스 인자값
+                processName:
+                  type: string
+                  description: 프로세스 이름
+                processNameOfParent:
+                  type: string
+                  description: 부모 프로세스 이름
+                serverName:
+                  type: string
+                  description: VM의 서버 이름
+                suspiciousIP:
+                  type: string
+                  description: 의심 IP
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 요청 처리 여부
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '웹쉘 행위 탐지 내역 목록: content'
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 개수
+                  pageSize:
+                    type: integer
+                    description: 페이지 출력 개수
+                  pageIndex:
+                    type: integer
+                    description: 페이지 번호
+                  totalPages:
+                    type: integer
+                    description: 총 페이지 개수
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /detections/{detection-id}:
+    delete:
+      operationId: WebshellDeleteWebshell
+      summary: DeleteWebshell
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - webshell-behavior-detector
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-webshellbehaviordetector-webshell-deletewebshell
+      parameters:
+        - name: detection-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 웹쉘 행위 탐지 내역 ID GetWebshell 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 요청 처리 여부
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /detections/{detection-id}/memo:
+    patch:
+      operationId: WebshellUpdateWebshellMemo
+      summary: UpdateWebshellMemo
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - webshell-behavior-detector
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-webshellbehaviordetector-webshell-updatewebshellmemo
+      parameters:
+        - name: detection-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 웹쉘 행위 탐지 내역 ID GetWebshell 참조
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - content
+              properties:
+                content:
+                  type: string
+                  description: 수정할 메모 내용
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 요청 처리 여부
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /detections/{detection-id}/suspicious-objects:
+    get:
+      operationId: WebshellGetWebshellsuspiciousObject
+      summary: GetWebshellSuspiciousObject
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - webshell-behavior-detector
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-webshellbehaviordetector-webshell-getwebshellsuspiciousobject
+      parameters:
+        - name: detection-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 웹쉘 행위 탐지 내역 ID GetWebshell 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 요청 처리 여부
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '의심 파일 목록: result'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /detections/{detection-id}/suspicious-objects/{object-id}/memo:
+    patch:
+      operationId: WebshellUpdateWebshellsuspiciousObjectMemo
+      summary: UpdateWebshellSuspiciousObjectMemo
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - webshell-behavior-detector
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-webshellbehaviordetector-webshell-updatewebshellsuspiciousobjectmemo
+      parameters:
+        - name: detection-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 웹쉘 행위 탐지 내역 ID GetWebshell 참조
+        - name: object-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 의심되는 파일의 ID GetWebshell 을 통해 suspicionFileId 확인
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - content
+              properties:
+                content:
+                  type: string
+                  description: 수정할 메모 내용
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 요청 처리 여부
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /detections/{detection-id}/suspicious-objects/{object-id}/quarantine:
+    patch:
+      operationId: WebshellQuarantinewebshellsuspiciousObject
+      summary: QuarantineWebshellSuspiciousObject
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - webshell-behavior-detector
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-webshellbehaviordetector-webshell-quarantinewebshellsuspiciousobject
+      parameters:
+        - name: detection-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 웹쉘 행위 탐지 내역 ID GetWebshell 참조
+        - name: object-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 의심되는 파일의 ID GetWebshell 을 통해 suspicionFileId 확인
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 요청 처리 여부
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /detections/{detection-id}/suspicious-objects/{object-id}/recover:
+    patch:
+      operationId: WebshellRecoverwebshellsuspiciousObject
+      summary: RecoverWebshellSuspiciousObject
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - webshell-behavior-detector
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-webshellbehaviordetector-webshell-recoverwebshellsuspiciousobject
+      parameters:
+        - name: detection-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 웹쉘 행위 탐지 내역 ID GetWebshell 참조
+        - name: object-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 의심되는 파일의 ID GetWebshell 을 통해 suspicionFileId 확인
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 요청 처리 여부
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /exception-rules:
+    get:
+      operationId: ExceptioNruLeGetExceptioNruLe
+      summary: GetExceptionRule
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - webshell-behavior-detector
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-webshellbehaviordetector-exceptionrule-getexceptionrule
+      parameters:
+        - name: pageIndex
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지 번호
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지 출력 개수
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 요청 처리 여부
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '예외 규칙 내역 목록: content'
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 개수
+                  pageSize:
+                    type: integer
+                    description: 페이지 출력 개수
+                  pageIndex:
+                    type: integer
+                    description: 페이지 번호
+                  totalPages:
+                    type: integer
+                    description: 총 페이지 개수
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: ExceptioNruLeSearchExceptioNruLe
+      summary: SearchExceptionRule
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - webshell-behavior-detector
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-webshellbehaviordetector-exceptionrule-searchexceptionrule
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - pageIndex
+                - pageSize
+              properties:
+                createdTimeFrom:
+                  type: integer
+                  description: 예외 규칙 생성 일자 검색 시작 일시 Timestamp 형식
+                createdTimeTo:
+                  type: integer
+                  description: 예외 규칙 생성 일자 검색 종료 일시 Timestamp 형식
+                deletedTimeFrom:
+                  type: integer
+                  description: 예외 규칙 삭제 일자 검색 시작 일시 Timestamp 형식
+                deletedTimeTo:
+                  type: integer
+                  description: 예외 규칙 삭제 일자 검색 종료 일시 Timestamp 형식
+                exceptTarget:
+                  type: string
+                  description: 예외 대상의 인스턴스 ID
+                exceptedRuleName:
+                  type: string
+                  description: 예외 규칙 이름
+                executor:
+                  type: string
+                  description: 프로세스의 실행 계정
+                executorOfParent:
+                  type: string
+                  description: 부모 프로세스의 실행 계정
+                pageIndex:
+                  type: integer
+                  description: 페이지 번호
+                pageSize:
+                  type: integer
+                  description: 페이지 출력 개수
+                processArg:
+                  type: string
+                  description: 프로세스 인자
+                processArgOfParent:
+                  type: string
+                  description: 부모 프로세스 인자
+                processName:
+                  type: string
+                  description: 프로세스 이름
+                processNameOfParent:
+                  type: string
+                  description: 부모 프로세스 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 요청 처리 여부
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '예외 규칙 내역 목록: content'
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 개수
+                  pageSize:
+                    type: integer
+                    description: 페이지 출력 개수
+                  pageIndex:
+                    type: integer
+                    description: 페이지 번호
+                  totalPages:
+                    type: integer
+                    description: 총 페이지 개수
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /exception-rules/{rule-id}:
+    delete:
+      operationId: ExceptioNruLeDeleteExceptioNruLe
+      summary: DeleteExceptionRule
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - webshell-behavior-detector
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-webshellbehaviordetector-exceptionrule-deleteexceptionrule
+      parameters:
+        - name: rule-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 예외 규칙 ID GetExceptionRule 을 통해 exceptedRuleId 확인
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 요청 처리 여부
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /exception-rules/{rule-id}/memo:
+    patch:
+      operationId: ExceptioNruLeUpdateExceptioNruLeMemo
+      summary: UpdateExceptionRuleMemo
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - webshell-behavior-detector
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-webshellbehaviordetector-exceptionrule-updateexceptionrulememo
+      parameters:
+        - name: rule-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 예외 규칙 ID GetExceptionRule 을 통해 exceptedRuleId 확인
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - content
+              properties:
+                content:
+                  type: string
+                  description: 수정할 메모 내용
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 요청 처리 여부
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /exceptions:
+    get:
+      operationId: ExceptedwebshellGetExceptedwebshell
+      summary: GetExceptedWebshell
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - webshell-behavior-detector
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-webshellbehaviordetector-exceptedwebshell-getexceptedwebshell
+      parameters:
+        - name: pageIndex
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지 번호
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지 출력 개수
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 요청 처리 여부
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '웹쉘 행위 탐지 내역 목록: content'
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 개수
+                  pageSize:
+                    type: integer
+                    description: 페이지 출력 개수
+                  pageIndex:
+                    type: integer
+                    description: 페이지 번호
+                  totalPages:
+                    type: integer
+                    description: 총 페이지 개수
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: ExceptedwebshellSearchExceptedwebshell
+      summary: SearchExceptedWebshell
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - webshell-behavior-detector
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-webshellbehaviordetector-exceptedwebshell-searchexceptedwebshell
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - pageIndex
+                - pageSize
+              properties:
+                actionStatus:
+                  type: string
+                  description: '문제에 대한 대응 상태 confirmed | blank confirmed : 확인 완료 blank : 미확인'
+                detectTimeFrom:
+                  type: integer
+                  description: 검색 시작 일시 Timestamp 형식
+                detectTimeTo:
+                  type: integer
+                  description: 검색 종료 일시 Timestamp 형식
+                executor:
+                  type: string
+                  description: 프로세스 실행 계정
+                executorOfParent:
+                  type: string
+                  description: 부모 프로세스 실행 계정
+                hostName:
+                  type: string
+                  description: VM의 호스트 이름
+                memo:
+                  type: string
+                  description: 메모
+                pageIndex:
+                  type: integer
+                  description: 페이지 번호
+                pageSize:
+                  type: integer
+                  description: 페이지 출력 개수
+                privateIPofServer:
+                  type: string
+                  description: VM의 사설 IP
+                processArg:
+                  type: string
+                  description: 프로세스 인자값
+                processArgOfParent:
+                  type: string
+                  description: 부모 프로세스 인자값
+                processName:
+                  type: string
+                  description: 프로세스 이름
+                processNameOfParent:
+                  type: string
+                  description: 부모 프로세스 이름
+                serverName:
+                  type: string
+                  description: VM의 서버 이름
+                suspiciousIP:
+                  type: string
+                  description: 의심 IP
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 요청 처리 여부
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '웹쉘 행위 탐지 내역 목록: content'
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 개수
+                  pageSize:
+                    type: integer
+                    description: 페이지 출력 개수
+                  pageIndex:
+                    type: integer
+                    description: 페이지 번호
+                  totalPages:
+                    type: integer
+                    description: 총 페이지 개수
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /exceptions/{exception-id}/cancel:
+    patch:
+      operationId: ExceptedwebshellRevokeExceptedwebshell
+      summary: RevokeExceptedWebshell
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - webshell-behavior-detector
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-webshellbehaviordetector-exceptedwebshell-revokeexceptedwebshell
+      parameters:
+        - name: exception-id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 예외 처리된 웹쉘 행위 탐지 내역 ID GetExceptedWebshell 을 통해 detectionId 확인
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 요청 처리 여부
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /exceptions/{exception-id}/memo:
+    patch:
+      operationId: ExceptedwebshellUpdateExceptedwebshellMemo
+      summary: UpdateExceptedWebshellMemo
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - webshell-behavior-detector
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-webshellbehaviordetector-exceptedwebshell-updateexceptedwebshellmemo
+      parameters:
+        - name: exception-id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 예외 처리된 웹쉘 행위 탐지 내역 ID GetExceptedWebshell 을 통해 detectionId 확인
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - content
+              properties:
+                content:
+                  type: string
+                  description: 수정할 메모 내용
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 요청 처리 여부
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /exceptions/{exception-id}/suspicious-objects:
+    get:
+      operationId: ExceptedwebshellGetExceptedwebshellsuspicious
+      summary: GetExceptedWebshellSuspiciousObject
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - webshell-behavior-detector
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-webshellbehaviordetector-exceptedwebshell-getexceptedwebshellsuspicious
+      parameters:
+        - name: exception-id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 예외 처리된 웹쉘 행위 탐지 내역 ID GetExceptedWebshell 을 통해 detectionId 확인
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 요청 처리 여부
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '의심 파일 목록: result'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /exceptions/{exception-id}/suspicious-objects/{object-id}/memo:
+    patch:
+      operationId: ExceptedwebshellUpdateExceptedwebshellsuspici
+      summary: UpdateWebshellSuspiciousObjectMemo
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - webshell-behavior-detector
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-webshellbehaviordetector-exceptedwebshell-updateexceptedwebshellsuspici
+      parameters:
+        - name: exception-id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 예외 처리된 웹쉘 행위 탐지 내역 ID GetExceptedWebshell 을 통해 detectionId 확인
+        - name: object-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 의심되는 파일의 ID GetExceptedWebshell 을 통해 suspicionFileId 확인
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - content
+              properties:
+                content:
+                  type: string
+                  description: 수정할 메모 내용
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 요청 처리 여부
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /exceptions/{exception-id}/suspicious-objects/{object-id}/quarantine:
+    patch:
+      operationId: ExceptedwebshellQuarantineexceptedwebshellsus
+      summary: QuarantineExceptedWebshellSuspiciousObject
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - webshell-behavior-detector
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-webshellbehaviordetector-exceptedwebshell-quarantineexceptedwebshellsus
+      parameters:
+        - name: exception-id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 예외 처리된 웹쉘 행위 탐지 내역 ID GetExceptedWebshell 을 통해 detectionId 확인
+        - name: object-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 의심되는 파일의 ID GetExceptedWebshell 을 통해 suspicionFileId 확인
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 요청 처리 여부
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /exceptions/{exception-id}/suspicious-objects/{object-id}/recover:
+    patch:
+      operationId: ExceptedwebshellRecoverexceptedwebshellsuspic
+      summary: RecoverExceptedWebshellSuspiciousObject
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - webshell-behavior-detector
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-webshellbehaviordetector-exceptedwebshell-recoverexceptedwebshellsuspic
+      parameters:
+        - name: exception-id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 예외 처리된 웹쉘 행위 탐지 내역 ID GetExceptedWebshell 을 통해 detectionId 확인
+        - name: object-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 의심되는 파일의 ID GetExceptedWebshell 을 통해 suspicionFileId 확인
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 요청 처리 여부
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /quarantines:
+    get:
+      operationId: QuarantineGetQuarantine
+      summary: GetQuarantine
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - webshell-behavior-detector
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-webshellbehaviordetector-quarantine-getquarantine
+      parameters:
+        - name: pageIndex
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지 번호
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지 출력 개수
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 요청 처리 여부
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '의심 파일 목록: result'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: QuarantineSearchQuarantine
+      summary: SearchQuarantine
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - webshell-behavior-detector
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-webshellbehaviordetector-quarantine-searchquarantine
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - pageIndex
+                - pageSize
+              properties:
+                fileOriginName:
+                  type: string
+                  description: 파일 이름
+                fileOwner:
+                  type: string
+                  description: 파일 소유자
+                hostName:
+                  type: string
+                  description: VM의 호스트 이름
+                memo:
+                  type: string
+                  description: 메모
+                pageIndex:
+                  type: integer
+                  description: 페이지 번호
+                pageSize:
+                  type: integer
+                  description: 페이지 출력 개수
+                quarantineFileName:
+                  type: string
+                  description: 격리 조치된 파일 이름
+                quarantineTimeFrom:
+                  type: integer
+                  description: 격리 시작 일시 Timestamp 형식
+                quarantineTimeTo:
+                  type: integer
+                  description: 격리 종료 일시 Timestamp 형식
+                serverName:
+                  type: string
+                  description: VM의 서버 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 요청 처리 여부
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '의심 파일 목록: result'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /quarantines/{quarantine-id}/memo:
+    patch:
+      operationId: QuarantineUpdateQuarantineMemo
+      summary: UpdateQuarantineMemo
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - webshell-behavior-detector
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-webshellbehaviordetector-quarantine-updatequarantinememo
+      parameters:
+        - name: quarantine-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 격리된 웹쉘 의심 파일의 ID GetQuarantine 을 통해 suspicionFileId 확인
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - content
+              properties:
+                content:
+                  type: string
+                  description: 수정할 메모 내용
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 요청 처리 여부
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /quarantines/{quarantine-id}/recover:
+    patch:
+      operationId: QuarantineRecoverquarantine
+      summary: RecoverQuarantine
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - webshell-behavior-detector
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-webshellbehaviordetector-quarantine-recoverquarantine
+      parameters:
+        - name: quarantine-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 격리된 웹쉘 의심 파일의 ID GetQuarantine 을 통해 suspicionFileId 확인
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 요청 처리 여부
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /servers:
+    get:
+      operationId: DetectionSetTingGetDetectionTarget
+      summary: GetDetectionTarget
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - webshell-behavior-detector
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-webshellbehaviordetector-detectionsetting-getdetectiontarget
+      parameters:
+        - name: pageIndex
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지 번호
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지 출력 개수
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 요청 처리 여부
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '탐지 대상 목록: content'
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 개수
+                  pageSize:
+                    type: integer
+                    description: 페이지 출력 개수
+                  pageIndex:
+                    type: integer
+                    description: 페이지 번호
+                  totalPages:
+                    type: integer
+                    description: 총 페이지 개수
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: DetectionSetTingSearchDetectionTarget
+      summary: SearchDetectionTarget
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - webshell-behavior-detector
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-webshellbehaviordetector-detectionsetting-searchdetectiontarget
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                pageIndex:
+                  type: integer
+                  description: 페이지 번호
+                pageSize:
+                  type: integer
+                  description: 페이지 출력 개수
+                agentStatus:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: '에이전트 상태 enable | disable | notInstalled | error | activating | down enable : 활성 상태 disable : 비활성 상태 notInstalled : 미설치 상태 error : 오류 상태 activating : 활성화 진행 중 상태 down : 에이전트 다운 상태'
+                fileUploadPath:
+                  type: string
+                  description: 파일의 업로드 디렉터리
+                webRootPath:
+                  type: string
+                  description: 웹 루트 디렉터리
+                ipAddress:
+                  type: string
+                  description: 서버 IP
+                memo:
+                  type: string
+                  description: 메모
+                serverGroupName:
+                  type: string
+                  description: 서버 그룹 이름
+                serverImageName:
+                  type: string
+                  description: VM의 서버 이미지 이름
+                serverName:
+                  type: string
+                  description: VM의 서버 이름
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 요청 처리 여부
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '탐지 대상 목록: content'
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 개수
+                  pageSize:
+                    type: integer
+                    description: 페이지 출력 개수
+                  pageIndex:
+                    type: integer
+                    description: 페이지 번호
+                  totalPages:
+                    type: integer
+                    description: 총 페이지 개수
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /servers/{server-id}/agent/activate:
+    patch:
+      operationId: DetectionSetTingActivateagent
+      summary: ActivateAgent
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - webshell-behavior-detector
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-webshellbehaviordetector-detectionsetting-activateagent
+      parameters:
+        - name: server-id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 탐지 대상 서버의 인스턴스 ID GetDetectionTarget 을 통해 instanceNo 확인
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 요청 처리 여부
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /servers/{server-id}/agent/deactivate:
+    patch:
+      operationId: DetectionSetTingDeactivateagent
+      summary: DeactivateAgent
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - webshell-behavior-detector
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-webshellbehaviordetector-detectionsetting-deactivateagent
+      parameters:
+        - name: server-id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 탐지 대상 서버의 인스턴스 ID GetDetectionTarget 을 통해 instanceNo 확인
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 요청 처리 여부
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /servers/{server-id}/memo:
+    patch:
+      operationId: DetectionSetTingUpdateDetectionTargetMemo
+      summary: UpdateDetectionTargetMemo
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - webshell-behavior-detector
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-webshellbehaviordetector-detectionsetting-updatedetectiontargetmemo
+      parameters:
+        - name: server-id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 탐지 대상 서버의 인스턴스 ID GetDetectionTarget 을 통해 instanceNo 확인
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - content
+              properties:
+                content:
+                  type: string
+                  description: 수정할 메모 내용
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 요청 처리 여부
+                  code:
+                    type: integer
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+components:
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  schemas:
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

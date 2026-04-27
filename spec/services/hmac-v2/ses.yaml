@@ -1,0 +1,1999 @@
+openapi: 3.0.3
+info:
+  title: ses
+  description: Search Engine Service(VPC) Open API
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: true
+    gov: true
+
+  x-ncloud-nrn:
+
+    productName: VPCSearchEngine
+    resource_types:
+      - Cluster
+      - Server
+
+servers:
+  - url: https://vpcsearchengine.apigw.ntruss.com/api/v1
+    description: ses 민간
+    x-ncloud-env: public
+  - url: https://vpcsearchengine.apigw.fin-ntruss.com/api/v1
+    description: ses 금융
+    x-ncloud-env: financial
+  - url: https://vpcsearchengine.apigw.gov-ntruss.com/api/v1
+    description: ses 공공
+    x-ncloud-env: gov
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /cluster/changeCountOfDataNode/{serviceGroupInstanceNo}:
+    post:
+      operationId: ClusterChangeCountOfDataNodeServiceGroupInstanceNoPost
+      tags:
+        - ses
+      parameters:
+        - name: changeCountOfDataNode
+          in: query
+          schema:
+            $ref: '#/components/schemas/AddNodesInCluster'
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoBoolean'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster change count of data node service group instance no post
+  /cluster/createElasticsearchCluster:
+    post:
+      operationId: ClusterCreateElasticsearchClusterPost
+      tags:
+        - ses
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCluster'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoCreateClusterResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster create elasticsearch cluster post
+  /cluster/deleteElasticsearchCluster/{serviceGroupInstanceNo}:
+    delete:
+      operationId: ClusterDeleteElasticsearchClusterServiceGroupInstanceNoDelete
+      tags:
+        - ses
+      parameters:
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoBoolean'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster delete elasticsearch cluster service group instance no delete
+  /cluster/getAcgInfoList/{serviceGroupInstanceNo}:
+    get:
+      operationId: ClusterGetAcgInfoListServiceGroupInstanceNoGet
+      tags:
+        - ses
+      parameters:
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoGetOpenApiAcgInfoList'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster get ACG info list service group instance no get
+  /cluster/getClusterDataNodeList/{serviceGroupInstanceNo}:
+    get:
+      operationId: ClusterGetClusterDataNodeListServiceGroupInstanceNoGet
+      tags:
+        - ses
+      parameters:
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoGetOpenApiServiceGroupResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster get cluster data node list service group instance no get
+  /cluster/getClusterInfo/{serviceGroupInstanceNo}:
+    get:
+      operationId: ClusterGetClusterInfoGet
+      tags:
+        - ses
+      parameters:
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoOpenApiGetClusterInfoResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster get cluster info get
+  /cluster/getClusterInfoList:
+    post:
+      operationId: ClusterGetClusterInfoListPost
+      tags:
+        - ses
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetClusterRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoOpenApiGetClusterInfoListResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster get cluster info list post
+  /cluster/getElasticsearchVersionList:
+    get:
+      operationId: ClusterGetElasticsearchVersionListGet
+      tags:
+        - ses
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoGetElasticSearchVersionListResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster get elasticsearch version list get
+  /cluster/getLoginKeyList:
+    get:
+      operationId: ClusterGetLoginKeyListGet
+      tags:
+        - ses
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoGetOpenApiLoginKeyListResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster get login key list get
+  /cluster/getNodeProductList:
+    post:
+      operationId: ClusterGetNodeProductListPost
+      tags:
+        - ses
+      parameters:
+        - name: getNodeProductList
+          in: query
+          schema:
+            $ref: '#/components/schemas/NodeProduct'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoGetOpenApiHwProductListResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster get node product list post
+  /cluster/getOsProductList:
+    get:
+      operationId: ClusterGetOsProductListGet
+      tags:
+        - ses
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoGetOpenApiOsProductListResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster get OS product list get
+  /cluster/getSubnetList:
+    post:
+      operationId: ClusterGetSubnetListPost
+      tags:
+        - ses
+      parameters:
+        - name: getSubnetList
+          in: query
+          schema:
+            $ref: '#/components/schemas/GetSubnetList'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoGetVpcSubnetListResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster get subnet list post
+  /cluster/getVpcList:
+    get:
+      operationId: ClusterGetVpcListGet
+      tags:
+        - ses
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoGetVpcConfigListResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster get VPC list get
+  /cluster/resetKibanaPassword/{serviceGroupInstanceNo}:
+    post:
+      operationId: ClusterResetKibanaPasswordServiceGroupInstanceNoPost
+      tags:
+        - ses
+      parameters:
+        - name: kibanaPassword
+          in: query
+          schema:
+            $ref: '#/components/schemas/ResetKibanaPassword'
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoBoolean'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster reset kibana password service group instance no post
+  /cluster/restartElasticsearchCluster/{serviceGroupInstanceNo}:
+    get:
+      operationId: ClusterRestartElasticsearchClusterServiceGroupInstanceNoGet
+      tags:
+        - ses
+      parameters:
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoBoolean'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cluster restart elasticsearch cluster service group instance no get
+  /dashboard/getDashboardInformation/{serviceGroupInstanceNo}:
+    get:
+      operationId: DashboardGetDashboardInformationServiceGroupInstanceNoGet
+      tags:
+        - ses
+      parameters:
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: pageNo
+          in: query
+          schema:
+            type: integer
+            format: int32
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoGetOpenApiDashboardInformationResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Dashboard get dashboard information service group instance no get
+  /import/createDataImportJob/{serviceGroupInstanceNo}:
+    post:
+      operationId: ImportCreateDataImportJobServiceGroupInstanceNoPost
+      tags:
+        - ses
+      parameters:
+        - name: createImportJob
+          in: query
+          schema:
+            $ref: '#/components/schemas/CreateImportJob'
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoBoolean'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Import create data import job service group instance no post
+  /import/getBucketList/{serviceGroupInstanceNo}:
+    get:
+      operationId: ImportGetBucketListServiceGroupInstanceNoGet
+      tags:
+        - ses
+      parameters:
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoBoolean'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Import get bucket list service group instance no get
+  /import/getDataImportHistory/{serviceGroupInstanceNo}:
+    get:
+      operationId: ImportGetDataImportHistoryServiceGroupInstanceNoGet
+      tags:
+        - ses
+      parameters:
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: pageNo
+          in: query
+          schema:
+            type: integer
+            format: int32
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoGetImportHistoryListResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Import get data import history service group instance no get
+  /import/stopDataImportJob/{serviceGroupInstanceNo}:
+    get:
+      operationId: ImportStopDataImportJobServiceGroupInstanceNoGet
+      tags:
+        - ses
+      parameters:
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoBoolean'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Import stop data import job service group instance no get
+  /monitoring/getElasticsearchMonitoringData/{serviceGroupInstanceNo}:
+    post:
+      operationId: MonitoringGetElasticsearchMonitoringDataServiceGroupInstanceNoPost
+      tags:
+        - ses
+      parameters:
+        - name: getElasticsearchMonitoringData
+          in: query
+          schema:
+            $ref: '#/components/schemas/GetElasticsearchMonitoringData'
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoQueryMultipleDataResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Monitoring get elasticsearch monitoring data service group instance no post
+  /monitoring/getOsMonitoringData/{serviceGroupInstanceNo}:
+    post:
+      operationId: MonitoringGetOsMonitoringDataServiceGroupInstanceNoPost
+      tags:
+        - ses
+      parameters:
+        - name: getOsMonitoringData
+          in: query
+          schema:
+            $ref: '#/components/schemas/GetOsMonitoringData'
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoQueryMultipleDataResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Monitoring get OS monitoring data service group instance no post
+  /snapshot/createSnapshot/{serviceGroupInstanceNo}:
+    post:
+      operationId: SnapshotCreateSnapshotServiceGroupInstanceNoPost
+      tags:
+        - ses
+      parameters:
+        - name: createSnapshot
+          in: query
+          schema:
+            $ref: '#/components/schemas/CreateSnapshot'
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoBoolean'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Snapshot create snapshot service group instance no post
+  /snapshot/getBucketList/{serviceGroupInstanceNo}:
+    get:
+      operationId: SnapshotGetBucketListServiceGroupInstanceNoGet
+      tags:
+        - ses
+      parameters:
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoGetObjectStorageBucketListResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Snapshot get bucket list service group instance no get
+  /snapshot/getSnapshotHistory/{serviceGroupInstanceNo}:
+    get:
+      operationId: SnapshotGetSnapshotHistoryServiceGroupInstanceNoGet
+      tags:
+        - ses
+      parameters:
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: pageNo
+          in: query
+          schema:
+            type: integer
+            format: int32
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoSnapshotHistoryListResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Snapshot get snapshot history service group instance no get
+  /snapshot/getSnapshotSchedulingHistory/{serviceGroupInstanceNo}:
+    post:
+      operationId: SnapshotGetSnapshotSchedulingHistoryServiceGroupInstanceNoPost
+      tags:
+        - ses
+      parameters:
+        - name: getSnapshotSchedulingHistory
+          in: query
+          schema:
+            $ref: '#/components/schemas/GetSnapshotSchedulingHistory'
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoGetSnapshotSchedulingHistoryResponseVo'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Snapshot get snapshot scheduling history service group instance no post
+  /snapshot/releaseSnapshotScheduling/{serviceGroupInstanceNo}:
+    get:
+      operationId: SnapshotReleaseSnapshotSchedulingServiceGroupInstanceNoGet
+      tags:
+        - ses
+      parameters:
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoBoolean'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Snapshot release snapshot scheduling service group instance no get
+  /snapshot/setSnapshotScheduling/{serviceGroupInstanceNo}:
+    post:
+      operationId: SnapshotSetSnapshotSchedulingServiceGroupInstanceNoPost
+      tags:
+        - ses
+      parameters:
+        - name: setSnapshotScheduling
+          in: query
+          schema:
+            $ref: '#/components/schemas/SetSnapshotScheduling'
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoBoolean'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Snapshot set snapshot scheduling service group instance no post
+  /snapshot/updateAPIAuthenticationKey/{serviceGroupInstanceNo}:
+    post:
+      operationId: SnapshotUpdateAPIAuthenticationKeyServiceGroupInstanceNoPost
+      tags:
+        - ses
+      parameters:
+        - name: updateAPIAuthenticationKey
+          in: query
+          schema:
+            $ref: '#/components/schemas/UpdateApiAuthenticationKey'
+        - name: serviceGroupInstanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseVoBoolean'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Snapshot update API authentication key service group instance no post
+components:
+  schemas:
+    AcgRuleResponseDetailVo:
+      type: object
+      properties:
+        accessControlGroupName:
+          type: string
+        accessControlGroupNo:
+          type: integer
+          format: int32
+        accessControlGroupRuleNo:
+          type: integer
+          format: int32
+        accessControlGroupSequence:
+          type: integer
+          format: int32
+        createdYmdt:
+          $ref: '#/components/schemas/DateTimeVo'
+        description:
+          type: string
+        ipBlock:
+          type: string
+        isInboundRule:
+          type: boolean
+        portRange:
+          type: string
+        protocolTypeCode:
+          type: string
+        statusCode:
+          type: string
+    AddNodesInCluster:
+      type: object
+      properties:
+        newDataNodeCount:
+          type: integer
+          format: int32
+      required:
+        - newDataNodeCount
+    AllowedClusterInfo:
+      type: object
+      properties:
+        accessKeyId:
+          type: string
+        clusterName:
+          type: string
+        clusterStatus:
+          type: string
+          description: clusterStatus (creating[blue], changing[yelllow], running[green], error[red], deleting[gray], return[gray])
+        createDate:
+          type: string
+        dataNodeAccessControlGroupName:
+          type: string
+        dataNodeAccessControlGroupSequence:
+          type: integer
+          format: int32
+        dataNodeCount:
+          type: integer
+          format: int32
+        dataNodeProductName:
+          type: string
+        dataNodeSubnetName:
+          type: string
+        dataNodeSubnetNo:
+          type: integer
+          format: int32
+        dataNodeType:
+          type: string
+        dataStorageVolumeSize:
+          type: integer
+          format: int64
+        elasticSearchHttpPort:
+          type: string
+        elasticSearchStatus:
+          type: string
+          description: elasticSearchStatus (green, yellow, orange, red, gray)
+        elasticSearchVersion:
+          type: string
+        isDualManager:
+          type: boolean
+        isMasterOnlyNodeActivated:
+          type: boolean
+        isPluginInstalled:
+          type: boolean
+        kibanaHttpPort:
+          type: string
+        kibanaUserName:
+          type: string
+        loginKeyName:
+          type: string
+        managerNodeAccessControlGroupName:
+          type: string
+        managerNodeAccessControlGroupSequence:
+          type: integer
+          format: int32
+        managerNodeCount:
+          type: integer
+          format: int32
+        managerNodeSubnetName:
+          type: string
+        managerNodeSubnetNo:
+          type: integer
+          format: int32
+        managerNodeType:
+          type: string
+        masterNodeAccessControlGroupName:
+          type: string
+        masterNodeAccessControlGroupSequence:
+          type: integer
+          format: int32
+        masterNodeCount:
+          type: integer
+          format: int32
+        masterNodeProductName:
+          type: string
+        masterNodeSubnetName:
+          type: string
+        masterNodeSubnetNo:
+          type: integer
+          format: int32
+        masterNodeType:
+          type: string
+        memberNo:
+          type: string
+        serviceGroupInstanceNo:
+          type: string
+        softwareProductName:
+          type: string
+        vpcName:
+          type: string
+        vpcNo:
+          type: integer
+          format: int32
+      required:
+        - clusterStatus
+        - elasticSearchStatus
+    BucketInfo:
+      type: object
+      properties:
+        actionName:
+          type: string
+        bucketProtectionState:
+          type: string
+        bytesUsed:
+          type: integer
+          format: int64
+        creationTime:
+          type: integer
+          format: int64
+        disabled:
+          type: boolean
+        enable:
+          type: boolean
+        name:
+          type: string
+        objectCount:
+          type: integer
+          format: int64
+        permission:
+          type: string
+        sseKmsEnabled:
+          type: boolean
+    CatIndice:
+      type: object
+      properties:
+        docsCount:
+          type: string
+        docsDeleted:
+          type: string
+        health:
+          type: string
+        indexName:
+          type: string
+        primaryCount:
+          type: string
+        replicaCount:
+          type: string
+        status:
+          type: string
+        storeSize:
+          type: string
+        uuid:
+          type: string
+    CreateCluster:
+      type: object
+      properties:
+        clusterName:
+          type: string
+        elasticSearchVersionCode:
+          type: string
+        kibanaHttpPort:
+          type: string
+        kibanaUserName:
+          type: string
+        kibanaUserPassword:
+          type: string
+        softwareProductCode:
+          type: string
+        vpcNo:
+          type: integer
+          format: int32
+        managerNodeProductCode:
+          type: string
+        managerNodeSubnetNo:
+          type: integer
+          format: int32
+        dataNodeProductCode:
+          type: string
+        dataNodeCount:
+          type: integer
+          format: int32
+        dataNodeSubnetNo:
+          type: integer
+          format: int32
+        dataNodeStorageSize:
+          type: integer
+          format: int32
+        loginKeyName:
+          type: string
+        isDualManager:
+          type: boolean
+        isMasterOnlyNodeActivated:
+          type: boolean
+        masterNodeSubnetNo:
+          type: integer
+          format: int32
+        masterNodeProductCode:
+          type: string
+        masterNodeCount:
+          type: integer
+          format: int32
+    CreateClusterResponseVo:
+      type: object
+      properties:
+        serviceGroupInstanceNo:
+          type: integer
+          format: int32
+          description: 서비스 그룹 인스턴스 번호
+    CreateImportJob:
+      type: object
+      properties:
+        dataSource:
+          type: string
+        index:
+          type: string
+        bucketName:
+          type: string
+        objectKey:
+          type: string
+        isBulkFormat:
+          type: boolean
+      required:
+        - dataSource
+        - index
+        - bucketName
+        - objectKey
+        - isBulkFormat
+    CreateSnapshot:
+      type: object
+      properties:
+        snapshotName:
+          type: string
+        bucketName:
+          type: string
+      required:
+        - snapshotName
+        - bucketName
+    DateTimeVo:
+      type: object
+      properties:
+        formattedDate:
+          type: string
+        formattedDateTime:
+          type: string
+        utc:
+          type: integer
+          format: int64
+    DimensionsVo:
+      type: object
+      properties:
+        Svc_group_instance_no:
+          type: string
+        instanceNo:
+          type: string
+    DisallowedClusterInfo:
+      type: object
+      properties:
+        clusterName:
+          type: string
+        clusterStatus:
+          type: string
+          description: clusterStatus (creating[blue], changing[yelllow], running[green], error[red], deleting[gray], return[gray])
+        elasticSearchStatus:
+          type: string
+          description: elasticSearchStatus (green, yellow, orange, red, gray)
+      required:
+        - clusterStatus
+        - elasticSearchStatus
+    ElasticSearchVersion:
+      type: object
+      properties:
+        elasticSearchVersionCode:
+          type: string
+        elasticSearchVersionName:
+          type: string
+        kibanaVersionName:
+          type: string
+    GetClusterIndicesStatusResponseVo:
+      type: object
+      properties:
+        currentPage:
+          type: integer
+          format: int32
+        indiceInfoList:
+          type: array
+          items:
+            $ref: '#/components/schemas/CatIndice'
+        isPaged:
+          type: boolean
+        pageSize:
+          type: integer
+          format: int32
+        totalCount:
+          type: integer
+          format: int32
+        totalPage:
+          type: integer
+          format: int32
+    GetClusterRequest:
+      type: object
+      properties:
+        inputText:
+          type: string
+        vpcName:
+          type: string
+        pageNo:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+    GetClusterStatusResponseVo:
+      type: object
+      properties:
+        docsCount:
+          type: string
+        indicesCount:
+          type: string
+        segmentsCount:
+          type: string
+        shardCount:
+          type: string
+        status:
+          type: string
+        storeSizeInUsed:
+          type: string
+    GetElasticSearchVersionListResponseVo:
+      type: object
+      properties:
+        elasticSearchVersionList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ElasticSearchVersion'
+    GetElasticsearchMonitoringData:
+      type: object
+      properties:
+        timeStart:
+          type: integer
+          format: int32
+        timeEnd:
+          type: integer
+          format: int32
+        metric:
+          type: string
+        computeInstanceNo:
+          type: string
+        interval:
+          type: string
+      required:
+        - timeStart
+        - timeEnd
+        - metric
+        - computeInstanceNo
+    GetImportHistoryListResponseVo:
+      type: object
+      properties:
+        currentPage:
+          type: integer
+          format: int32
+        importHistoryList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ImportHistoryVo'
+        isFirst:
+          type: boolean
+        isLast:
+          type: boolean
+        pageSize:
+          type: integer
+          format: int32
+        totalCount:
+          type: integer
+          format: int64
+        totalPage:
+          type: integer
+          format: int32
+    GetObjectStorageBucketListResponseVo:
+      type: object
+      properties:
+        bucketList:
+          type: array
+          items:
+            $ref: '#/components/schemas/BucketInfo'
+    GetOpenApiAccessControlGroupRuleListResponseVo:
+      type: object
+      properties:
+        inboundAcgRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/AcgRuleResponseDetailVo'
+        outboundAcgRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/AcgRuleResponseDetailVo'
+    GetOpenApiAcgInfoList:
+      type: object
+      properties:
+        dataNodeAcgRule:
+          $ref: '#/components/schemas/GetOpenApiAccessControlGroupRuleListResponseVo'
+        managerNodeAcgRule:
+          $ref: '#/components/schemas/GetOpenApiAccessControlGroupRuleListResponseVo'
+        masterNodeAcgRule:
+          $ref: '#/components/schemas/GetOpenApiAccessControlGroupRuleListResponseVo'
+    GetOpenApiDashboardInformationResponseVo:
+      type: object
+      properties:
+        clusterIndicesStatus:
+          $ref: '#/components/schemas/GetClusterIndicesStatusResponseVo'
+        clusterStatus:
+          $ref: '#/components/schemas/GetClusterStatusResponseVo'
+    GetOpenApiHwProductListResponseVo:
+      type: object
+      properties:
+        productList:
+          type: array
+          items:
+            $ref: '#/components/schemas/OpenApiHwProductVo'
+    GetOpenApiLoginKeyListResponseVo:
+      type: object
+      properties:
+        loginKeyList:
+          type: array
+          items:
+            $ref: '#/components/schemas/OpenApiLoginKeyVo'
+        totalRows:
+          type: integer
+          format: int32
+    GetOpenApiOsProductListResponseVo:
+      type: object
+      properties:
+        productList:
+          type: array
+          items:
+            $ref: '#/components/schemas/OpenApiOsProductVo'
+    GetOpenApiServiceGroupResponseVo:
+      type: object
+      properties:
+        computeList:
+          type: array
+          items:
+            $ref: '#/components/schemas/OpenApiGetComputeInstanceListResponseDetailVo'
+        contractNo:
+          type: integer
+          format: int32
+        createdDate:
+          $ref: '#/components/schemas/DateTimeVo'
+        productCode:
+          type: string
+        regionNo:
+          type: integer
+          format: int32
+        serviceGroupInstanceNo:
+          type: integer
+          format: int32
+        serviceGroupInstanceTypeCode:
+          type: string
+        serviceGroupName:
+          type: string
+        statusCode:
+          type: string
+        vpcNo:
+          type: integer
+          format: int32
+    GetOsMonitoringData:
+      type: object
+      properties:
+        timeStart:
+          type: integer
+          format: int32
+        timeEnd:
+          type: integer
+          format: int32
+        metric:
+          type: string
+        computeInstanceNo:
+          type: string
+        interval:
+          type: string
+      required:
+        - timeStart
+        - timeEnd
+        - metric
+        - computeInstanceNo
+    GetSnapshotSchedulingHistory:
+      type: object
+      properties:
+        pageNo:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+    GetSnapshotSchedulingHistoryResponseVo:
+      type: object
+      properties:
+        currentPage:
+          type: integer
+          format: int32
+        isFirst:
+          type: boolean
+        isLast:
+          type: boolean
+        pageSize:
+          type: integer
+          format: int32
+        snapshotSchedulingHistoryList:
+          type: array
+          items:
+            $ref: '#/components/schemas/SnapshotSchedulingHistoryResponseVo'
+        totalCount:
+          type: integer
+          format: int64
+        totalPage:
+          type: integer
+          format: int32
+    GetSubnetList:
+      type: object
+      properties:
+        vpcNo:
+          type: integer
+          format: int32
+        softwareProductCode:
+          type: string
+      required:
+        - vpcNo
+        - softwareProductCode
+    GetVpcConfigListResponseDetailVo:
+      type: object
+      properties:
+        createdDate:
+          $ref: '#/components/schemas/DateTimeVo'
+        ipv4Cidr:
+          type: string
+        permission:
+          type: string
+        regionNo:
+          type: string
+        statusCode:
+          type: string
+        vpcName:
+          type: string
+        vpcNo:
+          type: integer
+          format: int32
+    GetVpcConfigListResponseVo:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetVpcConfigListResponseDetailVo'
+    GetVpcSubnetListResponseVo:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/VpcSubnetListResponseDetailVo'
+    ImportHistoryVo:
+      type: object
+      properties:
+        actionEndDate:
+          type: string
+        actionStartDate:
+          type: string
+        bucketName:
+          type: string
+        clusterName:
+          type: string
+        importStatus:
+          type: string
+        objectKey:
+          type: string
+        progress:
+          type: integer
+          format: int32
+        serviceGroupInstanceNo:
+          type: integer
+          format: int32
+    MetricInfoResponseVo:
+      type: object
+      properties:
+        aggregation:
+          type: string
+        dimensions:
+          $ref: '#/components/schemas/DimensionsVo'
+        dps:
+          type: array
+          items:
+            type: array
+            items: {}
+        graphName:
+          type: string
+        interval:
+          type: string
+        metric:
+          type: string
+        productName:
+          type: string
+    NodeProduct:
+      type: object
+      properties:
+        softwareProductCode:
+          type: string
+        subnetNo:
+          type: integer
+          format: int32
+      required:
+        - softwareProductCode
+        - subnetNo
+    OpenApiGetClusterInfoListResponseVo:
+      type: object
+      properties:
+        allowedClusters:
+          type: array
+          items:
+            $ref: '#/components/schemas/AllowedClusterInfo'
+        currentPage:
+          type: integer
+          format: int32
+        disallowedClusters:
+          type: array
+          items:
+            $ref: '#/components/schemas/DisallowedClusterInfo'
+        isFirst:
+          type: boolean
+        isLast:
+          type: boolean
+        pageSize:
+          type: integer
+          format: int32
+        totalCount:
+          type: integer
+          format: int64
+        totalPage:
+          type: integer
+          format: int32
+    OpenApiGetClusterInfoResponseVo:
+      type: object
+      properties:
+        clusterName:
+          type: string
+        clusterStatus:
+          type: string
+        applicationVersionCode:
+          type: string
+        loginKeyName:
+          type: string
+        serviceGroupInstanceNo:
+          type: string
+        softwareProductCode:
+          type: string
+        vpcNo:
+          type: integer
+          format: int32
+        dataNodeCount:
+          type: integer
+          format: int32
+        dataNodeSubnetNo:
+          type: integer
+          format: int32
+        dataNodeProductCode:
+          type: string
+        managerNodeCount:
+          type: integer
+          format: int32
+        managerNodeSubnetNo:
+          type: integer
+          format: int32
+        managerNodeProductCode:
+          type: string
+        masterNodeCount:
+          type: integer
+          format: int32
+        masterNodeSubnetNo:
+          type: integer
+          format: int32
+        masterNodeProductCode:
+          type: string
+    OpenApiGetComputeInstanceListResponseDetailVo:
+      type: object
+      properties:
+        computeInstanceNo:
+          type: integer
+          format: int32
+        computeInstanceProductCode:
+          type: string
+        computeInstanceStatus:
+          type: string
+        cpuCount:
+          type: integer
+          format: int32
+        createdYmdt:
+          $ref: '#/components/schemas/DateTimeVo'
+        hostName:
+          type: string
+        macAddress:
+          type: string
+        memorySize:
+          type: integer
+          format: int64
+        nodeRoleCode:
+          type: string
+        operationYmdt:
+          $ref: '#/components/schemas/DateTimeVo'
+        osInfo:
+          type: string
+        privateIp:
+          type: string
+        regionCode:
+          type: string
+        regionName:
+          type: string
+        regionNo:
+          type: string
+        selfManaged:
+          type: boolean
+        serviceGroupInstanceNo:
+          type: integer
+          format: int32
+        subnetName:
+          type: string
+        subnetNo:
+          type: integer
+          format: int32
+        uuid:
+          type: string
+        vpcName:
+          type: string
+        vpcNo:
+          type: integer
+          format: int32
+        zoneName:
+          type: string
+        zoneNo:
+          type: integer
+          format: int32
+    OpenApiHwProductVo:
+      type: object
+      properties:
+        cpuCount:
+          type: string
+        diskType2Code:
+          type: string
+        infraResourceTypeCode:
+          type: string
+        memorySize:
+          type: integer
+          format: int64
+        productCode:
+          type: string
+        productEnglishDesc:
+          type: string
+        productName:
+          type: string
+        productType2Code:
+          type: string
+    OpenApiLoginKeyVo:
+      type: object
+      properties:
+        keyName:
+          type: string
+    OpenApiOsProductVo:
+      type: object
+      properties:
+        infraResourceTypeCode:
+          type: string
+        productCode:
+          type: string
+        productEnglishDesc:
+          type: string
+        productName:
+          type: string
+        productType2Code:
+          type: string
+        softwareTypeCode:
+          type: string
+    QueryMultipleDataResponseVo:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetricInfoResponseVo'
+    ResetKibanaPassword:
+      type: object
+      properties:
+        kibanaUserPassword:
+          type: string
+      required:
+        - kibanaUserPassword
+    ResponseVoBoolean:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          type: boolean
+    ResponseVoCreateClusterResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/CreateClusterResponseVo'
+    ResponseVoGetElasticSearchVersionListResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/GetElasticSearchVersionListResponseVo'
+    ResponseVoGetImportHistoryListResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/GetImportHistoryListResponseVo'
+    ResponseVoGetObjectStorageBucketListResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/GetObjectStorageBucketListResponseVo'
+    ResponseVoGetOpenApiAcgInfoList:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/GetOpenApiAcgInfoList'
+    ResponseVoGetOpenApiDashboardInformationResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/GetOpenApiDashboardInformationResponseVo'
+    ResponseVoGetOpenApiHwProductListResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/GetOpenApiHwProductListResponseVo'
+    ResponseVoGetOpenApiLoginKeyListResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/GetOpenApiLoginKeyListResponseVo'
+    ResponseVoGetOpenApiOsProductListResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/GetOpenApiOsProductListResponseVo'
+    ResponseVoGetOpenApiServiceGroupResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/GetOpenApiServiceGroupResponseVo'
+    ResponseVoGetSnapshotSchedulingHistoryResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/GetSnapshotSchedulingHistoryResponseVo'
+    ResponseVoGetVpcConfigListResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/GetVpcConfigListResponseVo'
+    ResponseVoGetVpcSubnetListResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/GetVpcSubnetListResponseVo'
+    ResponseVoOpenApiGetClusterInfoListResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/OpenApiGetClusterInfoListResponseVo'
+    ResponseVoOpenApiGetClusterInfoResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/OpenApiGetClusterInfoResponseVo'
+    ResponseVoQueryMultipleDataResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/QueryMultipleDataResponseVo'
+    ResponseVoSnapshotHistoryListResponseVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        requestId:
+          type: string
+        result:
+          $ref: '#/components/schemas/SnapshotHistoryListResponseVo'
+    SetSnapshotScheduling:
+      type: object
+      properties:
+        bucketName:
+          type: string
+        snapshotName:
+          type: string
+        scheduledDay:
+          type: string
+        scheduledHour:
+          type: integer
+          format: int32
+        scheduledMinute:
+          type: integer
+          format: int32
+      required:
+        - bucketName
+        - snapshotName
+        - scheduledDay
+        - scheduledHour
+        - scheduledMinute
+    SnapshotHistoryListResponseVo:
+      type: object
+      properties:
+        currentPage:
+          type: integer
+          format: int32
+        isFirst:
+          type: boolean
+        isLast:
+          type: boolean
+        pageSize:
+          type: integer
+          format: int32
+        snapshotHistoryResponseList:
+          type: array
+          items:
+            $ref: '#/components/schemas/SnapshotHistoryResponseVo'
+        totalCount:
+          type: integer
+          format: int64
+        totalPage:
+          type: integer
+          format: int32
+    SnapshotHistoryResponseVo:
+      type: object
+      properties:
+        actionDate:
+          type: string
+        bucketName:
+          type: string
+        clusterName:
+          type: string
+        duration:
+          type: string
+        hasErrorLog:
+          type: boolean
+        idx:
+          type: integer
+          format: int32
+        memberNo:
+          type: string
+        message:
+          type: string
+        requestType:
+          type: string
+        serviceGroupInstanceNo:
+          type: integer
+          format: int32
+        snapshotName:
+          type: string
+    SnapshotSchedulingHistoryResponseVo:
+      type: object
+      properties:
+        bucketName:
+          type: string
+        snapshotName:
+          type: string
+        snapshotSchedulingConfigSetUpDate:
+          type: string
+        snapshotSchedulingSetUpDay:
+          type: string
+        snapshotSchedulingSetUpTime:
+          type: string
+        snapshotSchedulingStatus:
+          type: string
+    UpdateApiAuthenticationKey:
+      type: object
+      properties:
+        accessKeyId:
+          type: string
+        secretKey:
+          type: string
+      required:
+        - accessKeyId
+        - secretKey
+    VpcSubnetListResponseDetailVo:
+      type: object
+      properties:
+        isPublic:
+          type: boolean
+        permission:
+          type: string
+        statusCode:
+          type: string
+        subnet:
+          type: string
+        subnetName:
+          type: string
+        subnetNo:
+          type: integer
+          format: int32
+        vpcName:
+          type: string
+        vpcNo:
+          type: integer
+          format: int32
+        zoneName:
+          type: string
+        zoneNo:
+          type: integer
+          format: int32
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

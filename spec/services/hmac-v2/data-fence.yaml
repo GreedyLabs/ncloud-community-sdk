@@ -1,0 +1,2052 @@
+openapi: 3.0.3
+info:
+  title: data-fence
+  description: data-fence
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: false
+    gov: false
+
+  x-ncloud-nrn-todo: true
+servers:
+  - url: https://datafence.apigw.ntruss.com
+    description: data-fence 민간
+    x-ncloud-env: public
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /box/change-box-block-external-network:
+    post:
+      operationId: ChangeBoxBlockExternalNetwork
+      summary: change-box-block-external-network
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-fence
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/change-box-block-external-network
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - fenceId
+                - boxId
+                - isBlock
+              properties:
+                fenceId:
+                  type: integer
+                  description: Datafence 번호 get-data-fence 참조
+                boxId:
+                  type: integer
+                  description: Box 번호 get-box-list 참조
+                isBlock:
+                  type: boolean
+                  description: '외부망 연결 차단 여부 true | false true : 차단 false : 허용'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /box/change-box-infra:
+    post:
+      operationId: ChangeBoxInfra
+      summary: change-box-infra
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-fence
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/change-box-infra
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - fenceId
+                - updateBoxInfo
+                - actionType
+              properties:
+                fenceId:
+                  type: integer
+                  description: Datafence 번호 get-data-fence 참조
+                updateBoxInfo:
+                  type: object
+                  additionalProperties: true
+                  description: Box 수정 정보
+                actionType:
+                  type: string
+                  description: '처리 유형 CREATE | UPDATE | DELETE CREATE : 생성 UPDATE : 수정 DELETE : 반납'
+                serverInstanceNo:
+                  type: string
+                  description: Connect 서버 인스턴스 번호 get-box-infra-list 참조 actionType 이 UPDATE 또는 DELETE 인 경우, 필수 입력
+                blockStorageInstanceNo:
+                  type: string
+                  description: Connect 서버 블록 스토리지 인스턴스 번호 get-box-infra-list 참조 actionType 이 UPDATE 또는 DELETE 인 경우, 필수 입력
+                specCode:
+                  type: string
+                  description: Connect 서버 스펙 코드 actionType 이 CREATE 또는 UPDATE 인 경우, 필수 입력 get-product-spec 참조
+                storageSize:
+                  type: integer
+                  description: Connect 서버 블록 스토리지 크기(GB) actionType 이 CREATE 또는 UPDATE 인 경우, 필수 입력 10~2000 10GB 단위로 설정
+                userPassword1:
+                  type: string
+                  description: "Connect 서버 ncp1 계정 비밀번호 영문 대문자, 소문자, 숫자, 특수 문자를 각각 1자 이상 조합하여 8~14자 이내로 입력 사용 불가 특수 문자: ', \", `, ₩, /, &, $, 공백"
+                userPassword2:
+                  type: string
+                  description: "Connect 서버 ncp2 계정 비밀번호 영문 대문자, 소문자, 숫자, 특수 문자를 각각 1자 이상 조합하여 8~14자 이내로 입력 사용 불가 특수 문자: ', \", `, ₩, /, &, $, 공백"
+                softwareCode:
+                  type: string
+                  description: Linux 서버 소프트웨어 코드 actionType 이 CREATE 또는 UPDATE 인 경우, 필수 입력
+                userPassword:
+                  type: string
+                  description: "Linux 서버 계정 비밀번호 영문 대문자, 소문자, 숫자, 특수 문자를 각각 1자 이상 조합하여 8~14자 이내로 입력 사용 불가 특수 문자: ', \", `, ₩, /, &, $, 공백"
+                nasInstanceNo:
+                  type: string
+                  description: NAS 인스턴스 번호 get-box-infra-list 참조 actionType 이 DELETE 인 경우, 필수 입력
+                nasSize:
+                  type: integer
+                  description: NAS 볼륨 크기(GB) 500~10000 100GB 단위로 설정
+                count:
+                  type: integer
+                  description: NAS 개수 actionType 이 CREATE 인 경우, 필수 입력
+                hadoopClusterNo:
+                  type: string
+                  description: Hadoop 클러스터 번호 get-box-infra-list 참조 infraType 이 HD 인 인프라의 instanceNo 입력 actionType 이 UPDATE 또는 DELETE 인 경우, 필수 입력
+                edgeNodeSpecCode:
+                  type: string
+                  description: 엣지 노드 스펙 코드 get-product-spec 참조 actionType 이 CREATE 또는 UPDATE 인 경우, 필수 입력
+                masterNodeSpecCode:
+                  type: string
+                  description: 마스터 노드 스펙 코드 get-product-spec 참조 actionType 이 CREATE 또는 UPDATE 인 경우, 필수 입력
+                masterNodeStorageSize:
+                  type: integer
+                  description: 마스터 노드 블록스토리지 크기(GB) actionType 이 CREATE 인 경우, 필수 입력 100~2000 10GB 단위로 설정 4000GB, 6000GB도 사용 가능
+                workerNodeSpecCode:
+                  type: string
+                  description: 워커 노드 스펙 코드 get-product-spec 참조 actionType 이 CREATE 또는 UPDATE 인 경우, 필수 입력
+                workerNodeStorageSize:
+                  type: integer
+                  description: 워커 노드 블록스토리지 크기(GB) actionType 이 CREATE 인 경우, 필수 입력 100~2000 10GB 단위로 설정 4000GB, 6000GB도 사용 가능
+                workerNodeCount:
+                  type: integer
+                  description: 워커 노드 개수 actionType 이 CREATE 또는 UPDATE 인 경우, 필수 입력
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /box/change-box-nas-volume:
+    post:
+      operationId: ChangeBoxNasVolume
+      summary: change-box-nas-volume
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-fence
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/change-box-nas-volume
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - fenceId
+                - boxId
+                - instanceNo
+                - volumeSize
+              properties:
+                fenceId:
+                  type: integer
+                  description: Datafence 번호 get-data-fence 참조
+                boxId:
+                  type: integer
+                  description: Box 번호 get-box-list 참조
+                instanceNo:
+                  type: integer
+                  description: NAS 인스턴스 번호 get-box-infra-list 참조
+                volumeSize:
+                  type: integer
+                  description: NAS 볼륨 크기(GB) 500~10000 100GB 단위로 설정
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /box/create-box:
+    post:
+      operationId: CreateBox
+      summary: create-box
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-fence
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/create-box
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - fenceId
+                - createBoxInfo
+                - specCode
+                - storageSize
+                - userPassword
+              properties:
+                fenceId:
+                  type: integer
+                  description: Datafence 번호 get-data-fence 참조
+                description:
+                  type: string
+                  description: Box에 대한 설명
+                createBoxInfo:
+                  type: object
+                  additionalProperties: true
+                  description: Box 생성 정보
+                specCode:
+                  type: string
+                  description: Connect 서버 스펙 코드 get-product-spec 참조
+                softwareCode:
+                  type: string
+                  description: Connect 서버 소프트웨어 코드 get-product-spec 참조
+                storageSize:
+                  type: integer
+                  description: Connect 서버 블록 스토리지 크기(GB) 10~2000 10GB 단위로 설정
+                userPassword1:
+                  type: string
+                  description: "Connect 서버 ncp1 계정 비밀번호 영문 대문자, 소문자, 숫자, 특수 문자를 각각 1자 이상 조합하여 8~14자 이내로 입력 사용 불가 특수 문자: ', \", `, ₩, /, &, $, 공백"
+                userPassword2:
+                  type: string
+                  description: "Connect 서버 ncp2 계정 비밀번호 영문 대문자, 소문자, 숫자, 특수 문자를 각각 1자 이상 조합하여 8~14자 이내로 입력 사용 불가 특수 문자: ', \", `, ₩, /, &, $, 공백"
+                userPassword:
+                  type: string
+                  description: "Linux 서버 계정 비밀번호 영문 대문자, 소문자, 숫자, 특수 문자를 각각 1자 이상 조합하여 8~14자 이내로 입력 사용 불가 특수 문자: ', \", `, ₩, /, &, $, 공백"
+                nasSize:
+                  type: integer
+                  description: NAS 볼륨 크기(GB) 500~10000 100GB 단위로 설정
+                count:
+                  type: integer
+                  description: NAS 개수
+                EdgeNodeSpecCode:
+                  type: string
+                  description: 엣지 노드 스펙 코드 get-product-spec 참조
+                masterNodeSpecCode:
+                  type: string
+                  description: 마스터 노드 스펙 코드 get-product-spec 참조
+                masterNodeStorageSize:
+                  type: integer
+                  description: 마스터 노드 블록스토리지 크기(GB) 100~2000 10GB 단위로 설정
+                workerNodeSpecCode:
+                  type: string
+                  description: 워커 노드 스펙 코드 get-product-spec 참조
+                workerNodeCount:
+                  type: integer
+                  description: 워커 노드 개수
+                workerNodeStorageSize:
+                  type: integer
+                  description: 워커 노드 블록스토리지 크기(GB) 100~2000 10GB 단위로 설정
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /box/get-box-custom-image:
+    get:
+      operationId: GetBoxCustomImage
+      summary: get-box-custom-image
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-fence
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-box-custom-image
+      parameters:
+        - name: fenceId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Datafence 번호 get-data-fence 참조
+        - name: productCode
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 'Box 스펙 코드 CON | TF_CPU | TF_GPU | SVR_LNX_UBUNTU | SVR_WIN CON : Connect 서버 TF_CPU : Tensorflow 서버(CPU) TF_GPU : Tensorflow 서버(GPU) SVR_LNX_UBUNTU : Linux 서버(Ubuntu) SVR_WIN : Windows 서버'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '사용자 서버 이미지 정보: content'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /box/get-box-history:
+    get:
+      operationId: GetBoxHistory
+      summary: get-box-history
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-fence
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-box-history
+      parameters:
+        - name: fenceId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Datafence 번호
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지 번호 0~100
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지당 항목 수 1~100
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 수
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 'Box 이력 목록: content'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /box/get-box-infra-history:
+    get:
+      operationId: GetBoxInfraHistory
+      summary: get-box-infra-history
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-fence
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-box-infra-history
+      parameters:
+        - name: fenceId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Datafence 번호 get-data-fence 참조
+        - name: boxId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Box 번호 get-box-list 참조
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 0~100 (기본값: 0)'
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지당 항목 수 1~100 (기본값: 10)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 수
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 'Box 인프라 이력 목록: content'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /box/get-box-infra-list:
+    get:
+      operationId: GetBoxInfraList
+      summary: get-box-infra-list
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-fence
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-box-infra-list
+      parameters:
+        - name: fenceId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Datafence 번호 get-data-fence 참조
+        - name: boxId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Box 번호 get-box-list 참조
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 0~100 (기본값: 0)'
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지당 항목 수 1~100 (기본값: 10)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 수
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 'Box 인프라 목록: content'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /box/get-box-list:
+    get:
+      operationId: GetBoxList
+      summary: get-box-list
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-fence
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-box-list
+      parameters:
+        - name: fenceId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Datafence 번호 get-data-fence 참조
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 0~100 (기본값: 0)'
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지당 항목 수 1~100 (기본값: 10)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 수
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 'Box 목록: content'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /box/get-box-summary-info:
+    get:
+      operationId: GetBoxSummaryInfo
+      summary: get-box-summary-info
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-fence
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-box-summary-info
+      parameters:
+        - name: fenceId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Datafence 번호 get-data-fence 참조
+        - name: boxId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Box 번호 get-box-list 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  boxId:
+                    type: integer
+                    description: Box 번호
+                  boxName:
+                    type: string
+                    description: Box 이름
+                  description:
+                    type: string
+                    description: Box에 대한 설명
+                  mountCount:
+                    type: integer
+                    description: 'Box 상태 코드 INITIALIZE | USE | ING | RETURN | TERMINATE INITIALIZE : 인프라 생성 중 USE : 이용 중 ING : 변경 중 RETURN : 반납 중 TERMINATE : 반납 완료'
+                  nasCount:
+                    type: integer
+                    description: Box 저장소의 개수
+                  nasTotalSize:
+                    type: integer
+                    description: Box 저장소의 총 용량(GB)
+                  nasInstanceNoList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: NAS 인스턴스 번호 목록
+                  nasTotalUseSize:
+                    type: integer
+                    description: Box 저장소의 총 사용량(GB)
+                  exportApplyCount:
+                    type: integer
+                    description: 반출 심사 요청 횟수
+                  webBlockStatus:
+                    type: boolean
+                    description: '외부망 차단 여부 true | false true : 차단 false : 연결'
+                  statusCode:
+                    type: string
+                    description: 'Box 상태 코드 INITIALIZE | USE | ING | RETURN | TERMINATE INITIALIZE : 인프라 생성 중 USE : 이용 중 ING : 변경 중 RETURN : 반납 중 TERMINATE : 반납 완료'
+                  statusName:
+                    type: string
+                    description: Box 상태 이름 인프라 생성중 | 이용중 | 변경 중 | 반납중 | 반납완료
+                  createDate:
+                    type: string
+                    description: Box 생성 일시 ISO 8601 형식(UTC+9 포함)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /box/get-connect-info:
+    get:
+      operationId: GetConnectInfo
+      summary: get-connect-info
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-fence
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-connect-info
+      parameters:
+        - name: fenceId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Datafence 번호 get-data-fence 참조
+        - name: boxId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Box 번호 get-box-list 참조
+        - name: instanceNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Connect 서버 인스턴스 번호 get-box-infra-list 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  storageList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 'Connect 서버 스토리지 정보: storageList'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /box/get-hadoop-cluster-info:
+    get:
+      operationId: GetHadoopClusterInfo1
+      summary: get-hadoop-cluster-info
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-fence
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-hadoop-cluster-info-1
+      parameters:
+        - name: fenceId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Datafence 번호 get-data-fence 참조
+        - name: boxId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Box 번호 get-box-list 참조
+        - name: hadoopClusterNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Hadoop 클러스터 번호 get-box-infra-list 참조 infraType 이 HD 인 인프라의 instanceNo 입력
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  connectionList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 'Hadoop 클러스터 애플리케이션 정보: connectionList'
+                  nodeSpecList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 'Hadoop 노드 정보: nodeSpecList'
+                  storageList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 'Hadoop 클러스터 스토리지 정보: storageList'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /box/get-linux-info:
+    get:
+      operationId: GetLinuxInfo1
+      summary: get-linux-info
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-fence
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-linux-info-1
+      parameters:
+        - name: fenceId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Datafence 번호 get-data-fence 참조
+        - name: boxId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Box 번호 get-box-list 참조
+        - name: instanceNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Linux 서버 인스턴스 번호 get-box-infra-list 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  storageList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 'Linux 서버 스토리지 정보: storageList'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /box/get-tensorflow-info:
+    get:
+      operationId: GetTensorFlowInfo
+      summary: get-tensorflow-info
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-fence
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-tensorflow-info
+      parameters:
+        - name: fenceId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Datafence 번호 get-data-fence 참조
+        - name: boxId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Box 번호 get-box-list 참조
+        - name: instanceNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Tensorflow 서버 인스턴스 번호 get-box-infra-list 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  connectionList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 'Tensorflow 서버 애플리케이션 정보: connectionList'
+                  storageList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 'Tensorflow 서버 스토리지 정보: storageList'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /box/get-windows-info:
+    get:
+      operationId: GetWindowsInfo
+      summary: get-windows-info
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-fence
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-windows-info
+      parameters:
+        - name: fenceId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Datafence 번호 get-data-fence 참조
+        - name: boxId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Box 번호 get-box-list 참조
+        - name: instanceNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Windows 서버 인스턴스 번호 get-box-infra-list 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  storageList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 'Windows 서버 스토리지 정보: storageList'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /box/return-box:
+    post:
+      operationId: ReturnBox
+      summary: return-box
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-fence
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/return-box
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - fenceId
+                - boxId
+              properties:
+                fenceId:
+                  type: integer
+                  description: Datafence 번호 get-data-fence 참조
+                boxId:
+                  type: integer
+                  description: Box 번호 get-box-list 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /export-approval/get-export-file-approve-detail:
+    get:
+      operationId: GetExportFileApproveDetail1
+      summary: get-export-file-approve-detail
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-fence
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-export-file-approve-detail-1
+      parameters:
+        - name: fenceId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Datafence 번호 get-data-fence 참조
+        - name: boxId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Box 번호 get-box-list 참조
+        - name: fileId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: 반출 신청 번호 get-box-list 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fenceId:
+                    type: integer
+                    description: Datafence 번호
+                  fenceName:
+                    type: string
+                    description: Datafence 이름
+                  boxId:
+                    type: integer
+                    description: Box 번호
+                  boxName:
+                    type: string
+                    description: Box 이름
+                  boxStatus:
+                    type: string
+                    description: 'Box 상태 코드 INITIALIZE | USE | ING | RETURN | TERMINATE INITIALIZE : 인프라 생성 중 USE : 이용 중 ING : 변경 중 RETURN : 반납 중 TERMINATE : 반납 완료'
+                  fileId:
+                    type: integer
+                    description: 반출 요청 번호
+                  requesterId:
+                    type: string
+                    description: 반출 신청자 아이디
+                  screenFilePath:
+                    type: string
+                    description: '반출 심사 대상 파일 이름 파일 이름: 반출 신청 시, {반출 신청 일시(ISO 8601 형식)}_{반입 번호( fileId )}_{Source 파일 이름( sourceFilePath )}으로 지정'
+                  statusCode:
+                    type: string
+                    description: 반출 심사 상태 코드 File Export Status Code 참조
+                  statusName:
+                    type: string
+                    description: 반출 심사 상태 이름 File Export Status Code 참조
+                  description:
+                    type: string
+                    description: 반출 신청에 대한 설명
+                  fileDescription:
+                    type: string
+                    description: 반출 신청 파일에 대한 설명
+                  exportPurpose:
+                    type: string
+                    description: 반출 목적
+                  rejectReason:
+                    type: string
+                    description: 반출 신청 반려 사유
+                  fileSize:
+                    type: integer
+                    description: 반출 심사 대상 파일 크기(MB)
+                  createDate:
+                    type: string
+                    description: 반출 신청 일시 ISO 8601 형식(UTC+9 포함)
+                  completeDate:
+                    type: string
+                    description: 반출 심사 일시 ISO 8601 형식(UTC+9 포함) 반출 심사를 완료한 경우, 표시
+                  resultDate:
+                    type: string
+                    description: 반출 심사 일시 ISO 8601 형식(UTC+9 포함) 반출 심사를 완료한 경우, 표시
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /export-approval/get-export-file-approve-list:
+    get:
+      operationId: GetExportFileApproveList1
+      summary: get-export-file-approve-list
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-fence
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-export-file-approve-list-1
+      parameters:
+        - name: fenceId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Datafence 번호 get-data-fence 참조
+        - name: boxId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Box 번호 get-box-list 참조
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 반출 신청 상태 코드 File Export Status Code 참조
+        - name: from
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 시작 일시 yyyyMMddHHmmss 형식
+        - name: to
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 종료 일시 yyyyMMddHHmmss 형식
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 0~100 (기본값: 0)'
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지당 항목 수 1~100 (기본값: 10)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 개수
+                  reviewBucketName:
+                    type: string
+                    description: 반출 심사 버킷 이름
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '반출 심사 대상 목록: content'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /export/cancel-file-export:
+    delete:
+      operationId: CancelFileExport
+      summary: cancel-file-export
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-fence
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/cancel-file-export
+      parameters:
+        - name: fenceId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Datafence 번호 get-data-fence 참조
+        - name: boxId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Box 번호 get-box-list 참조
+        - name: fileId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: 반출 신청 번호 get-export-list 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /export/create-file-export:
+    post:
+      operationId: CreateFileExport
+      summary: create-file-export
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-fence
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/create-file-export
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - fenceId
+                - boxId
+                - sourceNasInstanceNo
+                - sourceFilePathList
+                - targetBucketName
+                - fileDescription
+                - exportPurpose
+                - description
+              properties:
+                fenceId:
+                  type: integer
+                  description: Datafence 번호 get-data-fence 참조
+                boxId:
+                  type: integer
+                  description: Box 번호 get-box-list 참조
+                sourceNasInstanceNo:
+                  type: integer
+                  description: Source NAS 인스턴스 번호 get-source-nas-list 참조
+                sourceFilePathList:
+                  type: string
+                  description: '반출 신청 파일 이름 목록 동시 반출 신청 가능한 파일 수: 10개 파일 1개당 최대 크기: 2GB 파일 이름: {반입 번호( fileId )}_{Source 파일 이름( sourceFilePath )}으로 지정 get-import-list 참조'
+                targetBucketName:
+                  type: string
+                  description: Target 버킷 이름
+                fileDescription:
+                  type: string
+                  description: 반출 신청 파일에 대한 설명 1~1000자
+                exportPurpose:
+                  type: string
+                  description: 반출 목적 1~1000자
+                description:
+                  type: string
+                  description: 반출 신청에 대한 설명 0~50자
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /export/get-export-detail:
+    get:
+      operationId: GetExportDetail
+      summary: get-export-detail
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-fence
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-export-detail
+      parameters:
+        - name: fenceId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Datafence 번호 get-data-fence 참조
+        - name: boxId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Box 번호 get-box-list 참조
+        - name: fileId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: 반출 신청 번호 get-export-list 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fileId:
+                    type: integer
+                    description: 반출 신청 번호
+                  fenceId:
+                    type: integer
+                    description: Datafence 번호
+                  boxId:
+                    type: integer
+                    description: Box 번호
+                  boxName:
+                    type: string
+                    description: Box 이름
+                  requesterId:
+                    type: string
+                    description: 반출 신청자 아이디
+                  sourceNasName:
+                    type: string
+                    description: Source NAS 이름
+                  sourceFilePath:
+                    type: string
+                    description: 반출 신청 대상 파일 이름
+                  targetBucketName:
+                    type: string
+                    description: Target 버킷 이름
+                  statusCode:
+                    type: string
+                    description: 반출 신청 상태 코드 File Export Status Code 참조
+                  statusName:
+                    type: string
+                    description: 반출 신청 상태 이름 File Export Status Code 참조
+                  rejectReason:
+                    type: string
+                    description: 반출 신청 반려 사유 반출 심사가 반려된 경우, 표시
+                  description:
+                    type: string
+                    description: 반출 신청에 대한 설명
+                  createDate:
+                    type: string
+                    description: 반출 신청 일시 ISO 8601 형식(UTC+9 포함)
+                  resultDate:
+                    type: string
+                    description: 반출 심사 일시 ISO 8601 형식(UTC+9 포함) 반출 심사를 완료한 경우, 표시
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /export/get-export-list:
+    get:
+      operationId: GetExportList
+      summary: get-export-list
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-fence
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-export-list
+      parameters:
+        - name: fenceId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Datafence 번호 get-data-fence 참조
+        - name: boxId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Box 번호 get-box-list 참조
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 반출 신청 상태 코드 File Export Status Code 참조
+        - name: from
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 시작 일시 yyyyMMddHHmmss 형식
+        - name: to
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 종료 일시 yyyyMMddHHmmss 형식
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 0~100 (기본값: 0)'
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지당 항목 수 1~100 (기본값: 10)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 수
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '반출 요청 목록: content'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /export/get-source-nas-list:
+    get:
+      operationId: GetSourceNasList1
+      summary: get-source-nas-list
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-fence
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-source-nas-list-1
+      parameters:
+        - name: fenceId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Datafence 번호 get-data-fence 참조
+        - name: boxId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Box 번호 get-box-list 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '반출 신청 파일이 저장된 NAS 목록: content'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /fence/change-data-fence-infra:
+    post:
+      operationId: ChangeDataFenceInfra
+      summary: change-data-fence-infra
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-fence
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/change-datafence-infra
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - fenceId
+                - updateFence
+                - actionType
+              properties:
+                fenceId:
+                  type: integer
+                  description: Datafence 번호 get-data-fence 참조
+                description:
+                  type: string
+                  description: Datafence에 대한 설명
+                updateFence:
+                  type: object
+                  additionalProperties: true
+                  description: Datafence 인프라 설정 변경 정보
+                actionType:
+                  type: string
+                  description: '액션 유형 CREATE | UPDATE | DELETE CREATE : 생성 UPDATE : 수정 DELETE : 반납'
+                serverInstanceNo:
+                  type: string
+                  description: Datafence 서버 인스턴스 번호 actionType 이 UPDATE 또는 DELETE 인 경우, 필수 입력
+                specCode:
+                  type: string
+                  description: 서버 스펙 코드 actionType 이 CREATE 또는 UPDATE 인 경우, 필수 입력 get-product-spec 참조
+                softwareCode:
+                  type: string
+                  description: 서버 소프트웨어 코드 actionType 이 CREATE 또는 UPDATE 인 경우, 필수 입력
+                userPassword:
+                  type: string
+                  description: "Datafence 서버 접속 비밀번호 영문 대문자, 소문자, 숫자, 특수 문자를 각각 1자 이상 조합하여 8~14자 이내로 입력 사용 불가 특수 문자: ', \", `, ₩, /, &, $, 공백 actionType 이 CREATE 인 경우, 필수 입력"
+                serverImageNo:
+                  type: string
+                  description: 사용자 서버 이미지 번호 get-fence-custom-image 참조 actionType 이 CREATE 인 경우, 필수 입력
+                nasInstanceNo:
+                  type: string
+                  description: NAS 인스턴스 번호 actionType 이 DELETE 인 경우, 필수 입력
+                nasSize:
+                  type: integer
+                  description: NAS 볼륨 크기(GB) 500~10000 100GB 단위로 설정 actionType 이 CREATE 인 경우, 필수 입력
+                count:
+                  type: integer
+                  description: NAS 개수 actionType 이 CREATE 인 경우, 필수 입력
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /fence/change-fence-nas-volume:
+    post:
+      operationId: ChangeFenceNasVolume
+      summary: change-fence-nas-volume
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-fence
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/change-fence-nas-volume
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - fenceId
+                - instanceNo
+                - volumeSize
+              properties:
+                fenceId:
+                  type: integer
+                  description: Datafence 번호 get-data-fence 참조
+                instanceNo:
+                  type: integer
+                  description: NAS 인스턴스 번호 get-data-fence-infra-list 참조
+                volumeSize:
+                  type: integer
+                  description: NAS 볼륨 크기(GB) 500~10000 100GB 단위로 설정
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /fence/get-data-fence:
+    get:
+      operationId: GetDataFence
+      summary: get-data-fence
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-fence
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-datafence
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fenceId:
+                    type: integer
+                    description: Datafence 번호
+                  fenceName:
+                    type: string
+                    description: Datafence 이름
+                  boxCount:
+                    type: integer
+                    description: Box 개수
+                  createDate:
+                    type: string
+                    description: Datafence 생성 일시 ISO 8601 형식(UTC+9 포함)
+                  statusCode:
+                    type: string
+                    description: 'Datafence 상태 코드 INITIALIZE | USE | ING | RETURN | TERMINATE INITIALIZE : 인프라 생성 중 USE : 이용 중 ING : 변경 중 RETURN : 반납 중 TERMINATE : 반납 완료'
+                  statusName:
+                    type: string
+                    description: Datafence 상태 이름 인프라 생성중 | 이용중 | 변경 중 | 반납중 | 반납완료
+                  description:
+                    type: string
+                    description: Datafence에 대한 설명
+                  exportScreenBucketName:
+                    type: string
+                    description: 반출 심사용 버킷 이름
+                  sslVpnName:
+                    type: string
+                    description: SSL VPN 이름
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /fence/get-data-fence-infra-history:
+    get:
+      operationId: GetDataFenceInfraHistory
+      summary: get-data-fence-infra-history
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-fence
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-datafence-infra-history
+      parameters:
+        - name: fenceId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Datafence 번호 get-data-fence 참조
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 0~100 (기본값: 0)'
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지당 항목 수 1~100 (기본값: 10)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 수
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 'Datafence 이력: content'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /fence/get-data-fence-infra-list:
+    get:
+      operationId: GetDataFenceInfraList
+      summary: get-data-fence-infra-list
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-fence
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-datafence-infra-list
+      parameters:
+        - name: fenceId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Datafence 번호 get-data-fence 참조
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 0~100 (기본값: 0)'
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지당 항목 수 1~100 (기본값: 10)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 수
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 'Datafence 목록: content'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /fence/get-fence-custom-image:
+    get:
+      operationId: GetFenceCustomImage
+      summary: get-fence-custom-image
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-fence
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-fence-custom-image
+      parameters:
+        - name: fenceId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Datafence 번호 get-data-fence 참조
+        - name: productCode
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Datafence 상품 코드 FENCE_UBUNTU (유효 값)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '사용자 서버 이미지 정보: content'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /import/create-file-import:
+    post:
+      operationId: CreateFileImport
+      summary: create-file-import
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-fence
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/create-file-import
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - fenceId
+                - boxId
+                - sourceBucketName
+                - sourceFilePathList
+                - targetNasInstanceNo
+                - description
+              properties:
+                fenceId:
+                  type: integer
+                  description: Datafence 번호 get-data-fence 참조
+                boxId:
+                  type: integer
+                  description: Box 번호 get-box-list 참조
+                sourceBucketName:
+                  type: string
+                  description: Source 버킷 이름
+                sourceFilePathList:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: '반입 신청 파일 이름 목록 동시 반입 신청 가능한 파일 수: 10개 파일 1개당 최대 크기: 2GB'
+                targetNasInstanceNo:
+                  type: string
+                  description: Target NAS 인스턴스 번호 get-target-nas-list 참조
+                description:
+                  type: string
+                  description: 반입 신청에 대한 설명 1~50자
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: API 처리 결과 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /import/get-import-detail:
+    get:
+      operationId: GetImportDetail
+      summary: get-import-detail
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-fence
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-import-detail
+      parameters:
+        - name: fenceId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Datafence 번호 get-data-fence 참조
+        - name: boxId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Box 번호 get-box-list 참조
+        - name: fileId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: 반입 신청 번호 get-import-list 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fileId:
+                    type: integer
+                    description: 반입 신청 번호
+                  fenceId:
+                    type: integer
+                    description: Datafence 번호
+                  boxId:
+                    type: integer
+                    description: Box 번호
+                  boxName:
+                    type: string
+                    description: Box 이름
+                  sourceBucketName:
+                    type: string
+                    description: Source 버킷 이름
+                  sourceFilePath:
+                    type: string
+                    description: 반입 신청 대상 파일 이름
+                  targetNasName:
+                    type: string
+                    description: Target NAS 이름
+                  description:
+                    type: string
+                    description: 반입 신청에 대한 설명
+                  statusCode:
+                    type: string
+                    description: 반입 신청 상태 코드 File Import Status Code 참조
+                  statusName:
+                    type: string
+                    description: 반입 신청 상태 이름 File Import Status Code 참조
+                  createDate:
+                    type: string
+                    description: 반입 신청 일시 ISO 8601 형식(UTC+9 포함)
+                  completeDate:
+                    type: string
+                    description: 반입 완료 일시 ISO 8601 형식(UTC+9 포함)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /import/get-import-list:
+    get:
+      operationId: GetImportList
+      summary: get-import-list
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-fence
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-import-list
+      parameters:
+        - name: fenceId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Datafence 번호 get-data-fence 참조
+        - name: boxId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Box 번호 get-box-list 참조
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 반입 신청 상태 코드 File Import Status Code 참조
+        - name: from
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 시작 일시 yyyyMMddHHmmss 형식
+        - name: to
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 종료 일시 yyyyMMddHHmmss 형식
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 0~100 (기본값: 0)'
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지당 항목 수 1~100 (기본값: 10)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 수
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '반입 신청 목록: content'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /import/get-target-nas-list:
+    get:
+      operationId: GetTargetNasList1
+      summary: get-target-nas-list
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-fence
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-target-nas-list-1
+      parameters:
+        - name: fenceId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Datafence 번호 get-data-fence 참조
+        - name: boxId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Box 번호 get-box-list 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 'Target NAS 목록: content'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /object-storage/get-bucket-list:
+    get:
+      operationId: GetBucketList2
+      summary: get-bucket-list
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-fence
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-bucket-list-2
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: 버킷 이름
+                  enableable:
+                    type: boolean
+                    description: '버킷 사용 가능 여부 true | false true : 사용 가능 false : 사용 불가능'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /product/get-product-spec:
+    get:
+      operationId: GetProductSpec
+      summary: get-product-spec
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-fence
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-product-spec
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  productCode:
+                    type: string
+                    description: Datafence 상품 코드 Product Code 참조
+                  defaultQuantity:
+                    type: integer
+                    description: 해당 스펙으로 생성할 수 있는 기본 수량
+                  minQuantity:
+                    type: integer
+                    description: 해당 스펙으로 생성할 수 있는 최소 수량
+                  maxQuantity:
+                    type: integer
+                    description: 해당 스펙으로 생성할 수 있는 최대 수량
+                  specCodeList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '서버 또는 BOX 스펙 코드 목록: specCodeList'
+                  softwareCodeList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 서버 소프트웨어 코드 목록
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+components:
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  schemas:
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

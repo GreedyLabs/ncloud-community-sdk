@@ -1,0 +1,316 @@
+openapi: 3.0.3
+info:
+  title: source-commit
+  description: ''
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: true
+    gov: true
+
+  x-ncloud-nrn:
+
+    productName: SourceCommit
+    resource_types:
+      - Repository
+
+servers:
+  - url: https://sourcecommit.apigw.ntruss.com/api/v1
+    description: source-commit 민간
+    x-ncloud-env: public
+  - url: https://sourcecommit.apigw.fin-ntruss.com/api/v1
+    description: source-commit 금융
+    x-ncloud-env: financial
+  - url: https://sourcecommit.apigw.gov-ntruss.com/api/v1
+    description: source-commit 공공
+    x-ncloud-env: gov
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /repository:
+    get:
+      operationId: GetRepositories
+      tags:
+        - source-commit
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRepositoryListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get repositories
+    post:
+      operationId: CreateRepository
+      tags:
+        - source-commit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRepository'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: boolean
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Create repository
+  /repository/id/{repositoryId}:
+    delete:
+      operationId: DeleteRepository
+      tags:
+        - source-commit
+      parameters:
+        - name: repositoryId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: boolean
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Delete repository
+    get:
+      operationId: GetRepositoryById
+      tags:
+        - source-commit
+      parameters:
+        - name: repositoryId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRepositoryDetailResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get repository by ID
+    patch:
+      operationId: ChangeRepository
+      tags:
+        - source-commit
+      parameters:
+        - name: repositoryId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeRepository'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: boolean
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Change repository
+  /repository/{repositoryName}:
+    get:
+      operationId: GetRepository
+      tags:
+        - source-commit
+      parameters:
+        - name: repositoryName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRepositoryDetailResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get repository
+components:
+  schemas:
+    ChangeRepository:
+      type: object
+      properties:
+        description:
+          type: string
+        linked:
+          $ref: '#/components/schemas/CreateRepositoryLinked'
+    CreateRepository:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        linked:
+          $ref: '#/components/schemas/CreateRepositoryLinked'
+    CreateRepositoryLinked:
+      type: object
+      properties:
+        FileSafer:
+          type: boolean
+    GetRepositoryDetailResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: "repository id"
+        name:
+          type: string
+          description: "repository name"
+        description:
+          type: string
+          description: "repository description"
+        created:
+          $ref: '#/components/schemas/GetRepositoryDetailResponseCreated'
+        git:
+          $ref: '#/components/schemas/GetRepositoryDetailResponseGit'
+        linked:
+          $ref: '#/components/schemas/GetRepositoryDetailResponseLinked'
+    GetRepositoryDetailResponseCreated:
+      type: object
+      properties:
+        timestamp:
+          type: number
+          format: float
+          description: "repository created timestamp"
+        user:
+          type: string
+          description: "repository created user"
+    GetRepositoryDetailResponseGit:
+      type: object
+      properties:
+        https:
+          type: string
+          description: "git repository https url"
+        ssh:
+          type: string
+          description: "git repository ssh url"
+    GetRepositoryDetailResponseLinked:
+      type: object
+      properties:
+        FileSafer:
+          type: boolean
+          description: "FileSafer use"
+    GetRepositoryListResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+          format: int32
+          description: "total repository count"
+        repository:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetRepositoryListResponseRepository'
+    GetRepositoryListResponseRepository:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: "repository id"
+        name:
+          type: string
+          description: "repository name"
+        permission:
+          type: string
+          description: "repository permission"
+        actionName:
+          type: string
+          description: "repository detail action name"
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

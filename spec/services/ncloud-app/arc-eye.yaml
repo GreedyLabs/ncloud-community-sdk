@@ -1,0 +1,226 @@
+openapi: 3.0.3
+info:
+  title: arc-eye
+  description: arc-eye
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: false
+    gov: false
+
+  x-ncloud-nrn:
+
+    productName: ARCeye
+    resource_types:
+      - Project
+      - Location
+      - MapData
+      - VLTask
+      - API
+      - Notification
+      - Dashboard
+
+servers:
+  - url: https://arc.apigw.ntruss.com
+    description: arc-eye 민간
+    x-ncloud-env: public
+security:
+  # Arc Eye uses a single per-app secret header against a customer-specific
+  # InvokeURL (NOT the apigw.ntruss.com host).
+  - arcEyeSecret: []
+paths:
+  /map-data/v1/{projectId}/{signature}/{task}/download-urls:
+    get:
+      operationId: MapDataDownloadUrlSApi
+      summary: 사전 단계
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - arc-eye
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/arc-eye-mapdata-download-urls-api
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: number
+          description: 프로젝트 ID 콘솔의 작업 상세 화면에 표시되는 Invoke URL에서 확인 가능
+        - name: signature
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 프로젝트 서명 값 콘솔의 작업 상세 화면에 표시되는 Invoke URL에서 확인 가능
+        - name: task
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 조회 대상 Task 종류 emapper | robot-map 콘솔의 작업 상세 화면에 표시되는 Invoke URL에서 확인 가능
+        - name: locationId
+          in: query
+          required: true
+          schema:
+            type: number
+          description: 대상 로케이션 ID Map Data - 로케이션 조회 응답의 locationId
+        - name: version
+          in: query
+          required: false
+          schema:
+            type: number
+          description: 대상 버전 번호 Map Data - 이력 조회 응답의 version 생략 시 최신 버전 반환
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '다운로드 대상 파일 목록: data'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /map-data/v1/{projectId}/{signature}/{task}/locations:
+    get:
+      operationId: MapDataLocationSApi
+      summary: 사전 단계
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - arc-eye
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/arc-eye-mapdata-locations-api
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: number
+          description: 프로젝트 ID 다운로드 URL 조회 화면에서 조회 가능
+        - name: signature
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 프로젝트 서명 값 다운로드 URL 조회 화면에서 조회 가능
+        - name: task
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 조회 대상 Task 종류 emapper | robot-map 다운로드 URL 조회 화면에서 조회 가능
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  locations:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '결과가 존재하는 로케이션 목록: locations'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /map-data/v1/{projectId}/{signature}/{task}/versions:
+    get:
+      operationId: MapDataVersionsApi
+      summary: 사전 단계
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - arc-eye
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/arc-eye-mapdata-versions-api
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: number
+          description: 프로젝트 ID 다운로드 URL 조회 화면에서 조회 가능
+        - name: signature
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 프로젝트 서명 값 다운로드 URL 조회 화면에서 조회 가능
+        - name: task
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 조회 대상 Task 종류 emapper | robot-map 다운로드 URL 조회 화면에서 조회 가능
+        - name: locationId
+          in: query
+          required: true
+          schema:
+            type: number
+          description: 대상 로케이션 ID Map Data - 로케이션 조회 응답의 locationId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  versions:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '해당 로케이션의 변환 버전 목록 버전 번호 내림차순 정렬 : versions'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+components:
+  securitySchemes:
+    arcEyeSecret:
+      type: apiKey
+      in: header
+      name: X-ARCEYE-SECRET
+      description: Per-app Arc Eye secret issued in NCP console.
+  schemas:
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

@@ -1,0 +1,1093 @@
+openapi: 3.0.3
+info:
+  title: vpe
+  description: vpe
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: false
+    gov: true
+
+  x-ncloud-nrn-todo: true
+servers:
+  - url: https://vpe.apigw.ntruss.com
+    description: vpe 민간
+    x-ncloud-env: public
+  - url: https://vpe.apigw.gov-ntruss.com
+    description: vpe 공공
+    x-ncloud-env: gov
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /players:
+    get:
+      operationId: List
+      summary: 플레이어 목록 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - vpe
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/vpe-api-list
+      parameters:
+        - name: page_no
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~1000 (기본값: 1)'
+        - name: page_size
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지당 항목 수 10~1000 (기본값: 10)'
+        - name: sort_type
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '생성일 기준 정렬 순서 desc (기본값) | asc desc : 내림차순 asc : 오름차순'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: Create
+      summary: 플레이어 생성
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - vpe
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/vpe-api-create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - domains
+                - name
+                - type
+                - domain
+              properties:
+                auto_update:
+                  type: string
+                  description: '플레이어 SDK 자동 업데이트 여부 Y (기본값) | N Y : 사용 N : 사용 안 함'
+                domains:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: '사이트 도메인 목록: domains'
+                name:
+                  type: string
+                  description: "플레이어 이름 영문자, 숫자, 특수 문자 '_', '-', '@'를 조합하여 3~30자 이내로 입력 문자열 시작은 영문자로 구성 중복 및 유효성 검증: 플레이어 이름 체크 참조"
+                version:
+                  type: string
+                  description: 플레이어 SDK 버전 플레이어 SDK 버전 조회 참조 미입력 시 최신 버전으로 생성
+                type:
+                  type: string
+                  description: '사이트 도메인 유형 web | ios | aos web : 웹사이트 URL ios : iOS 앱 패키지 아이디 aos : Android 앱 패키지 아이디'
+                domain:
+                  type: string
+                  description: 도메인 또는 모바일 앱 패키지 아이디
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /players/checkName:
+    get:
+      operationId: CheckName
+      summary: 플레이어 이름 체크
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - vpe
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/vpe-api-check-name
+      parameters:
+        - name: name
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 플레이어 이름 영문자, 숫자, 특수 문자 '_', '-', '@'를 조합하여 3~30자 이내로 입력 문자열 시작은 영문자로 구성
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: '이름 체크 결과 사용 가능한 이름인 경우: ok 사용 불가능한 이름인 경우: 사용 불가능 이유'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /players/versions:
+    get:
+      operationId: Versions
+      summary: 플레이어 SDK 버전 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - vpe
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/vpe-api-versions
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '버전 목록: result'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /players/{player_no}:
+    get:
+      operationId: View
+      summary: 플레이어 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - vpe
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/vpe-api-view
+      parameters:
+        - name: player_no
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 플레이어 번호 플레이어 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    put:
+      operationId: Update
+      summary: 플레이어 수정
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - vpe
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/vpe-api-update
+      parameters:
+        - name: player_no
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 플레이어 번호 플레이어 목록 조회 참조
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - domains
+                - type
+                - domain
+              properties:
+                domains:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: '사이트 도메인 목록: domains'
+                type:
+                  type: string
+                  description: '사이트 도메인 유형 web | ios | aos web : 웹사이트 URL ios : iOS 앱 패키지 아이디 aos : Android 앱 패키지 아이디'
+                domain:
+                  type: string
+                  description: 도메인 또는 모바일 앱 패키지 아이디
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: Delete
+      summary: 플레이어 삭제
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - vpe
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/vpe-api-delete
+      parameters:
+        - name: player_no
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 플레이어 번호 플레이어 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /players/{player_no}/applyDev:
+    put:
+      operationId: DeployDev
+      summary: 플레이어 배포(Develop)
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - vpe
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/vpe-api-deploy-dev
+      parameters:
+        - name: player_no
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 플레이어 번호 플레이어 목록 조회 참조
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - option
+              properties:
+                option:
+                  type: object
+                  additionalProperties: true
+                  description: '플레이어 옵션 정보 Standard 요금제: 전체 옵션 지원 Basic 요금제: 일부 옵션 지원'
+                ui:
+                  type: string
+                  description: '버튼 UI 환경 pc (기본값) | mobile pc : PC mobile : 모바일'
+                flow:
+                  type: string
+                  description: '생성 위치 left (기본값)| right left : 왼쪽 right : 오른쪽 position 위치에 기존 버튼 존재 시 해당 버튼의 왼쪽 또는 오른쪽에 생성'
+                position:
+                  type: string
+                  description: '버튼 위치 left-top | left-bottom | right-top (기본값) | right-bottom left-top : 좌측 상단 left-bottom : 좌측 하단 right-top : 우측 상단 right-bottom : 우측 하단'
+                icon:
+                  type: string
+                  description: 버튼 이미지 URL
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /players/{player_no}/applyProd:
+    put:
+      operationId: DeployPrd
+      summary: 플레이어 배포(Production)
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - vpe
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/vpe-api-deploy-prd
+      parameters:
+        - name: player_no
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 플레이어 번호 플레이어 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /players/{player_no}/clone:
+    post:
+      operationId: Clone
+      summary: 플레이어 복제
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - vpe
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/vpe-api-clone
+      parameters:
+        - name: player_no
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 플레이어 번호 플레이어 목록 조회 참조
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - version
+              properties:
+                auto_update:
+                  type: string
+                  description: '플레이어 SDK 자동 업데이트 여부 Y (기본값) | N Y : 사용 N : 사용 안 함'
+                name:
+                  type: string
+                  description: 플레이어 이름 영문자, 숫자, 특수 문자 '_', '-', '@'를 허용하며, 3~30자 이내로 입력 문자열 시작은 영문자로 구성 플레이어 이름 체크 참조
+                version:
+                  type: string
+                  description: 플레이어 SDK 버전 플레이어 SDK 버전 조회 참조 미입력 시 최신 버전으로 생성
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /players/{player_no}/options:
+    get:
+      operationId: Option
+      summary: 플레이어 옵션 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - vpe
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/vpe-api-option
+      parameters:
+        - name: player_no
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 플레이어 번호 플레이어 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /players/{player_no}/rollback:
+    put:
+      operationId: OptionReset
+      summary: 플레이어 롤백(Develop)
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - vpe
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/vpe-api-option-reset
+      parameters:
+        - name: player_no
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 플레이어 번호 플레이어 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/charts/currentViewers:
+    get:
+      operationId: CurrentViewers
+      summary: 실시간 시청자 수 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - vpe
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/vpe-api-currentviewers
+      parameters:
+        - name: device
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 플레이어 재생 환경 PC,Mobile (기본값)| PC | Mobile
+        - name: videoType
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '재생 소스 구분 VOD,LIVE (기본값) | VOD | LIVE VOD,LIVE : VOD 비디오, LIVE 스트림 VOD : VOD 비디오 LIVE : LIVE 스트림'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/charts/playCnt:
+    get:
+      operationId: Playcnt
+      summary: 전체 재생 수 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - vpe
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/vpe-api-playcnt
+      parameters:
+        - name: device
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 플레이어 재생 환경 PC,Mobile (기본값)| PC | Mobile
+        - name: videoType
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '재생 소스 구분 VOD,LIVE (기본값) | VOD | LIVE VOD,LIVE : VOD 비디오, LIVE 스트림 VOD : VOD 비디오 LIVE : LIVE 스트림'
+        - name: startDate
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 시작 일시 날짜 형식(UTC)
+        - name: endDate
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 종료 일시 날짜 형식(UTC)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/charts/playTimeSum:
+    get:
+      operationId: PlaytimeSum
+      summary: 전체 재생 시간 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - vpe
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/vpe-api-playtimesum
+      parameters:
+        - name: device
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 플레이어 재생 환경 PC,Mobile (기본값)| PC | Mobile
+        - name: videoType
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '재생 소스 구분 VOD,LIVE (기본값) | VOD | LIVE VOD,LIVE : VOD 비디오, LIVE 스트림 VOD : VOD 비디오 LIVE : LIVE 스트림'
+        - name: startDate
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 시작 일시 날짜 형식(UTC)
+        - name: endDate
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 종료 일시 날짜 형식(UTC)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/charts/uniqUserCnt:
+    get:
+      operationId: UniqUserCnt
+      summary: 유니크 사용자 수 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - vpe
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/vpe-api-uniqusercnt
+      parameters:
+        - name: device
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 플레이어 재생 환경 PC,Mobile (기본값)| PC | Mobile
+        - name: videoType
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '재생 소스 구분 VOD,LIVE (기본값) | VOD | LIVE VOD,LIVE : VOD 비디오, LIVE 스트림 VOD : VOD 비디오 LIVE : LIVE 스트림'
+        - name: startDate
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 시작 일시 날짜 형식(UTC)
+        - name: endDate
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 종료 일시 날짜 형식(UTC)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/contentsSummary:
+    get:
+      operationId: ContentsSummary
+      summary: 콘텐츠 재생 목록 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - vpe
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/vpe-api-contentssummary
+      parameters:
+        - name: device
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 플레이어 재생 환경 PC,Mobile (기본값)| PC | Mobile
+        - name: videoType
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '재생 소스 구분 VOD,LIVE (기본값) | VOD | LIVE VOD,LIVE : VOD 비디오, LIVE 스트림 VOD : VOD 비디오 LIVE : LIVE 스트림'
+        - name: startDate
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 시작 일시 날짜 형식(UTC)
+        - name: endDate
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 종료 일시 날짜 형식(UTC)
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~1000 (기본값: 1)'
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지당 항목 수 10~100 (기본값: 10)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/contentsSummary/playCountTop10:
+    get:
+      operationId: ContentsSummaryPlaycounttop10
+      summary: 콘텐츠 재생 횟수 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - vpe
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/vpe-api-contentssummary-playcounttop10
+      parameters:
+        - name: device
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 플레이어 재생 환경 PC,Mobile (기본값)| PC | Mobile
+        - name: videoType
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '재생 소스 구분 VOD,LIVE (기본값) | VOD | LIVE VOD,LIVE : VOD 비디오, LIVE 스트림 VOD : VOD 비디오 LIVE : LIVE 스트림'
+        - name: startDate
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 시작 일시 날짜 형식(UTC)
+        - name: endDate
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 종료 일시 날짜 형식(UTC)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '재생 횟수 TOP 10 콘텐츠 목록: result'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/contentsSummary/playTimeTop10:
+    get:
+      operationId: ContentsSummaryPlaytimetop10
+      summary: 콘텐츠 재생 시간 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - vpe
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/vpe-api-contentssummary-playtimetop10
+      parameters:
+        - name: device
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 플레이어 재생 환경 PC,Mobile (기본값)| PC | Mobile
+        - name: videoType
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '재생 소스 구분 VOD,LIVE (기본값) | VOD | LIVE VOD,LIVE : VOD 비디오, LIVE 스트림 VOD : VOD 비디오 LIVE : LIVE 스트림'
+        - name: startDate
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 시작 일시 날짜 형식(UTC)
+        - name: endDate
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 종료 일시 날짜 형식(UTC)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '재생 시간 TOP 10 콘텐츠 목록: result'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/sessionRecent:
+    get:
+      operationId: SessionRecent
+      summary: 세션 최근 목록 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - vpe
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/vpe-api-sessionrecent
+      parameters:
+        - name: device
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 플레이어 재생 환경 PC,Mobile (기본값)| PC | Mobile
+        - name: videoType
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '재생 소스 구분 VOD,LIVE (기본값) | VOD | LIVE VOD,LIVE : VOD 비디오, LIVE 스트림 VOD : VOD 비디오 LIVE : LIVE 스트림'
+        - name: startDate
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 시작 일시 날짜 형식(UTC)
+        - name: endDate
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 종료 일시 날짜 형식(UTC)
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 세션 수 N~100
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '세션 정보: result'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/sessionRecent/{SessionUUID}:
+    get:
+      operationId: SessionRecentUuid
+      summary: 세션 상세 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - vpe
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/vpe-api-sessionrecent-uuid
+      parameters:
+        - name: Session UUID
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 유니크 사용자 번호 UUID 형식
+        - name: SessionUUID
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 응답 코드
+                  message:
+                    type: string
+                    description: 응답 메시지
+                  result:
+                    type: object
+                    additionalProperties: true
+                    description: 세션 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+components:
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  schemas:
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

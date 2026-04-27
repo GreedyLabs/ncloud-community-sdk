@@ -1,0 +1,1478 @@
+openapi: 3.0.3
+info:
+  title: Data Catalog
+  description: Data Catalog
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: false
+    gov: false
+
+  x-ncloud-nrn:
+
+    productName: DataCatalog
+    resource_types:
+      - TagTemplate
+      - Classifier
+      - Connection
+      - Scanner
+      - Database
+      - Catalog
+
+servers:
+  - url: https://datacatalog.apigw.ntruss.com
+    description: data-catalog 민간
+    x-ncloud-env: public
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /catalogs:
+    get:
+      operationId: CataLogGetCataLogS
+      summary: getCatalogs
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-catalog
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-datacatalog-catalog-getcatalogs
+      parameters:
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~N (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 출력 수 1~200 (기본값: 20)'
+      responses:
+        '200':
+          description: |
+            OK. Verified against the live NCP API on 2026-04-26: the response
+            body is a top-level JSON array of catalog objects, not a single
+            object as the docparse-derived shape implied.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    catalogId:
+                      type: integer
+                      description: 카탈로그 아이디
+                    catalogStatus:
+                      type: string
+                      description: '카탈로그 상태 CREATED | DELETED CREATED : 생성됨 DELETED : 삭제됨'
+                    metastoreStatus:
+                      type: string
+                      description: '카탈로그 메타스토어 상태 METASTORE_STARTING | METASTORE_RUNNING | METASTORE_CONFIGURING | METASTORE_STOPPING | METASTORE_STOPPED | METASTORE_FAILED_START METASTORE_STARTING : 시작 중 METASTORE_RUNNING : 정상 METASTORE_CONFIGURING : 재설정 중 METASTORE_STOPPING : 정지 중 METASTORE_STOPPED : 정지 METASTORE_FAILED_START : 시작 실패'
+                    createTime:
+                      type: string
+                      description: 카탈로그 생성 일시 ISO 8601 형식
+                    updateTime:
+                      type: string
+                      description: 업데이트 일시 ISO 8601 형식
+                  additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /catalogs/{catalogId}/connections:
+    get:
+      operationId: ConnectionGetConnections
+      summary: getConnections
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-catalog
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-datacatalog-connection-getconnections
+      parameters:
+        - name: catalogId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 카탈로그 아이디 getCatalogs 참조
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~N (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 출력 수 1~200 (기본값: 20)'
+        - name: searchValue
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 검색 키워드 커넥션 이름 또는 설명으로 검색 가능 한글 입력 시 URL 인코딩 필요
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pageNo:
+                    type: integer
+                    description: 페이지 번호
+                  pageSize:
+                    type: integer
+                    description: 페이지 출력 수
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 수
+                  connectionResponseList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '커넥션 목록: connectionResponseList'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /catalogs/{catalogId}/connections/{connectionId}:
+    get:
+      operationId: ConnectionGetConnection
+      summary: getConnection
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-catalog
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-datacatalog-connection-getconnection
+      parameters:
+        - name: catalogId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 카탈로그 아이디 getCatalogs 참조
+        - name: connectionId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 커넥션 아이디 getConnections 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  connectionId:
+                    type: integer
+                    description: 커넥션 아이디
+                  catalogId:
+                    type: integer
+                    description: 카탈로그 아이디
+                  name:
+                    type: string
+                    description: 커넥션 이름
+                  description:
+                    type: string
+                    description: 커넥션 설명
+                  type:
+                    type: string
+                    description: 데이터 유형
+                  connectionConfigJson:
+                    type: object
+                    additionalProperties: true
+                    description: 데이터 상세 정보
+                  createTime:
+                    type: string
+                    description: 커넥션 생성 일시 ISO 8601 형식
+                  updateTime:
+                    type: string
+                    description: 업데이트 일시 ISO 8601 형식
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /catalogs/{catalogId}/databases:
+    get:
+      operationId: DatabaseGetDatabaseS
+      summary: getDatabases
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-catalog
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-datacatalog-database-getdatabases
+      parameters:
+        - name: catalogId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 카탈로그 아이디 getCatalogs 참조
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~N (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 출력 수 1~200 (기본값: 20)'
+        - name: searchValue
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 검색 키워드 데이터베이스 이름으로 검색 가능
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pageNo:
+                    type: integer
+                    description: 페이지 번호
+                  pageSize:
+                    type: integer
+                    description: 페이지 출력 수
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 수
+                  requestId:
+                    type: string
+                    description: 요청에 대한 아이디 UUID 형식
+                  databaseResponseList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '데이터베이스 목록: databaseResponseList'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /catalogs/{catalogId}/databases/{databaseName}:
+    get:
+      operationId: DatabaseGetDatabase
+      summary: getDatabase
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-catalog
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-datacatalog-database-getdatabase
+      parameters:
+        - name: catalogId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 카탈로그 아이디 getCatalogs 참조
+        - name: databaseName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 데이터베이스 이름 getDatabases 참조
+        - name: includeTags
+          in: query
+          required: true
+          schema:
+            type: boolean
+          description: '응답 내 태그 포함 여부 true | false true : 포함 false : 포함 안 함'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  catalogId:
+                    type: integer
+                    description: 카탈로그 아이디
+                  name:
+                    type: string
+                    description: 데이터베이스 이름
+                  databaseName:
+                    type: string
+                    description: 데이터베이스 이름
+                  description:
+                    type: string
+                    description: 데이터베이스 설명
+                  location:
+                    type: string
+                    description: 데이터베이스 위치
+                  tagKeyTypeValueList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '태그 목록: tagKeyTypeValueList 요청에서 includeTags 가 true 인 경우, 표시'
+                  createTime:
+                    type: string
+                    description: 데이터베이스 생성 일시 ISO 8601 형식
+                  updateTime:
+                    type: string
+                    description: 데이터베이스 업데이트 일시 ISO 8601 형식
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /catalogs/{catalogId}/databases/{databaseName}/tables:
+    get:
+      operationId: TableGetTableSbyDatabase
+      summary: getTablesByDatabase
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-catalog
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-datacatalog-table-gettablesbydatabase
+      parameters:
+        - name: catalogId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 카탈로그 아이디 getCatalogs 참조
+        - name: databaseName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 데이터베이스 이름 getDatabases 참조
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~N (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 출력 수 1~200 (기본값: 20)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pageNo:
+                    type: integer
+                    description: 페이지 번호
+                  pageSize:
+                    type: integer
+                    description: 페이지 출력 수
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 수
+                  requestId:
+                    type: string
+                    description: 요청에 대한 아이디 UUID 형식
+                  tableResponseList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '테이블 목록: tableResponseList'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /catalogs/{catalogId}/databases/{databaseName}/tables/{tableName}:
+    get:
+      operationId: TableGetTable
+      summary: getTable
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-catalog
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-datacatalog-table-gettable
+      parameters:
+        - name: catalogId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 카탈로그 아이디 getCatalogs 참조
+        - name: databaseName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 데이터베이스 이름 getDatabases 참조
+        - name: tableName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 테이블 이름 getTables 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pageNo:
+                    type: integer
+                    description: 페이지 번호
+                  pageSize:
+                    type: integer
+                    description: 페이지 출력 수
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 수
+                  requestId:
+                    type: string
+                    description: 요청에 대한 아이디 UUID 형식
+                  tableResponseList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '테이블 정보: tableResponseList'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /catalogs/{catalogId}/databases/{databaseName}/tables/{tableName}/partition-keys:
+    get:
+      operationId: TableGetTablePartItionKeys
+      summary: getTablePartitionKeys
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-catalog
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-datacatalog-table-gettablepartitionkeys
+      parameters:
+        - name: catalogId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 카탈로그 아이디 getCatalogs 참조
+        - name: databaseName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 데이터베이스 이름 getDatabases 참조
+        - name: tableName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 테이블 이름 getTables 참조
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~N (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 출력 수 1~200 (기본값: 20)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pageNo:
+                    type: integer
+                    description: 페이지 번호
+                  pageSize:
+                    type: integer
+                    description: 페이지 출력 수
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 수
+                  requestId:
+                    type: string
+                    description: 요청에 대한 아이디 UUID 형식
+                  partitionKeys:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '파티션 키 목록: partitionKeys'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /catalogs/{catalogId}/databases/{databaseName}/tables/{tableName}/partitions:
+    get:
+      operationId: TableGetTablePartItions
+      summary: getTablePartitions
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-catalog
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-datacatalog-table-gettablepartitions
+      parameters:
+        - name: catalogId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 카탈로그 아이디 getCatalogs 참조
+        - name: databaseName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 데이터베이스 이름 getDatabases 참조
+        - name: tableName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 테이블 이름 getTables 참조
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~N (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 출력 수 1~200 (기본값: 20)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pageNo:
+                    type: integer
+                    description: 페이지 번호
+                  pageSize:
+                    type: integer
+                    description: 페이지 출력 수
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 수
+                  requestId:
+                    type: string
+                    description: 요청에 대한 아이디 UUID 형식
+                  partitionList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '파티션 목록: partitionList'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /catalogs/{catalogId}/databases/{databaseName}/tables/{tableName}/properties:
+    get:
+      operationId: TableGetTableProPerTies
+      summary: getTableProperties
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-catalog
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-datacatalog-table-gettableproperties
+      parameters:
+        - name: catalogId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 카탈로그 아이디 getCatalogs 참조
+        - name: databaseName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 데이터베이스 이름 getDatabases 참조
+        - name: tableName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 테이블 이름 getTables 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  storageFormatInfo:
+                    type: object
+                    additionalProperties: true
+                    description: 스토리지 포맷 정보
+                  serdeParams:
+                    type: object
+                    additionalProperties: true
+                    description: SerDe 파라미터
+                  tableParams:
+                    type: object
+                    additionalProperties: true
+                    description: 테이블 파라미터
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /catalogs/{catalogId}/databases/{databaseName}/tables/{tableName}/schema:
+    get:
+      operationId: TableGetTableSchema
+      summary: getTableAllVersion
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-catalog
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-datacatalog-table-gettableschema
+      parameters:
+        - name: catalogId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 카탈로그 아이디 getCatalogs 참조
+        - name: databaseName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 데이터베이스 이름 getDatabases 참조
+        - name: tableName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 테이블 이름 getTables 참조
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~N (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 출력 수 1~200 (기본값: 20)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pageNo:
+                    type: integer
+                    description: 페이지 번호
+                  pageSize:
+                    type: integer
+                    description: 페이지 출력 수
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 수
+                  requestId:
+                    type: string
+                    description: 요청에 대한 아이디 UUID 형식
+                  schema:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '스키마 정보: schema'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /catalogs/{catalogId}/databases/{databaseName}/tables/{tableName}/schema-and-partition-keys:
+    get:
+      operationId: TableGetTableSchemaAndPartItionKeys
+      summary: getTableSchemaAndPartitionKeys
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-catalog
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-datacatalog-table-gettableschemaandpartitionkeys
+      parameters:
+        - name: catalogId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 카탈로그 아이디 getCatalogs 참조
+        - name: databaseName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 데이터베이스 이름 getDatabases 참조
+        - name: tableName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 테이블 이름 getTables 참조
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~N (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 출력 수 1~200 (기본값: 20)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pageNo:
+                    type: integer
+                    description: 페이지 번호
+                  pageSize:
+                    type: integer
+                    description: 페이지 출력 수
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 수
+                  requestId:
+                    type: string
+                    description: 요청에 대한 아이디 UUID 형식
+                  schema:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '스키마 및 파티션 키 정보: schema'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /catalogs/{catalogId}/databases/{databaseName}/tables/{tableName}/schema-versions:
+    get:
+      operationId: TableGetTableSchemaVersions
+      summary: getTableSchemaVersions
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-catalog
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-datacatalog-table-gettableschemaversions
+      parameters:
+        - name: catalogId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 카탈로그 아이디 getCatalogs 참조
+        - name: databaseName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 데이터베이스 이름 getDatabases 참조
+        - name: tableName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 테이블 이름 getTables 참조
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~N (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 출력 수 1~200 (기본값: 20)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pageNo:
+                    type: integer
+                    description: 페이지 번호
+                  pageSize:
+                    type: integer
+                    description: 페이지 출력 수
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 수
+                  requestId:
+                    type: string
+                    description: 요청에 대한 아이디 UUID 형식
+                  schemaVersions:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '스키마 버전 목록: schemaVersions'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /catalogs/{catalogId}/databases/{databaseName}/tables/{tableName}/schema/{version}:
+    get:
+      operationId: TableGetTableSchemaByVersion
+      summary: getTableSchemaByVersion
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-catalog
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-datacatalog-table-gettableschemabyversion
+      parameters:
+        - name: catalogId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 카탈로그 아이디 getCatalogs 참조
+        - name: databaseName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 데이터베이스 이름 getDatabases 참조
+        - name: tableName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 테이블 이름 getTables 참조
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 스키마 버전 getTableSchemaVersions 참조
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~N (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 출력 수 1~200 (기본값: 20)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pageNo:
+                    type: integer
+                    description: 페이지 번호
+                  pageSize:
+                    type: integer
+                    description: 페이지 출력 수
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 수
+                  requestId:
+                    type: string
+                    description: 요청에 대한 아이디 UUID 형식
+                  schema:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '스키마 정보: schema'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /catalogs/{catalogId}/databases/{databaseName}/tables/{tableName}/tags:
+    get:
+      operationId: TableGetTableTags
+      summary: getTableTags
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-catalog
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-datacatalog-table-gettabletags
+      parameters:
+        - name: catalogId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 카탈로그 아이디 getCatalogs 참조
+        - name: databaseName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 데이터베이스 이름 getDatabases 참조
+        - name: tableName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 테이블 이름 getTables 참조
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~N (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 출력 수 1~200 (기본값: 20)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pageNo:
+                    type: integer
+                    description: 페이지 번호
+                  pageSize:
+                    type: integer
+                    description: 페이지 출력 수
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 수
+                  tagKeyTypeValueList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '태그 목록: tagKeyTypeValueList'
+                  catalogId:
+                    type: integer
+                    description: 카탈로그 아이디
+                  tableName:
+                    type: string
+                    description: 테이블 이름
+                  databaseName:
+                    type: string
+                    description: 데이터베이스 이름
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /catalogs/{catalogId}/scanners:
+    get:
+      operationId: ScannerGetScanners
+      summary: getScanners
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-catalog
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-datacatalog-scanner-getscanners
+      parameters:
+        - name: catalogId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 카탈로그 아이디 getCatalogs 참조
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~N (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 출력 수 1~200 (기본값: 20)'
+        - name: searchValue
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 검색 키워드 스캐너 이름 또는 설명으로 검색 가능 한글 입력 시 URL 인코딩 필요
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pageNo:
+                    type: integer
+                    description: 페이지 번호
+                  pageSize:
+                    type: integer
+                    description: 페이지 출력 수
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 수
+                  scannerResponseList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '스캐너 목록: scannerResponseList'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /catalogs/{catalogId}/scanners/{scannerId}:
+    get:
+      operationId: ScannerGetScanner
+      summary: getScanner
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-catalog
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-datacatalog-scanner-getscanner
+      parameters:
+        - name: catalogId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 카탈로그 아이디 getCatalogs 참조
+        - name: scannerId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 스캐너 아이디 getScanners 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  scannerId:
+                    type: integer
+                    description: 스캐너 아이디
+                  name:
+                    type: string
+                    description: 스캐너 이름
+                  status:
+                    type: string
+                    description: '스캐너 상태 SCANNER_IDLE | SCANNER_STARTING | SCANNER_RUNNING | SCANNER_STOPPING | SCANNER_DONE SCANNER_IDLE : 실행 대기 SCANNER_STARTING : 실행 시작 SCANNER_RUNNING : 실행 중 SCANNER_STOPPING : 실행 중지 SCANNER_DONE : 실행 종료'
+                  description:
+                    type: string
+                    description: 스캐너 설명 값이 존재하는 경우, 표시
+                  type:
+                    type: string
+                    description: 소스 데이터 유형
+                  location:
+                    type: string
+                    description: 소스 데이터 경로
+                  schedule:
+                    type: string
+                    description: 스캐너 실행 주기의 크론 표현식 주기적 실행이 설정된 경우, 표시
+                  scheduleType:
+                    type: string
+                    description: '스캐너 실행 주기 ON_DEMAND | EVERY_DAY | EVERY_WEEK | EVERY_MONTH | CRON ON_DEMAND : 온디맨드 (사용자 요청 시) EVERY_DAY : 매일 EVERY_WEEK : 매주 EVERY_MONTH : 매월 CRON : 크론'
+                  opAddType:
+                    type: string
+                    description: '스키마 추가 시 수집 옵션 UPDATE_TABLE | ADD_NEW_COLUMNS_ONLY | IGNORE_UPDATE UPDATE_TABLE : 테이블 정의 업데이트 ADD_NEW_COLUMNS_ONLY : 새 열만 추가 IGNORE_UPDATE : 무시'
+                  opDelType:
+                    type: string
+                    description: '스키마 삭제 시 옵션 DEL_NO : 무시 (유효 값)'
+                  includePattern:
+                    type: string
+                    description: 스캔 대상 포함 패턴
+                  excludePattern:
+                    type: string
+                    description: 스캔 대상 제외 패턴 제외 패턴이 포함 패턴보다 우선 적용
+                  tablePrefixName:
+                    type: string
+                    description: 출력 데이터 접두어 값이 존재하는 경우, 표시
+                  lastExecStartTime:
+                    type: string
+                    description: 스캐너 최근 실행 일시 ISO 8601 형식
+                  lastExecElapsedTime:
+                    type: integer
+                    description: 스캐너 최근 실행 시간(초)
+                  lastResult:
+                    type: string
+                    description: 스캐너 최근 실행 결과
+                  isSchedulePaused:
+                    type: integer
+                    description: '실행 주기 일시 중지 여부 1 | 0 1 : 일시 중지 0 : 일시 중지 안 됨'
+                  catalogId:
+                    type: integer
+                    description: 카탈로그 아이디
+                  connectionId:
+                    type: integer
+                    description: 커넥션 아이디
+                  connectionName:
+                    type: string
+                    description: 커넥션 이름
+                  classifierResponseList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '분류자 목록: classifierResponseList 스캐너 실행 옵션으로 설정된 경우, 표시'
+                  databaseName:
+                    type: string
+                    description: 출력 데이터의 데이터베이스 이름
+                  createTime:
+                    type: string
+                    description: 스캐너 생성 일시 ISO 8601 형식
+                  updateTime:
+                    type: string
+                    description: 업데이트 일시 ISO 8601 형식
+                  lastHistoryUuid:
+                    type: string
+                    description: 최근 실행 내역 UUID
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /catalogs/{catalogId}/scanners/{scannerId}/histories:
+    get:
+      operationId: ScannerGetScannerHistories
+      summary: getScannerHistories
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-catalog
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-datacatalog-scanner-getscannerhistories
+      parameters:
+        - name: catalogId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 카탈로그 아이디 getCatalogs 참조
+        - name: scannerId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 스캐너 아이디 getScanners 참조
+        - name: fromTimestamp
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: 조회 시작 일시(밀리초) Unix Timestamp 형식
+        - name: toTimestamp
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: 조회 종료 일시(밀리초) Unix Timestamp 형식
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~N (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 출력 수 1~200 (기본값: 20)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pageNo:
+                    type: integer
+                    description: 페이지 번호
+                  pageSize:
+                    type: integer
+                    description: 페이지 출력 수
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 수
+                  scannerHistoryListResponseList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 실행 이력 목록
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /catalogs/{catalogId}/scanners/{scannerId}/run-scanner:
+    put:
+      operationId: ScannerRunscanner
+      summary: runScanner
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-catalog
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-datacatalog-scanner-runscanner
+      parameters:
+        - name: catalogId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 카탈로그 아이디 getCatalogs 참조
+        - name: scannerId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 스캐너 아이디 getScanners 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  scannerId:
+                    type: integer
+                    description: 스캐너 아이디
+                  name:
+                    type: string
+                    description: 스캐너 이름
+                  status:
+                    type: string
+                    description: '스캐너 상태 SCANNER_STARTING : 실행 시작 (유효 값)'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /catalogs/{catalogId}/scanners/{scannerId}/stop-scanner:
+    put:
+      operationId: ScannerStopScanner
+      summary: stopScanner
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-catalog
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-datacatalog-scanner-stopscanner
+      parameters:
+        - name: catalogId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 카탈로그 아이디 getCatalogs 참조
+        - name: scannerId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 스캐너 아이디 getScanners 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  scannerId:
+                    type: integer
+                    description: 스캐너 아이디
+                  name:
+                    type: string
+                    description: 스캐너 이름
+                  status:
+                    type: string
+                    description: '스캐너 상태 SCANNER_STOPPING : 실행 중지 (유효 값)'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /catalogs/{catalogId}/tables:
+    get:
+      operationId: TableGetTableS
+      summary: getTables
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-catalog
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/analytics-datacatalog-table-gettables
+      parameters:
+        - name: catalogId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 카탈로그 아이디 getCatalogs 참조
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~N (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 출력 수 1~200 (기본값: 20)'
+        - name: databaseName
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 데이터베이스 이름으로 필터링
+        - name: tableName
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 테이블 이름으로 필터링
+        - name: location
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 위치 문자열로 필터링
+        - name: tagKeyValue
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 태그 키와 값으로 필터링 {key}:{value} 형태로 입력
+        - name: dataFormats
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 데이터 형식으로 필터링 csv | json | xml | parquet | avro | orc | unknown | CLOUD_DB_FOR_MYSQL | CLOUD_DB_FOR_MSSQL | CLOUD_DB_FOR_MONGODB | CLOUD_DB_FOR_POSTGRESQL | JDBC
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pageNo:
+                    type: integer
+                    description: 페이지 번호
+                  pageSize:
+                    type: integer
+                    description: 페이지 출력 수
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 수
+                  requestId:
+                    type: string
+                    description: 요청에 대한 아이디 UUID 형식
+                  tableResponseList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '테이블 목록: tableResponseList'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+components:
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  schemas:
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

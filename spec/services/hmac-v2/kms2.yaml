@@ -1,0 +1,1644 @@
+openapi: 3.0.3
+info:
+  title: kms2
+  description: kms2
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: false
+    gov: true
+
+  x-ncloud-nrn:
+
+    productName: KMS
+    resource_types:
+      - Key
+
+# Real base URL is ocapi.ncloud.com (verified live 2026-04-26 against the
+# curl example in https://api.ncloud-docs.com/docs/security-kms2-key-list).
+# An earlier "fix" in this file pointed at kms.apigw.ntruss.com/api/v1 — that
+# host responded but with an UNRELATED keystore service (different from kms2).
+# Region-isolated variants ocapi-kr.ncloud.com / ocapi-jp.ncloud.com also
+# documented but flaky/timeout from outside KR; keep them as alt servers
+# for completeness. Auth is normal HMAC v2.
+servers:
+  - url: https://ocapi.ncloud.com
+    description: kms2 전역(GLOBAL)
+    x-ncloud-env: public
+  - url: https://ocapi-kr.ncloud.com
+    description: kms2 격리 — 한국(KR)
+    x-ncloud-env: public
+    x-ncloud-region: KR
+  - url: https://ocapi-jp.ncloud.com
+    description: kms2 격리 — 일본(JP)
+    x-ncloud-env: public
+    x-ncloud-region: JP
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /kms/v1/keys:
+    get:
+      operationId: KeyList
+      summary: Get Key List
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-key-list
+      parameters:
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 요청 페이지 번호 1 (기본값)
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 출력 개수 1~200 (기본값: 100)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+                  currentPageNo:
+                    type: integer
+                    description: 현재 페이지 번호
+                  totalPageNo:
+                    type: integer
+                    description: 총 페이지 번호
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 개수
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: CreateKey
+      summary: Create Key
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-create-key
+      parameters:
+        - name: keyName
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 키 이름 영문자, 숫자, 특수문자 '-', '_'를 조합하여 3~15자 이내로 입력 첫 글자는 영문이어야 하며 사용자의 키 저장소 내 다른 키 이름과 중복 불가
+        - name: keyType
+          in: query
+          required: true
+          schema:
+            type: string
+          description: '키 타입 AES256 | RSA2048 | ECDSA AES256 : 대칭키 방식의 AES 암호(AES 256-GCM96)를 사용하는 256 비트 키 최대 32 KB의 데이터 암호화 가능 RSA2048 : 비대칭키 방식의 RSA 암호(RSA 2048)를 사용하는 2048 비트 키 암호화ㆍ복호화, 서명ㆍ검증 기능을 모두 사용할 수 있으나 처리 속도가 가장 느림 최대 190 바이트 데이터 암호화 또는 최대 8 KB 데이터 서명 가능 ECDSA : 비대칭키 방식의 ECDSA 암호(ECDSA-P256)를 사용하는 256 비트 키 최대 8 KB의 데이터 서명 가능'
+        - name: memo
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 키 메모 키에 대한 추가 정보 및 설명 0~100자 입력 가능
+        - name: isConvergent
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: '수렴 암호화(convergent encryption) 설정 여부 true | false (기본값) true : 설정 false : 미설정 keyType 이 AES256 인 경우에만 설정 가능'
+        - name: isAutoRotation
+          in: query
+          required: true
+          schema:
+            type: boolean
+          description: '키 자동 회전 활성화 여부 true | false (기본값) true : 활성화 false : 비활성화'
+        - name: rotationPeriod
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '키 자동 회전 주기 설정(일) 1~730 (기본값: 90) isAutoRotation 이 true 인 경우 입력 가능'
+        - name: protectionType
+          in: query
+          required: true
+          schema:
+            type: string
+          description: '키 저장 방식 BASIC | COMMON_HSM BASIC : 내부 스토리지에 암호화된 형태로 저장 COMMON_HSM : HSM (Hardware Security Module)에 저장'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /kms/v1/keys/{keyTag}:
+    get:
+      operationId: KeyInfo
+      summary: Get Key Info
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-key-info
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: DeleteKey
+      summary: Delete Key
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-delete-key
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과 값은 null 로 표시
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /kms/v1/keys/{keyTag}/access-token:
+    post:
+      operationId: TokenAccessToken
+      summary: Create Access Token
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-token-access-token
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+        - name: accessTokenHours
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '액세스 토큰 유효 시간(시간) 1~17520 (기본값: 72) UL : 무제한 설정 시 입력'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /kms/v1/keys/{keyTag}/acl:
+    get:
+      operationId: AclList
+      summary: Get ACL Rule List
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-acl-list
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: AddAcl
+      summary: Add ACL Rule
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-add-acl
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+        - name: ipList
+          in: query
+          required: true
+          schema:
+            type: string
+          description: IPv4 형식의 IP 주소
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: DeleteAcl
+      summary: Delete ACL Rule
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-delete-acl
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+        - name: ipList
+          in: query
+          required: true
+          schema:
+            type: string
+          description: IPv4 형식의 IP 주소
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /kms/v1/keys/{keyTag}/acl/disable:
+    post:
+      operationId: DisableIpAcl
+      summary: Disable IP ACL
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-disable-ip-acl
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /kms/v1/keys/{keyTag}/acl/enable:
+    post:
+      operationId: EnableIpAcl
+      summary: Enable IP ACL
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-enable-ip-acl
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /kms/v1/keys/{keyTag}/activities:
+    get:
+      operationId: KeyActivityLogS
+      summary: Get Key Activity Logs
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-key-activity-logs
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+        - name: keyword
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 키워드로 필터링
+        - name: timestampFrom
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+          description: 조회 시작 일시(밀리초) 현재 시간에서 1일을 뺀 값(기본값) Unix Timestamp 형식
+        - name: timestampTo
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+          description: 조회 종료 일시(밀리초) 현재 시간(기본값) Unix Timestamp 형식
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 요청 페이지 번호 1 (기본값)
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 출력 개수 1~200 (기본값: 100)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /kms/v1/keys/{keyTag}/cancel-deletion:
+    post:
+      operationId: CancelKeyDeletion
+      summary: Cancel Key Deletion
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-cancel-key-deletion
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /kms/v1/keys/{keyTag}/create-custom-key:
+    post:
+      operationId: TokenCustomKey
+      summary: Create Custom Key
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-token-custom-key
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+        - name: requestPlainKey
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: '암호화된 임의의 평문 생성 여부 true | false (기본값) true : 생성 false : 미생성'
+        - name: bits
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 생성할 키 데이터 크기(비트) 128 | 256 (기본값) | 512
+        - name: context
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Base64로 인코딩된 문자열 데이터 수렴 암호화(convergent encryption)가 적용된 키 사용 시 필수 입력 최대 50 바이트 입력 가능 같은 데이터를 여러 번 암호화하더라도 항상 동일한 암호문 생성
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /kms/v1/keys/{keyTag}/decrypt:
+    post:
+      operationId: TokenDecrypt
+      summary: Decrypt
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-token-decrypt
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+        - name: ciphertext
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 평문을 암호화하여 생성된 문자열
+        - name: context
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Base64로 인코딩된 문자열 데이터 수렴 암호화(convergent encryption)가 적용된 키로 데이터를 암호화할 때 사용한 context 파라미터 값 필수 입력
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /kms/v1/keys/{keyTag}/disable:
+    post:
+      operationId: DisableKey
+      summary: Disable Key
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-disable-key
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /kms/v1/keys/{keyTag}/disable-auto-rotation:
+    post:
+      operationId: DisableAutoRotation
+      summary: Disable Auto Rotation
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-disable-auto-rotation
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /kms/v1/keys/{keyTag}/enable:
+    post:
+      operationId: EnableKey
+      summary: Enable Key
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-enable-key
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /kms/v1/keys/{keyTag}/enable-auto-rotation:
+    post:
+      operationId: EnableAutoRotation
+      summary: Enable Auto Rotation
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-enable-auto-rotation
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /kms/v1/keys/{keyTag}/encrypt:
+    post:
+      operationId: TokenEncrypt
+      summary: Encrypt
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-token-encrypt
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+        - name: plaintext
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Base64로 인코딩된 문자열 데이터 최대 32 KB 데이터 암호화 가능
+        - name: context
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Base64로 인코딩된 문자열 데이터 수렴 암호화(convergent encryption)가 적용된 키 사용 시 필수 입력 최대 50 바이트 입력 가능 같은 데이터를 여러 번 암호화하더라도 항상 동일한 암호문 생성
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /kms/v1/keys/{keyTag}/get-pub-key:
+    post:
+      operationId: TokenPublicKey
+      summary: Get Public Key
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-token-public-key
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+        - name: keyVersion
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 조회할 키 버전 1~100 미입력 시 키의 가장 최신 버전이 표시됨 비활성화된 키 버전은 조회 불가
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /kms/v1/keys/{keyTag}/last-use-info:
+    get:
+      operationId: LatestUseInfo
+      summary: Get Latest Use Info
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-latest-use-info
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+                  message:
+                    type: string
+                    description: 응답 내용 응답의 성공 또느 실패 여부 표시
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /kms/v1/keys/{keyTag}/memo:
+    put:
+      operationId: UpdateMemo
+      summary: Update Memo
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-update-memo
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+        - name: memo
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 키 메모 키에 대한 추가 정보 및 설명 0~100자 입력 가능
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /kms/v1/keys/{keyTag}/name:
+    put:
+      operationId: UpdateKeyName
+      summary: Update Key Name
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-update-key-name
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+        - name: keyName
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 변경할 키 이름 영문자, 숫자, 특수문자 '-', '_'를 조합하여 3~15자 이내로 입력 첫 글자는 영문이어야 하며 사용자의 키 저장소 내 다른 키 이름과 중복 불가
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /kms/v1/keys/{keyTag}/re-encrypt:
+    post:
+      operationId: ReEncrypt
+      summary: Re-encrypt
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-reencrypt
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+        - name: ciphertext
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 평문을 암호화하여 생성된 문자열
+        - name: context
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Base64로 인코딩된 문자열 데이터 수렴 암호화(convergent encryption)가 적용된 키 사용 시 필수 입력 최대 50 바이트 입력 가능 같은 데이터를 여러 번 암호화하더라도 항상 동일한 암호문 생성
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /kms/v1/keys/{keyTag}/request-deletion:
+    post:
+      operationId: RequestKeyDeletion
+      summary: Request Key Deletion
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-request-key-deletion
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /kms/v1/keys/{keyTag}/rotate:
+    post:
+      operationId: RotateKey
+      summary: Rotate Key
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-rotate-key
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /kms/v1/keys/{keyTag}/rotation-period:
+    put:
+      operationId: RotationPerIod
+      summary: Update Rotation Period
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-rotation-period
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+        - name: rotationPeriod
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: 키 자동 회전 주기(일) 1~730 자동 회전 주기가 활성화 상태( isAutoRotation 이 true 인 경우) 시 설정 가능 Get Key Info 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /kms/v1/keys/{keyTag}/sign:
+    post:
+      operationId: TokenSign
+      summary: Sign
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-token-sign
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+        - name: data
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 서명값을 생성할 Base64로 인코딩된 문자열 데이터 최대 8 KB 입력 가능
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /kms/v1/keys/{keyTag}/token-generator:
+    get:
+      operationId: GetTokenGen
+      summary: Get Token Generator
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-get-token-gen
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: CreateTokenGen
+      summary: Create Token Generator
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-create-token-gen
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과 값은 null 로 표시
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    put:
+      operationId: UpdateTokenGen
+      summary: Update Token Generator
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-update-token-gen
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과 값은 null 로 표시
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: DeleteTokenGen
+      summary: Delete Token Generator
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-delete-token-gen
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과 값은 null 로 표시
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /kms/v1/keys/{keyTag}/token-set:
+    post:
+      operationId: TokenSet
+      summary: Create Token Set
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-token-set
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+        - name: accessTokenHours
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '액세스 토큰 유효 시간(시간) 1~17520 (기본값: 72) UL : 무제한 설정 시 입력'
+        - name: refreshTokenHours
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '리프레시 토큰 유효 시간(시간) 1~17520 (기본값: 2160) UL : 무제한 설정 시 입력'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    put:
+      operationId: TokenRenew
+      summary: Renew Token Set
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-token-renew
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+        - name: accessTokenHours
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '액세스 토큰 유효 시간(시간) 1~17520 (기본값: 72) UL : 무제한 설정 시 입력'
+        - name: refreshTokenHours
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '리프레시 토큰 유효 시간(시간) 1~17520 (기본값: 2160) UL : 무제한 설정 시 입력'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /kms/v1/keys/{keyTag}/verify:
+    post:
+      operationId: TokenVerify
+      summary: Verify
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-token-verify
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+        - name: data
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 서명된 데이터
+        - name: signature
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 비교할 서명값
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /kms/v1/keys/{keyTag}/versions:
+    get:
+      operationId: KeyVersionList
+      summary: Get Key Version List
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-key-version-list
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /kms/v1/keys/{keyTag}/versions/{version}/disable:
+    post:
+      operationId: DisableKeyVersion
+      summary: Disable Key Version
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-disable-key-version
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 키 버전 1~100
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /kms/v1/keys/{keyTag}/versions/{version}/enable:
+    post:
+      operationId: EnableKeyVersion
+      summary: Enable Key Version
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - kms2
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/security-kms2-enable-key-version
+      parameters:
+        - name: keyTag
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 키 태그 키 이름에서 파생된 키의 고유 식별자 Get Key List 참조 REST API로 암호화 또는 복호화 요청 시 사용 키 태그는 기밀 정보로 취급되지 않음
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 키 버전 1~100
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: 성공 여부
+                  data:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+components:
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  schemas:
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

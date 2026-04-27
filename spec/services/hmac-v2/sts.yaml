@@ -1,0 +1,157 @@
+openapi: 3.0.3
+info:
+  title: sts
+  description: |
+    Security Token Service — 임시 자격 증명 발급 (AWS STS 대응).
+    Classic/VPC 환경에서 이용 가능합니다.
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: true
+    gov: true
+
+  x-ncloud-nrn-todo: true
+servers:
+  - url: https://sts.apigw.ntruss.com/api/v1
+    description: sts 민간
+    x-ncloud-env: public
+  - url: https://sts.apigw.fin-ntruss.com/api/v1
+    description: sts 금융
+    x-ncloud-env: financial
+  - url: https://sts.apigw.gov-ntruss.com/api/v1
+    description: sts 공공
+    x-ncloud-env: gov
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /credentials:
+    post:
+      operationId: CreateSts
+      summary: 임시 자격 증명 생성
+      description: |
+        Sub Account 사용자의 임시 Access Key / Secret Key를 발급합니다. 발급된 키는 지정한
+        durationSec 동안만 유효하며, MFA가 설정된 계정은 serialNumber/tokenCode를 함께 전달합니다.
+      tags:
+        - sts
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-sts-creatests
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStsRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Credentials'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    get:
+      operationId: GetSts
+      summary: 임시 자격 증명 조회
+      description: 현재 호출자의 활성 임시 자격 증명을 조회합니다.
+      tags:
+        - sts
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-sts-getsts
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Credentials'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+components:
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  schemas:
+    CreateStsRequest:
+      type: object
+      properties:
+        durationSec:
+          type: integer
+          minimum: 600
+          maximum: 43200
+          default: 3600
+          description: Access Key 유효 시간(초). 600~43200.
+        serialNumber:
+          type: string
+          description: OTP 디바이스 NRN 또는 MFA 시리얼 번호 (MFA 활성 계정)
+        tokenCode:
+          type: integer
+          description: OTP 인증 번호 (MFA 활성 계정)
+    Credentials:
+      type: object
+      required: [accessKey, keySecret, createTime, expireTime, useMfa]
+      properties:
+        accessKey:
+          type: string
+          description: Access Key (ncp_iam_* 형식)
+        keySecret:
+          type: string
+          description: Secret Key
+        createTime:
+          type: string
+          format: date-time
+          description: 생성 일자 (ISO 8601)
+        expireTime:
+          type: string
+          format: date-time
+          description: 만료 일자 (ISO 8601)
+        useMfa:
+          type: boolean
+          description: MFA 인증 여부
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

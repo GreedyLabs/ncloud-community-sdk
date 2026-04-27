@@ -1,0 +1,1958 @@
+openapi: 3.0.3
+info:
+  title: nks
+  description: ''
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: false
+    gov: false
+
+  x-ncloud-nrn:
+
+    productName: VPCKubernetesService
+    resource_types:
+      - Cluster
+      - NodePool
+
+servers:
+  - url: https://nks.apigw.ntruss.com/{basePath}
+    description: nks 민간
+    x-ncloud-env: public
+    variables:
+      basePath:
+        default: nks/v2
+        description: |
+          리전별 path. x-ncp-region_code 헤더 기준:
+            KR 또는 *CS* 포함  → nks/v2
+            그 외 민간 리전      → nks/{lowercase(region)}-v2
+x-ncloud-region-routing:
+  header: x-ncp-region_code
+  description: |
+    실제 basePath는 server 선택(x-ncloud-env) × region 코드 조합으로 결정됩니다.
+    SDK 제너레이터는 다음 규칙을 basePath 변수에 적용해야 합니다.
+  rules:
+    - match: "hasPrefix(region, 'F')"
+      basePath: nks/v2
+    - match: "region == 'KR' or contains(region, 'CS')"
+      basePath: nks/v2
+    - match: default
+      basePath: "nks/{lowercase(region)}-v2"
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /:
+    get:
+      operationId: RootGet
+      tags:
+        - nks
+      responses:
+        '200':
+          description: OK
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Root get
+  /clusters:
+    get:
+      operationId: ClustersGet
+      tags:
+        - nks
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClustersRes'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Clusters get
+    post:
+      operationId: ClustersPost
+      tags:
+        - nks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClusterInputBody'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateClusterRes'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Clusters post
+  /clusters/{uuid}:
+    delete:
+      operationId: ClustersUuidDelete
+      tags:
+        - nks
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Clusters uuid delete
+    get:
+      operationId: ClustersUuidGet
+      tags:
+        - nks
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClusterRes'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Clusters uuid get
+  /clusters/{uuid}/access-entries:
+    get:
+      operationId: ClustersUuidAccessEntriesGet
+      tags:
+        - nks
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClusterAccessEntriesRes'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Clusters uuid access entries get
+    post:
+      operationId: ClustersUuidAccessEntriesPost
+      tags:
+        - nks
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAccessEntryDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateAccessEntryRes'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Clusters uuid access entries post
+  /clusters/{uuid}/access-entries/{entryUuid}:
+    delete:
+      operationId: ClustersUuidAccessEntriesEntryUuidDelete
+      tags:
+        - nks
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: entryUuid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteAccessEntryRes'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Clusters uuid access entries entry uuid delete
+    get:
+      operationId: ClustersUuidAccessEntriesEntryUuidGet
+      tags:
+        - nks
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: entryUuid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClusterAccessEntryRes'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Clusters uuid access entries entry uuid get
+    put:
+      operationId: ClustersUuidAccessEntriesEntryUuidPut
+      tags:
+        - nks
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: entryUuid
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAccessEntryDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateAccessEntryRes'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Clusters uuid access entries entry uuid put
+  /clusters/{uuid}/add-subnet:
+    patch:
+      operationId: ClustersUuidAddSubnetPatch
+      tags:
+        - nks
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddSubnetDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateClusterRes'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Clusters uuid add subnet patch
+  /clusters/{uuid}/auth-type:
+    patch:
+      operationId: ClustersUuidAuthTypePatch
+      tags:
+        - nks
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAuthTypeDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateClusterRes'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Clusters uuid auth type patch
+  /clusters/{uuid}/ip-acl:
+    get:
+      operationId: ClustersUuidIpAclGet
+      tags:
+        - nks
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IpAclsRes'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Clusters uuid IP acl get
+    patch:
+      operationId: ClustersUuidIpAclPatch
+      tags:
+        - nks
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IpAclsDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateClusterRes'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Clusters uuid IP acl patch
+  /clusters/{uuid}/kubeconfig:
+    get:
+      operationId: ClustersUuidKubeconfigGet
+      tags:
+        - nks
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KubeconfigRes'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Clusters uuid kubeconfig get
+  /clusters/{uuid}/kubeconfig/reset:
+    patch:
+      operationId: ClustersUuidKubeconfigResetPatch
+      tags:
+        - nks
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateClusterRes'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Clusters uuid kubeconfig reset patch
+  /clusters/{uuid}/lb-subnet:
+    patch:
+      operationId: ClustersUuidLbSubnetPatch
+      tags:
+        - nks
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: lbSubnetNo
+          in: query
+          schema:
+            type: integer
+            format: int32
+        - name: localVarOptionals
+          in: query
+          schema:
+            type: object
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateClusterLbSubnetRes'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Clusters uuid lb subnet patch
+  /clusters/{uuid}/log:
+    patch:
+      operationId: ClustersUuidLogPatch
+      tags:
+        - nks
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuditLogDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateClusterRes'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Clusters uuid log patch
+  /clusters/{uuid}/node-pool:
+    get:
+      operationId: ClustersUuidNodePoolGet
+      tags:
+        - nks
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NodePoolRes'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Clusters uuid node pool get
+    post:
+      operationId: ClustersUuidNodePoolPost
+      tags:
+        - nks
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NodePoolCreationBody'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateClusterRes'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Clusters uuid node pool post
+  /clusters/{uuid}/node-pool/{instanceNo}:
+    delete:
+      operationId: ClustersUuidNodePoolInstanceNoDelete
+      tags:
+        - nks
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: instanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Clusters uuid node pool instance no delete
+    patch:
+      operationId: ClustersUuidNodePoolInstanceNoPatch
+      tags:
+        - nks
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: instanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NodePoolUpdateBody'
+      responses:
+        '200':
+          description: OK
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Clusters uuid node pool instance no patch
+  /clusters/{uuid}/node-pool/{instanceNo}/labels:
+    put:
+      operationId: ClustersUuidNodePoolInstanceNoLabelsPut
+      tags:
+        - nks
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: instanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateNodepoolLabelDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateNodePoolRes'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Clusters uuid node pool instance no labels put
+  /clusters/{uuid}/node-pool/{instanceNo}/subnets:
+    patch:
+      operationId: ClustersUuidNodePoolInstanceNoSubnetsPatch
+      tags:
+        - nks
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: instanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateNodepoolSubnetDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateNodePoolRes'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Clusters uuid node pool instance no subnets patch
+  /clusters/{uuid}/node-pool/{instanceNo}/taints:
+    put:
+      operationId: ClustersUuidNodePoolInstanceNoTaintsPut
+      tags:
+        - nks
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: instanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateNodepoolTaintDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateNodePoolRes'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Clusters uuid node pool instance no taints put
+  /clusters/{uuid}/node-pool/{instanceNo}/upgrade:
+    patch:
+      operationId: ClustersUuidNodePoolInstanceNoUpgradePatch
+      tags:
+        - nks
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: instanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: k8sVersion
+          in: query
+          schema:
+            type: string
+        - name: localVarOptionals
+          in: query
+          schema:
+            type: object
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateNodePoolRes'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Clusters uuid node pool instance no upgrade patch
+  /clusters/{uuid}/nodes:
+    get:
+      operationId: ClustersUuidNodesGet
+      tags:
+        - nks
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkerNodeRes'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Clusters uuid nodes get
+  /clusters/{uuid}/nodes/{instanceNo}:
+    delete:
+      operationId: ClustersUuidNodesInstanceNoDelete
+      tags:
+        - nks
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: instanceNo
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: localVarOptionals
+          in: query
+          schema:
+            type: object
+      responses:
+        '200':
+          description: OK
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Clusters uuid nodes instance no delete
+  /clusters/{uuid}/oidc:
+    get:
+      operationId: ClustersUuidOidcGet
+      tags:
+        - nks
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OidcRes'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Clusters uuid oidc get
+    patch:
+      operationId: ClustersUuidOidcPatch
+      tags:
+        - nks
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateOidcDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateClusterRes'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Clusters uuid oidc patch
+  /clusters/{uuid}/return-protection:
+    patch:
+      operationId: ClustersUuidReturnProtectionPatch
+      tags:
+        - nks
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReturnProtectionDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateClusterRes'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Clusters uuid return protection patch
+  /clusters/{uuid}/secret-encryption:
+    patch:
+      operationId: ClustersUuidSecretEncryptionPatch
+      tags:
+        - nks
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSecretEncryptionDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateClusterRes'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Clusters uuid secret encryption patch
+  /clusters/{uuid}/upgrade:
+    patch:
+      operationId: ClustersUuidUpgradePatch
+      tags:
+        - nks
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: k8sVersion
+          in: query
+          schema:
+            type: string
+        - name: localVarOptionals
+          in: query
+          schema:
+            type: object
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateClusterRes'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Clusters uuid upgrade patch
+  /option/server-image:
+    get:
+      operationId: OptionServerImageGet
+      tags:
+        - nks
+      parameters:
+        - name: localVarOptionals
+          in: query
+          schema:
+            type: object
+      responses:
+        '200':
+          description: OK
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Option server image get
+  /option/server-product-code:
+    get:
+      operationId: OptionServerProductCodeGet
+      tags:
+        - nks
+      parameters:
+        - name: softwareCode
+          in: query
+          schema:
+            type: string
+        - name: localVarOptionals
+          in: query
+          schema:
+            type: object
+      responses:
+        '200':
+          description: OK
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Option server product code get
+  /option/version:
+    get:
+      operationId: OptionVersionGet
+      tags:
+        - nks
+      parameters:
+        - name: localVarOptionals
+          in: query
+          schema:
+            type: object
+      responses:
+        '200':
+          description: OK
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Option version get
+components:
+  schemas:
+    AccessEntryPolicyRes:
+      type: object
+      properties:
+        namespaces:
+          type: array
+          items:
+            type: string
+        scope:
+          type: string
+        type:
+          type: string
+    AccessEntryRes:
+      type: object
+      properties:
+        uuid:
+          type: string
+        entry:
+          type: string
+        groups:
+          type: array
+          items:
+            type: string
+        policies:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessEntryPolicyRes'
+        username:
+          type: string
+    AddSubnetDto:
+      type: object
+      properties:
+        subnets:
+          type: array
+          description: 추가할 서브넷 목록
+          items:
+            $ref: '#/components/schemas/SubnetDto'
+      required:
+        - subnets
+    AuditLogDto:
+      type: object
+      properties:
+        audit:
+          type: boolean
+    AutoscaleOption:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: 오토스케일 가능여부
+        max:
+          type: integer
+          format: int32
+          description: 오토스케일 가능 최대 노드 수
+        min:
+          type: integer
+          format: int32
+          description: 오토스케일 가능 최소 노드 수
+    AutoscalerUpdate:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: 오토스케일 가능여부
+        max:
+          type: integer
+          format: int32
+          description: 오토스케일 가능 최대 노드 수
+        min:
+          type: integer
+          format: int32
+          description: 오토스케일 가능 최소 노드 수
+    Cluster:
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: 클러스터 uuid
+        acgName:
+          type: string
+          description: 클러스터 acg 이름
+        acgNo:
+          type: integer
+          format: int32
+          description: 클러스터 acg no
+        name:
+          type: string
+          description: 클러스터 이름
+        capacity:
+          type: string
+          description: 클러스터 용량
+        clusterType:
+          type: string
+          description: 클러스터 타입
+        hypervisorCode:
+          type: string
+          description: Hypervisor Code
+        nodeCount:
+          type: integer
+          format: int32
+          description: 등록된 노드 총 개수
+        nodeMaxCount:
+          type: integer
+          format: int32
+          description: 사용할 수 있는 노드의 최대 개수
+        cpuCount:
+          type: integer
+          format: int32
+          description: cpu 개수
+        memorySize:
+          type: integer
+          format: int64
+          description: 메모리 용량
+        createdAt:
+          type: string
+          description: 생성 일자
+        endpoint:
+          type: string
+          description: Control Plane API 주소
+        k8sVersion:
+          type: string
+          description: 쿠버네티스 버전
+        regionCode:
+          type: string
+          description: region 의 코드
+        status:
+          type: string
+          description: 클러스터 상태
+        kubeNetworkPlugin:
+          type: string
+          description: CNI Plugin Code
+        subnetLbName:
+          type: string
+          description: 로드밸런서 전용 서브넷 이름
+        subnetLbNo:
+          type: integer
+          format: int32
+          description: 로드밸런서 전용 Private Subnet No
+        lbPrivateSubnetNo:
+          type: integer
+          format: int32
+          description: 로드밸런서 전용 Private Subnet No
+        lbPublicSubnetNo:
+          type: integer
+          format: int32
+          description: 로드밸런서 전용 Public Subnet No
+        subnetName:
+          type: string
+          description: 서브넷 이름
+        subnetNoList:
+          type: array
+          description: 서브넷 No 목록
+          items:
+            type: integer
+            format: int32
+        updatedAt:
+          type: string
+          description: 최근 업데이트 일자
+        vpcName:
+          type: string
+          description: vpc 이름
+        vpcNo:
+          type: integer
+          format: int32
+          description: vpc 번호
+        zoneCode:
+          type: string
+          description: zone 코드
+        zoneNo:
+          type: integer
+          format: int32
+          description: zone 번호
+        initScriptNo:
+          type: integer
+          format: int32
+          description: InitScript 번호
+        initScriptName:
+          type: string
+          description: InitScript 이름
+        podSecurityPolicyEnabled:
+          type: boolean
+          description: Pod Security Policy 설정 여부
+        loginKeyName:
+          type: string
+          description: 로그인 키 이름
+        nodePool:
+          type: array
+          description: 노드풀
+          items:
+            $ref: '#/components/schemas/NodePool'
+        log:
+          $ref: '#/components/schemas/ClusterLogInput'
+        publicNetwork:
+          type: boolean
+          description: Public Network
+        returnProtection:
+          type: boolean
+        kmsKeyTag:
+          type: string
+        authType:
+          type: string
+      required:
+        - subnetNoList
+        - nodePool
+    ClusterAccessEntriesRes:
+      type: object
+      properties:
+        accessEntries:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessEntryRes'
+      required:
+        - accessEntries
+    ClusterAccessEntryRes:
+      type: object
+      properties:
+        accessEntry:
+          $ref: '#/components/schemas/AccessEntryRes'
+    ClusterInputBody:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 클러스터 이름
+        clusterType:
+          type: string
+          description: 클러스터 타입
+        k8sVersion:
+          type: string
+          description: 'Kubernetes 버전. 지원 버전 목록은 같은 spec의 `OptionVersionGet` 오퍼레이션(`GET /option/version`) 응답을 참고하세요.'
+        loginKeyName:
+          type: string
+          description: 로그인 키 이름
+        zoneCode:
+          type: string
+          description: Zone 코드
+        zoneNo:
+          type: integer
+          format: int32
+          description: Zone 번호
+        hypervisorCode:
+          type: string
+          description: Hypervisor Code
+        regionCode:
+          type: string
+          description: Region 의 코드
+        publicNetwork:
+          type: boolean
+          description: Public network
+        kubeNetworkPlugin:
+          type: string
+          description: CNI Plugin Code (ncloud-vpc-cni or cilium)
+        vpcNo:
+          type: integer
+          format: int32
+          description: '[VPC 번호](https://api.ncloud-docs.com/docs/networking-vpc-vpcmanagement-getvpclist)'
+        subnetNoList:
+          type: array
+          description: '[서브넷 번호 목록](https://api.ncloud-docs.com/docs/networking-vpc-subnetmanagement-getsubnetlist)'
+          items:
+            type: integer
+            format: int32
+        subnetLbNo:
+          type: integer
+          format: int32
+          description: '[로드밸런서 전용 Private Subnet 번호](https://api.ncloud-docs.com/docs/networking-vpc-subnetmanagement-getsubnetlist)'
+        lbPrivateSubnetNo:
+          type: integer
+          format: int32
+          description: '[로드밸런서 전용 Private Subnet 번호](https://api.ncloud-docs.com/docs/networking-vpc-subnetmanagement-getsubnetlist)'
+        lbPublicSubnetNo:
+          type: integer
+          format: int32
+          description: '[로드밸런서 전용 Public Subnet 번호](https://api.ncloud-docs.com/docs/networking-vpc-subnetmanagement-getsubnetlist)'
+        log:
+          $ref: '#/components/schemas/ClusterLogInput'
+        kmsKeyTag:
+          type: string
+        authType:
+          type: string
+          description: 클러스터 인증 타입
+        bootstrapAccessEntry:
+          type: boolean
+          description: 클러스터 생성 시 bootstrap access entry 자동 생성 여부
+        defaultNodePool:
+          $ref: '#/components/schemas/DefaultNodePoolParam'
+        nodePool:
+          type: array
+          description: 추가 노드풀
+          items:
+            $ref: '#/components/schemas/NodePoolDto'
+      required:
+        - subnetNoList
+    ClusterLogInput:
+      type: object
+      properties:
+        audit:
+          type: boolean
+          description: Audit Log 설정
+    ClusterRes:
+      type: object
+      properties:
+        cluster:
+          $ref: '#/components/schemas/Cluster'
+    ClustersRes:
+      type: object
+      properties:
+        clusters:
+          type: array
+          description: 클러스터 목록
+          items:
+            $ref: '#/components/schemas/Cluster'
+      required:
+        - clusters
+    CreateAccessEntryDto:
+      type: object
+      properties:
+        type:
+          type: string
+        entry:
+          type: string
+        groups:
+          type: array
+          items:
+            type: string
+        policies:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateAccessEntryPolicyDto'
+    CreateAccessEntryPolicyDto:
+      type: object
+      properties:
+        type:
+          type: string
+        scope:
+          type: string
+        namespaces:
+          type: array
+          items:
+            type: string
+    CreateAccessEntryRes:
+      type: object
+      properties:
+        uuid:
+          type: string
+    CreateClusterRes:
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: 클러스터 UUID
+    DefaultNodePoolParam:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 노드풀 이름
+        nodeCount:
+          type: integer
+          format: int32
+          description: 노드 개수
+        subnetNo:
+          type: integer
+          format: int32
+          description: Subnet 번호
+        subnetNoList:
+          type: array
+          description: Subnet 번호
+          items:
+            type: integer
+            format: int32
+        softwareCode:
+          type: string
+          description: Server image code
+        productCode:
+          type: string
+          description: 상품 코드
+        serverSpecCode:
+          type: string
+          description: Server spec code
+        labels:
+          type: array
+          items:
+            $ref: '#/components/schemas/NodePoolLabel'
+        taints:
+          type: array
+          items:
+            $ref: '#/components/schemas/NodePoolTaint'
+        storageSize:
+          type: integer
+          format: int32
+          description: Storage size
+        serverRoleId:
+          type: string
+        fabricCluster:
+          $ref: '#/components/schemas/FabricClusterPool'
+    DeleteAccessEntryRes:
+      type: object
+      properties:
+        uuid:
+          type: string
+    FabricClusterPool:
+      type: object
+      properties:
+        poolName:
+          type: string
+        poolNo:
+          type: integer
+          format: int32
+    IpAclsDto:
+      type: object
+      properties:
+        defaultAction:
+          type: string
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/IpAclsEntriesDto'
+    IpAclsEntriesDto:
+      type: object
+      properties:
+        action:
+          type: string
+        address:
+          type: string
+        comment:
+          type: string
+    IpAclsEntriesRes:
+      type: object
+      properties:
+        action:
+          type: string
+        address:
+          type: string
+        comment:
+          type: string
+    IpAclsRes:
+      type: object
+      properties:
+        defaultAction:
+          type: string
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/IpAclsEntriesRes'
+    KubeconfigRes:
+      type: object
+      properties:
+        kubeconfig:
+          type: string
+          description: Kubeconfig
+    NodePool:
+      type: object
+      properties:
+        instanceNo:
+          type: integer
+          format: int32
+          description: 인스턴스 번호
+        isDefault:
+          type: boolean
+          description: default pool 여부
+        name:
+          type: string
+          description: 노드풀 이름
+        nodeCount:
+          type: integer
+          format: int32
+          description: 노드 개수
+        subnetNoList:
+          type: array
+          description: Subnet 번호 목록
+          items:
+            type: integer
+            format: int32
+        subnetNameList:
+          type: array
+          description: Subnet 이름 목록
+          items:
+            type: string
+        status:
+          type: string
+          description: 노드풀 상태
+        autoscale:
+          $ref: '#/components/schemas/AutoscaleOption'
+        softwareCode:
+          type: string
+          description: Software Code(OS)
+        productCode:
+          type: string
+          description: 상품 코드
+        k8sVersion:
+          type: string
+          description: 쿠버네티스 버전
+        serverSpecCode:
+          type: string
+          description: 서버 스펙 코드
+        storageSize:
+          type: integer
+          format: int32
+          description: 스토리지 크기
+        labels:
+          type: array
+          items:
+            $ref: '#/components/schemas/NodePoolLabel'
+        taints:
+          type: array
+          items:
+            $ref: '#/components/schemas/NodePoolTaint'
+        serverRoleId:
+          type: string
+        fabricCluster:
+          $ref: '#/components/schemas/FabricClusterPool'
+      required:
+        - subnetNoList
+        - subnetNameList
+        - labels
+        - taints
+    NodePoolCreationBody:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 노드풀 이름
+        nodeCount:
+          type: integer
+          format: int32
+          description: 등록 될 노드 개수
+        subnetNo:
+          type: integer
+          format: int32
+          description: Subnet 번호
+        subnetNoList:
+          type: array
+          description: Subnet 번호
+          items:
+            type: integer
+            format: int32
+        softwareCode:
+          type: string
+          description: Server image code
+        productCode:
+          type: string
+          description: 상품 코드 [서버 스펙 목록](https://api.ncloud-docs.com/docs/compute-vserver-server-common-getserverproductlist)
+        serverSpecCode:
+          type: string
+          description: Server spec code
+        storageSize:
+          type: integer
+          format: int32
+          description: Storage size
+        autoscale:
+          $ref: '#/components/schemas/AutoscalerUpdate'
+        labels:
+          type: array
+          items:
+            $ref: '#/components/schemas/NodePoolLabel'
+        taints:
+          type: array
+          items:
+            $ref: '#/components/schemas/NodePoolTaint'
+        serverRoleId:
+          type: string
+        fabricCluster:
+          $ref: '#/components/schemas/FabricClusterPool'
+    NodePoolDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 노드풀 이름
+        nodeCount:
+          type: integer
+          format: int32
+          description: 노드 개수
+        subnetNo:
+          type: integer
+          format: int32
+          description: Subnet 번호
+        subnetNoList:
+          type: array
+          description: Subnet 번호
+          items:
+            type: integer
+            format: int32
+        softwareCode:
+          type: string
+          description: Server image code
+        productCode:
+          type: string
+          description: 상품 코드
+        labels:
+          type: array
+          items:
+            $ref: '#/components/schemas/NodePoolLabel'
+        taints:
+          type: array
+          items:
+            $ref: '#/components/schemas/NodePoolTaint'
+        serverSpecCode:
+          type: string
+          description: Server spec code
+        storageSize:
+          type: integer
+          format: int32
+          description: Storage size
+        serverRoleId:
+          type: string
+        fabricCluster:
+          $ref: '#/components/schemas/FabricClusterPool'
+    NodePoolLabel:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+    NodePoolRes:
+      type: object
+      properties:
+        nodePool:
+          type: array
+          description: 노드풀
+          items:
+            $ref: '#/components/schemas/NodePool'
+      required:
+        - nodePool
+    NodePoolTaint:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+        effect:
+          type: string
+    NodePoolUpdateBody:
+      type: object
+      properties:
+        nodeCount:
+          type: integer
+          format: int32
+          description: 노드 개수
+        autoscale:
+          $ref: '#/components/schemas/AutoscalerUpdate'
+    OidcRes:
+      type: object
+      properties:
+        clientId:
+          type: string
+        groupsClaim:
+          type: string
+        groupsPrefix:
+          type: string
+        issuerURL:
+          type: string
+        requiredClaim:
+          type: string
+        status:
+          type: boolean
+        usernameClaim:
+          type: string
+        usernamePrefix:
+          type: string
+    ReturnProtectionDto:
+      type: object
+      properties:
+        returnProtection:
+          type: boolean
+    SubnetDto:
+      type: object
+      properties:
+        number:
+          type: integer
+          format: int32
+    UpdateAccessEntryDto:
+      type: object
+      properties:
+        groups:
+          type: array
+          items:
+            type: string
+        policies:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateAccessEntryPolicyDto'
+    UpdateAccessEntryRes:
+      type: object
+      properties:
+        uuid:
+          type: string
+    UpdateAuthTypeDto:
+      type: object
+      properties:
+        authType:
+          type: string
+    UpdateClusterLbSubnetRes:
+      type: object
+      properties:
+        uuid:
+          type: string
+    UpdateClusterRes:
+      type: object
+      properties:
+        uuid:
+          type: string
+    UpdateNodePoolRes:
+      type: object
+      properties:
+        uuid:
+          type: string
+        instanceNo:
+          type: integer
+          format: int32
+    UpdateNodepoolLabelDto:
+      type: object
+      properties:
+        labels:
+          type: array
+          items:
+            $ref: '#/components/schemas/NodePoolLabel'
+      required:
+        - labels
+    UpdateNodepoolSubnetDto:
+      type: object
+      properties:
+        subnets:
+          type: array
+          items:
+            type: integer
+            format: int32
+      required:
+        - subnets
+    UpdateNodepoolTaintDto:
+      type: object
+      properties:
+        taints:
+          type: array
+          items:
+            $ref: '#/components/schemas/NodePoolTaint'
+      required:
+        - taints
+    UpdateOidcDto:
+      type: object
+      properties:
+        clientId:
+          type: string
+        issuerURL:
+          type: string
+        status:
+          type: boolean
+        groupsClaim:
+          type: string
+        groupsPrefix:
+          type: string
+        usernameClaim:
+          type: string
+        usernamePrefix:
+          type: string
+        requiredClaim:
+          type: string
+    UpdateSecretEncryptionDto:
+      type: object
+      properties:
+        kmsKeyTag:
+          type: string
+    WorkerNode:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: 워커노드 id
+        name:
+          type: string
+          description: 워커노드 이름
+        serverName:
+          type: string
+          description: 워커노드 서버 이름
+        serverSpec:
+          type: string
+          description: 워커노드 서버 스펙
+        privateIp:
+          type: string
+          description: 비 공인 IP
+        publicIp:
+          type: string
+          description: 공인 IP
+        returnProtectionYn:
+          type: string
+          description: 반납 보호 설정
+        status:
+          type: string
+          description: 워커노드 현재 상태
+        statusCode:
+          type: string
+          description: 상태 코드
+        statusIcon:
+          type: string
+          description: 상태 아이콘
+        statusColor:
+          type: string
+          description: 상태 색깔
+        statusName:
+          type: string
+          description: 상태 이름
+        serverImageName:
+          type: string
+          description: 서버 이미지 이름
+        cpuCount:
+          type: integer
+          format: int32
+          description: cpu 수
+        memorySize:
+          type: integer
+          format: int64
+          description: 총 메모리 용량
+        softwareCode:
+          type: string
+          description: 서버 이미지 코드
+        specCode:
+          type: string
+          description: 스펙 코드
+        productCode:
+          type: string
+          description: 스펙 코드
+        loginKeyName:
+          type: string
+          description: 로그인 키 이름
+        k8sStatus:
+          type: string
+          description: 쿠버네티스 상태
+        dockerVersion:
+          type: string
+          description: 도커 버전
+        kernelVersion:
+          type: string
+          description: 커널 버전
+        providerID:
+          type: string
+          description: providerID
+        nodePoolId:
+          type: integer
+          format: int32
+          description: 노드풀 ID
+        nodePoolName:
+          type: string
+          description: 노드풀 이름
+    WorkerNodeRes:
+      type: object
+      properties:
+        nodes:
+          type: array
+          description: 워커노드 목록
+          items:
+            $ref: '#/components/schemas/WorkerNode'
+      required:
+        - nodes
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

@@ -1,0 +1,519 @@
+openapi: 3.0.3
+info:
+  title: drm
+  description: drm
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: false
+    gov: true
+
+  x-ncloud-nrn-todo: true
+servers:
+  - url: https://multi-drm.apigw.ntruss.com
+    description: drm 민간
+    x-ncloud-env: public
+  - url: https://multi-drm.apigw.gov-ntruss.com
+    description: drm 공공
+    x-ncloud-env: gov
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /license/statistics:
+    get:
+      operationId: LicenseStatistics
+      summary: 라이선스 발급 이력 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - drm
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/drm-license-statistics
+      parameters:
+        - name: siteId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 사이트 아이디 사이트 목록 조회 참조
+        - name: searchCondition
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '검색 조건 contentId | drmType | userId | deviceId | deviceModel contentId : 콘텐츠 아이디 drmType : DRM 타입 userId : 사용자 아이디 deviceId : 기기 아이디 deviceModel : 기기 모델'
+        - name: searchKeyword
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 검색 키워드
+        - name: startTime
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 조회 시작 일시(밀리초) Unix Timestamp 형식
+        - name: endTime
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 조회 종료 일시(밀리초) Unix Timestamp 형식
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~N (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지당 항목 수 1~100
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '라이선스 발급 성공 여부로 필터링 success | fail success : 성공 fail : 실패'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 'API 처리 결과 true | false true : 성공 false : 실패'
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '라이선스 발급 이력 목록: content'
+                  total:
+                    type: integer
+                    description: 전체 응답 수
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /policy:
+    get:
+      operationId: PolicyList
+      summary: 정책 목록 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - drm
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/drm-policy-list
+      parameters:
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~N (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 페이지당 항목 수 1~100
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 'API 처리 결과 true | false true : 성공 false : 실패'
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '정책 목록: content'
+                  total:
+                    type: integer
+                    description: 전체 응답 수
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: PolicyCreate
+      summary: 정책 생성
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - drm
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/drm-policy-create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - policyName
+                - persistent
+                - rentalDuration
+                - playbackDuration
+                - drmPolicyConfig
+              properties:
+                policyName:
+                  type: string
+                  description: 정책 이름 영문자, 숫자, 특수 문자 '_'를 조합하여 3~20자 이내로 입력
+                persistent:
+                  type: boolean
+                  description: '오프라인용 라이선스 저장 여부 true | false (기본값) true : 라이선스 유지 false : 재생 후 라이선스 제거(스트리밍) rentalDuration (오프라인 렌탈 시나리오)을 사용하는 경우, true 로 필수 입력'
+                rentalDuration:
+                  type: integer
+                  description: '오프라인 라이선스 획득 후 콘텐츠를 최초 재생해야 하는 유효 기간(초) 0~2,147,483,647 (기본값: 0) 오프라인 렌탈 시나리오 사용 시 설정'
+                playbackDuration:
+                  type: integer
+                  description: '콘텐츠 최초 재생 시작 시점부터의 라이선스 유효 기간(초) 0~2,147,483,647 (기본값: 0)'
+                drmPolicyConfig:
+                  type: object
+                  additionalProperties: true
+                  description: DRM 타입별 정책 설정
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 'API 처리 결과 true | false true : 성공 false : 실패'
+                  content:
+                    type: object
+                    additionalProperties: true
+                    description: 정책 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /policy/{policyId}:
+    get:
+      operationId: PolicyDetail
+      summary: 정책 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - drm
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/drm-policy-detail
+      parameters:
+        - name: policyId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: DRM 정책 아이디 정책 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 'API 처리 결과 true | false true : 성공 false : 실패'
+                  content:
+                    type: object
+                    additionalProperties: true
+                    description: 정책 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    put:
+      operationId: PolicyUpdate
+      summary: 정책 수정
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - drm
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/drm-policy-update
+      parameters:
+        - name: policyId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: DRM 정책 아이디 정책 목록 조회 참조
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - policyName
+                - persistent
+                - rentalDuration
+                - playbackDuration
+                - drmPolicyConfig
+              properties:
+                policyName:
+                  type: string
+                  description: 정책 이름 영문자, 숫자, 특수 문자 '_'를 조합하여 3~20자 이내로 입력
+                persistent:
+                  type: boolean
+                  description: '오프라인용 라이선스 저장 여부 true | false (기본값) true : 라이선스 유지 false : 재생 후 라이선스 제거(스트리밍) rentalDuration (오프라인 렌탈 시나리오)을 사용하는 경우, true 로 필수 입력'
+                rentalDuration:
+                  type: integer
+                  description: '오프라인 라이선스 획득 후, 콘텐츠를 최초 재생해야 하는 유효 기간(초) 0~2,147,483,647 (기본값: 0) 오프라인 렌탈 시나리오 사용 시 설정'
+                playbackDuration:
+                  type: integer
+                  description: '콘텐츠 최초 재생 시작 시점부터의 라이선스 유효 기간(초) 0~2,147,483,647 (기본값: 0)'
+                drmPolicyConfig:
+                  type: object
+                  additionalProperties: true
+                  description: DRM 타입별 정책 설정
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 'API 처리 결과 true | false true : 성공 false : 실패'
+                  content:
+                    type: object
+                    additionalProperties: true
+                    description: 정책 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: PolicyDelete
+      summary: 정책 삭제
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - drm
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/drm-policy-delete
+      parameters:
+        - name: policyId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: DRM 정책 아이디 정책 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 'API 처리 결과 true | false true : 성공 false : 실패'
+                  content:
+                    type: object
+                    additionalProperties: true
+                    description: 정책 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /policy/{policyId}/copy:
+    post:
+      operationId: PolicyCopy
+      summary: 정책 복제
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - drm
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/drm-policy-copy
+      parameters:
+        - name: policyId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: DRM 정책 아이디 정책 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 'API 처리 결과 true | false true : 성공 false : 실패'
+                  content:
+                    type: object
+                    additionalProperties: true
+                    description: 정책 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/cpix/pallycon/getKey/{kmsToken}:
+    post:
+      operationId: ContentsEncryption
+      summary: CPIX API 기반 DRM 콘텐츠 암호화
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - drm
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/drm-contents-encryption
+      parameters:
+        - name: kmsToken
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: cpix:CPIX
+          in: query
+          required: true
+          schema:
+            type: object
+            additionalProperties: true
+          description: 콘텐츠 키와 DRM 시스템 정보를 포함하는 CPIX 문서의 루트 요소
+        - name: └ cpix:ContentKeyList
+          in: query
+          required: true
+          schema:
+            type: object
+            additionalProperties: true
+          description: 콘텐츠 키 목록을 정의하는 컨테이너 요소
+        - name: └ cpix:ContentKey
+          in: query
+          required: true
+          schema:
+            type: object
+            additionalProperties: true
+          description: kid (Key ID) 속성을 가진 개별 콘텐츠 키 정보
+        - name: └ cpix:DRMSystemList
+          in: query
+          required: true
+          schema:
+            type: object
+            additionalProperties: true
+          description: DRM 시스템 목록을 정의하는 컨테이너 요소
+        - name: └ cpix:DRMSystem
+          in: query
+          required: true
+          schema:
+            type: object
+            additionalProperties: true
+          description: kid (Key ID)와 systemId (DRM 시스템 식별자) 속성을 가진 각 DRM 시스템 정보
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cpix:CPIX:
+                    type: object
+                    additionalProperties: true
+                    description: 콘텐츠 아이디(CID) 키와 DRM 시스템 정보를 포함하는 CPIX 문서의 루트 요소
+                  └ cpix:ContentKeyList:
+                    type: object
+                    additionalProperties: true
+                    description: 콘텐츠 키 목록을 정의하는 컨테이너 요소
+                  └ cpix:ContentKey:
+                    type: object
+                    additionalProperties: true
+                    description: kid (Key ID)와 explicitIV (초기화 벡터) 속성을 가진 개별 콘텐츠 키 정보 kid 값은 요청 데이터에 입력된 값과 별개로 KMS 에서 새로 생성된 값이 적용되며, 키와 IV는 Base64 인코딩된 형태로 리턴됨
+                  └ cpix:Data:
+                    type: object
+                    additionalProperties: true
+                    description: 콘텐츠 키 데이터를 포함하는 요소
+                  └ pskc:Secret:
+                    type: object
+                    additionalProperties: true
+                    description: 콘텐츠 키의 비밀 데이터를 포함하는 요소
+                  └ pskc:PlainValue:
+                    type: string
+                    description: Base64로 인코딩된 콘텐츠 키 값
+                  └ cpix:DRMSystemList:
+                    type: object
+                    additionalProperties: true
+                    description: DRM 시스템 목록을 정의하는 컨테이너 요소
+                  └ cpix:DRMSystem:
+                    type: object
+                    additionalProperties: true
+                    description: kid (Key ID)와 systemId (DRM 시스템 식별자) 속성을 가진 각 DRM 시스템 정보
+                  └ cpix:ContentProtectionData:
+                    type: string
+                    description: Base64로 인코딩된 PSSH 데이터에서 헤더가 제거된 Payload 부분
+                  └ cpix:PSSH:
+                    type: string
+                    description: Base64로 인코딩된 PSSH 데이터(헤더 포함)
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+components:
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  schemas:
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

@@ -1,0 +1,1582 @@
+openapi: 3.0.3
+info:
+  title: mssql
+  description: ''
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: true
+    gov: true
+
+  x-ncloud-nrn:
+
+    productName: VPCCloudDBforMSSQL
+    resource_types:
+      - Service
+      - Server
+      - ConfigGroup
+
+servers:
+  - url: https://ncloud.apigw.ntruss.com/vmssql/v2
+    description: mssql 민간
+    x-ncloud-env: public
+  - url: https://ncloud.apigw.fin-ntruss.com/vmssql/v2
+    description: mssql 금융
+    x-ncloud-env: financial
+  - url: https://ncloud.apigw.gov-ntruss.com/vmssql/v2
+    description: mssql 공공
+    x-ncloud-env: gov
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /createCloudMssqlInstance:
+    post:
+      operationId: CreateCloudMssqlInstance
+      tags:
+        - mssql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateCloudMssqlInstanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCloudMssqlInstanceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for MSSQL 인스턴스를 생성합니다.
+  /createCloudMssqlSlaveInstance:
+    post:
+      operationId: CreateCloudMssqlSlaveInstance
+      tags:
+        - mssql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateCloudMssqlSlaveInstanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCloudMssqlSlaveInstanceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for MSSQL 인스턴스에 Slave 서버 인스턴스를 추가합니다.
+  /deleteCloudMssqlInstance:
+    post:
+      operationId: DeleteCloudMssqlInstance
+      tags:
+        - mssql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteCloudMssqlInstanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteCloudMssqlInstanceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for MSSQL 인스턴스를 삭제합니다.
+  /deleteCloudMssqlServerInstance:
+    post:
+      operationId: DeleteCloudMssqlServerInstance
+      tags:
+        - mssql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteCloudMssqlServerInstanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteCloudMssqlServerInstanceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for MSSQL Slave 서버 인스턴스를 삭제합니다.
+  /downloadDmsFile:
+    post:
+      operationId: DownloadDmsFile
+      tags:
+        - mssql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DownloadDmsFileRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DownloadDmsFileResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Download dms file
+  /getCloudMssqlBackupDetailList:
+    post:
+      operationId: GetCloudMssqlBackupDetailList
+      tags:
+        - mssql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudMssqlBackupDetailListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudMssqlBackupDetailListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for MSSQL 인스턴스의 백업 상세 정보를 목록으로 조회합니다.
+  /getCloudMssqlBackupList:
+    post:
+      operationId: GetCloudMssqlBackupList
+      tags:
+        - mssql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudMssqlBackupListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudMssqlBackupListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for MSSQL 인스턴스의 백업 목록을 조회합니다.
+  /getCloudMssqlCharacterSetList:
+    post:
+      operationId: GetCloudMssqlCharacterSetList
+      tags:
+        - mssql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudMssqlCharacterSetListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudMssqlCharacterSetListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for MSSQL에서 사용할 수 있는 Character Set 목록을 조회합니다.
+  /getCloudMssqlConfigGroupList:
+    post:
+      operationId: GetCloudMssqlConfigGroupList
+      tags:
+        - mssql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudMssqlConfigGroupListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudMssqlConfigGroupListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for MSSQL에서 사용할 수 있는 Config Group 목록을 조회합니다.
+  /getCloudMssqlImageProductList:
+    post:
+      operationId: GetCloudMssqlImageProductList
+      tags:
+        - mssql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudMssqlImageProductListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudMssqlImageProductListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for MSSQL 이미지 상품 코드 목록을 조회합니다.
+  /getCloudMssqlInstanceDetail:
+    post:
+      operationId: GetCloudMssqlInstanceDetail
+      tags:
+        - mssql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudMssqlInstanceDetailRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudMssqlInstanceDetailResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for MSSQL 인스턴스의 상세 정보를 조회합니다.
+  /getCloudMssqlInstanceList:
+    post:
+      operationId: GetCloudMssqlInstanceList
+      tags:
+        - mssql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudMssqlInstanceListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudMssqlInstanceListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for MSSQL 인스턴스 목록을 조회합니다.
+  /getCloudMssqlProductList:
+    post:
+      operationId: GetCloudMssqlProductList
+      tags:
+        - mssql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudMssqlProductListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudMssqlProductListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: 사용할 수 있는 Cloud DB for MSSQL 서버 스펙 코드 목록을 조회합니다.
+  /getDmsBackupList:
+    post:
+      operationId: GetDmsBackupList
+      tags:
+        - mssql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetDmsBackupListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetDmsBackupListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get dms backup list
+  /getDmsObjectStorageBackupList:
+    post:
+      operationId: GetDmsObjectStorageBackupList
+      tags:
+        - mssql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetDmsObjectStorageBackupListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetDmsObjectStorageBackupListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get dms object storage backup list
+  /getDmsOperation:
+    post:
+      operationId: GetDmsOperation
+      tags:
+        - mssql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetDmsOperationRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetDmsOperationResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get dms operation
+  /rebootCloudMssqlServerInstance:
+    post:
+      operationId: RebootCloudMssqlServerInstance
+      tags:
+        - mssql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RebootCloudMssqlServerInstanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RebootCloudMssqlServerInstanceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for MSSQL 서버 인스턴스를 재시작합니다.
+  /restoreDmsDatabase:
+    post:
+      operationId: RestoreDmsDatabase
+      tags:
+        - mssql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RestoreDmsDatabaseRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestoreDmsDatabaseResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Restore dms database
+  /restoreDmsTransactionLog:
+    post:
+      operationId: RestoreDmsTransactionLog
+      tags:
+        - mssql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RestoreDmsTransactionLogRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestoreDmsTransactionLogResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Restore dms transaction log
+  /setDmsObjectStorageInfo:
+    post:
+      operationId: SetDmsObjectStorageInfo
+      tags:
+        - mssql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetDmsObjectStorageInfoRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetDmsObjectStorageInfoResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Set dms object storage info
+  /uploadDmsFile:
+    post:
+      operationId: UploadDmsFile
+      tags:
+        - mssql
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UploadDmsFileRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadDmsFileResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Upload dms file
+components:
+  schemas:
+    BackupFile:
+      type: object
+      properties:
+        cloudMssqlServerName:
+          type: string
+          description: MSSQL 서버 이름
+        fileName:
+          type: string
+          description: 파일이름
+        databaseName:
+          type: string
+          description: DB 이름
+        firstLsn:
+          type: string
+          description: LSN 시작 번호
+        lastLsn:
+          type: string
+          description: LSN 끝번호
+        backupType:
+          $ref: '#/components/schemas/CommonCode'
+        startTime:
+          type: string
+          description: 백업시작시간
+        endTime:
+          type: string
+          description: 백업완료시간
+    CloudMssqlBackup:
+      type: object
+      properties:
+        cloudMssqlInstanceNo:
+          type: string
+          description: Cloud DB for Mssql 인스턴스 번호
+        cloudMssqlServiceName:
+          type: string
+          description: Cloud DB for Mssql 서비스 이름
+        backupFileRetentionPeriod:
+          type: integer
+          format: int32
+          description: 백업 파일 보관 기간
+        backupTime:
+          type: string
+          description: FullBackup 시작 시간
+        totalBackupDataSize:
+          type: integer
+          format: int64
+          description: 보관중인 Backup 데이터 사이즈
+        fullBackupDataSize:
+          type: integer
+          format: int64
+          description: FullBackup 데이터 사이즈
+        logBackupDataSize:
+          type: integer
+          format: int64
+          description: Log Backup 데이터 사이즈
+        logBackupCount:
+          type: integer
+          format: int32
+          description: Log Backup 수
+    CloudMssqlBackupDetail:
+      type: object
+      properties:
+        databaseName:
+          type: string
+          description: DB 이름
+        fullBackupSize:
+          type: integer
+          format: int64
+          description: FullBackup 데이터 사이즈
+        logBackupCount:
+          type: integer
+          format: int32
+          description: 연관된 Log Backup 수
+        logBackupSize:
+          type: integer
+          format: int64
+          description: 연관된 Log Backup 데이터 사이즈
+        startTime:
+          type: string
+          description: 백업 시작 일시
+        endTime:
+          type: string
+          description: 백업 종료 일시
+    CloudMssqlCharacterSet:
+      type: object
+      properties:
+        totalRows:
+          type: integer
+          format: int32
+          description: 조회된 리스트의 총 개수
+        characterSetName:
+          type: string
+          description: 문자셋 이름
+    CloudMssqlConfigGroup:
+      type: object
+      properties:
+        configGroupNo:
+          type: integer
+          format: int32
+          description: Cloud DB for MSSQL Config Group 번호
+        configGroupName:
+          type: string
+          description: Cloud DB for MSSQL Config Group 이름
+        configGroupDescription:
+          type: string
+          description: Cloud DB for MSSQL Config Group 설명
+        configGroupType:
+          $ref: '#/components/schemas/CommonCode'
+        configGroupStatus:
+          $ref: '#/components/schemas/CommonCode'
+        configGroupStatusName:
+          type: string
+          description: Cloud DB for MSSQL Config Group 상태명
+        createDate:
+          type: string
+          description: Cloud DB for MSSQL Config Group 생성 일시
+        modifyDate:
+          type: string
+          description: Cloud DB for MSSQL Config Group 마지막 수정 일시
+        cloudMssqlCharacterSetList:
+          type: array
+          description: Cloud DB for MSSQL Config Group 을 사용 중인 Cloud DB for MSSQL Instance 번호 목록
+          items:
+            $ref: '#/components/schemas/CloudMssqlCharacterSet'
+    CloudMssqlInstance:
+      type: object
+      properties:
+        cloudMssqlInstanceNo:
+          type: string
+          description: Cloud DB for MSSQL 인스턴스 번호
+        cloudMssqlServiceName:
+          type: string
+          description: Cloud DB for MSSQL 서비스 이름
+        cloudMssqlInstanceStatusName:
+          type: string
+          description: Cloud DB for MSSQL 인스턴스 상태 이름
+        cloudMssqlInstanceStatus:
+          $ref: '#/components/schemas/CommonCode'
+        cloudMssqlInstanceOperation:
+          $ref: '#/components/schemas/CommonCode'
+        cloudMssqlImageProductCode:
+          type: string
+          description: Cloud DB for MSSQL 상품 코드
+        isHa:
+          type: boolean
+          description: 고가용성 여부
+        licenseCode:
+          $ref: '#/components/schemas/CommonCode'
+        cloudMssqlPort:
+          type: integer
+          format: int32
+          description: Cloud DB for MSSQL 포트
+        backupFileRetentionPeriod:
+          type: integer
+          format: int32
+          description: 백업 파일 보관 기간
+        backupTime:
+          type: string
+          description: 백업 시간
+        configGroupNo:
+          type: string
+          description: Cloud DB for MSSQL Config Group 번호
+        engineVersion:
+          type: string
+          description: Cloud DB for MSSQL 엔진 버전
+        createDate:
+          type: string
+          description: 생성일자
+        dbCollation:
+          type: string
+          description: Cloud DB for MSSQL 문자셋
+        accessControlGroupNoList:
+          type: array
+          description: ACG 번호 리스트
+          items:
+            type: string
+        cloudMssqlServerInstanceList:
+          type: array
+          description: Cloud MSSQL 서버 리스트
+          items:
+            $ref: '#/components/schemas/CloudMssqlServerInstance'
+    CloudMssqlServerInstance:
+      type: object
+      properties:
+        cloudMssqlServerInstanceNo:
+          type: string
+          description: Cloud DB for MSSQL 서버 인스턴스 번호
+        cloudMssqlServerName:
+          type: string
+          description: Cloud DB for MSSQL 서버 이름
+        cloudMssqlServerRole:
+          $ref: '#/components/schemas/CommonCode'
+        cloudMssqlServerInstanceStatusName:
+          type: string
+          description: Cloud DB for MSSQL 서버 인스턴스 상태 이름
+        cloudMssqlServerInstanceStatus:
+          $ref: '#/components/schemas/CommonCode'
+        cloudMssqlServerInstanceOperation:
+          $ref: '#/components/schemas/CommonCode'
+        regionCode:
+          type: string
+          description: 리전 코드
+        zoneCode:
+          type: string
+          description: ZONE 코드
+        vpcNo:
+          type: string
+          description: VPC 번호
+        subnetNo:
+          type: string
+          description: Subnet 번호
+        dataStorageSize:
+          type: integer
+          format: int64
+          description: 데이터 스토리지 사이즈
+        cpuCount:
+          type: integer
+          format: int32
+          description: CPU 개수
+        memorySize:
+          type: integer
+          format: int64
+          description: 메모리 사이즈
+        isPublicSubnet:
+          type: boolean
+          description: Public Subnet 여부
+        cloudMssqlProductCode:
+          type: string
+          description: Cloud DB for MSSQL 상품 코드
+        privateDomain:
+          type: string
+          description: 사설 도메인명
+        publicDomain:
+          type: string
+          description: 공인 도메인명
+        createDate:
+          type: string
+          description: 생성일자
+        uptime:
+          type: string
+          description: 구동시간
+        dataStorageType:
+          $ref: '#/components/schemas/CommonCode'
+        usedDataStorageSize:
+          type: integer
+          format: int64
+          description: 사용중인 데이터 스토리지 사이
+    CommonCode:
+      type: object
+      properties:
+        code:
+          type: string
+          description: 코드
+        codeName:
+          type: string
+          description: 코드명
+    CreateCloudMssqlInstanceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: 리전 코드
+        vpcNo:
+          type: string
+          description: VPC 번호
+        subnetNo:
+          type: string
+          description: Subnet 번호
+        cloudMssqlServiceName:
+          type: string
+          description: Cloud MSSQL 서비스 이름
+        configGroupNo:
+          type: string
+          description: Cloud MSSQL Config Group 번호
+        cloudMssqlImageProductCode:
+          type: string
+          description: Cloud MSSQL 상품 코드
+        cloudMssqlProductCode:
+          type: string
+          description: Cloud MSSQL 스펙 코드
+        dataStorageTypeCode:
+          type: string
+          description: 데이터 스토리지 타입 코드
+        isHa:
+          type: boolean
+          description: 고가용성 여부
+        backupFileRetentionPeriod:
+          type: integer
+          format: int32
+          description: 백업 파일 보관 기간
+        backupTime:
+          type: string
+          description: 백업 시간
+        isAutomaticBackup:
+          type: boolean
+          description: 백업 시간 자동 여부
+        cloudMssqlUserName:
+          type: string
+          description: 접근 유저명
+        cloudMssqlUserPassword:
+          type: string
+          description: 접근 패스워드
+        cloudMssqlPort:
+          type: integer
+          format: int32
+          description: Cloud MSSQL 포트
+        characterSetName:
+          type: string
+          description: DB 문자셋
+    CreateCloudMssqlInstanceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudMssqlInstanceList:
+          type: array
+          description: CloudMssql 인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudMssqlInstance'
+    CreateCloudMssqlSlaveInstanceRequest:
+      type: object
+      properties:
+        cloudMssqlInstanceNo:
+          type: string
+          description: Cloud MSSQL 인스턴스 번호
+        regionCode:
+          type: string
+          description: REGION 코드
+        privateDomainPostfix:
+          type: string
+          description: private domain postfix
+    CreateCloudMssqlSlaveInstanceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudMssqlInstanceList:
+          type: array
+          description: CloudMssql 인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudMssqlInstance'
+    DeleteCloudMssqlInstanceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudMssqlInstanceNo:
+          type: string
+          description: Cloud MSSQL 인스턴스 번호
+    DeleteCloudMssqlInstanceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudMssqlInstanceList:
+          type: array
+          description: CloudMssql 인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudMssqlInstance'
+    DeleteCloudMssqlServerInstanceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudMssqlServerInstanceNo:
+          type: string
+          description: CloudMssql 서버인스턴스 번호
+    DeleteCloudMssqlServerInstanceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudMssqlInstanceList:
+          type: array
+          description: CloudMssql 인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudMssqlInstance'
+    DmsFile:
+      type: object
+      properties:
+        fileLength:
+          type: integer
+          format: int64
+          description: 파일길이
+        lastWriteTime:
+          type: string
+          description: 파일작성시간
+        fileName:
+          type: string
+          description: 파일이름
+    DownloadDmsFileRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudMssqlInstanceNo:
+          type: string
+          description: CloudMssql 인스턴스 번호
+        fileName:
+          type: string
+          description: 파일 이름
+    DownloadDmsFileResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        requestNo:
+          type: string
+          description: 요청번호
+    GetCloudMssqlBackupDetailListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudMssqlInstanceNo:
+          type: string
+          description: CloudMssql 인스턴스 번호
+        pageNo:
+          type: integer
+          format: int32
+          description: 페이지 번호
+        pageSize:
+          type: integer
+          format: int32
+          description: 페이지 사이즈
+    GetCloudMssqlBackupDetailListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudMssqlBackupDetailList:
+          type: array
+          description: CloudMssql 백업상세리스트
+          items:
+            $ref: '#/components/schemas/CloudMssqlBackupDetail'
+    GetCloudMssqlBackupListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        pageNo:
+          type: integer
+          format: int32
+          description: 페이지 번호
+        pageSize:
+          type: integer
+          format: int32
+          description: 페이지 사이즈
+    GetCloudMssqlBackupListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudMssqlBackupList:
+          type: array
+          description: CloudMssql 백업리스트
+          items:
+            $ref: '#/components/schemas/CloudMssqlBackup'
+    GetCloudMssqlCharacterSetListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+    GetCloudMssqlCharacterSetListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudMssqlCharacterSetList:
+          type: array
+          description: Cloud MSSQL 문자셋 리스트
+          items:
+            $ref: '#/components/schemas/CloudMssqlCharacterSet'
+    GetCloudMssqlConfigGroupListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        configGroupNo:
+          type: string
+          description: Config Group 번호
+        configGroupName:
+          type: string
+          description: Config Group 이름
+        cloudMssqlInstanceNo:
+          type: string
+          description: Cloud MSSQL 번호
+        cloudMssqlServiceName:
+          type: string
+          description: Cloud MSSQL 이름
+    GetCloudMssqlConfigGroupListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudMssqlConfigGroupList:
+          type: array
+          description: Cloud MSSQL Config Group 리스트
+          items:
+            $ref: '#/components/schemas/CloudMssqlConfigGroup'
+    GetCloudMssqlImageProductListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        productCode:
+          type: string
+          description: 조회할상품코드
+        exclusionProductCode:
+          type: string
+          description: 제외할상품코드
+    GetCloudMssqlImageProductListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        productList:
+          type: array
+          description: 상품리스트
+          items:
+            $ref: '#/components/schemas/Product'
+    GetCloudMssqlInstanceDetailRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudMssqlInstanceNo:
+          type: string
+          description: CloudMssql 인스턴스 번호
+    GetCloudMssqlInstanceDetailResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudMssqlInstanceList:
+          type: array
+          description: CloudMssql 인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudMssqlInstance'
+    GetCloudMssqlInstanceListRequest:
+      type: object
+      properties:
+        cloudMssqlInstanceNoList:
+          type: array
+          description: CloudMssql 인스턴스 번호 리스트
+          items:
+            type: string
+        cloudMssqlServiceName:
+          type: string
+          description: CloudMssql 서비스이름
+        cloudMssqlServerInstanceNoList:
+          type: string
+          description: CloudMssql 서버인스턴스 번호 리스트
+        cloudMssqlServerName:
+          type: string
+          description: CloudMssql 서버 이름
+        regionCode:
+          type: string
+          description: REGION 코드
+        zoneCode:
+          type: string
+          description: ZONE 코드
+        vpcNo:
+          type: string
+          description: VPC 번호
+        subnetNo:
+          type: string
+          description: Subnet 번호
+        pageNo:
+          type: integer
+          format: int32
+          description: 페이지번호
+        pageSize:
+          type: integer
+          format: int32
+          description: 페이지사이즈
+    GetCloudMssqlInstanceListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudMssqlInstanceList:
+          type: array
+          description: CloudMssql 인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudMssqlInstance'
+    GetCloudMssqlProductListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        zoneCode:
+          type: string
+          description: ZONE 코드
+        cloudMssqlImageProductCode:
+          type: string
+          description: CloudMssql 이미지상품코드
+        productCode:
+          type: string
+          description: 조회할상품코드
+        exclusionProductCode:
+          type: string
+          description: 제외할상품코드
+    GetCloudMssqlProductListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        productList:
+          type: array
+          description: 상품리스트
+          items:
+            $ref: '#/components/schemas/Product'
+    GetDmsBackupListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudMssqlInstanceNo:
+          type: string
+          description: CloudMssql 인스턴스 번호
+        databaseName:
+          type: string
+          description: 데이터베이스 이름
+        backupTypeCode:
+          type: string
+          description: 백업 유형 코드
+    GetDmsBackupListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        backupFileList:
+          type: array
+          description: 백업파일리스트
+          items:
+            $ref: '#/components/schemas/BackupFile'
+    GetDmsObjectStorageBackupListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudMssqlInstanceNo:
+          type: string
+          description: CloudMssql 인스턴스 번호
+        folderName:
+          type: string
+          description: 폴더이름
+    GetDmsObjectStorageBackupListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        dmsFileList:
+          type: array
+          description: DMS 파일리스트
+          items:
+            $ref: '#/components/schemas/DmsFile'
+    GetDmsOperationRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        requestNo:
+          type: string
+          description: 요청번호
+    GetDmsOperationResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        status:
+          $ref: '#/components/schemas/CommonCode'
+    Product:
+      type: object
+      properties:
+        productCode:
+          type: string
+          description: 상품코드
+        productName:
+          type: string
+          description: 상품이름
+        productType:
+          $ref: '#/components/schemas/CommonCode'
+        productDescription:
+          type: string
+          description: 상품설명
+        infraResourceType:
+          $ref: '#/components/schemas/CommonCode'
+        infraResourceDetailType:
+          $ref: '#/components/schemas/CommonCode'
+        cpuCount:
+          type: integer
+          format: int32
+          description: CPU 개수
+        memorySize:
+          type: integer
+          format: int64
+          description: 메모리사이즈
+        baseBlockStorageSize:
+          type: integer
+          format: int64
+          description: 기본블록스토리지사이즈
+        platformType:
+          $ref: '#/components/schemas/CommonCode'
+        osInformation:
+          type: string
+          description: OS 정보
+        diskType:
+          $ref: '#/components/schemas/CommonCode'
+        dbKindCode:
+          type: string
+          description: DB 유형 코드
+        addBlockStorageSize:
+          type: integer
+          format: int64
+          description: 추가블록스토리지사이즈
+        generationCode:
+          type: string
+          description: 세대코드
+    RebootCloudMssqlServerInstanceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudMssqlServerInstanceNo:
+          type: string
+          description: CloudMssql 서버인스턴스 번호
+    RebootCloudMssqlServerInstanceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudMssqlInstanceList:
+          type: array
+          description: CloudMssql 인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudMssqlInstance'
+    RestoreDmsDatabaseRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudMssqlInstanceNo:
+          type: string
+          description: CloudMssql 인스턴스 번호
+        fileName:
+          type: string
+          description: 파일이름
+        isRecovery:
+          type: boolean
+          description: recovery 모드 여부
+        newDatabaseName:
+          type: string
+          description: 새로운 데이터베이스 이름
+    RestoreDmsDatabaseResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        requestNo:
+          type: string
+          description: 요청번호
+    RestoreDmsTransactionLogRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudMssqlInstanceNo:
+          type: string
+          description: CloudMssql 인스턴스 번호
+        fileName:
+          type: string
+          description: 파일이름
+        isRecovery:
+          type: boolean
+          description: recovery 모드 여부
+        newDatabaseName:
+          type: string
+          description: 새로운 데이터베이스 이름
+        stopTime:
+          type: string
+          description: restore 할 시점
+    RestoreDmsTransactionLogResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        requestNo:
+          type: string
+          description: 요청번호
+    SetDmsObjectStorageInfoRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        objectStorageAccessKey:
+          type: string
+          description: access key
+        objectStorageSecretKey:
+          type: string
+          description: secret key
+        endpoint:
+          type: string
+          description: endpoint
+        bucketName:
+          type: string
+          description: 버킷 이름
+    SetDmsObjectStorageInfoResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+    UploadDmsFileRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudMssqlInstanceNo:
+          type: string
+          description: CloudMssql 인스턴스 번호
+        fileName:
+          type: string
+          description: 파일 이름
+    UploadDmsFileResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        requestNo:
+          type: string
+          description: 요청번호
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

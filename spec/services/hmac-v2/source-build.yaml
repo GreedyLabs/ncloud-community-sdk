@@ -1,0 +1,1049 @@
+openapi: 3.0.3
+info:
+  title: source-build
+  description: ''
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: true
+    gov: true
+
+  x-ncloud-nrn:
+
+    productName: SourceBuild
+    resource_types:
+      - Project
+
+servers:
+  - url: https://sourcebuild.apigw.ntruss.com/api/v1
+    description: source-build 민간
+    x-ncloud-env: public
+  - url: https://sourcebuild.apigw.fin-ntruss.com/api/v1
+    description: source-build 금융
+    x-ncloud-env: financial
+  - url: https://sourcebuild.apigw.gov-ntruss.com/api/v1
+    description: source-build 공공
+    x-ncloud-env: gov
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /containerregistry/registry:
+    get:
+      operationId: GetContainerRegistry
+      tags:
+        - source-build
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetContainerRegistryResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get container registry
+  /env/compute:
+    get:
+      operationId: GetComputeEnv
+      tags:
+        - source-build
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetComputeEnvResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get compute env
+  /env/docker:
+    get:
+      operationId: GetDockerEnv
+      tags:
+        - source-build
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetDockerEnvResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get docker env
+  /env/os:
+    get:
+      operationId: GetOsEnv
+      tags:
+        - source-build
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetOsEnvResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get OS env
+  /env/os/{osId}/runtime:
+    get:
+      operationId: GetRuntimeEnv
+      tags:
+        - source-build
+      parameters:
+        - name: osId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRuntimeEnvResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get runtime env
+  /env/os/{osId}/runtime/{runtimeId}/version:
+    get:
+      operationId: GetRuntimeVersionEnv
+      tags:
+        - source-build
+      parameters:
+        - name: osId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: runtimeId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRuntimeVersionEnvResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get runtime version env
+  /objectstorage/bucket:
+    get:
+      operationId: GetObjectstorageBucket
+      tags:
+        - source-build
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetObjsBucketResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get objectstorage bucket
+  /project:
+    get:
+      operationId: GetProjects
+      tags:
+        - source-build
+      parameters:
+        - name: localVarOptionals
+          in: query
+          schema:
+            type: object
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetProjectListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get projects
+    post:
+      operationId: CreateProject
+      tags:
+        - source-build
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProject'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateProjectResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Create project
+  /project/{projectId}:
+    delete:
+      operationId: DeleteProject
+      tags:
+        - source-build
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Delete project
+    get:
+      operationId: GetProject
+      tags:
+        - source-build
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetProjectDetailResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get project
+    patch:
+      operationId: ChangeProject
+      tags:
+        - source-build
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeProject'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateProjectResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Change project
+  /project/{projectId}/build:
+    delete:
+      operationId: CancelBuild
+      tags:
+        - source-build
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CancelBuild'
+      responses:
+        '200':
+          description: OK
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cancel build
+    post:
+      operationId: StartBuild
+      tags:
+        - source-build
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StartBuildResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Start build
+  /project/{projectId}/history:
+    get:
+      operationId: GetBuildHistory
+      tags:
+        - source-build
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBuildHistoryResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get build history
+  /sourcecommit/repository:
+    get:
+      operationId: GetSourcecommitRepositories
+      tags:
+        - source-build
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetScRepositoryResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get sourcecommit repositories
+  /sourcecommit/repository/{repositoryName}/branch:
+    get:
+      operationId: GetSourcecommitRepositoryBranches
+      tags:
+        - source-build
+      parameters:
+        - name: repositoryName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetScBranchResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get sourcecommit repository branches
+components:
+  schemas:
+    CancelBuild:
+      type: object
+      properties:
+        buildId:
+          type: string
+    ChangeProject:
+      type: object
+      properties:
+        description:
+          type: string
+        source:
+          $ref: '#/components/schemas/ProjectSource'
+        env:
+          $ref: '#/components/schemas/ProjectEnv'
+        cmd:
+          $ref: '#/components/schemas/ProjectCmd'
+        artifact:
+          $ref: '#/components/schemas/ProjectArtifact'
+        cache:
+          $ref: '#/components/schemas/ProjectCache'
+        linked:
+          $ref: '#/components/schemas/ProjectLinked'
+    CreateProject:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        source:
+          $ref: '#/components/schemas/ProjectSource'
+        env:
+          $ref: '#/components/schemas/ProjectEnv'
+        cmd:
+          $ref: '#/components/schemas/ProjectCmd'
+        artifact:
+          $ref: '#/components/schemas/ProjectArtifact'
+        cache:
+          $ref: '#/components/schemas/ProjectCache'
+        linked:
+          $ref: '#/components/schemas/ProjectLinked'
+    CreateProjectResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+    EnvPlatformConfigRequest:
+      type: object
+      properties:
+        os:
+          $ref: '#/components/schemas/EnvPlatformConfigRequestOs'
+        runtime:
+          $ref: '#/components/schemas/EnvPlatformConfigRequestRuntime'
+        registry:
+          type: string
+        image:
+          type: string
+        tag:
+          type: string
+    EnvPlatformConfigRequestOs:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+    EnvPlatformConfigRequestRuntime:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        version:
+          $ref: '#/components/schemas/EnvPlatformConfigRequestRuntimeVersion'
+    EnvPlatformConfigRequestRuntimeVersion:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+    EnvPlatformConfigResponse:
+      type: object
+      properties:
+        os:
+          $ref: '#/components/schemas/EnvPlatformConfigResponseOs'
+        runtime:
+          $ref: '#/components/schemas/EnvPlatformConfigResponseRuntime'
+        registry:
+          type: string
+        image:
+          type: string
+        tag:
+          type: string
+    EnvPlatformConfigResponseOs:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        version:
+          type: string
+        archi:
+          type: string
+    EnvPlatformConfigResponseRuntime:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        version:
+          $ref: '#/components/schemas/EnvPlatformConfigResponseRuntimeVersion'
+    EnvPlatformConfigResponseRuntimeVersion:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+    GetBuildHistoryResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+          format: int32
+        history:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetBuildHistoryResponseHistory'
+    GetBuildHistoryResponseHistory:
+      type: object
+      properties:
+        projectId:
+          type: integer
+          format: int32
+        buildId:
+          type: string
+        begin:
+          type: integer
+          format: int32
+        end:
+          type: integer
+          format: int32
+        userId:
+          type: string
+        status:
+          type: string
+        failedPhase:
+          type: string
+    GetComputeEnvResponse:
+      type: object
+      properties:
+        compute:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetComputeEnvResponseCompute'
+    GetComputeEnvResponseCompute:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        cpu:
+          type: integer
+          format: int32
+        mem:
+          type: integer
+          format: int32
+    GetContainerRegistryResponse:
+      type: object
+      properties:
+        registry:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetContainerRegistryResponseRegistry'
+    GetContainerRegistryResponseRegistry:
+      type: object
+      properties:
+        name:
+          type: string
+        status:
+          type: string
+        permission:
+          type: string
+        actionName:
+          type: string
+        disabled:
+          type: boolean
+    GetDockerEnvResponse:
+      type: object
+      properties:
+        docker:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetDockerEnvResponseDocker'
+    GetDockerEnvResponseDocker:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+    GetObjsBucketResponse:
+      type: object
+      properties:
+        bucket:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetObjsBucketResponseBucket'
+    GetObjsBucketResponseBucket:
+      type: object
+      properties:
+        name:
+          type: string
+        permission:
+          type: string
+        actionName:
+          type: string
+        creationTime:
+          type: integer
+          format: int32
+        disabled:
+          type: boolean
+    GetOsEnvResponse:
+      type: object
+      properties:
+        os:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetOsEnvResponseOs'
+    GetOsEnvResponseOs:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        version:
+          type: string
+        archi:
+          type: string
+    GetProjectDetailResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        description:
+          type: string
+        created:
+          $ref: '#/components/schemas/GetProjectDetailResponseCreated'
+        source:
+          $ref: '#/components/schemas/GetProjectDetailResponseSource'
+        env:
+          $ref: '#/components/schemas/GetProjectDetailResponseEnv'
+        cmd:
+          $ref: '#/components/schemas/ProjectCmd'
+        artifact:
+          $ref: '#/components/schemas/GetProjectDetailResponseArtifact'
+        cache:
+          $ref: '#/components/schemas/ProjectCache'
+        linked:
+          $ref: '#/components/schemas/ProjectLinked'
+        lastBuild:
+          $ref: '#/components/schemas/GetProjectDetailResponseLastBuild'
+    GetProjectDetailResponseArtifact:
+      type: object
+      properties:
+        use:
+          type: boolean
+        path:
+          type: array
+          items:
+            type: string
+        storage:
+          $ref: '#/components/schemas/GetProjectDetailResponseArtifactStorage'
+        backup:
+          type: boolean
+    GetProjectDetailResponseArtifactStorage:
+      type: object
+      properties:
+        bucket:
+          type: string
+        path:
+          type: string
+        filename:
+          type: string
+    GetProjectDetailResponseCreated:
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        user:
+          type: string
+    GetProjectDetailResponseEnv:
+      type: object
+      properties:
+        compute:
+          $ref: '#/components/schemas/GetProjectDetailResponseEnvCompute'
+        platform:
+          $ref: '#/components/schemas/GetProjectDetailResponseEnvPlatform'
+        docker:
+          $ref: '#/components/schemas/GetProjectDetailResponseEnvDocker'
+        timeout:
+          type: integer
+          format: int32
+        envVars:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectEnvEnvVars'
+    GetProjectDetailResponseEnvCompute:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        cpu:
+          type: integer
+          format: int32
+        mem:
+          type: integer
+          format: int32
+    GetProjectDetailResponseEnvDocker:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        use:
+          type: boolean
+        name:
+          type: string
+    GetProjectDetailResponseEnvPlatform:
+      type: object
+      properties:
+        type:
+          type: string
+        config:
+          $ref: '#/components/schemas/EnvPlatformConfigResponse'
+    GetProjectDetailResponseLastBuild:
+      type: object
+      properties:
+        id:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        status:
+          type: string
+    GetProjectDetailResponseSource:
+      type: object
+      properties:
+        type:
+          type: string
+        config:
+          $ref: '#/components/schemas/GetProjectDetailResponseSourceConfig'
+    GetProjectDetailResponseSourceConfig:
+      type: object
+      properties:
+        repository:
+          type: string
+        branch:
+          type: string
+    GetProjectListResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+          format: int32
+        project:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetProjectListResponseProject'
+    GetProjectListResponseProject:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        permission:
+          type: string
+        actionName:
+          type: string
+    GetRuntimeEnvResponse:
+      type: object
+      properties:
+        runtime:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetDockerEnvResponseDocker'
+    GetRuntimeVersionEnvResponse:
+      type: object
+      properties:
+        version:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetDockerEnvResponseDocker'
+    GetScBranchResponse:
+      type: object
+      properties:
+        default:
+          type: string
+        branch:
+          type: array
+          items:
+            type: string
+    GetScRepositoryResponse:
+      type: object
+      properties:
+        repository:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetScRepositoryResponseRepository'
+    GetScRepositoryResponseRepository:
+      type: object
+      properties:
+        name:
+          type: string
+        permission:
+          type: string
+        actionName:
+          type: string
+    ProjectArtifact:
+      type: object
+      properties:
+        use:
+          type: boolean
+        path:
+          type: array
+          items:
+            type: string
+        storage:
+          $ref: '#/components/schemas/ProjectArtifactStorage'
+        backup:
+          type: boolean
+    ProjectArtifactStorage:
+      type: object
+      properties:
+        bucket:
+          type: string
+        path:
+          type: string
+        filename:
+          type: string
+    ProjectCache:
+      type: object
+      properties:
+        use:
+          type: boolean
+        registry:
+          type: string
+        image:
+          type: string
+        tag:
+          type: string
+        latest:
+          type: boolean
+    ProjectCmd:
+      type: object
+      properties:
+        pre:
+          type: array
+          items:
+            type: string
+        build:
+          type: array
+          items:
+            type: string
+        post:
+          type: array
+          items:
+            type: string
+        dockerbuild:
+          $ref: '#/components/schemas/ProjectCmdDockerbuild'
+      required:
+        - pre
+        - build
+        - post
+    ProjectCmdDockerbuild:
+      type: object
+      properties:
+        use:
+          type: boolean
+        dockerfile:
+          type: string
+        registry:
+          type: string
+        image:
+          type: string
+        tag:
+          type: string
+        latest:
+          type: boolean
+    ProjectEnv:
+      type: object
+      properties:
+        compute:
+          $ref: '#/components/schemas/ProjectEnvCompute'
+        platform:
+          $ref: '#/components/schemas/ProjectEnvPlatform'
+        docker:
+          $ref: '#/components/schemas/ProjectEnvDocker'
+        timeout:
+          type: integer
+          format: int32
+        envVars:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectEnvEnvVars'
+    ProjectEnvCompute:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+    ProjectEnvDocker:
+      type: object
+      properties:
+        use:
+          type: boolean
+        id:
+          type: integer
+          format: int32
+    ProjectEnvEnvVars:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+    ProjectEnvPlatform:
+      type: object
+      properties:
+        type:
+          type: string
+        config:
+          $ref: '#/components/schemas/EnvPlatformConfigRequest'
+    ProjectLinked:
+      type: object
+      properties:
+        CloudLogAnalytics:
+          type: boolean
+        FileSafer:
+          type: boolean
+    ProjectSource:
+      type: object
+      properties:
+        type:
+          type: string
+        config:
+          $ref: '#/components/schemas/ProjectSourceConfig'
+    ProjectSourceConfig:
+      type: object
+      properties:
+        repository:
+          type: string
+        branch:
+          type: string
+    StartBuildResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        buildId:
+          type: string
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

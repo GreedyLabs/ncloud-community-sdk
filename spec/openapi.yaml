@@ -1,0 +1,603 @@
+openapi: 3.0.3
+info:
+  title: NcloudGo — Naver Cloud Platform OpenAPI
+  description: |-
+    Reconstructed OpenAPI 3.0 specification for Naver Cloud Platform (NCP).
+
+    Two authoritative sources are merged:
+      1. Go SDK: github.com/NaverCloudPlatform/ncloud-sdk-go-v2 @ 6eac36b
+         → 20 VPC-era services (520 operations), parsed via AST + canonical
+           semantic types.
+      2. Public docs portal: api.ncloud-docs.com (Document360)
+         → 57 services (1426 operations) NOT in the Go SDK, extracted via
+           `tools/docparse.py`.
+
+    Total: 77 services, 1946 operations, 1946 verified (100%).
+
+    Each service spec lives in `./services/<name>.yaml` and lint-passes OpenAPI
+    3.0.3 independently. This root document is an index — it does not merge
+    paths; consumers should pick a service file directly or use a tool that
+    walks `x-service-files[].path` entries.
+
+    Three-environment servers (민간/금융/공공) are declared per service using the
+    `x-ncloud-env` vendor extension. See README for details.
+  version: 2.0.0
+paths: {}
+components:
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+x-ncloud-environments:
+- key: public
+  domain: ntruss.com
+  label: 민간
+- key: financial
+  domain: fin-ntruss.com
+  label: 금융
+- key: gov
+  domain: gov-ntruss.com
+  label: 공공
+x-ncloud-stats:
+  services: 77
+  operations: 1946
+  verified: 1946
+  source_distribution:
+    sdk: 520
+    docs: 1426
+x-service-files:
+- name: ai-tems
+  path: ./services/hmac-v2/ai-tems.yaml
+  ops: 27
+  verified: 27
+  source: docs
+  base_url: https://aitems.apigw.ntruss.com
+  title: AiTEMS
+- name: api-gateway
+  path: ./services/hmac-v2/api-gateway.yaml
+  ops: 132
+  verified: 132
+  source: docs
+  base_url: https://apigateway.apigw.ntruss.com
+  title: api-gateway
+- name: application-maps
+  path: ./services/ncloud-app/application-maps.yaml
+  ops: 4
+  verified: 4
+  source: docs
+  base_url: https://maps.apigw.ntruss.com
+  title: application-maps
+- name: archive-storage
+  path: ./services/swift-compat/archive-storage.yaml
+  ops: 19
+  verified: 19
+  source: docs
+  base_url: https://{regionCode}.archive.ncloudstorage.com
+  title: archive-storage
+- name: arc-eye
+  path: ./services/ncloud-app/arc-eye.yaml
+  ops: 5
+  verified: 5
+  source: docs
+  base_url: https://arc.apigw.ntruss.com
+  title: arc-eye
+- name: blockchain
+  path: ./services/hmac-v2/blockchain.yaml
+  ops: 19
+  verified: 19
+  source: docs
+  base_url: https://blockchainservice.apigw.ntruss.com
+  title: blockchain
+- name: cdn
+  path: ./services/hmac-v2/cdn.yaml
+  ops: 6
+  verified: 6
+  source: sdk
+  base_url: https://ncloud.apigw.ntruss.com/cdn/v2
+  title: ''
+- name: certificate-manager
+  path: ./services/hmac-v2/certificate-manager.yaml
+  ops: 20
+  verified: 20
+  source: docs
+  base_url: https://certificatemanager.apigw.ntruss.com
+  title: certificate-manager
+- name: chatbot
+  path: ./services/ncloud-app/chatbot.yaml
+  ops: 3
+  verified: 3
+  source: docs
+  base_url: https://chatbot.apigw.ntruss.com
+  title: CLOVA Chatbot
+- name: cloud-activity-tracer
+  path: ./services/hmac-v2/cloud-activity-tracer.yaml
+  ops: 1
+  verified: 1
+  source: docs
+  base_url: https://cloudactivitytracer.apigw.ntruss.com/api/v1
+  title: Cloud Activity Tracer — audit log of NCP control-plane actions (AWS CloudTrail equivalent).
+- name: cloud-advisor
+  path: ./services/hmac-v2/cloud-advisor.yaml
+  ops: 14
+  verified: 14
+  source: docs
+  base_url: https://cloud-advisor.apigw.ntruss.com
+  title: Cloud Advisor
+- name: cloud-functions
+  path: ./services/hmac-v2/cloud-functions.yaml
+  ops: 42
+  verified: 42
+  source: docs
+  base_url: https://cloudfunctions.apigw.ntruss.com
+  title: Cloud Functions
+- name: cloud-insight
+  path: ./services/hmac-v2/cloud-insight.yaml
+  ops: 75
+  verified: 75
+  source: docs
+  base_url: https://cw.apigw.ntruss.com
+  title: cloud-insight
+- name: cloud-log-analytics
+  path: ./services/hmac-v2/cloud-log-analytics.yaml
+  ops: 29
+  verified: 29
+  source: docs
+  base_url: https://cloudloganalytics.apigw.ntruss.com
+  title: Cloud Log Analytics
+- name: cloud-outbound-mailer
+  path: ./services/hmac-v2/cloud-outbound-mailer.yaml
+  ops: 35
+  verified: 35
+  source: docs
+  base_url: https://mail.apigw.ntruss.com
+  title: Cloud Outbound Mailer
+- name: cloud-search
+  path: ./services/hmac-v2/cloud-search.yaml
+  ops: 59
+  verified: 59
+  source: docs
+  base_url: https://cloudsearch.apigw.ntruss.com
+  title: Cloud Search
+- name: clova-speech
+  path: ./services/ncloud-app/clova-speech.yaml
+  ops: 5
+  verified: 5
+  source: docs
+  base_url: https://clovaspeech.apigw.ntruss.com
+  title: CLOVA Speech
+- name: clova-studio
+  path: ./services/ncloud-app/clova-studio.yaml
+  ops: 18
+  verified: 18
+  source: docs
+  base_url: https://clovastudio.apigw.ntruss.com
+  title: CLOVA Studio (HyperCLOVA X)
+- name: data-box-frame
+  path: ./services/hmac-v2/data-box-frame.yaml
+  ops: 30
+  verified: 30
+  source: docs
+  base_url: https://databoxframe.apigw.ntruss.com
+  title: data-box-frame
+- name: data-catalog
+  path: ./services/hmac-v2/data-catalog.yaml
+  ops: 21
+  verified: 21
+  source: docs
+  base_url: https://datacatalog.apigw.ntruss.com
+  title: Data Catalog
+- name: data-fence
+  path: ./services/hmac-v2/data-fence.yaml
+  ops: 35
+  verified: 35
+  source: docs
+  base_url: https://datafence.apigw.ntruss.com
+  title: data-fence
+- name: data-flow
+  path: ./services/hmac-v2/data-flow.yaml
+  ops: 23
+  verified: 23
+  source: docs
+  base_url: https://dataflow.apigw.ntruss.com
+  title: Data Flow
+- name: data-forest
+  path: ./services/hmac-v2/data-forest.yaml
+  ops: 24
+  verified: 24
+  source: docs
+  base_url: https://df.apigw.ntruss.com
+  title: Data Forest
+- name: data-query
+  path: ./services/hmac-v2/data-query.yaml
+  ops: 5
+  verified: 5
+  source: docs
+  base_url: https://dataquery.apigw.ntruss.com
+  title: Data Query (Trino-compat)
+- name: data-stream
+  path: ./services/hmac-v2/data-stream.yaml
+  ops: 19
+  verified: 19
+  source: docs
+  base_url: https://datastream.apigw.ntruss.com
+  title: data-stream
+- name: drm
+  path: ./services/hmac-v2/drm.yaml
+  ops: 8
+  verified: 8
+  source: docs
+  base_url: https://multi-drm.apigw.ntruss.com
+  title: drm
+- name: edge
+  path: ./services/hmac-v2/edge.yaml
+  ops: 16
+  verified: 16
+  source: docs
+  base_url: https://edge.apigw.ntruss.com
+  title: edge
+- name: file-safer
+  path: ./services/hmac-v2/file-safer.yaml
+  ops: 13
+  verified: 13
+  source: docs
+  base_url: https://filesafer.apigw.ntruss.com
+  title: file-safer
+- name: gamepot
+  path: ./services/ncloud-app/gamepot.yaml
+  ops: 14
+  verified: 14
+  source: docs
+  base_url: https://gamepot.apigw.ntruss.com
+  title: gamepot
+- name: geo-cidr
+  path: ./services/hmac-v2/geo-cidr.yaml
+  ops: 6
+  verified: 6
+  source: docs
+  base_url: https://globaltrafficmanager.apigw.ntruss.com
+  title: geo-cidr
+- name: geo-location
+  path: ./services/hmac-v2/geo-location.yaml
+  ops: 3
+  verified: 3
+  source: docs
+  base_url: https://geolocation.apigw.ntruss.com
+  title: geo-location
+- name: global-dns
+  path: ./services/hmac-v2/global-dns.yaml
+  ops: 12
+  verified: 12
+  source: docs
+  base_url: https://globaldns.apigw.ntruss.com
+  title: global-dns
+- name: global-traffic-manager
+  path: ./services/hmac-v2/global-traffic-manager.yaml
+  ops: 5
+  verified: 5
+  source: docs
+  base_url: https://globaltrafficmanager.apigw.ntruss.com
+  title: global-traffic-manager
+- name: kms
+  path: ./services/hmac-v1/kms.yaml
+  ops: 6
+  verified: 6
+  source: docs
+  base_url: https://kms.apigw.ntruss.com
+  title: kms
+- name: kms2
+  path: ./services/hmac-v2/kms2.yaml
+  ops: 38
+  verified: 38
+  source: docs
+  base_url: https://kms.apigw.ntruss.com
+  title: kms2
+- name: live-station
+  path: ./services/hmac-v2/live-station.yaml
+  ops: 68
+  verified: 68
+  source: docs
+  base_url: https://livestation.apigw.ntruss.com
+  title: live-station
+- name: maiu
+  path: ./services/hmac-v2/maiu.yaml
+  ops: 39
+  verified: 39
+  source: docs
+  base_url: https://mi.apigw.ntruss.com
+  title: maiu
+- name: media-connect-center
+  path: ./services/hmac-v2/media-connect-center.yaml
+  ops: 20
+  verified: 20
+  source: docs
+  base_url: https://ncloudmcc.apigw.ntruss.com
+  title: media-connect-center
+- name: naver
+  path: ./services/ncloud-app/naver.yaml
+  ops: 17
+  verified: 17
+  source: docs
+  base_url: https://naveropenapi.apigw.ntruss.com
+  title: Naver OpenAPI
+- name: ncloud-chat
+  path: ./services/ncloud-app/ncloud-chat.yaml
+  ops: 23
+  verified: 23
+  source: docs
+  base_url: https://chatapi.apigw.ntruss.com
+  title: Ncloud Chat
+- name: nclue
+  path: ./services/hmac-v2/nclue.yaml
+  ops: 21
+  verified: 21
+  source: docs
+  base_url: https://nclue.apigw.ntruss.com
+  title: Naver CLUE
+- name: object-storage
+  path: ./services/s3-compat/object-storage.yaml
+  ops: 9
+  verified: 9
+  source: docs
+  base_url: https://placeholder.apigw.ntruss.com
+  title: object-storage
+- name: ocr
+  path: ./services/ncloud-app/ocr.yaml
+  ops: 7
+  verified: 7
+  source: docs
+  base_url: https://ocr.apigw.ntruss.com
+  title: OCR
+- name: organization
+  path: ./services/hmac-v2/organization.yaml
+  ops: 27
+  verified: 27
+  source: docs
+  base_url: https://organization.apigw.ntruss.com
+  title: organization
+- name: papago
+  path: ./services/hmac-v2/papago.yaml
+  ops: 9
+  verified: 9
+  source: docs
+  base_url: https://papago.apigw.ntruss.com
+  title: Papago
+- name: platform
+  path: ./services/hmac-v2/platform.yaml
+  ops: 17
+  verified: 17
+  source: docs
+  base_url: https://billingapi.apigw.ntruss.com
+  title: platform
+- name: private-ca
+  path: ./services/hmac-v2/private-ca.yaml
+  ops: 14
+  verified: 14
+  source: docs
+  base_url: https://pca.apigw.ntruss.com
+  title: private-ca
+- name: resource-manager
+  path: ./services/hmac-v2/resource-manager.yaml
+  ops: 6
+  verified: 6
+  source: docs
+  base_url: https://resourcemanager.apigw.ntruss.com/api/v1
+  title: Resource Manager — NCP 리소스를 그룹화하고 태그를 부착합니다.
+- name: secret-manager
+  path: ./services/hmac-v2/secret-manager.yaml
+  ops: 32
+  verified: 32
+  source: docs
+  base_url: https://secretmanager.apigw.ntruss.com
+  title: secret-manager
+- name: security-monitoring
+  path: ./services/hmac-v2/security-monitoring.yaml
+  ops: 7
+  verified: 7
+  source: docs
+  base_url: https://securitymonitoring.apigw.ntruss.com
+  title: security-monitoring
+- name: sens
+  path: ./services/hmac-v2/sens.yaml
+  ops: 29
+  verified: 29
+  source: docs
+  base_url: https://sens.apigw.ntruss.com
+  title: sens
+- name: source-build
+  path: ./services/hmac-v2/source-build.yaml
+  ops: 17
+  verified: 17
+  source: sdk
+  base_url: https://sourcebuild.apigw.ntruss.com/api/v1
+  title: ''
+- name: source-commit
+  path: ./services/hmac-v2/source-commit.yaml
+  ops: 6
+  verified: 6
+  source: sdk
+  base_url: https://sourcecommit.apigw.ntruss.com/api/v1
+  title: ''
+- name: sso
+  path: ./services/hmac-v2/sso.yaml
+  ops: 121
+  verified: 121
+  source: docs
+  base_url: https://sso.apigw.ntruss.com
+  title: sso
+- name: sts
+  path: ./services/hmac-v2/sts.yaml
+  ops: 2
+  verified: 2
+  source: docs
+  base_url: https://sts.apigw.ntruss.com/api/v1
+  title: Security Token Service — 임시 자격 증명 발급 (AWS STS 대응).
+- name: sub-account
+  path: ./services/hmac-v2/sub-account.yaml
+  ops: 103
+  verified: 103
+  source: docs
+  base_url: https://subaccount.apigw.ntruss.com/api/v1
+  title: Sub Account — NCP IAM.
+- name: auto-scaling
+  path: ./services/hmac-v2/auto-scaling.yaml
+  ops: 22
+  verified: 22
+  source: sdk
+  base_url: https://ncloud.apigw.ntruss.com/autoscaling/v2
+  title: VPC Auto Scaling 관련 API
+- name: cdss
+  path: ./services/hmac-v2/cdss.yaml
+  ops: 41
+  verified: 41
+  source: sdk
+  base_url: https://clouddatastreamingservice.apigw.ntruss.com/api/v1
+  title: Cloud Data Streaming Service Open API
+- name: hadoop
+  path: ./services/hmac-v2/hadoop.yaml
+  ops: 13
+  verified: 13
+  source: sdk
+  base_url: https://ncloud.apigw.ntruss.com/hadoop/v2
+  title: ''
+- name: load-balancer
+  path: ./services/hmac-v2/load-balancer.yaml
+  ops: 26
+  verified: 26
+  source: sdk
+  base_url: https://ncloud.apigw.ntruss.com/loadbalancer/v2
+  title: VPC Load Balancer 관련 API
+- name: mongodb
+  path: ./services/hmac-v2/mongodb.yaml
+  ops: 23
+  verified: 23
+  source: sdk
+  base_url: https://ncloud.apigw.ntruss.com/mongodb/v2
+  title: ''
+- name: mssql
+  path: ./services/hmac-v2/mssql.yaml
+  ops: 21
+  verified: 21
+  source: sdk
+  base_url: https://ncloud.apigw.ntruss.com/mssql/v2
+  title: ''
+- name: mysql
+  path: ./services/hmac-v2/mysql.yaml
+  ops: 25
+  verified: 25
+  source: sdk
+  base_url: https://ncloud.apigw.ntruss.com/mysql/v2
+  title: ''
+- name: nas
+  path: ./services/hmac-v2/nas.yaml
+  ops: 17
+  verified: 17
+  source: sdk
+  base_url: https://ncloud.apigw.ntruss.com/nas/v2
+  title: VPC NAS 관련 API
+- name: nks
+  path: ./services/hmac-v2/nks.yaml
+  ops: 36
+  verified: 36
+  source: sdk
+  base_url: https://nks.apigw.ntruss.com/{basePath}
+  title: ''
+- name: vod-station
+  path: ./services/hmac-v2/vod-station.yaml
+  ops: 22
+  verified: 22
+  source: docs
+  base_url: https://vodstation.apigw.ntruss.com
+  title: vod-station
+- name: vpc
+  path: ./services/hmac-v2/vpc.yaml
+  ops: 47
+  verified: 47
+  source: sdk
+  base_url: https://ncloud.apigw.ntruss.com/vpc/v2
+  title: VPC Network 관련 API
+- name: vpe
+  path: ./services/hmac-v2/vpe.yaml
+  ops: 21
+  verified: 21
+  source: docs
+  base_url: https://vpe.apigw.ntruss.com
+  title: vpe
+- name: postgresql
+  path: ./services/hmac-v2/postgresql.yaml
+  ops: 24
+  verified: 24
+  source: sdk
+  base_url: https://ncloud.apigw.ntruss.com/postgresql/v2
+  title: ''
+- name: cache
+  path: ./services/hmac-v2/cache.yaml
+  ops: 14
+  verified: 14
+  source: sdk
+  base_url: https://ncloud.apigw.ntruss.com/redis/v2
+  title: ''
+- name: server
+  path: ./services/hmac-v2/server.yaml
+  ops: 91
+  verified: 91
+  source: sdk
+  base_url: https://ncloud.apigw.ntruss.com/server/v2
+  title: VPC Compute 관련 API
+- name: ses
+  path: ./services/hmac-v2/ses.yaml
+  ops: 29
+  verified: 29
+  source: sdk
+  base_url: https://vpcsearchengine.apigw.ntruss.com/api/v1
+  title: Search Engine Service(VPC) Open API
+- name: ses2
+  path: ./services/hmac-v2/ses2.yaml
+  ops: 13
+  verified: 13
+  source: sdk
+  base_url: https://vpcsearchengine.apigw.ntruss.com/{basePath}
+  title: Search Engine Service(VPC) Open API
+- name: source-deploy
+  path: ./services/hmac-v2/source-deploy.yaml
+  ops: 33
+  verified: 33
+  source: sdk
+  base_url: https://vpcsourcedeploy.apigw.ntruss.com/api/v1
+  title: ''
+- name: source-pipeline
+  path: ./services/hmac-v2/source-pipeline.yaml
+  ops: 16
+  verified: 16
+  source: sdk
+  base_url: https://vpcsourcepipeline.apigw.ntruss.com/api/v1
+  title: ''
+- name: web-security-checker
+  path: ./services/hmac-v2/web-security-checker.yaml
+  ops: 6
+  verified: 6
+  source: docs
+  base_url: https://wsc.apigw.ntruss.com
+  title: web-security-checker
+- name: webshell-behavior-detector
+  path: ./services/hmac-v2/webshell-behavior-detector.yaml
+  ops: 35
+  verified: 35
+  source: docs
+  base_url: https://wbd.apigw.ntruss.com
+  title: webshell-behavior-detector
+- name: wms
+  path: ./services/hmac-v2/wms.yaml
+  ops: 5
+  verified: 5
+  source: docs
+  base_url: https://wms.apigw.ntruss.com/api/v1
+  title: Web Monitoring Service — 시나리오 기반 HTTP 합성 모니터링.

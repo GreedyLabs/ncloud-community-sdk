@@ -1,0 +1,1609 @@
+openapi: 3.0.3
+info:
+  title: Ncloud Chat
+  description: Ncloud Chat
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: false
+    gov: false
+
+  x-ncloud-nrn:
+
+    productName: NcloudChat
+    resource_types:
+      - Project
+
+servers:
+  - url: https://dashboard-api.ncloudchat.naverncp.com
+    description: ncloud-chat 민간
+    x-ncloud-env: public
+security:
+  # NCloud Chat uses a per-project key + project ID — NOT IAM HMAC.
+  - ncloudChatApiKey: []
+    ncloudChatProjectId: []
+paths:
+  /v1/api/channels:
+    get:
+      operationId: ChannelList
+      summary: 채널 목록 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - ncloud-chat
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/bizapp-ncloudchat-channellist
+      parameters:
+        - name: filter
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 필터링 조건 응답 바디의 일부 필드를 기준으로 필터링 전체 일치하는 값만 필터링 조건이 없는 경우, 빈 값 {} 입력 <예시> {"id":"{채널아이디}"} , {"name":"{채널이름}"} , {"disabled":false}
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '정렬 기준 {기준:방식} 형태로 입력 기준: 응답 바디의 String 타입 필드 방식: -1 | 1 -1 : 내림차순 1 : 오름차순 <예시> {"createdAt":"-1"} : 생성 일시 기준 내림차순'
+        - name: option
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '추가 옵션: Option <예시> {"offset":0,"per_page":20} : 첫 번째 항목부터 20개 표시'
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: number
+          description: 조회 시작점 0~N
+        - name: per_page
+          in: query
+          required: false
+          schema:
+            type: number
+          description: 페이지당 항목 수 1~100
+        - name: count
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: '목록 대신 응답 결과 수 표시 여부 true | false true : 응답 결과 수 표시 false : 목록 표시'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: 채널 아이디
+                  project_id:
+                    type: string
+                    description: 프로젝트 아이디
+                  name:
+                    type: string
+                    description: 채널 이름
+                  user_id:
+                    type: string
+                    description: 채널 생성자 아이디
+                  user:
+                    type: object
+                    additionalProperties: true
+                    description: 생성자 정보
+                  unique_id:
+                    type: string
+                    description: 채널 고유 아이디 고유 식별 용도로 사용자가 입력하는 아이디
+                  type:
+                    type: string
+                    description: '채널 유형 PUBLIC | PRIVATE PUBLIC : 공개 PRIVATE : 비공개'
+                  translation:
+                    type: boolean
+                    description: '자동 번역 여부 true | false true : 번역 false : 번역 안 함'
+                  members:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 구독 가능한 사용자 아이디 목록 type 이 PRIVATE 인 경우, 유효 값 표시
+                  disabled:
+                    type: boolean
+                    description: '비활성화 여부 true | false true : 비활성화 false : 활성화'
+                  mutes:
+                    type: boolean
+                    description: '음소거 여부 true | false true : 음소거 false : 음소거 안 함'
+                  push:
+                    type: boolean
+                    description: '푸시 알림 허용 여부 true | false true : 허용 false : 차단'
+                  limit:
+                    type: integer
+                    description: '최대 참여 인원 수 0 : 무제한'
+                  link_url:
+                    type: string
+                    description: 채널 링크 URL
+                  image_url:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 채널 이미지 URL
+                  created_at:
+                    type: string
+                    description: 채널 생성 일시 ISO 8601 형식
+                  updated_at:
+                    type: string
+                    description: 정보 수정 일시 ISO 8601 형식
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: ChannelCreate
+      summary: 채널 생성
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - ncloud-chat
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/bizapp-ncloudchat-channelcreate
+      parameters:
+        - name: name
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 채널 이름
+        - name: uniqueId
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 채널 고유 아이디 고유 식별 용도로 사용자가 입력하는 아이디
+        - name: type
+          in: query
+          required: true
+          schema:
+            type: string
+          description: '채널 유형 PUBLIC | PRIVATE PUBLIC : 공개 PRIVATE : 비공개'
+        - name: translation
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: '자동 번역 여부 true | false (기본값) true : 번역 false : 번역 안 함'
+        - name: members
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: object
+              additionalProperties: true
+          description: 구독 가능한 사용자 아이디 목록 type 이 PRIVATE 인 경우, 입력
+        - name: disabled
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: '비활성화 여부 true | false (기본값) true : 비활성화 false : 활성화'
+        - name: mutes
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: '음소거 여부 true | false (기본값) true : 음소거 false : 음소거 안 함'
+        - name: push
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: '푸시 알림 허용 여부 true (기본값) | false true : 허용 false : 차단'
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '최대 참여 인원 수 0 : 무제한'
+        - name: linkUrl
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 채널 링크 URL 일정 조건을 만족하는 URL 입력
+        - name: imageUrl
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 채널 이미지 URL 일정 조건을 만족하는 URL 입력
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  channel:
+                    type: object
+                    additionalProperties: true
+                    description: 채널 정보
+                  status:
+                    type: integer
+                    description: '응답 상태 1 : 성공 1 이 아닌 경우: 실패'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/api/channels/{channelId}:
+    get:
+      operationId: ChannelDetail
+      summary: 채널 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - ncloud-chat
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/bizapp-ncloudchat-channeldetail
+      parameters:
+        - name: channelId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 채널 아이디 채널 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: 채널 아이디
+                  project_id:
+                    type: string
+                    description: 프로젝트 아이디
+                  name:
+                    type: string
+                    description: 채널 이름
+                  user_id:
+                    type: string
+                    description: 채널 생성자 아이디
+                  user:
+                    type: object
+                    additionalProperties: true
+                    description: 생성자 정보
+                  unique_id:
+                    type: string
+                    description: 채널 고유 아이디 고유 식별 용도로 사용자가 입력하는 아이디
+                  type:
+                    type: string
+                    description: '채널 유형 PUBLIC | PRIVATE PUBLIC : 공개 PRIVATE : 비공개'
+                  translation:
+                    type: boolean
+                    description: '자동 번역 여부 true | false true : 번역 false : 번역 안 함'
+                  members:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 구독 가능한 사용자 아이디 목록 type 이 PRIVATE 인 경우, 유효 값 표시
+                  disabled:
+                    type: boolean
+                    description: '비활성화 여부 true | false true : 비활성화 false : 활성화'
+                  mutes:
+                    type: boolean
+                    description: '음소거 여부 true | false true : 음소거 false : 음소거 안 함'
+                  push:
+                    type: boolean
+                    description: '푸시 알림 허용 여부 true | false true : 허용 false : 차단'
+                  limit:
+                    type: integer
+                    description: '최대 참여 인원 수 0 : 무제한'
+                  link_url:
+                    type: string
+                    description: 채널 링크 URL
+                  image_url:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 채널 이미지 URL
+                  created_at:
+                    type: string
+                    description: 채널 생성 일시 ISO 8601 형식
+                  updated_at:
+                    type: string
+                    description: 정보 수정 일시 ISO 8601 형식
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    put:
+      operationId: ChannelModify
+      summary: 채널 수정
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - ncloud-chat
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/bizapp-ncloudchat-channelmodify
+      parameters:
+        - name: channelId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 채널 아이디 채널 목록 조회 참조
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 채널 이름
+        - name: uniqueId
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 채널 고유 아이디 고유 식별 용도로 사용자가 입력하는 아이디
+        - name: type
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '채널 유형 PUBLIC | PRIVATE PUBLIC : 공개 PRIVATE : 비공개'
+        - name: translation
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: '자동 번역 여부 true | false true : 번역 false : 번역 안 함'
+        - name: members
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: object
+              additionalProperties: true
+          description: 구독 가능한 사용자 아이디 목록 type 이 PRIVATE 인 경우, 입력
+        - name: disabled
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: '비활성화 여부 true | false true : 비활성화 false : 활성화'
+        - name: mutes
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: '음소거 여부 true | false true : 음소거 false : 음소거 안 함'
+        - name: push
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: '푸시 알림 허용 여부 true | false true : 허용 false : 차단'
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '최대 참여 인원 수 0 : 무제한'
+        - name: linkUrl
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 채널 링크 URL 일정 조건을 만족하는 URL 입력
+        - name: imageUrl
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 채널 이미지 URL 일정 조건을 만족하는 URL 입력
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  channel:
+                    type: object
+                    additionalProperties: true
+                    description: 채널 정보
+                  status:
+                    type: integer
+                    description: '응답 상태 1 : 성공 1 이 아닌 경우: 실패'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: ChannelDelete
+      summary: 채널 삭제
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - ncloud-chat
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/bizapp-ncloudchat-channeldelete
+      parameters:
+        - name: channelId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 채널 아이디 채널 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  channel:
+                    type: object
+                    additionalProperties: true
+                    description: 채널 정보
+                  status:
+                    type: integer
+                    description: '응답 상태 1 : 성공 1 이 아닌 경우: 실패'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/api/friendship/accept:
+    post:
+      operationId: FriEndShIpAccept
+      summary: 친구 수락
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - ncloud-chat
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/bizapp-ncloudchat-friendshipaccept
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 사용자 아이디 친구 목록 조회 참조
+        - name: friendId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 친구 아이디 친구 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  friendship:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/api/friendship/reject:
+    post:
+      operationId: FriEndShIpReject
+      summary: 친구 거절
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - ncloud-chat
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/bizapp-ncloudchat-friendshipreject
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 사용자 아이디 친구 목록 조회 참조
+        - name: friendId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 친구 아이디 친구 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  friendship:
+                    type: object
+                    additionalProperties: true
+                    description: 응답 결과
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/api/friendship/request:
+    post:
+      operationId: FriEndShIp
+      summary: 친구 요청
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - ncloud-chat
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/bizapp-ncloudchat-friendship
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 사용자 아이디 사용자 목록 조회 참조
+        - name: friendId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 친구 아이디 사용자 목록 조회 참조
+        - name: message
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 친구 요청 메시지
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/api/members:
+    get:
+      operationId: MemberList
+      summary: 사용자 목록 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - ncloud-chat
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/bizapp-ncloudchat-memberlist
+      parameters:
+        - name: filter
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 필터링 조건 응답 바디의 일부 필드를 기준으로 필터링 전체 일치하는 값만 필터링 조건이 없는 경우, 빈 값 {} 입력 <예시> {"id":"{사용자아이디}"} , {"name":"{사용자이름}"} , {"online":true}
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '정렬 기준 {기준:방식} 형태로 입력 기준: 응답 바디의 String 타입 필드 방식: -1 | 1 -1 : 내림차순 1 : 오름차순 <예시> {"created_at":"-1"} : 생성 일시 기준 내림차순'
+        - name: option
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '추가 옵션: Option <예시> {"offset":0,"per_page":20} : 첫 번째 항목부터 20개 표시'
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: number
+          description: 조회 시작 오프셋 0~N
+        - name: per_page
+          in: query
+          required: false
+          schema:
+            type: number
+          description: 페이지당 항목 수 1~100
+        - name: count
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: '목록 대신 응답 결과 수 표시 여부 true | false true : 응답 결과 수 표시 false : 목록 표시'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: 사용자 아이디
+                  project_id:
+                    type: string
+                    description: 프로젝트 아이디
+                  member_id:
+                    type: string
+                    description: 사용자 아이디
+                  name:
+                    type: string
+                    description: 사용자 이름
+                  profile:
+                    type: string
+                    description: 사용자 프로필 이미지
+                  memo:
+                    type: string
+                    description: 사용자에 대한 메모
+                  country:
+                    type: string
+                    description: 접속 국가
+                  remoteip:
+                    type: string
+                    description: 접속 IP 주소
+                  adid:
+                    type: string
+                    description: 광고 아이디
+                  device:
+                    type: string
+                    description: 디바이스
+                  network:
+                    type: string
+                    description: 네트워크
+                  version:
+                    type: string
+                    description: 버전
+                  model:
+                    type: string
+                    description: 모델
+                  deleted:
+                    type: boolean
+                    description: '탈퇴 여부 true | false true : 탈퇴 false : 탈퇴 안 함'
+                  online:
+                    type: boolean
+                    description: '온라인 여부 true | false true : 온라인 false : 오프라인'
+                  customField:
+                    type: string
+                    description: 사용자 정의 필드
+                  device_type:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 디바이스
+                  push:
+                    type: boolean
+                    description: '푸시 알림 허용 여부 true | false true : 허용 false : 차단'
+                  memberblock_id:
+                    type: string
+                    description: TBD
+                  notifications:
+                    type: object
+                    additionalProperties: true
+                    description: 푸시 알림 정보
+                  logined_at:
+                    type: string
+                    description: 마지막 로그인 일시 ISO 8601 형식
+                  created_at:
+                    type: string
+                    description: 사용자 등록 일시 ISO 8601 형식
+                  updated_at:
+                    type: string
+                    description: 정보 수정 일시 ISO 8601 형식
+                  deleted_at:
+                    type: string
+                    description: 탈퇴 일시 ISO 8601 형식
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: Member
+      summary: 사용자 등록
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - ncloud-chat
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/bizapp-ncloudchat-member
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 사용자 아이디 영문자, 숫자, 특수 문자 '-', '_'를 조합하여 4~128자 이내로 입력
+        - name: name
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 사용자 이름
+        - name: profile
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 사용자 프로필 이미지 URL
+        - name: customField
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 사용자 정의 필드
+        - name: notifications
+          in: query
+          required: false
+          schema:
+            type: object
+            additionalProperties: true
+          description: 푸시 알림 설정
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  member:
+                    type: object
+                    additionalProperties: true
+                    description: 사용자 정보
+                  status:
+                    type: integer
+                    description: '응답 상태 1 : 성공 1 이 아닌 경우: 실패'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/api/members/{userId}:
+    get:
+      operationId: MemberDetail
+      summary: 사용자 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - ncloud-chat
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/bizapp-ncloudchat-memberdetail
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 사용자 아이디 사용자 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: 사용자 아이디
+                  project_id:
+                    type: string
+                    description: 프로젝트 아이디
+                  member_id:
+                    type: string
+                    description: 사용자 아이디
+                  name:
+                    type: string
+                    description: 사용자 이름
+                  profile:
+                    type: string
+                    description: 사용자 프로필 이미지
+                  memo:
+                    type: string
+                    description: 사용자에 대한 메모
+                  country:
+                    type: string
+                    description: 접속 국가
+                  remoteip:
+                    type: string
+                    description: 접속 IP 주소
+                  adid:
+                    type: string
+                    description: 광고 아이디
+                  device:
+                    type: string
+                    description: 디바이스
+                  network:
+                    type: string
+                    description: 네트워크
+                  version:
+                    type: string
+                    description: 버전
+                  model:
+                    type: string
+                    description: 모델
+                  deleted:
+                    type: boolean
+                    description: '탈퇴 여부 true | false true : 탈퇴 false : 탈퇴 안 함'
+                  online:
+                    type: boolean
+                    description: '온라인 여부 true | false true : 온라인 false : 오프라인'
+                  customField:
+                    type: string
+                    description: 사용자 정의 필드
+                  device_type:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 디바이스 유형
+                  push:
+                    type: boolean
+                    description: '푸시 알림 허용 여부 true | false true : 허용 false : 차단'
+                  memberblock_id:
+                    type: string
+                    description: TBD
+                  notifications:
+                    type: object
+                    additionalProperties: true
+                    description: 푸시 알림 정보
+                  logined_at:
+                    type: string
+                    description: 마지막 로그인 일시 ISO 8601 형식
+                  created_at:
+                    type: string
+                    description: 사용자 등록 일시 ISO 8601 형식
+                  updated_at:
+                    type: string
+                    description: 정보 수정 일시 ISO 8601 형식
+                  deleted_at:
+                    type: string
+                    description: 탈퇴 일시 ISO 8601 형식
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    put:
+      operationId: MemberModify
+      summary: 사용자 정보 수정
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - ncloud-chat
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/bizapp-ncloudchat-membermodify
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 사용자 아이디 사용자 목록 조회 참조
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 사용자 이름
+        - name: profile
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 사용자 프로필 이미지 URL
+        - name: customField
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 사용자 정의 필드
+        - name: notifications
+          in: query
+          required: false
+          schema:
+            type: object
+            additionalProperties: true
+          description: 푸시 알림 설정
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  member:
+                    type: object
+                    additionalProperties: true
+                    description: 사용자 정보
+                  status:
+                    type: integer
+                    description: '응답 상태 1 : 성공 1 이 아닌 경우: 실패'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: MemberDelete
+      summary: 사용자 탈퇴
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - ncloud-chat
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/bizapp-ncloudchat-memberdelete
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 사용자 아이디 사용자 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  member:
+                    type: object
+                    additionalProperties: true
+                    description: 사용자 정보
+                  status:
+                    type: integer
+                    description: '응답 상태 1 : 성공 1 이 아닌 경우: 실패'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/api/members/{userId}/notification:
+    get:
+      operationId: NotiList
+      summary: 푸시 알림 설정 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - ncloud-chat
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/bizapp-ncloudchat-notilist
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 사용자 아이디 사용자 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: 사용자 아이디
+                  notifications:
+                    type: object
+                    additionalProperties: true
+                    description: 푸시 알림 설정 내역
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: NotiSet
+      summary: 푸시 알림 설정
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - ncloud-chat
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/bizapp-ncloudchat-notiset
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 사용자 아이디 사용자 목록 조회 참조
+        - name: token
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 푸시 토큰
+        - name: device
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 디바이스 푸시 타입 FCM | APNS
+        - name: os
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 운영 체제 버전
+        - name: push
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: '푸시 알림 허용 여부 true | false true : 허용 false : 차단'
+        - name: ad
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: '광고성 푸시 알림 허용 여부 true | false true : 허용 false : 차단'
+        - name: night
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: '야간 푸시 알림 허용 여부 true | false true : 허용 false : 차단'
+        - name: timezone
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 시간대
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  member:
+                    type: object
+                    additionalProperties: true
+                    description: 사용자 정보
+                  status:
+                    type: integer
+                    description: '응답 상태 1 : 성공 1 이 아닌 경우: 실패'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: NotiCancel
+      summary: 푸시 알림 설정 해제
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - ncloud-chat
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/bizapp-ncloudchat-noticancel
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 사용자 아이디 사용자 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  member:
+                    type: object
+                    additionalProperties: true
+                    description: 사용자 정보
+                  status:
+                    type: integer
+                    description: '응답 상태 1 : 성공 1 이 아닌 경우: 실패'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/api/members/{userId}/restore:
+    delete:
+      operationId: MemberRestore
+      summary: 사용자 복원
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - ncloud-chat
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/bizapp-ncloudchat-memberrestore
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 사용자 아이디 사용자 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  member:
+                    type: object
+                    additionalProperties: true
+                    description: 사용자 정보
+                  status:
+                    type: integer
+                    description: '응답 상태 1 : 성공 1 이 아닌 경우: 실패'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/api/messages/{channelId}:
+    get:
+      operationId: MessageList
+      summary: 메시지 목록 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - ncloud-chat
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/bizapp-ncloudchat-messagelist
+      parameters:
+        - name: channelId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 채널 아이디 채널 목록 조회 참조
+        - name: filter
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 필터링 조건 응답 바디의 일부 필드를 기준으로 필터링 전체 일치하는 값만 필터링 조건이 없는 경우, 빈 값 {} 입력 <예시> {"sender.name":"{발신자이름}"} , {"content":"{내용일부}"}
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '정렬 기준 {기준:방식} 형태로 입력 기준: 응답 바디의 String 타입 필드 방식: -1 | 1 -1 : 내림차순 1 : 오름차순 <예시> {"created_at":"-1"} : 생성 일시 기준 내림차순'
+        - name: option
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '추가 옵션: Option <예시> {"offset":0,"per_page":20} : 첫 번째 항목부터 20개 표시'
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: number
+          description: 조회 시작 오프셋 0~N
+        - name: per_page
+          in: query
+          required: false
+          schema:
+            type: number
+          description: 페이지당 항목 수 1~100
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: 메시지 아이디
+                  message_id:
+                    type: string
+                    description: 메시지 아이디
+                  channel_id:
+                    type: string
+                    description: 채널 아이디
+                  sort_id:
+                    type: string
+                    description: 발신 일시 Unix Timestamp 형식
+                  message_type:
+                    type: string
+                    description: 메시지 유형 text | file
+                  sender:
+                    type: object
+                    additionalProperties: true
+                    description: 발신자 정보
+                  admin:
+                    type: object
+                    additionalProperties: true
+                    description: 관리자 정보
+                  attachment_filenames:
+                    type: object
+                    additionalProperties: true
+                    description: 첨부 파일 정보
+                  has:
+                    type: string
+                    description: '첨부 특수 항목 구분 (기본값: "" ) <예시> link, image, video, file'
+                  embed_providers:
+                    type: string
+                    description: 첨부 임베드 특수 항목의 제공자
+                  embed_type:
+                    type: string
+                    description: '임베드 특수 항목의 유형 (기본값: "" )'
+                  isExpress:
+                    type: boolean
+                    description: '빠른 메시지 여부 true | false (기본값) true : 빠른 메시지 false : 일반 메시지'
+                  link_hostnames:
+                    type: string
+                    description: 링크 호스트 이름 has 가 link인 경우
+                  mentions:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '멘션 정보 (기본값: [] )'
+                  mentions_everyone:
+                    type: boolean
+                    description: '전체 멘션 여부 true | false (기본값) true : 전체 false : 전체 아님'
+                  content:
+                    type: string
+                    description: 메시지 내용
+                  sended_at:
+                    type: string
+                    description: 메시지 전송 일시 ISO 8601 형식
+                  created_at:
+                    type: string
+                    description: 메시지 생성 일시 ISO 8601 형식
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: Message
+      summary: 메시지 전송
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - ncloud-chat
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/bizapp-ncloudchat-message
+      parameters:
+        - name: channelId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 채널 아이디 채널 목록 조회 참조
+        - name: content
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 메시지 내용 메시지 최대 길이는 Ncloud Chat 대시보드의 설정 > 일반 > 메세지 최대 길이 입력값에 따라 결정
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    additionalProperties: true
+                    description: 메시지 정보
+                  status:
+                    type: integer
+                    description: '응답 상태 1 : 성공 1 이 아닌 경우: 실패'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/api/messages/{channelId}/{messageId}:
+    get:
+      operationId: MessageDetail
+      summary: 메시지 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - ncloud-chat
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/bizapp-ncloudchat-messagedetail
+      parameters:
+        - name: channelId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 채널 아이디 메시지 목록 조회 참조
+        - name: messageId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 메시지 아이디 메시지 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: 메시지 아이디
+                  message_id:
+                    type: string
+                    description: 메시지 아이디
+                  channel_id:
+                    type: string
+                    description: 채널 아이디
+                  sort_id:
+                    type: string
+                    description: 발신 일시 Unix Timestamp 형식
+                  message_type:
+                    type: string
+                    description: 메시지 유형 text | file
+                  sender:
+                    type: object
+                    additionalProperties: true
+                    description: 발신자 정보
+                  admin:
+                    type: object
+                    additionalProperties: true
+                    description: 관리자 정보
+                  attachment_filenames:
+                    type: object
+                    additionalProperties: true
+                    description: 첨부 파일 정보
+                  has:
+                    type: string
+                    description: '첨부 특수 항목 구분 (기본값: "" ) <예시> link, image, video, file'
+                  embed_providers:
+                    type: string
+                    description: 첨부 임베드 특수 항목의 제공자
+                  embed_type:
+                    type: string
+                    description: '임베드 특수 항목의 유형 (기본값: "" )'
+                  isExpress:
+                    type: boolean
+                    description: '빠른 메시지 여부 true | false (기본값) true : 빠른 메시지 false : 일반 메시지'
+                  link_hostnames:
+                    type: string
+                    description: 링크 호스트 이름 has 가 link인 경우
+                  mentions:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '멘션 정보 (기본값: [] )'
+                  mentions_everyone:
+                    type: boolean
+                    description: '전체 멘션 여부 true | false (기본값) true : 전체 false : 전체 아님'
+                  content:
+                    type: string
+                    description: 메시지 내용
+                  sended_at:
+                    type: string
+                    description: 메시지 전송 일시 ISO 8601 형식
+                  created_at:
+                    type: string
+                    description: 메시지 생성 일시 ISO 8601 형식
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: MessageDelete
+      summary: 메시지 삭제
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - ncloud-chat
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/bizapp-ncloudchat-messagedelete
+      parameters:
+        - name: channelId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 채널 아이디 메시지 목록 조회 참조
+        - name: messageId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 메시지 아이디 메시지 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    additionalProperties: true
+                    description: 메시지 정보
+                  status:
+                    type: integer
+                    description: '응답 상태 1 : 성공 1 이 아닌 경우: 실패'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/api/subscriptions:
+    get:
+      operationId: SubScriptIon
+      summary: 채널 구독 목록 조회
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - ncloud-chat
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/bizapp-ncloudchat-subscription
+      parameters:
+        - name: filter
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 필터링 조건 응답 바디의 일부 필드를 기준으로 필터링 전체 일치하는 값만 필터링 조건이 없는 경우, 빈 값 {} 입력 <예시> {"channel_id":"{채널아이디}"} , {"user_id":"{사용자아이디}"} , {"online":true}
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '정렬 기준 {기준:방식} 형태로 입력 기준: 응답 바디의 String 타입 필드 방식: -1 | 1 -1 : 내림차순 1 : 오름차순 <예시> {"created_at":"-1"} : 생성 일시 기준 내림차순'
+        - name: option
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '추가 옵션: Option <예시> {"offset":0,"per_page":20} : 첫 번째 항목부터 20개 표시'
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: number
+          description: 조회 시작 오프셋 0~N
+        - name: per_page
+          in: query
+          required: false
+          schema:
+            type: number
+          description: 페이지당 항목 수 1~100
+        - name: count
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: '목록 대신 응답 결과 수 표시 여부 true | false true : 응답 결과 수 표시 false : 목록 표시'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: 구독 고유 아이디
+                  project_id:
+                    type: string
+                    description: 프로젝트 아이디
+                  channel_id:
+                    type: string
+                    description: 채널 아이디
+                  user_id:
+                    type: string
+                    description: 사용자 아이디
+                  online:
+                    type: boolean
+                    description: '온라인 여부 true | false true : 온라인 false : 오프라인'
+                  language:
+                    type: string
+                    description: 접속 언어
+                  push:
+                    type: boolean
+                    description: '푸시 알림 허용 여부 true | false true : 허용 false : 차단'
+                  mute:
+                    type: boolean
+                    description: '채널 음소거 여부 true | false true : 음소거 false : 음소거 안 함'
+                  user:
+                    type: object
+                    additionalProperties: true
+                    description: 사용자 정보
+                  mark:
+                    type: object
+                    additionalProperties: true
+                    description: 마지막 메시지 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/api/v1/api/friendship/bulk:
+    get:
+      operationId: FriEndShIpMultiPle
+      summary: 친구 일괄 요청
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - ncloud-chat
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/bizapp-ncloudchat-friendshipmultiple
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 사용자 아이디 사용자 목록 조회 참조
+        - name: friendId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 친구 아이디 사용자 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 응답 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+components:
+  securitySchemes:
+    ncloudChatApiKey:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: NCloud Chat per-project API key.
+    ncloudChatProjectId:
+      type: apiKey
+      in: header
+      name: x-project-id
+      description: NCloud Chat project ID.
+  schemas:
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

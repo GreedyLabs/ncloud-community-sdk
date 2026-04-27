@@ -1,0 +1,1313 @@
+openapi: 3.0.3
+info:
+  title: nas
+  description: VPC NAS 관련 API
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: true
+    gov: true
+
+  x-ncloud-nrn:
+
+    productName: VPCNAS
+    resource_types:
+      - Volume
+      - CIFS
+
+servers:
+  - url: https://ncloud.apigw.ntruss.com/vnas/v2
+    description: nas 민간
+    x-ncloud-env: public
+  - url: https://ncloud.apigw.fin-ntruss.com/vnas/v2
+    description: nas 금융
+    x-ncloud-env: financial
+  - url: https://ncloud.apigw.gov-ntruss.com/vnas/v2
+    description: nas 공공
+    x-ncloud-env: gov
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /addNasVolumeAccessControl:
+    post:
+      operationId: AddNasVolumeAccessControl
+      tags:
+        - nas
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AddNasVolumeAccessControlRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddNasVolumeAccessControlResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: 서버 인스턴스 번호를 이용하여 NAS 볼륨 인스턴스에 접근 제어를 추가합니다.
+  /changeNasVolumeSize:
+    post:
+      operationId: ChangeNasVolumeSize
+      tags:
+        - nas
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChangeNasVolumeSizeRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeNasVolumeSizeResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: NAS 볼륨 인스턴스의 크기를 변경합니다.
+  /changeNasVolumeSnapshotConfiguration:
+    post:
+      operationId: ChangeNasVolumeSnapshotConfiguration
+      tags:
+        - nas
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChangeNasVolumeSnapshotConfigurationRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeNasVolumeSnapshotConfigurationResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: NAS 볼륨 인스턴스의 스냅샷 설정을 변경할 수 있습니다.
+  /createNasVolumeInstance:
+    post:
+      operationId: CreateNasVolumeInstance
+      tags:
+        - nas
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateNasVolumeInstanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateNasVolumeInstanceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: NAS 볼륨 인스턴스를 생성합니다.
+  /createNasVolumeSnapshot:
+    post:
+      operationId: CreateNasVolumeSnapshot
+      tags:
+        - nas
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateNasVolumeSnapshotRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateNasVolumeSnapshotResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: NAS 볼륨 인스턴스의 스냅샷을 생성할 수 있습니다.
+  /deleteNasVolumeInstances:
+    post:
+      operationId: DeleteNasVolumeInstances
+      tags:
+        - nas
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteNasVolumeInstancesRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteNasVolumeInstancesResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: NAS 볼륨 인스턴스를 삭제합니다.
+  /deleteNasVolumeSnapshot:
+    post:
+      operationId: DeleteNasVolumeSnapshot
+      tags:
+        - nas
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteNasVolumeSnapshotRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteNasVolumeSnapshotResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: NAS 볼륨 인스턴스의 스냅샷을 삭제할 수 있습니다.
+  /getNasVolumeAccessControlRuleList:
+    post:
+      operationId: GetNasVolumeAccessControlRuleList
+      tags:
+        - nas
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetNasVolumeAccessControlRuleListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetNasVolumeAccessControlRuleListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: NAS 볼륨 인스턴스에 설정된 접근 제어 규칙 목록을 조회합니다.
+  /getNasVolumeInstanceDetail:
+    post:
+      operationId: GetNasVolumeInstanceDetail
+      tags:
+        - nas
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetNasVolumeInstanceDetailRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetNasVolumeInstanceDetailResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: NAS 볼륨 인스턴스 번호를 이용하여 NAS 볼륨 인스턴스의 상세 정보를 조회합니다.
+  /getNasVolumeInstanceList:
+    post:
+      operationId: GetNasVolumeInstanceList
+      tags:
+        - nas
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetNasVolumeInstanceListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetNasVolumeInstanceListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: NAS 볼륨 인스턴스 목록을 조회합니다.
+  /getNasVolumeInstanceRatingList:
+    post:
+      operationId: GetNasVolumeInstanceRatingList
+      tags:
+        - nas
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetNasVolumeInstanceRatingListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetNasVolumeInstanceRatingListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: 특정 기간의 NAS 볼륨 인스턴스의 크기를 설정한 측정 간격에 따라 조회합니다.
+  /getNasVolumeSnapshotConfigurationHistoryList:
+    post:
+      operationId: GetNasVolumeSnapshotConfigurationHistoryList
+      tags:
+        - nas
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetNasVolumeSnapshotConfigurationHistoryListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetNasVolumeSnapshotConfigurationHistoryListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: NAS 볼륨 인스턴스의 스냅샷 설정 이력을 조회할 수 있습니다.
+  /getNasVolumeSnapshotList:
+    post:
+      operationId: GetNasVolumeSnapshotList
+      tags:
+        - nas
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetNasVolumeSnapshotListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetNasVolumeSnapshotListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: NAS 볼륨 인스턴스의 스냅샷 목록을 조회할 수 있습니다.
+  /removeNasVolumeAccessControl:
+    post:
+      operationId: RemoveNasVolumeAccessControl
+      tags:
+        - nas
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RemoveNasVolumeAccessControlRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RemoveNasVolumeAccessControlResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: 서버 인스턴스 번호를 이용하여 NAS 볼륨 인스턴스에 설정된 접근 제어를 제거합니다.
+  /restoreNasVolumeWithSnapshot:
+    post:
+      operationId: RestoreNasVolumeWithSnapshot
+      tags:
+        - nas
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RestoreNasVolumeWithSnapshotRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestoreNasVolumeWithSnapshotResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: 스냅샷을 이용해 NAS 볼륨을 복구할 수 있습니다.
+  /setNasVolumeAccessControl:
+    post:
+      operationId: SetNasVolumeAccessControl
+      tags:
+        - nas
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetNasVolumeAccessControlRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetNasVolumeAccessControlResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: 기존에 설정된 NAS 볼륨 인스턴트의 접근 제어를 제거하고 새롭게 설정합니다.
+  /setNasVolumeReturnProtection:
+    post:
+      operationId: SetNasVolumeReturnProtection
+      tags:
+        - nas
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetNasVolumeReturnProtectionRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetNasVolumeReturnProtectionResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: NAS 볼륨 인스턴스의 반납 보호 여부를 설정합니다.
+components:
+  schemas:
+    AccessControlRuleParameter:
+      type: object
+      properties:
+        serverInstanceNo:
+          type: string
+          description: "서버인스턴스 번호"
+        writeAccess:
+          type: string
+          description: "WriteAccess 여부"
+    AddNasVolumeAccessControlRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        nasVolumeInstanceNo:
+          type: string
+          description: "NAS 볼륨인스턴스 번호"
+        serverInstanceNoList:
+          type: array
+          description: "서버인스턴스 번호 리스트"
+          items:
+            type: string
+        accessControlRuleList:
+          type: array
+          description: "접근제어 Rule 리스트"
+          items:
+            $ref: '#/components/schemas/AccessControlRuleParameter'
+    AddNasVolumeAccessControlResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        nasVolumeInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NasVolumeInstance'
+    ChangeNasVolumeSizeRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        nasVolumeInstanceNo:
+          type: string
+          description: "NAS 볼륨인스턴스 번호"
+        volumeSize:
+          type: integer
+          format: int32
+          description: "볼륨사이즈"
+        isAsync:
+          type: boolean
+          description: "Async 여부"
+    ChangeNasVolumeSizeResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        nasVolumeInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NasVolumeInstance'
+    ChangeNasVolumeSnapshotConfigurationRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        nasVolumeInstanceNo:
+          type: string
+          description: "NAS 볼륨인스턴스 번호"
+        snapshotVolumeConfigurationRatio:
+          type: integer
+          format: int32
+          description: "스냅샷볼륨설정비율"
+        snapshotVolumeConfigDayOfWeekTypeCode:
+          type: string
+          description: "스냅샷자동생성주기요일"
+        snapshotVolumeConfigTime:
+          type: integer
+          format: int32
+          description: "스냅샷자동생성주기시각"
+    ChangeNasVolumeSnapshotConfigurationResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        nasVolumeInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NasVolumeInstance'
+    CommonCode:
+      type: object
+      properties:
+        code:
+          type: string
+          description: "코드"
+        codeName:
+          type: string
+          description: "코드명"
+    CreateNasVolumeInstanceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        zoneCode:
+          type: string
+          description: "ZONE 코드"
+        volumeName:
+          type: string
+          description: "볼륨 이름"
+        volumeSize:
+          type: integer
+          format: int32
+          description: "볼륨사이즈"
+        volumeAllotmentProtocolTypeCode:
+          type: string
+          description: "볼륨할당프로토콜유형 코드"
+        serverInstanceNoList:
+          type: array
+          description: "서버인스턴스 번호 리스트"
+          items:
+            type: string
+        cifsUserName:
+          type: string
+          description: "CIFS 유저이름"
+        cifsUserPassword:
+          type: string
+          description: "CIFS 유저비밀번호"
+        isEncryptedVolume:
+          type: boolean
+          description: "볼륨암호화여부"
+        isReturnProtection:
+          type: boolean
+          description: "반납보호여부"
+        nasVolumeDescription:
+          type: string
+          description: "NAS 볼륨설명"
+        accessControlRuleList:
+          type: array
+          description: "접근제어 Rule 리스트"
+          items:
+            $ref: '#/components/schemas/AccessControlRuleParameter'
+        isAsync:
+          type: boolean
+          description: "Async 여부"
+    CreateNasVolumeInstanceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        nasVolumeInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NasVolumeInstance'
+    CreateNasVolumeSnapshotRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        nasVolumeInstanceNo:
+          type: string
+          description: "NAS 볼륨인스턴스 번호"
+    CreateNasVolumeSnapshotResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        nasVolumeSnapshotList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NasVolumeSnapshot'
+    DeleteNasVolumeInstancesRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        nasVolumeInstanceNoList:
+          type: array
+          description: "NAS 볼륨인스턴스 번호 리스트"
+          items:
+            type: string
+        isAsync:
+          type: boolean
+          description: "Async 여부"
+      required:
+        - nasVolumeInstanceNoList
+    DeleteNasVolumeInstancesResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        nasVolumeInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NasVolumeInstance'
+    DeleteNasVolumeSnapshotRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        nasVolumeInstanceNo:
+          type: string
+          description: "NAS 볼륨인스턴스 번호"
+        nasVolumeSnapshotName:
+          type: string
+          description: "NAS 볼륨스냅샷이름"
+    DeleteNasVolumeSnapshotResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        nasVolumeSnapshotList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NasVolumeSnapshot'
+    GetNasVolumeAccessControlRuleListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        nasVolumeInstanceNo:
+          type: string
+          description: "NAS 볼륨인스턴스 번호"
+    GetNasVolumeAccessControlRuleListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        nasVolumeAccessControlRuleList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NasVolumeAccessControlRule'
+    GetNasVolumeInstanceDetailRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        nasVolumeInstanceNo:
+          type: string
+          description: "NAS 볼륨인스턴스 번호"
+    GetNasVolumeInstanceDetailResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        nasVolumeInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NasVolumeInstance'
+    GetNasVolumeInstanceListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        volumeAllotmentProtocolTypeCode:
+          type: string
+          description: "볼륨할당프로토콜유형 코드"
+        isEventConfiguration:
+          type: boolean
+          description: "이벤트설정여부"
+        isSnapshotConfiguration:
+          type: boolean
+          description: "스냅샷설정여부"
+        nasVolumeInstanceNoList:
+          type: array
+          description: "NAS 볼륨인스턴스 번호 리스트"
+          items:
+            type: string
+        zoneCode:
+          type: string
+          description: "ZONE 코드"
+        pageNo:
+          type: integer
+          format: int32
+          description: "페이지번호"
+        pageSize:
+          type: integer
+          format: int32
+          description: "페이지사이즈"
+        volumeName:
+          type: string
+          description: "볼륨 이름"
+        sortedBy:
+          type: string
+          description: "정렬대상"
+        sortingOrder:
+          type: string
+          description: "정렬순서"
+    GetNasVolumeInstanceListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        nasVolumeInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NasVolumeInstance'
+    GetNasVolumeInstanceRatingListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        nasVolumeInstanceNo:
+          type: string
+          description: "NAS 볼륨인스턴스 번호"
+        startTime:
+          type: string
+          description: "측정시작시간"
+        endTime:
+          type: string
+          description: "측정종료시간"
+        interval:
+          type: string
+          description: "측정간격"
+    GetNasVolumeInstanceRatingListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        nasVolumeInstanceRatingList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NasVolumeInstanceRating'
+    GetNasVolumeSnapshotConfigurationHistoryListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        nasVolumeInstanceNo:
+          type: string
+          description: "NAS 볼륨인스턴스 번호"
+    GetNasVolumeSnapshotConfigurationHistoryListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        nasVolumeSnapshotConfigurationHistoryList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NasVolumeSnapshotConfigurationHistory'
+    GetNasVolumeSnapshotListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        nasVolumeInstanceNo:
+          type: string
+          description: "NAS 볼륨인스턴스 번호"
+    GetNasVolumeSnapshotListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        nasVolumeSnapshotList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NasVolumeSnapshot'
+    NasVolumeAccessControlRule:
+      type: object
+      properties:
+        serverInstanceNo:
+          type: string
+          description: "서버인스턴스 번호"
+        readAccess:
+          type: boolean
+          description: "ReadAccess 여부"
+        writeAccess:
+          type: boolean
+          description: "WriteAccess 여부"
+    NasVolumeInstance:
+      type: object
+      properties:
+        nasVolumeInstanceNo:
+          type: string
+          description: "NAS 볼륨인스턴스 번호"
+        nasVolumeInstanceStatus:
+          $ref: '#/components/schemas/CommonCode'
+        nasVolumeInstanceOperation:
+          $ref: '#/components/schemas/CommonCode'
+        nasVolumeInstanceStatusName:
+          type: string
+          description: "NAS 볼륨인스턴스 상태이름"
+        createDate:
+          type: string
+          description: "생성일시"
+        nasVolumeDescription:
+          type: string
+          description: "NAS 볼륨설명"
+        mountInformation:
+          type: string
+          description: "마운트정보"
+        volumeAllotmentProtocolType:
+          $ref: '#/components/schemas/CommonCode'
+        volumeName:
+          type: string
+          description: "볼륨 이름"
+        volumeTotalSize:
+          type: integer
+          format: int64
+          description: "볼륨총사이즈"
+        volumeSize:
+          type: integer
+          format: int64
+          description: "볼륨사이즈"
+        snapshotVolumeConfigurationRatio:
+          type: number
+          format: float
+          description: "스냅샷볼륨설정비율"
+        snapshotVolumeConfigPeriodType:
+          $ref: '#/components/schemas/CommonCode'
+        snapshotVolumeConfigDayOfWeekType:
+          $ref: '#/components/schemas/CommonCode'
+        snapshotVolumeConfigTime:
+          type: integer
+          format: int32
+          description: "스냅샷볼륨설정시간"
+        snapshotVolumeSize:
+          type: integer
+          format: int64
+          description: "스냅샷볼륨사이즈"
+        isSnapshotConfiguration:
+          type: boolean
+          description: "스냅샷설정여부"
+        isEventConfiguration:
+          type: boolean
+          description: "이벤트설정여부"
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        zoneCode:
+          type: string
+          description: "ZONE 코드"
+        initScriptNo:
+          type: string
+          description: "초기화스크립트번호"
+        nasVolumeServerInstanceNoList:
+          type: array
+          description: "NAS 볼륨서버인스턴스 번호 리스트"
+          items:
+            type: string
+        isEncryptedVolume:
+          type: boolean
+          description: "볼륨암호화여부"
+        nasVolumeInstanceCustomIpList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NasVolumeInstanceCustomIp'
+        isReturnProtection:
+          type: boolean
+          description: "반납보호여부"
+    NasVolumeInstanceCustomIp:
+      type: object
+      properties:
+        customIp:
+          type: string
+          description: "커스텀 IP"
+    NasVolumeInstanceRating:
+      type: object
+      properties:
+        ratingTime;:
+          type: string
+          description: "측정시간"
+        volumeSize;:
+          type: integer
+          format: int64
+          description: "볼륨사이즈"
+        volumeUseSize;:
+          type: integer
+          format: int64
+          description: "볼륨사용사이즈"
+        volumeUseRatio;:
+          type: number
+          format: float
+          description: "볼륨사용비율"
+        averageVolumeSize;:
+          type: integer
+          format: int64
+          description: "평균볼륨사이즈"
+        averageVolumeUseSize;:
+          type: integer
+          format: int64
+          description: "평균볼륨사용사이즈"
+        averageVolumeUseRatio;:
+          type: number
+          format: float
+          description: "평균볼륨사용비율"
+        maxVolumeUseSize;:
+          type: integer
+          format: int64
+          description: "최대볼륨사용사이즈"
+        maxVolumeUseRatio;:
+          type: number
+          format: float
+          description: "최대볼륨사용비율"
+        minVolumeUseSize;:
+          type: integer
+          format: int64
+          description: "최소볼륨사용사이즈"
+        minVolumeUseRatio;:
+          type: number
+          format: float
+          description: "최소볼륨사용비율"
+        snapshotVolumeSize;:
+          type: integer
+          format: int64
+          description: "스냅샷볼륨사이즈"
+        snapshotVolumeUseSize;:
+          type: integer
+          format: int64
+          description: "스냅샷볼륨사용사이즈"
+        snapshotVolumeUseRatio;:
+          type: number
+          format: float
+          description: "스냅샷볼륨사용비율"
+        snapshotAverageVolumeSize;:
+          type: integer
+          format: int64
+          description: "평균스냅샷볼륨사이즈"
+        snapshotAverageVolumeUseSize;:
+          type: integer
+          format: int64
+          description: "평균스냅샷볼륨사용사이즈"
+        snapshotAverageVolumeUseRatio;:
+          type: number
+          format: float
+          description: "평균스냅샷볼륨사용비율"
+        snapshotMaxVolumeUseSize;:
+          type: integer
+          format: int64
+          description: "최대스냅샷볼륨사용사이즈"
+        snapshotMaxVolumeUseRatio;:
+          type: number
+          format: float
+          description: "최대스냅샷볼륨사용비율"
+        snapshotMinVolumeUseSize;:
+          type: integer
+          format: int64
+          description: "최소스냅샷볼륨사용사이즈"
+        snapshotMinVolumeUseRatio;:
+          type: number
+          format: float
+          description: "최소스냅샷볼륨사용비율"
+    NasVolumeSnapshot:
+      type: object
+      properties:
+        nasVolumeSnapshotName;:
+          type: string
+          description: "NAS 볼륨스냅샷이름"
+        createDate;:
+          type: string
+          description: "생성일시"
+        snapshotSize;:
+          type: integer
+          format: int64
+          description: "스냡샷사이즈"
+        isBusy;:
+          type: boolean
+          description: "busy 여부"
+    NasVolumeSnapshotConfigurationHistory:
+      type: object
+      properties:
+        nasVolumeInstanceNo;:
+          type: string
+          description: "NAS 볼륨인스턴스 번호"
+        historySequenceNo;:
+          type: string
+          description: "이력일련번호"
+        historyType;:
+          $ref: '#/components/schemas/CommonCode'
+        ip;:
+          type: string
+          description: "IP"
+        registerDate;:
+          type: string
+          description: "등록일시"
+        snapshotVolumeConfigurationRatio;:
+          type: number
+          format: float
+          description: "스냅샷볼륨설정비율"
+        snapshotVolumeConfigPeriodType;:
+          $ref: '#/components/schemas/CommonCode'
+        snapshotVolumeConfigDayOfWeekType;:
+          $ref: '#/components/schemas/CommonCode'
+        snapshotVolumeConfigTime;:
+          type: integer
+          format: int32
+          description: "스냅샷자동생성주기시각"
+    RemoveNasVolumeAccessControlRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        nasVolumeInstanceNo:
+          type: string
+          description: "NAS 볼륨인스턴스 번호"
+        serverInstanceNoList:
+          type: array
+          description: "서버인스턴스 번호 리스트"
+          items:
+            type: string
+    RemoveNasVolumeAccessControlResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        nasVolumeInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NasVolumeInstance'
+    RestoreNasVolumeWithSnapshotRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        nasVolumeInstanceNo:
+          type: string
+          description: "NAS 볼륨인스턴스 번호"
+        nasVolumeSnapshotName:
+          type: string
+          description: "NAS 볼륨스냅샷이름"
+    RestoreNasVolumeWithSnapshotResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        nasVolumeSnapshotList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NasVolumeSnapshot'
+    SetNasVolumeAccessControlRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        nasVolumeInstanceNo:
+          type: string
+          description: "NAS 볼륨인스턴스 번호"
+        serverInstanceNoList:
+          type: array
+          description: "서버인스턴스 번호 리스트"
+          items:
+            type: string
+        accessControlRuleList:
+          type: array
+          description: "접근제어 Rule 리스트"
+          items:
+            $ref: '#/components/schemas/AccessControlRuleParameter'
+    SetNasVolumeAccessControlResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        nasVolumeInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NasVolumeInstance'
+    SetNasVolumeReturnProtectionRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        nasVolumeInstanceNo:
+          type: string
+          description: "NAS 볼륨인스턴스 번호"
+        isReturnProtection:
+          type: boolean
+          description: "반납보호여부"
+    SetNasVolumeReturnProtectionResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        nasVolumeInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NasVolumeInstance'
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

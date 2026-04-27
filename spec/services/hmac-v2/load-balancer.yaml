@@ -1,0 +1,1998 @@
+openapi: 3.0.3
+info:
+  title: load-balancer
+  description: VPC Load Balancer 관련 API
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: true
+    gov: true
+
+  x-ncloud-nrn:
+
+    productName: VPCLoadBalancer
+    resource_types:
+      - LoadBalancer
+
+servers:
+  - url: https://ncloud.apigw.ntruss.com/vloadbalancer/v2
+    description: load-balancer 민간
+    x-ncloud-env: public
+  - url: https://ncloud.apigw.fin-ntruss.com/vloadbalancer/v2
+    description: load-balancer 금융
+    x-ncloud-env: financial
+  - url: https://ncloud.apigw.gov-ntruss.com/vloadbalancer/v2
+    description: load-balancer 공공
+    x-ncloud-env: gov
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /addLoadBalancerListenerCertificate:
+    post:
+      operationId: AddLoadBalancerListenerCertificate
+      summary: 로드밸런서리스너인증서추가
+      tags:
+        - load-balancer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AddLoadBalancerListenerCertificateRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddLoadBalancerListenerCertificateResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /addTarget:
+    post:
+      operationId: AddTarget
+      tags:
+        - load-balancer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AddTargetRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddTargetResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Add target
+  /changeLoadBalancerInstanceConfiguration:
+    post:
+      operationId: ChangeLoadBalancerInstanceConfiguration
+      tags:
+        - load-balancer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChangeLoadBalancerInstanceConfigurationRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeLoadBalancerInstanceConfigurationResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: 로드 밸런서 인스턴스의 설정을 변경합니다.
+  /changeLoadBalancerListenerConfiguration:
+    post:
+      operationId: ChangeLoadBalancerListenerConfiguration
+      tags:
+        - load-balancer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChangeLoadBalancerListenerConfigurationRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeLoadBalancerListenerConfigurationResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: 로드 밸런서 리스너의 설정을 변경합니다.
+  /changeTargetGroupConfiguration:
+    post:
+      operationId: ChangeTargetGroupConfiguration
+      tags:
+        - load-balancer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChangeTargetGroupConfigurationRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeTargetGroupConfigurationResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Change target group configuration
+  /changeTargetGroupHealthCheckConfiguration:
+    post:
+      operationId: ChangeTargetGroupHealthCheckConfiguration
+      tags:
+        - load-balancer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChangeTargetGroupHealthCheckConfigurationRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeTargetGroupHealthCheckConfigurationResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Change target group health check configuration
+  /createLoadBalancerInstance:
+    post:
+      operationId: CreateLoadBalancerInstance
+      tags:
+        - load-balancer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateLoadBalancerInstanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateLoadBalancerInstanceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: 로드 밸런서 인스턴스를 생성합니다.
+  /createLoadBalancerListener:
+    post:
+      operationId: CreateLoadBalancerListener
+      tags:
+        - load-balancer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateLoadBalancerListenerRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateLoadBalancerListenerResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: 로드 밸런서에 등록할 새로운 리스너를 생성합니다.
+  /createTargetGroup:
+    post:
+      operationId: CreateTargetGroup
+      tags:
+        - load-balancer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateTargetGroupRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateTargetGroupResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Create target group
+  /deleteLoadBalancerInstances:
+    post:
+      operationId: DeleteLoadBalancerInstances
+      tags:
+        - load-balancer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteLoadBalancerInstancesRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteLoadBalancerInstancesResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: 로드 밸런서 인스턴스를 삭제합니다.
+  /deleteLoadBalancerListeners:
+    post:
+      operationId: DeleteLoadBalancerListeners
+      tags:
+        - load-balancer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteLoadBalancerListenersRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteLoadBalancerListenersResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: 로드 밸런서에 등록된 리스너를 삭제합니다. 삭제 후에도 로드 밸런서에 리스너가 최소 한 개 이상 존재해야 합니다.
+  /deleteTargetGroups:
+    post:
+      operationId: DeleteTargetGroups
+      tags:
+        - load-balancer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteTargetGroupsRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteTargetGroupsResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Delete target groups
+  /getLoadBalancerInstanceDetail:
+    post:
+      operationId: GetLoadBalancerInstanceDetail
+      tags:
+        - load-balancer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetLoadBalancerInstanceDetailRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetLoadBalancerInstanceDetailResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: 로드 밸런서 인스턴스의 번호를 이용하여 상세 정보를 조회합니다.
+  /getLoadBalancerInstanceList:
+    post:
+      operationId: GetLoadBalancerInstanceList
+      tags:
+        - load-balancer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetLoadBalancerInstanceListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetLoadBalancerInstanceListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: 사용자가 지정한 조건에 따라 로드 밸런서 인스턴스의 목록을 조회합니다.
+  /getLoadBalancerListenerCertificateList:
+    post:
+      operationId: GetLoadBalancerListenerCertificateList
+      summary: 로드밸런서리스너인증서조회
+      tags:
+        - load-balancer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetLoadBalancerListenerCertificateListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetLoadBalancerListenerCertificateListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /getLoadBalancerListenerList:
+    post:
+      operationId: GetLoadBalancerListenerList
+      tags:
+        - load-balancer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetLoadBalancerListenerListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetLoadBalancerListenerListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: 로드 밸런서에 등록된 리스너 목록을 조회합니다.
+  /getLoadBalancerRuleList:
+    post:
+      operationId: GetLoadBalancerRuleList
+      tags:
+        - load-balancer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetLoadBalancerRuleListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetLoadBalancerRuleListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: 로드 밸런서 리스너에 등록된 규칙 목록을 조회합니다.
+  /getTargetGroupDetail:
+    post:
+      operationId: GetTargetGroupDetail
+      tags:
+        - load-balancer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetTargetGroupDetailRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTargetGroupDetailResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get target group detail
+  /getTargetGroupList:
+    post:
+      operationId: GetTargetGroupList
+      tags:
+        - load-balancer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetTargetGroupListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTargetGroupListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get target group list
+  /getTargetList:
+    post:
+      operationId: GetTargetList
+      tags:
+        - load-balancer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetTargetListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTargetListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Get target list
+  /removeLoadBalancerListenerCertificate:
+    post:
+      operationId: RemoveLoadBalancerListenerCertificate
+      summary: 로드밸런서리스너인증서제거
+      tags:
+        - load-balancer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RemoveLoadBalancerListenerCertificateRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RemoveLoadBalancerListenerCertificateResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+  /removeTarget:
+    post:
+      operationId: RemoveTarget
+      tags:
+        - load-balancer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RemoveTargetRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RemoveTargetResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Remove target
+  /setLoadBalancerDescription:
+    post:
+      operationId: SetLoadBalancerDescription
+      tags:
+        - load-balancer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetLoadBalancerDescriptionRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetLoadBalancerDescriptionResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: 로드 밸런서의 설명을 수정합니다.
+  /setLoadBalancerInstanceSubnet:
+    post:
+      operationId: SetLoadBalancerInstanceSubnet
+      tags:
+        - load-balancer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetLoadBalancerInstanceSubnetRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetLoadBalancerInstanceSubnetResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: 로드 밸런서의 서브넷을 설정합니다. 기존에 설정된 서브넷을 포함하여 설정하며, 기존 서브넷과 다른 존에 위치한 서브넷을 추가할 수 있습니다.
+  /setTarget:
+    post:
+      operationId: SetTarget
+      tags:
+        - load-balancer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetTargetRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetTargetResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Set target
+  /setTargetGroupDescription:
+    post:
+      operationId: SetTargetGroupDescription
+      tags:
+        - load-balancer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetTargetGroupDescriptionRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetTargetGroupDescriptionResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Set target group description
+components:
+  schemas:
+    AddLoadBalancerListenerCertificateRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        loadBalancerListenerNo:
+          type: string
+          description: "로드밸런서리스너번호"
+        sslCertificateNo:
+          type: string
+          description: "SSL 인증서 번호"
+    AddLoadBalancerListenerCertificateResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        loadBalancerListenerCertificateList:
+          type: array
+          items:
+            $ref: '#/components/schemas/LoadBalancerListenerCertificate'
+    AddTargetRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        targetGroupNo:
+          type: string
+          description: "타겟그룹 번호"
+        targetNoList:
+          type: array
+          description: "타겟번호 리스트"
+          items:
+            type: string
+      required:
+        - targetNoList
+    AddTargetResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        targetList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Target'
+    ChangeLoadBalancerInstanceConfigurationRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        idleTimeout:
+          type: integer
+          format: int32
+          description: "연결타임아웃"
+        loadBalancerInstanceNo:
+          type: string
+          description: "로드밸런서인스턴스 번호"
+        throughputTypeCode:
+          type: string
+          description: "부하처리성능유형 코드"
+    ChangeLoadBalancerInstanceConfigurationResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        loadBalancerInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/LoadBalancerInstance'
+    ChangeLoadBalancerListenerConfigurationRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        sslCertificateNo:
+          type: string
+          description: "SSL 인증서 번호"
+        useHttp2:
+          type: boolean
+          description: "HTTP2 사용여부"
+        loadBalancerListenerNo:
+          type: string
+          description: "로드밸런서리스너번호"
+        port:
+          type: integer
+          format: int32
+          description: "포트"
+        protocolTypeCode:
+          type: string
+          description: "프로토콜유형 코드"
+        tlsMinVersionTypeCode:
+          type: string
+          description: "TLS 최소지원버전유형 코드"
+        cipherSuiteList:
+          type: array
+          description: "암호화스위트리스트"
+          items:
+            type: string
+    ChangeLoadBalancerListenerConfigurationResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        loadBalancerListenerList:
+          type: array
+          items:
+            $ref: '#/components/schemas/LoadBalancerListener'
+    ChangeTargetGroupConfigurationRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        algorithmTypeCode:
+          type: string
+          description: "알고리즘유형 코드"
+        useProxyProtocol:
+          type: boolean
+          description: "프록시프로토콜사용여부"
+        useStickySession:
+          type: boolean
+          description: "세션별접근사용여부"
+        targetGroupNo:
+          type: string
+          description: "타겟그룹 번호"
+    ChangeTargetGroupConfigurationResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        targetGroupList:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetGroup'
+    ChangeTargetGroupHealthCheckConfigurationRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        healthCheckCycle:
+          type: integer
+          format: int32
+          description: "헬스체크주기"
+        healthCheckDownThreshold:
+          type: integer
+          format: int32
+          description: "헬스체크실패임계값"
+        healthCheckHttpMethodTypeCode:
+          type: string
+          description: "헬스체크 HTTP 메소드유형 코드"
+        healthCheckPort:
+          type: integer
+          format: int32
+          description: "헬스체크포트"
+        healthCheckUpThreshold:
+          type: integer
+          format: int32
+          description: "헬스체크정상임계값"
+        healthCheckUrlPath:
+          type: string
+          description: "헬스체크 URL 경로"
+        targetGroupNo:
+          type: string
+          description: "타겟그룹 번호"
+    ChangeTargetGroupHealthCheckConfigurationResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        targetGroupList:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetGroup'
+    CommonCode:
+      type: object
+      properties:
+        code:
+          type: string
+          description: "코드"
+        codeName:
+          type: string
+          description: "코드명"
+    CreateLoadBalancerInstanceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        idleTimeout:
+          type: integer
+          format: int32
+          description: "연결타임아웃"
+        loadBalancerDescription:
+          type: string
+          description: "로드밸런서설명"
+        loadBalancerNetworkTypeCode:
+          type: string
+          description: "로드밸런서네트워크유형 코드"
+        loadBalancerTypeCode:
+          type: string
+          description: "로드밸런서유형 코드"
+        loadBalancerListenerList:
+          type: array
+          description: "로드밸런서리스너리스트"
+          items:
+            $ref: '#/components/schemas/LoadBalancerListenerParameter'
+        loadBalancerName:
+          type: string
+          description: "로드밸런서이름"
+        throughputTypeCode:
+          type: string
+          description: "부하처리성능유형 코드"
+        vpcNo:
+          type: string
+          description: "VPC 번호"
+        subnetNoList:
+          type: array
+          description: "서브넷 번호 리스트"
+          items:
+            type: string
+        loadBalancerSubnetList:
+          type: array
+          description: "로드밸런서서브넷리스트"
+          items:
+            $ref: '#/components/schemas/LoadBalancerSubnetParameter'
+      required:
+        - subnetNoList
+    CreateLoadBalancerInstanceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        loadBalancerInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/LoadBalancerInstance'
+    CreateLoadBalancerListenerRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        sslCertificateNo:
+          type: string
+          description: "SSL 인증서 번호"
+        useHttp2:
+          type: boolean
+          description: "HTTP2 사용여부"
+        loadBalancerInstanceNo:
+          type: string
+          description: "로드밸런서인스턴스 번호"
+        port:
+          type: integer
+          format: int32
+          description: "포트"
+        protocolTypeCode:
+          type: string
+          description: "프로토콜유형 코드"
+        tlsMinVersionTypeCode:
+          type: string
+          description: "TLS 최소지원버전유형 코드"
+        targetGroupNo:
+          type: string
+          description: "타겟그룹 번호"
+        cipherSuiteList:
+          type: array
+          description: "암호화스위트리스트"
+          items:
+            type: string
+    CreateLoadBalancerListenerResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        loadBalancerListenerList:
+          type: array
+          items:
+            $ref: '#/components/schemas/LoadBalancerListener'
+    CreateTargetGroupRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        targetGroupPort:
+          type: integer
+          format: int32
+          description: "타겟그룹포트"
+        targetGroupProtocolTypeCode:
+          type: string
+          description: "타겟그룹프로토콜유형 코드"
+        targetGroupDescription:
+          type: string
+          description: "타겟그룹설명"
+        healthCheckCycle:
+          type: integer
+          format: int32
+          description: "헬스체크주기"
+        healthCheckDownThreshold:
+          type: integer
+          format: int32
+          description: "헬스체크실패임계값"
+        healthCheckHttpMethodTypeCode:
+          type: string
+          description: "헬스체크 HTTP 메소드유형 코드"
+        healthCheckPort:
+          type: integer
+          format: int32
+          description: "헬스체크포트"
+        healthCheckProtocolTypeCode:
+          type: string
+          description: "헬스체크프로토콜유형 코드"
+        healthCheckUpThreshold:
+          type: integer
+          format: int32
+          description: "헬스체크정상임계값"
+        healthCheckUrlPath:
+          type: string
+          description: "헬스체크 URL 경로"
+        targetGroupName:
+          type: string
+          description: "타겟그룹 이름"
+        targetNoList:
+          type: array
+          description: "타겟번호 리스트"
+          items:
+            type: string
+        targetTypeCode:
+          type: string
+          description: "타겟유형 코드"
+        vpcNo:
+          type: string
+          description: "VPC 번호"
+    CreateTargetGroupResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        targetGroupList:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetGroup'
+    DeleteLoadBalancerInstancesRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        loadBalancerInstanceNoList:
+          type: array
+          description: "로드밸런서인스턴스 번호 리스트"
+          items:
+            type: string
+        returnPublicIpTogether:
+          type: boolean
+          description: "공인 IP 반납여부"
+      required:
+        - loadBalancerInstanceNoList
+    DeleteLoadBalancerInstancesResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        loadBalancerInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/LoadBalancerInstance'
+    DeleteLoadBalancerListenersRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        loadBalancerListenerNoList:
+          type: array
+          description: "로드밸런서리스너번호 리스트"
+          items:
+            type: string
+      required:
+        - loadBalancerListenerNoList
+    DeleteLoadBalancerListenersResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        loadBalancerListenerList:
+          type: array
+          items:
+            $ref: '#/components/schemas/LoadBalancerListener'
+    DeleteTargetGroupsRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        targetGroupNoList:
+          type: array
+          description: "타겟그룹 번호 리스트"
+          items:
+            type: string
+      required:
+        - targetGroupNoList
+    DeleteTargetGroupsResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        targetGroupList:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetGroup'
+    GetLoadBalancerInstanceDetailRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        loadBalancerInstanceNo:
+          type: string
+          description: "로드밸런서인스턴스 번호"
+    GetLoadBalancerInstanceDetailResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        loadBalancerInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/LoadBalancerInstance'
+    GetLoadBalancerInstanceListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        loadBalancerInstanceNoList:
+          type: array
+          description: "로드밸런서인스턴스 번호 리스트"
+          items:
+            type: string
+        loadBalancerNetworkTypeCode:
+          type: string
+          description: "로드밸런서네트워크유형 코드"
+        loadBalancerTypeCode:
+          type: string
+          description: "로드밸런서유형 코드"
+        pageNo:
+          type: integer
+          format: int32
+          description: "페이지번호"
+        pageSize:
+          type: integer
+          format: int32
+          description: "페이지사이즈"
+        sortList:
+          type: string
+          description: "정렬리스트"
+        vpcNo:
+          type: string
+          description: "VPC 번호"
+    GetLoadBalancerInstanceListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        loadBalancerInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/LoadBalancerInstance'
+    GetLoadBalancerListenerCertificateListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        loadBalancerListenerNo:
+          type: string
+          description: "로드밸런서리스너번호"
+    GetLoadBalancerListenerCertificateListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        loadBalancerListenerCertificateList:
+          type: array
+          items:
+            $ref: '#/components/schemas/LoadBalancerListenerCertificate'
+    GetLoadBalancerListenerListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        loadBalancerInstanceNo:
+          type: string
+          description: "로드밸런서인스턴스 번호"
+    GetLoadBalancerListenerListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        loadBalancerListenerList:
+          type: array
+          items:
+            $ref: '#/components/schemas/LoadBalancerListener'
+    GetLoadBalancerRuleListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        loadBalancerListenerNo:
+          type: string
+          description: "로드밸런서리스너번호"
+    GetLoadBalancerRuleListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        loadBalancerRuleList:
+          type: array
+          items:
+            $ref: '#/components/schemas/LoadBalancerRule'
+    GetTargetGroupDetailRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        targetGroupNo:
+          type: string
+          description: "타겟그룹 번호"
+    GetTargetGroupDetailResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        targetGroupList:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetGroup'
+    GetTargetGroupListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        targetGroupNoList:
+          type: array
+          description: "타겟그룹 번호 리스트"
+          items:
+            type: string
+        pageNo:
+          type: integer
+          format: int32
+          description: "페이지번호"
+        pageSize:
+          type: integer
+          format: int32
+          description: "페이지사이즈"
+        sortList:
+          type: string
+          description: "정렬리스트"
+        targetTypeCode:
+          type: string
+          description: "타겟유형 코드"
+        vpcNo:
+          type: string
+          description: "VPC 번호"
+    GetTargetGroupListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        targetGroupList:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetGroup'
+    GetTargetListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        targetGroupNo:
+          type: string
+          description: "타겟그룹 번호"
+    GetTargetListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        targetList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Target'
+    HostHeaderCondition:
+      type: object
+      properties:
+        hostHeaderList:
+          type: array
+          description: "호스트헤더리스트"
+          items:
+            type: string
+    LoadBalancerInstance:
+      type: object
+      properties:
+        loadBalancerInstanceNo:
+          type: string
+          description: "로드밸런서인스턴스 번호"
+        loadBalancerInstanceStatus:
+          $ref: '#/components/schemas/CommonCode'
+        loadBalancerInstanceOperation:
+          $ref: '#/components/schemas/CommonCode'
+        loadBalancerInstanceStatusName:
+          type: string
+          description: "로드밸런서인스턴스 상태이름"
+        loadBalancerDescription:
+          type: string
+          description: "로드밸런서설명"
+        createDate:
+          type: string
+          description: "생성일시"
+        loadBalancerName:
+          type: string
+          description: "로드밸런서이름"
+        loadBalancerDomain:
+          type: string
+          description: "로드밸런서도메인"
+        loadBalancerIpList:
+          type: array
+          description: "로드밸런서 IP 리스트"
+          items:
+            type: string
+        loadBalancerType:
+          $ref: '#/components/schemas/CommonCode'
+        loadBalancerNetworkType:
+          $ref: '#/components/schemas/CommonCode'
+        throughputType:
+          $ref: '#/components/schemas/CommonCode'
+        idleTimeout:
+          type: integer
+          format: int32
+          description: "연결타임아웃"
+        vpcNo:
+          type: string
+          description: "VPC 번호"
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        subnetNoList:
+          type: array
+          description: "서브넷 번호 리스트"
+          items:
+            type: string
+        loadBalancerSubnetList:
+          type: array
+          description: "로드밸런서서브넷리스트"
+          items:
+            $ref: '#/components/schemas/LoadBalancerSubnet'
+        loadBalancerListenerNoList:
+          type: array
+          description: "로드밸런서리스너번호 리스트"
+          items:
+            type: string
+    LoadBalancerListener:
+      type: object
+      properties:
+        loadBalancerInstanceNo:
+          type: string
+          description: "로드밸런서인스턴스 번호"
+        loadBalancerListenerNo:
+          type: string
+          description: "로드밸런서리스너번호"
+        protocolType:
+          $ref: '#/components/schemas/CommonCode'
+        port:
+          type: integer
+          format: int32
+          description: "포트"
+        useHttp2:
+          type: boolean
+          description: "HTTP2 사용여부"
+        sslCertificateNo:
+          type: string
+          description: "SSL 인증서 번호"
+        tlsMinVersionType:
+          $ref: '#/components/schemas/CommonCode'
+        loadBalancerRuleNoList:
+          type: array
+          description: "로드밸런서룰번호 리스트"
+          items:
+            type: string
+        cipherSuiteList:
+          type: array
+          description: "암호화스위트리스트"
+          items:
+            type: string
+    LoadBalancerListenerCertificate:
+      type: object
+      properties:
+        sslCertificateNo:
+          type: string
+          description: "SSL 인증서 번호"
+        memberNo:
+          type: string
+          description: "사용자번호"
+        sslCertificateName:
+          type: string
+          description: "SSL 인증서이름"
+        domainAddress:
+          type: string
+          description: "도메인주소"
+        validEndDate:
+          type: string
+          description: "인증종료일"
+        isDefault:
+          type: boolean
+          description: "디폴트여부"
+        statusCode:
+          type: integer
+          format: int32
+          description: "상태 코드"
+        statusName:
+          type: string
+          description: "상태이름"
+    LoadBalancerListenerParameter:
+      type: object
+      properties:
+        sslCertificateNo:
+          type: string
+          description: "SSL 인증서 번호"
+        useHttp2:
+          type: boolean
+          description: "HTTP2 사용여부"
+        port:
+          type: integer
+          format: int32
+          description: "포트"
+        protocolTypeCode:
+          type: string
+          description: "프로토콜유형 코드"
+        tlsMinVersionTypeCode:
+          type: string
+          description: "TLS 최소지원버전유형 코드"
+        targetGroupNo:
+          type: string
+          description: "타겟그룹 번호"
+        cipherSuiteList:
+          type: array
+          description: "암호화스위트리스트"
+          items:
+            type: string
+    LoadBalancerRule:
+      type: object
+      properties:
+        loadBalancerRuleNo:
+          type: string
+          description: "로드밸런서룰번호"
+        loadBalancerListenerNo:
+          type: string
+          description: "로드밸런서리스너번호"
+        priority:
+          type: integer
+          format: int32
+          description: "우선순위"
+        loadBalancerRuleConditionList:
+          type: array
+          description: "로드밸런서룰조건리스트"
+          items:
+            $ref: '#/components/schemas/LoadBalancerRuleCondition'
+        loadBalancerRuleActionList:
+          type: array
+          description: "로드밸런서룰액션리스트"
+          items:
+            $ref: '#/components/schemas/LoadBalancerRuleAction'
+    LoadBalancerRuleAction:
+      type: object
+      properties:
+        ruleActionType:
+          $ref: '#/components/schemas/CommonCode'
+        targetGroupAction:
+          $ref: '#/components/schemas/TargetGroupAction'
+        redirectionAction:
+          $ref: '#/components/schemas/RedirectionAction'
+    LoadBalancerRuleCondition:
+      type: object
+      properties:
+        ruleConditionType:
+          $ref: '#/components/schemas/CommonCode'
+        hostHeaderCondition:
+          $ref: '#/components/schemas/HostHeaderCondition'
+        pathPatternCondition:
+          $ref: '#/components/schemas/PathPatternCondition'
+    LoadBalancerSubnet:
+      type: object
+      properties:
+        zoneCode:
+          type: string
+          description: "ZONE 코드"
+        subnetNo:
+          type: string
+          description: "서브넷 번호"
+        publicIpInstanceNo:
+          type: string
+          description: "공인 IP 인스턴스 번호"
+    LoadBalancerSubnetParameter:
+      type: object
+      properties:
+        subnetNo:
+          type: string
+          description: "서브넷 번호"
+        publicIpInstanceNo:
+          type: string
+          description: "공인 IP 인스턴스 번호"
+    PathPatternCondition:
+      type: object
+      properties:
+        pathPatternList:
+          type: array
+          description: "경로패턴리스트"
+          items:
+            type: string
+    RedirectionAction:
+      type: object
+      properties:
+        protocol:
+          type: string
+          description: "프로토콜"
+        port:
+          type: string
+          description: "포트"
+        host:
+          type: string
+          description: "호스트"
+        path:
+          type: string
+          description: "경로"
+        query:
+          type: string
+          description: "쿼리"
+        statusCode:
+          type: string
+          description: "상태 코드"
+    RemoveLoadBalancerListenerCertificateRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        loadBalancerListenerNo:
+          type: string
+          description: "로드밸런서리스너번호"
+        sslCertificateNo:
+          type: string
+          description: "SSL 인증서 번호"
+    RemoveLoadBalancerListenerCertificateResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        loadBalancerListenerCertificateList:
+          type: array
+          items:
+            $ref: '#/components/schemas/LoadBalancerListenerCertificate'
+    RemoveTargetRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        targetGroupNo:
+          type: string
+          description: "타겟그룹 번호"
+        targetNoList:
+          type: array
+          description: "타겟번호 리스트"
+          items:
+            type: string
+      required:
+        - targetNoList
+    RemoveTargetResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        targetList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Target'
+    SetLoadBalancerDescriptionRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        loadBalancerDescription:
+          type: string
+          description: "로드밸런서설명"
+        loadBalancerInstanceNo:
+          type: string
+          description: "로드밸런서인스턴스 번호"
+    SetLoadBalancerDescriptionResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        loadBalancerInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/LoadBalancerInstance'
+    SetLoadBalancerInstanceSubnetRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        loadBalancerInstanceNo:
+          type: string
+          description: "로드밸런서인스턴스 번호"
+        subnetNoList:
+          type: array
+          description: "서브넷 번호 리스트"
+          items:
+            type: string
+        loadBalancerSubnetList:
+          type: array
+          description: "로드밸런서서브넷리스트"
+          items:
+            $ref: '#/components/schemas/LoadBalancerSubnetParameter'
+      required:
+        - subnetNoList
+    SetLoadBalancerInstanceSubnetResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        loadBalancerInstanceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/LoadBalancerInstance'
+    SetTargetGroupDescriptionRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        targetGroupNo:
+          type: string
+          description: "타겟그룹 번호"
+        targetGroupDescription:
+          type: string
+          description: "타겟그룹설명"
+    SetTargetGroupDescriptionResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        targetGroupList:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetGroup'
+    SetTargetRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        targetGroupNo:
+          type: string
+          description: "타겟그룹 번호"
+        targetNoList:
+          type: array
+          description: "타겟번호 리스트"
+          items:
+            type: string
+    SetTargetResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        targetList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Target'
+    Target:
+      type: object
+      properties:
+        targetNo:
+          type: string
+          description: "타겟번호"
+        healthCheckStatus:
+          $ref: '#/components/schemas/CommonCode'
+        healthCheckResponse:
+          type: string
+          description: "헬스체크응답"
+    TargetGroup:
+      type: object
+      properties:
+        targetGroupNo:
+          type: string
+          description: "타겟그룹 번호"
+        targetGroupName:
+          type: string
+          description: "타겟그룹 이름"
+        targetType:
+          $ref: '#/components/schemas/CommonCode'
+        vpcNo:
+          type: string
+          description: "VPC 번호"
+        targetGroupProtocolType:
+          $ref: '#/components/schemas/CommonCode'
+        targetGroupPort:
+          type: integer
+          format: int32
+          description: "타겟그룹포트"
+        targetGroupDescription:
+          type: string
+          description: "타겟그룹설명"
+        useStickySession:
+          type: boolean
+          description: "세션별접근사용여부"
+        useProxyProtocol:
+          type: boolean
+          description: "프록시프로토콜사용여부"
+        algorithmType:
+          $ref: '#/components/schemas/CommonCode'
+        createDate:
+          type: string
+          description: "생성일시"
+        regionCode:
+          type: string
+          description: "REGION 코드"
+        loadBalancerInstanceNo:
+          type: string
+          description: "로드밸런서인스턴스 번호"
+        healthCheckProtocolType:
+          $ref: '#/components/schemas/CommonCode'
+        healthCheckPort:
+          type: integer
+          format: int32
+          description: "타겟그룹포트"
+        healthCheckUrlPath:
+          type: string
+          description: "헬스체크 URL 경로"
+        healthCheckHttpMethodType:
+          $ref: '#/components/schemas/CommonCode'
+        healthCheckCycle:
+          type: integer
+          format: int32
+          description: "헬스체크주기"
+        healthCheckUpThreshold:
+          type: integer
+          format: int32
+          description: "헬스체크정상임계값"
+        healthCheckDownThreshold:
+          type: integer
+          format: int32
+          description: "헬스체크실패임계값"
+        targetNoList:
+          type: array
+          description: "타겟번호 리스트"
+          items:
+            type: string
+    TargetGroupAction:
+      type: object
+      properties:
+        targetGroupWeightList:
+          type: array
+          description: "타겟그룹가중치리스트"
+          items:
+            $ref: '#/components/schemas/TargetGroupWeight'
+        useStickySession:
+          type: boolean
+          description: "세션별접근사용여부"
+    TargetGroupWeight:
+      type: object
+      properties:
+        targetGroupNo:
+          type: string
+          description: "타겟그룹 번호"
+        weight:
+          type: integer
+          format: int32
+          description: "가중치"
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

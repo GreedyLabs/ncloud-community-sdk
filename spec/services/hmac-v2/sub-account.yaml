@@ -1,0 +1,3653 @@
+openapi: 3.0.3
+info:
+  title: sub-account
+  description: |
+    Sub Account — NCP IAM.
+    사용자 / 그룹 / 역할 / 정책 / Access Key / MFA / CRL / TrustAnchor 등을 관리합니다.
+
+    현재 스펙 범위 (22 op):
+      • access-keys 그룹 (4)
+      • sub-account CRUD + 인증·세션 설정 (18)
+    잔여 그룹: groups, policies, roles, profiles, trustanchors, crls, tags, switchable, 2factorauthentication, attach/detach 패밀리.
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: true
+    gov: true
+
+  x-ncloud-nrn:
+
+    productName: IAM
+    resource_types:
+      - SubAccount
+      - Group
+      - Policy
+      - Tenant
+      - Role
+
+servers:
+  - url: https://subaccount.apigw.ntruss.com/api/v1
+    description: sub-account 민간
+    x-ncloud-env: public
+  - url: https://subaccount.apigw.fin-ntruss.com/api/v1
+    description: sub-account 금융
+    x-ncloud-env: financial
+  - url: https://subaccount.apigw.gov-ntruss.com/api/v1
+    description: sub-account 공공
+    x-ncloud-env: gov
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  # ---------- sub-accounts (CRUD) ----------
+  /sub-accounts:
+    get:
+      operationId: GetSubAccounts
+      summary: 서브 계정 목록 조회
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-getsubaccounts
+      parameters:
+        - {name: searchColumn, in: query, schema: {type: string}, description: 검색 대상 컬럼 (loginId/name/email 등)}
+        - {name: searchWord, in: query, schema: {type: string}, description: 검색어}
+        - {name: page, in: query, schema: {type: integer, default: 0}, description: 페이지 번호 (0~N)}
+        - {name: size, in: query, schema: {type: integer, default: 20, minimum: 1, maximum: 100}, description: 페이지 출력 수}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubAccountListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: CreateSubAccount
+      summary: 서브 계정 생성
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-createsubaccount
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSubAccountRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [id, success]
+                properties:
+                  id: {type: string, format: uuid, description: 생성된 서브 계정 아이디}
+                  success: {type: boolean}
+                  generatedPassword:
+                    type: string
+                    description: needPasswordGenerate=true 일 때만 반환되는 자동 생성 비밀번호 (1회성).
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /sub-accounts/{subAccountId}:
+    parameters:
+      - name: subAccountId
+        in: path
+        required: true
+        schema: {type: string, format: uuid}
+        description: 서브 계정 아이디 (GetSubAccounts 참조)
+    get:
+      operationId: GetSubAccount
+      summary: 서브 계정 상세 조회
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-getsubaccount
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SubAccountDetail'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    put:
+      operationId: UpdateSubAccount
+      summary: 서브 계정 정보 수정
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-putsubaccount
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/UpdateSubAccountRequest'}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: DeleteSubAccount
+      summary: 서브 계정 삭제
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-deletesubaccount
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  /sub-accounts/{subAccountId}/password:
+    parameters:
+      - name: subAccountId
+        in: path
+        required: true
+        schema: {type: string, format: uuid}
+    put:
+      operationId: ResetSubAccountPassword
+      summary: 서브 계정 로그인 비밀번호 재설정
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-putpassword
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [needPasswordGenerate]
+              properties:
+                needPasswordGenerate:
+                  type: boolean
+                  description: "true: 자동 생성, false: newPassword 직접 입력 필수"
+                newPassword:
+                  type: string
+                  description: needPasswordGenerate=false 일 때 필수
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [success]
+                properties:
+                  success: {type: boolean}
+                  generatedPassword:
+                    type: string
+                    description: needPasswordGenerate=true 일 때만 반환
+
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /sub-accounts/{subAccountId}/access-keys:
+    # 동일 URL에서 4개 메서드로 분기 (AWS IAM 패턴)
+    parameters:
+      - name: subAccountId
+        in: path
+        required: true
+        schema: {type: string, format: uuid}
+        description: 서브 계정 아이디 (GetSubAccounts 참조)
+    post:
+      operationId: CreateAccessKey
+      summary: 서브 계정의 Access Key 생성
+      description: 서브 계정의 새 Access Key / Secret Key 쌍을 발급합니다.
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-createaccesskey
+      requestBody:
+        description: '(Per NCP docs this endpoint takes no request body. Source: https://api.ncloud-docs.com/docs/management-subaccount-createaccesskey)'
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/NewAccessKey'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    get:
+      operationId: GetAccessKeys
+      summary: 서브 계정의 Access Key 목록 조회
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-getaccesskey
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {$ref: '#/components/schemas/AccessKeyInfo'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    put:
+      operationId: SuspendAccessKey
+      summary: 서브 계정의 Access Key 상태 변경
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-suspendkey
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [accessKey, active]
+              properties:
+                accessKey: {type: string, description: 상태를 변경할 Access Key}
+                active: {type: boolean, description: "true: 활성화, false: 비활성화"}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: DeleteAccessKey
+      summary: 서브 계정의 Access Key 삭제
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-deletekey
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [accessKey]
+              properties:
+                accessKey: {type: string, description: 삭제할 Access Key}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  # ---------- 식별자 helpers ----------
+  /sub-accounts-with-no:
+    get:
+      operationId: GetSubAccountIdByNo
+      summary: 서브 계정 번호로 서브 계정 아이디 조회
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-getsubaccountidno
+      parameters:
+        - name: subAccountNo
+          in: query
+          required: true
+          explode: true
+          schema: {type: array, items: {type: integer}}
+          description: 서브 계정 번호 목록 (다중값 — 콤마 또는 반복 파라미터)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    subAccountNo: {type: integer}
+                    subAccountId: {type: string, format: uuid}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  /users/{subAccountId}:
+    get:
+      operationId: GetUserDetail
+      summary: 사용자 상세 정보 조회 (그룹 소속 포함)
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-getuserdetail
+      parameters:
+        - name: subAccountId
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - name: includeDeleted
+          in: query
+          required: false
+          schema: {type: boolean, default: false}
+          description: "true: 삭제된 계정 포함, false: 제외(기본값)"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/UserDetail'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  # ---------- 가입 검증 (회원가입 화면용) ----------
+  /join/check-login-id:
+    get:
+      operationId: CheckLoginIdAvailable
+      summary: 로그인 아이디 사용 가능 여부 확인
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-checkloginid
+      parameters:
+        - name: loginId
+          in: query
+          required: true
+          schema: {type: string}
+          description: 검사할 로그인 아이디
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isValid: {type: boolean, description: 사용 가능 여부 (필드명은 응답 예시 기반 추정)}
+                  reason: {type: string, description: 사용 불가 사유 (해당 시)}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  /join/check-password:
+    get:
+      operationId: CheckPasswordValid
+      summary: 비밀번호 정책 충족 여부 검증
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-checkpassword
+      parameters:
+        - name: password
+          in: query
+          required: true
+          schema: {type: string}
+          description: 검사할 비밀번호 (HTTPS 전송이지만 query string 노출 위험 있음)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isValid: {type: boolean}
+                  reason: {type: string}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  # ---------- 로그인 별칭 (테넌트 alias) ----------
+  /login-alias:
+    get:
+      operationId: GetLoginAlias
+      summary: 로그인 별칭 조회
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-getloginalias
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  loginAlias: {type: string, description: 현재 설정된 로그인 별칭}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    put:
+      operationId: UpdateLoginAlias
+      summary: 로그인 별칭 변경
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-putloginalias
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [loginAlias]
+              properties:
+                loginAlias: {type: string, description: 새 로그인 별칭}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  # ---------- 테넌트 설정 — session / password / idle ----------
+  # NOTE: NCP docs slug naming is misleading — slug "get..." 페이지는 실제로 POST(set) 동작이고
+  #       slug "post..." 페이지가 GET(read) 동작입니다. spec에서는 HTTP 의미에 맞게 정리.
+  /tenant-settings/sub-account-session-policy:
+    get:
+      operationId: GetSessionExpirationPolicy
+      summary: 서브 계정 세션 만료 정책 조회
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-postsessionexpirationtime
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  useSessionExpiration: {type: boolean}
+                  sessionExpirationSec: {type: integer}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: SetSessionExpirationPolicy
+      summary: 서브 계정 세션 만료 정책 설정
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-getsessionexpirationtime
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [useSessionExpiration]
+              properties:
+                useSessionExpiration: {type: boolean, description: 세션 만료 사용 여부}
+                sessionExpirationSec:
+                  type: integer
+                  description: 세션 만료 시간(초). useSessionExpiration=true 시 필수.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  /tenant-settings/sub-account-password-policy:
+    get:
+      operationId: GetPasswordExpirationPolicy
+      summary: 서브 계정 비밀번호 만료 정책 조회
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-getpasswordexpirationdays
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  usePasswordExpiration: {type: boolean}
+                  passwordExpirationDays: {type: integer}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: SetPasswordExpirationPolicy
+      summary: 서브 계정 비밀번호 만료 정책 설정
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-postpasswordexpirationdays
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [usePasswordExpiration]
+              properties:
+                usePasswordExpiration: {type: boolean}
+                passwordExpirationDays:
+                  type: integer
+                  description: 비밀번호 만료 일수. usePasswordExpiration=true 시 필수.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  /tenant-settings/idle-disable-settings:
+    get:
+      operationId: GetIdleDisablePolicy
+      summary: 미접속 비활성화 정책 조회
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-getidledisable
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  useIdleDisable: {type: boolean}
+                  idleDisableDays: {type: integer}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: SetIdleDisablePolicy
+      summary: 미접속 비활성화 정책 설정
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-postidledisable
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [useIdleDisable]
+              properties:
+                useIdleDisable: {type: boolean}
+                idleDisableDays:
+                  type: integer
+                  description: 미접속 비활성화 기준 일수. useIdleDisable=true 시 필수.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  # ---------- groups (CRUD) ----------
+  /groups:
+    get:
+      operationId: GetGroups
+      summary: 그룹 목록 조회
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-getgroups
+      parameters:
+        - {name: searchColumn, in: query, schema: {type: string}, description: 검색 대상 컬럼 (groupName 등)}
+        - {name: searchWord, in: query, schema: {type: string}, description: 검색어}
+        - {name: page, in: query, schema: {type: integer, default: 0}, description: 페이지 번호}
+        - {name: size, in: query, schema: {type: integer, default: 20, minimum: 1, maximum: 100}}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/GroupListResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+    post:
+      operationId: CreateGroup
+      summary: 그룹 생성
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-creategroup
+      description: |
+        Document360 페이지의 request 표가 sub-table 한 개(`tags`)만 노출되어
+        groupName/description 필드가 누락됨. IAM 표준 패턴 기반 추정. 후속 검증 필요.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - groupName
+              properties:
+                groupName:
+                  type: string
+                  description: 그룹 이름 한글, 영어 대문자, 소문자, 일어, 특수문자 '.', '_', '-'를 조합하여 3~30자 이내로 입력 첫 글자는 한글, 영어 대소문자, 일어
+                tags:
+                  type: object
+                  additionalProperties:
+                    type: string
+                  description: 그룹의 태그 리소스당 최대 20개 key, value 제약 조건 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 'API 호출 성공 여부 true | false true : 성공 false : 실패'
+                  id:
+                    type: string
+                    description: 그룹 아이디
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  /groups/{groupId}:
+    parameters:
+      - name: groupId
+        in: path
+        required: true
+        schema: {type: string, format: uuid}
+        description: 그룹 아이디 (GetGroups 참조)
+    get:
+      operationId: GetGroup
+      summary: 그룹 상세 조회
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-getgroup
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/GroupDetail'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    put:
+      operationId: UpdateGroup
+      summary: 그룹 정보 수정
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-putgroup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - groupName
+              properties:
+                groupName:
+                  type: string
+                  description: 그룹 이름 한글, 영어 대문자, 소문자, 일어, 특수문자 '.', '_', '-'를 조합하여 3~30자 이내로 입력 첫 글자는 한글, 영어 대소문자, 일어
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+    delete:
+      operationId: DeleteGroup
+      summary: 그룹 삭제
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-deletegroup
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  # ---------- group ↔ sub-account membership (양방향) ----------
+  /groups/{groupId}/sub-accounts:
+    parameters:
+      - name: groupId
+        in: path
+        required: true
+        schema: {type: string, format: uuid}
+    post:
+      operationId: AttachSubAccountToGroup
+      summary: 그룹에 서브 계정 추가 (그룹 관점)
+      description: 그룹 자원 입장에서 멤버로 서브 계정을 추가. 사용자 입장의 AddSubAccountToGroup과 같은 효과.
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-attachsubaccounttogroup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - subAccountIdList
+              properties:
+                subAccountIdList:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: 서브 계정 아이디 서브 계정 목록 조회 참조 서브 계정당 최대 10개 그룹에 소속 가능
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+    delete:
+      operationId: DetachSubAccountFromGroup
+      summary: 그룹에서 서브 계정 제거 (그룹 관점)
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-detachsubaccountfromgroup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - subAccountIdList
+              properties:
+                subAccountIdList:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: 서브 계정 아이디 서브 계정 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  /sub-accounts/{subAccountId}/groups:
+    parameters:
+      - name: subAccountId
+        in: path
+        required: true
+        schema: {type: string, format: uuid}
+    post:
+      operationId: AddSubAccountToGroup
+      summary: 서브 계정을 그룹들에 추가 (사용자 관점)
+      description: 사용자 자원 입장에서 멤버십 추가. 그룹 입장의 AttachSubAccountToGroup과 동일 효과.
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-addsubaccounttogroup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - groupIdList
+              properties:
+                groupIdList:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: 그룹 아이디 목록 그룹 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+    delete:
+      operationId: DeleteSubAccountFromGroup
+      summary: 서브 계정을 그룹들에서 제거 (사용자 관점)
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-deletesubaccountfromgroup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - groupIdList
+              properties:
+                groupIdList:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: 그룹 아이디 목록 그룹 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  # ---------- group ↔ policy attach ----------
+  /groups/{groupId}/policies:
+    parameters:
+      - name: groupId
+        in: path
+        required: true
+        schema: {type: string, format: uuid}
+    post:
+      operationId: AttachPolicyToGroup
+      summary: 그룹에 정책 부착
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-attachpolicytogroup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - policyIdList
+              properties:
+                policyIdList:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: 정책 아이디 정책 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+    delete:
+      operationId: DetachPolicyFromGroup
+      summary: 그룹에서 정책 분리
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-detachpolicyfromgroup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - policyIdList
+              properties:
+                policyIdList:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: 정책 아이디 정책 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  # ---------- policies (CRUD + validation) ----------
+  /policies:
+    get:
+      operationId: GetPolicies
+      summary: 정책 목록 조회
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-getpolicies
+      parameters:
+        - {name: page, in: query, schema: {type: integer, default: 0}}
+        - {name: size, in: query, schema: {type: integer, default: 20, minimum: 1, maximum: 100}}
+        - {name: searchColumn, in: query, schema: {type: string}, description: 검색 대상 컬럼 (policyName 등)}
+        - {name: searchWord, in: query, schema: {type: string}}
+        - {name: type, in: query, schema: {type: string, enum: [SYSTEM, USER]}, description: 정책 유형 필터}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/PolicyListResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: CreatePolicy
+      summary: 정책 생성
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-createpolicy
+      description: |
+        agent가 추출한 응답이 RFC 7807 형식의 에러 응답이라 정상 응답 스키마는 추정으로 채움.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/CreatePolicyRequest'}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  policyId:
+                    type: string
+                    description: 정책 아이디
+                  policyName:
+                    type: string
+                    description: 정책 이름
+                  description:
+                    type: string
+                    description: 정책에 대한 설명
+                  validationResult:
+                    type: object
+                    additionalProperties: true
+                    description: 유효성 확인 결과
+                  tags:
+                    type: object
+                    additionalProperties:
+                      type: string
+                    description: 정책의 태그
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+    delete:
+      operationId: DeletePolicies
+      summary: 정책 다건 삭제
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-deletepolicymulti
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [policyId]
+              properties:
+                policyId:
+                  type: array
+                  items: {type: string, format: uuid}
+                  description: 삭제할 정책 아이디 목록 (필드명은 단수 'policyId'지만 Array)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  /policies/{policyId}:
+    parameters:
+      - name: policyId
+        in: path
+        required: true
+        schema: {type: string, format: uuid}
+        description: 정책 아이디 (GetPolicies 참조)
+    get:
+      operationId: GetPolicy
+      summary: 정책 상세 조회
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-getpolicy
+      description: |
+        agent가 추출한 응답 표가 부분적이라 권한(permissions) 구조는 IAM Statement 패턴 추정.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/PolicyDetail'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+      parameters:
+        - name: withPermissions
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: '정책의 상세 권한 표시 여부 true | false (기본값) true : 표시 false : 표시 안 함'
+
+    put:
+      operationId: UpdatePolicy
+      summary: 정책 수정
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-updatepolicy
+      description: 부분 업데이트. permissions를 통째로 교체하는 형식 추정 (NCP docs 표 미공개).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - permissions
+                - effect
+                - targets
+                - product
+                - actions
+                - resourceNrns
+              properties:
+                description:
+                  type: string
+                  description: 정책에 대한 설명(Byte) 0~300
+                permissions:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: '허용 권한 목록: permissions'
+                effect:
+                  type: string
+                  description: 권한 허용 여부 Allow (유효 값)
+                targets:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: '권한 허용 대상: targets'
+                condition:
+                  type: object
+                  additionalProperties: true
+                  description: 정책 컨디션
+                product:
+                  type: string
+                  description: 허용 대상 서비스 코드 서비스별 권한 정보 참조
+                actions:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: '허용 대상 액션 서비스별 권한 정보 를 참조하여 다음과 같이 적용 상세 액션 단위: 액션 이름 입력 모든 조회 단위: View* 입력 모든 변경 단위: Change* 입력 서비스 단위: 별표(*) 입력'
+                resourceNrns:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: 허용 대상에 대한 네이버 클라우드 플랫폼 리소스 식별 값 지정하지 않을 경우, 별표(*) 입력
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+    delete:
+      operationId: DeletePolicy
+      summary: 정책 단건 삭제
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-deletepolicy
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  /policies/{policyId}/resources:
+    get:
+      operationId: GetPolicyResources
+      summary: 정책에 연결된 리소스 목록 조회
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-getpolicyresources
+      parameters:
+        - {name: policyId, in: path, required: true, schema: {type: string, format: uuid}}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    resourceType: {type: string}
+                    resourceId: {type: string}
+                    resourceName: {type: string}
+                    nrn: {type: string}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  /policies/validate:
+    post:
+      operationId: ValidatePolicy
+      summary: 정책 스펙 유효성 검증 (저장 전 dry-run)
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-validatepolicy
+      description: |
+        Agent 추출 path가 모호 (`/policy/{policyId}`)했으나 body가 createPolicy와 동일하므로
+        '저장 없이 형식만 검사'하는 dry-run으로 추정. 경로는 `/policies/validate` (NCP 표준 dry-run 패턴) 추정.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/CreatePolicyRequest'}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  details:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '유효성 확인 상세 결과: details'
+                  success:
+                    type: boolean
+                    description: '유효성 확인 결과 true | false true : 유효함 false : 유효하지 않음'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  /policies/{policyId}/tags:
+    parameters:
+      - name: policyId
+        in: path
+        required: true
+        schema: {type: string, format: uuid}
+    get:
+      operationId: GetPolicyTags
+      summary: 정책 태그 조회
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-getpolicytag
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {$ref: '#/components/schemas/TagItem'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: AddPolicyTag
+      summary: 정책에 태그 추가
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-addpolicytag
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - tagKey
+                - tagValue
+              properties:
+                tagKey:
+                  type: string
+                  description: key 제약 조건 참조
+                tagValue:
+                  type: string
+                  description: value 제약 조건 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+    delete:
+      operationId: RemovePolicyTag
+      summary: 정책에서 태그 제거
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-removepolicytag
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - tagKey
+                - tagValue
+              properties:
+                tagKey:
+                  type: string
+                  description: 태그 키 태그 조회 참조
+                tagValue:
+                  type: string
+                  description: 태그 값 태그 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  # ---------- policy ↔ sub-account attach (사용자 관점) ----------
+  /sub-accounts/{subAccountId}/policies:
+    parameters:
+      - name: subAccountId
+        in: path
+        required: true
+        schema: {type: string, format: uuid}
+    post:
+      operationId: AttachPolicyToSubAccount
+      summary: 서브 계정에 정책 부착 (사용자 관점)
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-attachpolicytosubaccount
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - policyIdList
+              properties:
+                policyIdList:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: 정책 아이디 목록 정책 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+    delete:
+      operationId: DetachPolicyFromSubAccount
+      summary: 서브 계정에서 정책 분리
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-detachpolicyfromsubaccount
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - policyIdList
+              properties:
+                policyIdList:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: 정책 아이디 목록 정책 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  # ---------- roles (CRUD) ----------
+  /roles:
+    get:
+      operationId: GetRoles
+      summary: 역할 목록 조회
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-getroles
+      parameters:
+        - {name: page, in: query, schema: {type: integer, default: 0}}
+        - {name: size, in: query, schema: {type: integer, default: 20, minimum: 1, maximum: 100}}
+        - {name: searchColumn, in: query, schema: {type: string}, description: 검색 대상 컬럼 (roleName 등)}
+        - {name: searchWord, in: query, schema: {type: string}}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/RoleListResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+    post:
+      operationId: CreateRole
+      summary: 역할 생성
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-createrole
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/CreateRoleRequest'}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 'API 호출 성공 여부 true | false true : 성공 false : 실패'
+                  id:
+                    type: string
+                    description: 역할 아이디
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+    put:
+      operationId: SuspendRoles
+      summary: 역할 일괄 활성화/비활성화
+      description: |
+        쿼리 `active=true|false`와 body의 roleIds 목록으로 다건 역할의 활성 상태를 변경합니다.
+        agent 추출이 부분적이므로 body 필드명은 IAM 패턴 기반 추정.
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-suspendroles
+      parameters:
+        - {name: active, in: query, required: true, schema: {type: boolean}, description: "true: 활성화, false: 비활성화"}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - roleNoList
+              properties:
+                roleNoList:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: 역할 아이디 목록 역할 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 'API 호출 성공 여부 true | false true : 성공 false : 실패'
+                  id:
+                    type: string
+                    description: 역할 아이디
+                  name:
+                    type: string
+                    description: 액션 종류
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  /roles/{roleId}:
+    parameters:
+      - name: roleId
+        in: path
+        required: true
+        schema: {type: string, format: uuid}
+        description: 역할 아이디 (GetRoles 참조)
+    get:
+      operationId: GetRole
+      summary: 역할 상세 조회
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-getrole
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/RoleDetail'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+    put:
+      operationId: UpdateRole
+      summary: 역할 수정
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-updaterole
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - roleType
+              properties:
+                descCont:
+                  type: string
+                  description: 역할에 대한 설명(Byte) 0~300
+                roleName:
+                  type: string
+                  description: 역할 이름 한글, 영어 대문자, 소문자, 일어, 특수문자 '.', '_', '-'를 조합하여 3~100자 이내로 입력 첫 글자는 한글, 영어 대소문자, 일어
+                roleType:
+                  type: string
+                  description: 역할 유형 수정 불가하므로 기존 유형 입력
+                sessionExpirationSec:
+                  type: integer
+                  description: 세션 만료 시간(초) 600 | 1800 | 3600 | 10800 roleType 이 Account 인 경우, 필수 입력
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+    delete:
+      operationId: DeleteRole
+      summary: 역할 삭제
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-deleterole
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  /roles/{roleId}/enable:
+    put:
+      operationId: SuspendRole
+      summary: 역할 단건 활성화/비활성화
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-suspendrole
+      parameters:
+        - {name: roleId, in: path, required: true, schema: {type: string, format: uuid}}
+        - {name: active, in: query, required: true, schema: {type: boolean}, description: "true: 활성화, false: 비활성화"}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  # ---------- role ↔ entity attach (서브 계정 / 그룹 / 리소스) ----------
+  /roles/{roleId}/entities/account:
+    parameters:
+      - name: roleId
+        in: path
+        required: true
+        schema: {type: string, format: uuid}
+    post:
+      operationId: AttachAccountToRole
+      summary: 역할에 서브 계정(엔티티) 부착 — account 타입 전용
+      description: |
+        엔티티 타입을 path로 명시하는 변형 (`/entities/account`).
+        상위 path (`/entities`)의 `AttachEntityToRole`와 같은 효과 (어떤 형식이 권장되는지 docs에서 모호).
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-attachentitytorole
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - isMyAccount
+              properties:
+                isMyAccount:
+                  type: boolean
+                  description: '본인 계정 여부 true | false true : 본인 계정 false : 다른 메인 계정'
+                accountName:
+                  type: string
+                  description: 서브 계정 사용자 이름 isMyAccount 가 false 인 경우, 필수 입력
+                loginId:
+                  type: string
+                  description: 서브 계정 로그인 아이디 isMyAccount 가 false 인 경우, 필수 입력
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+    delete:
+      operationId: DetachAccountFromRole
+      summary: 역할에서 서브 계정(엔티티) 분리 — account 타입 전용
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-detachentityfromrole
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [loginIds]
+              properties:
+                loginIds:
+                  type: array
+                  items: {type: string}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  /roles/{roleId}/entities:
+    parameters:
+      - name: roleId
+        in: path
+        required: true
+        schema: {type: string, format: uuid}
+    post:
+      operationId: AttachEntityToRole
+      summary: 역할에 엔티티 부착 (범용 — body로 type 지정)
+      description: |
+        body에서 entityType과 식별자를 함께 전달하는 범용 attach.
+        account 타입만 대상이면 `/entities/account` 변형(AttachAccountToRole) 사용 가능.
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-attachentitytorole01
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - roleEntityList
+              properties:
+                roleEntityList:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: '역할 적용 대상 목록: roleEntityList'
+                type:
+                  type: string
+                  description: 역할 유형 Server | Service
+                id:
+                  type: string
+                  description: '역할 적용 대상 아이디 또는 이름 Server 역할: 서버 인스턴스 아이디 Service 역할: Datafence | DataFlow | ExternalAccess | DataStream'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 'API 호출 성공 여부 true | false true : 성공 false : 실패'
+                  id:
+                    type: string
+                    description: 역할 적용 대상 아이디 또는 이름
+                  name:
+                    type: string
+                    description: 액션 종류
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+    delete:
+      operationId: DetachEntityFromRole
+      summary: 역할에서 엔티티 분리 (범용)
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-detachentityfromrole01
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - entityIdList
+              properties:
+                entityIdList:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: '역할 적용 대상 목록 Server 역할: 서버 인스턴스 아이디 Service 역할: Datafence | DataFlow | ExternalAccess | DataStream'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 'API 호출 성공 여부 true | false true : 성공 false : 실패'
+                  id:
+                    type: string
+                    description: 역할 적용 대상 아이디 또는 이름
+                  name:
+                    type: string
+                    description: 액션 종류
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  # ---------- role ↔ policy attach ----------
+  /roles/{roleId}/policies:
+    parameters:
+      - name: roleId
+        in: path
+        required: true
+        schema: {type: string, format: uuid}
+    post:
+      operationId: AttachPolicyToRole
+      summary: 역할에 정책 부착
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-attachpolicytorole
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - policyIdList
+              properties:
+                policyIdList:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: 정책 아이디 목록 정책 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+    delete:
+      operationId: DetachPolicyFromRole
+      summary: 역할에서 정책 분리
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-detachpolicyfromrole
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - policyIdList
+              properties:
+                policyIdList:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: 정책 아이디 목록 정책 목록 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 'API 호출 성공 여부 true | false true : 성공 false : 실패'
+                  id:
+                    type: string
+                    description: 정책 아이디
+                  name:
+                    type: string
+                    description: 액션 종류
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  # ---------- role tags ----------
+  /roles/{roleId}/tags:
+    parameters:
+      - name: roleId
+        in: path
+        required: true
+        schema: {type: string, format: uuid}
+    get:
+      operationId: GetRoleTags
+      summary: 역할 태그 조회
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-getroletag
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tagKey:
+                    type: string
+                    description: 태그 키
+                  tagValue:
+                    type: string
+                    description: 태그 값
+                  tagDisplay:
+                    type: string
+                    description: 태그 표시 {tagKey}:{tagValue} 형태로 표시
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+    post:
+      operationId: AddRoleTag
+      summary: 역할에 태그 추가
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-addroletag
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - tagKey
+                - tagValue
+              properties:
+                tagKey:
+                  type: string
+                  description: 태그 키 key 제약 조건 참조
+                tagValue:
+                  type: string
+                  description: 태그 값 value 제약 조건 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+    delete:
+      operationId: RemoveRoleTag
+      summary: 역할에서 태그 제거
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-removeroletag
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - tagKey
+                - tagValue
+              properties:
+                tagKey:
+                  type: string
+                  description: 태그 키 태그 조회 참조
+                tagValue:
+                  type: string
+                  description: 태그 값 태그 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  # ---------- switchable roles (현재 사용자가 전환 가능한 역할 관리) ----------
+  /switchable-roles:
+    get:
+      operationId: GetSwitchableRoles
+      summary: 전환 가능한 역할 목록 조회
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-switchablerole-get
+      parameters:
+        - {name: page, in: query, schema: {type: integer, default: 0}}
+        - {name: size, in: query, schema: {type: integer, default: 20}}
+        - name: searchColumn
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '검색 컬럼 nrn | roleDisplayName nrn : 역할에 대한 네이버 클라우드 플랫폼 리소스 식별 값 roleDisplayName : 역할 이름'
+        - name: searchWord
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 검색 키워드
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  roleNo:
+                    type: string
+                    description: 역할 아이디
+                  roleNrn:
+                    type: string
+                    description: 역할에 대한 네이버 클라우드 플랫폼 리소스 식별 값
+                  displayName:
+                    type: string
+                    description: 역할 이름
+                  description:
+                    type: string
+                    description: 역할에 대한 설명
+                  isCurrentRole:
+                    type: boolean
+                    description: '현재 사용 여부 true | false true : 사용 중 false : 사용 안 함'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+    post:
+      operationId: AddSwitchableRole
+      summary: 전환 가능한 역할 추가
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-switchablerole-post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - displayName
+                - roleNrn
+              properties:
+                description:
+                  type: string
+                  description: 역할에 대한 설명(Byte) 0~300
+                displayName:
+                  type: string
+                  description: 역할 이름 3~30자
+                roleNrn:
+                  type: string
+                  description: 역할에 대한 네이버 클라우드 플랫폼 리소스 식별 값 메인 계정에서 전달받은 Account 역할 정보 입력
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 'API 호출 성공 여부 true | false true : 성공 false : 실패'
+                  id:
+                    type: string
+                    description: 역할에 대한 네이버 클라우드 플랫폼 리소스 식별 값
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+    put:
+      operationId: UpdateSwitchableRole
+      summary: 전환 가능한 역할 수정
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-switchablerole-put
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - displayName
+                - roleNrn
+              properties:
+                description:
+                  type: string
+                  description: 역할에 대한 설명(Byte) 0~300
+                displayName:
+                  type: string
+                  description: 역할 이름 2~30자
+                roleNrn:
+                  type: string
+                  description: 역할에 대한 네이버 클라우드 플랫폼 리소스 식별 값
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 'API 호출 성공 여부 true | false true : 성공 false : 실패'
+                  id:
+                    type: string
+                    description: 역할에 대한 네이버 클라우드 플랫폼 리소스 식별 값
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+    delete:
+      operationId: DeleteSwitchableRole
+      summary: 전환 가능한 역할 제거
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-switchablerole-delete
+      parameters:
+        - name: nrn
+          in: query
+          required: true
+          explode: true
+          schema:
+            type: array
+            items: {type: string}
+          description: 제거할 역할 NRN 목록 (다중값)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: 'API 호출 성공 여부 true | false true : 성공 false : 실패'
+                  id:
+                    type: string
+                    description: 역할에 대한 네이버 클라우드 플랫폼 리소스 식별 값
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - roleNrns
+              properties:
+                roleNrns:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: 역할에 대한 네이버 클라우드 플랫폼 리소스 식별 값 목록
+
+  # ==========================================================================
+  # Roles Anywhere (X.509 기반 외부 엔터티 인증)
+  # - Profile: 역할 + 세션 정책 (AWS IAM Roles Anywhere Profile 대응)
+  # - Trust Anchor: 클라이언트 인증서를 발급한 CA 정보
+  # - CRL: Trust Anchor 하위의 인증서 해지 목록
+  # ==========================================================================
+
+  # ---------- profiles ----------
+  /profiles:
+    get:
+      operationId: GetProfiles
+      summary: Profile 목록 조회
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-getprofilelist
+      parameters:
+        - {name: page, in: query, schema: {type: integer, default: 0}}
+        - {name: size, in: query, schema: {type: integer, default: 20, minimum: 1, maximum: 100}}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/ProfileListResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: CreateProfile
+      summary: Profile 생성
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-postprofiles
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, roleIdList]
+              properties:
+                name:
+                  type: string
+                  description: "Profile 이름 (영대소문자/숫자/'.','_','-' 조합, 3~30자)"
+                description: {type: string, maxLength: 300}
+                durationSeconds:
+                  type: integer
+                  minimum: 600
+                  maximum: 43200
+                  default: 3600
+                  description: 임시 자격 증명 지속 시간(초)
+                enabled: {type: boolean, default: true}
+                roleIdList:
+                  type: array
+                  items: {type: string, format: uuid}
+                  description: 이 Profile이 assume 가능한 역할 아이디 목록
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Profile'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  /profiles/{profileId}:
+    parameters:
+      - name: profileId
+        in: path
+        required: true
+        schema: {type: string}
+        description: Profile 아이디
+    get:
+      operationId: GetProfile
+      summary: Profile 상세 조회
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-getprofiles
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Profile'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    patch:
+      operationId: UpdateProfile
+      summary: Profile 부분 수정
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-patchprofiles
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: {type: string}
+                description: {type: string, maxLength: 300}
+                durationSeconds: {type: integer, minimum: 600, maximum: 43200}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Profile'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: DeleteProfile
+      summary: Profile 삭제
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-deleteprofiles
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Profile'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  /profiles/{profileId}/enable:
+    post:
+      operationId: EnableProfile
+      summary: Profile 활성화
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-enableprofiles
+      parameters:
+        - {name: profileId, in: path, required: true, schema: {type: string}}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Profile'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /profiles/{profileId}/disable:
+    post:
+      operationId: DisableProfile
+      summary: Profile 비활성화
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-disableprofiles
+      parameters:
+        - {name: profileId, in: path, required: true, schema: {type: string}}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Profile'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  # ---------- trust anchors ----------
+  /trust-anchors:
+    get:
+      operationId: GetTrustAnchors
+      summary: Trust Anchor 목록 조회
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-gettrustanchorlist
+      parameters:
+        - {name: page, in: query, schema: {type: integer, default: 0}}
+        - {name: size, in: query, schema: {type: integer, default: 20, minimum: 1, maximum: 100}}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/TrustAnchorListResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: CreateTrustAnchor
+      summary: Trust Anchor 생성
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-posttrustanchors
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, source]
+              properties:
+                name:
+                  type: string
+                  description: "Trust Anchor 이름 (영대소문자/숫자/'.','_','-' 조합, 3~30자)"
+                description: {type: string, maxLength: 300}
+                enabled: {type: boolean, default: true}
+                source: {$ref: '#/components/schemas/TrustAnchorSource'}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/TrustAnchor'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  /trust-anchors/{trustAnchorId}:
+    parameters:
+      - name: trustAnchorId
+        in: path
+        required: true
+        schema: {type: string}
+    get:
+      operationId: GetTrustAnchor
+      summary: Trust Anchor 상세 조회
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-gettrustanchors
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/TrustAnchor'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    patch:
+      operationId: UpdateTrustAnchor
+      summary: Trust Anchor 부분 수정
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-patchtrustanchors
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: {type: string}
+                description: {type: string, maxLength: 300}
+                source: {$ref: '#/components/schemas/TrustAnchorSource'}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/TrustAnchor'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: DeleteTrustAnchor
+      summary: Trust Anchor 삭제
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-deletetrustanchors
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/TrustAnchor'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  /trust-anchors/{trustAnchorId}/enable:
+    post:
+      operationId: EnableTrustAnchor
+      summary: Trust Anchor 활성화
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-enabletrustanchors
+      parameters:
+        - {name: trustAnchorId, in: path, required: true, schema: {type: string}}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/TrustAnchor'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /trust-anchors/{trustAnchorId}/disable:
+    post:
+      operationId: DisableTrustAnchor
+      summary: Trust Anchor 비활성화
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-disabletrustanchors
+      parameters:
+        - {name: trustAnchorId, in: path, required: true, schema: {type: string}}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/TrustAnchor'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  # ---------- CRLs (중첩: trust-anchors 하위) ----------
+  /trust-anchors/{trustAnchorId}/crls:
+    parameters:
+      - name: trustAnchorId
+        in: path
+        required: true
+        schema: {type: string}
+    get:
+      operationId: GetCrls
+      summary: CRL 목록 조회 (Trust Anchor 하위)
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-getcrllist
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {$ref: '#/components/schemas/Crl'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: CreateCrl
+      summary: CRL 등록
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-postcrls
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, crlData]
+              properties:
+                name: {type: string, minLength: 3, maxLength: 15, description: CRL 이름}
+                crlData: {type: string, description: Base64로 인코딩된 CRL 바이너리 데이터}
+                enabled: {type: boolean, default: false}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Crl'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  /trust-anchors/{trustAnchorId}/crls/{crlId}:
+    parameters:
+      - {name: trustAnchorId, in: path, required: true, schema: {type: string}}
+      - {name: crlId, in: path, required: true, schema: {type: string}}
+    get:
+      operationId: GetCrl
+      summary: CRL 상세 조회
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-getcrls
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Crl'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    patch:
+      operationId: UpdateCrl
+      summary: CRL 수정
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-patchcrls
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: {type: string, minLength: 3, maxLength: 15}
+                crlData: {type: string}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Crl'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: DeleteCrl
+      summary: CRL 삭제
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-deletecrls
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  /trust-anchors/{trustAnchorId}/crls/{crlId}/enable:
+    post:
+      operationId: EnableCrl
+      summary: CRL 활성화
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-enablecrls
+      parameters:
+        - {name: trustAnchorId, in: path, required: true, schema: {type: string}}
+        - {name: crlId, in: path, required: true, schema: {type: string}}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Crl'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /trust-anchors/{trustAnchorId}/crls/{crlId}/disable:
+    post:
+      operationId: DisableCrl
+      summary: CRL 비활성화
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-disablecrls
+      parameters:
+        - {name: trustAnchorId, in: path, required: true, schema: {type: string}}
+        - {name: crlId, in: path, required: true, schema: {type: string}}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Crl'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  # ==========================================================================
+  # Misc: MFA / user tags / access rules / credentials / subjects
+  # ==========================================================================
+
+  /sub-accounts/{subAccountId}/mfa:
+    get:
+      operationId: GetMfaState
+      summary: 서브 계정 MFA 상태 조회
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-2factorauthentication
+      parameters:
+        - {name: subAccountId, in: path, required: true, schema: {type: string, format: uuid}}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isMfaMandatory:
+                    type: boolean
+                    description: '2차 인증 필수 여부 true | false true : 필수 false : 선택'
+                  mfaList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 'MFA 설정 정보: mfaList'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  /users/{subAccountId}/tags:
+    parameters:
+      - {name: subAccountId, in: path, required: true, schema: {type: string, format: uuid}}
+    get:
+      operationId: GetUserTags
+      summary: 사용자 태그 조회
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-gettag
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {$ref: '#/components/schemas/TagItem'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: AddUserTag
+      summary: 사용자에 태그 추가
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-addtag
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [tagKey, tagValue]
+              properties:
+                tagKey: {type: string, minLength: 1, maxLength: 128}
+                tagValue: {type: string, minLength: 1, maxLength: 256}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    delete:
+      operationId: RemoveUserTag
+      summary: 사용자에서 태그 제거
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-removetag
+      description: |
+        Agent가 tagKey/tagValue를 query로 추출했으나 다른 태그 DELETE 엔드포인트들과 일관성 위해
+        body로 통일 — 실제 호출 테스트 시 query인지 body인지 확인 필요.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - tagKey
+                - tagValue
+              properties:
+                tagKey:
+                  type: string
+                  description: 태그 키 태그 조회 참조
+                tagValue:
+                  type: string
+                  description: 태그 값 태그 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  # ---------- access rules (console / API 접근 제한) ----------
+  /sub-accounts/{subAccountId}/access-rules/console:
+    parameters:
+      - {name: subAccountId, in: path, required: true, schema: {type: string, format: uuid}}
+    get:
+      operationId: GetConsoleAccessRule
+      summary: 콘솔 접근 제한 룰 조회
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-getaccessrule
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  subAccountId: {type: string, format: uuid}
+                  useConsolePermitIp: {type: boolean}
+                  consolePermitIps:
+                    type: array
+                    items: {type: string}
+                    description: 허용 IP/CIDR 목록
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    put:
+      operationId: SetConsoleAccessRule
+      summary: 콘솔 접근 제한 룰 설정
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-putaccessrule
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [useConsolePermitIp]
+              properties:
+                useConsolePermitIp: {type: boolean}
+                consolePermitIps:
+                  type: array
+                  items: {type: string}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  /sub-accounts/{subAccountId}/access-rules/api:
+    parameters:
+      - {name: subAccountId, in: path, required: true, schema: {type: string, format: uuid}}
+    get:
+      operationId: GetApiAccessRule
+      summary: API 접근 제한 룰 조회
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-getapiaccessrule
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  useApiAllowSource: {type: boolean}
+                  apiAllowSources:
+                    type: array
+                    items: {$ref: '#/components/schemas/AccessSourceItem'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    put:
+      operationId: SetApiAccessRule
+      summary: API 접근 제한 룰 설정
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-putapiaccessrule
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [useApiAllowSource]
+              properties:
+                useApiAllowSource: {type: boolean}
+                apiAllowSources:
+                  type: array
+                  items: {$ref: '#/components/schemas/AccessSourceItem'}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  # ---------- subjects (X.509 authenticated principals) ----------
+  /subjects:
+    get:
+      operationId: GetSubjectList
+      summary: Subject 목록 조회 (X.509 인증된 호출 주체)
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-getsubjectlist
+      parameters:
+        - {name: page, in: query, schema: {type: integer, default: 0}}
+        - {name: size, in: query, schema: {type: integer, default: 20, minimum: 1, maximum: 100}}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SubjectListResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  /subjects/{subjectId}:
+    get:
+      operationId: GetSubject
+      summary: Subject 상세 조회
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-getsubjects
+      parameters:
+        - {name: subjectId, in: path, required: true, schema: {type: string}}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Subject'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  /subjects/{subjectId}/credentials:
+    get:
+      operationId: GetSubjectCredentials
+      summary: Subject가 사용한 자격 증명(인증서) 이력 조회
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-getcredentiallist
+      parameters:
+        - {name: subjectId, in: path, required: true, schema: {type: string}}
+        - {name: page, in: query, schema: {type: integer, default: 0}}
+        - {name: size, in: query, schema: {type: integer, default: 20}}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pageNo: {type: integer}
+                  pageSize: {type: integer}
+                  totalElements: {type: integer}
+                  totalPages: {type: integer}
+                  content:
+                    type: array
+                    items: {$ref: '#/components/schemas/SubjectCredential'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  # ---------- 기타 ----------
+  /roles/{roleNo}/entities/account:
+    get:
+      operationId: GetRoleTargetAccount
+      summary: 역할의 대상 서브 계정 조회
+      description: 특정 역할(roleNo)에 attach된 서브 계정의 이름/로그인 ID 등 메타데이터 조회.
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-gettargetaccount
+      parameters:
+        - {name: roleNo, in: path, required: true, schema: {type: string}}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isMyAccount: {type: boolean, description: 본인 계정 여부}
+                  accountName: {type: string, description: 서브 계정 사용자 이름}
+                  loginId: {type: string, description: 서브 계정 로그인 아이디}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  /users/{subAccountId}/last-access-summary:
+    get:
+      operationId: GetLastAccessSummary
+      summary: 서브 계정 마지막 접근 이력 요약
+      description: 마지막 로그인, Git 로그인, Access Key 사용 일시 등 inactivity 판단 지표 조회.
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-getlastaccesssummary
+      parameters:
+        - {name: subAccountId, in: path, required: true, schema: {type: string, format: uuid}}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  subAccountId:
+                    type: string
+                    description: 서브 계정 아이디
+                  lastLogin:
+                    type: string
+                    description: 마지막 서브 계정 로그인 일시 ISO 8601 형식
+                  lastGitLogin:
+                    type: string
+                    description: 마지막 Git(Source Commit) 로그인 일시 ISO 8601 형식
+                  lastAccessKeyUsed:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: '마지막 AccessKey 사용 정보: lastAccessKeyUsed'
+                  unusedDays:
+                    type: string
+                    description: 서브계정 미사용 일수 ISO 8601 형식
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+  # ---------- group tags ----------
+  /groups/{groupId}/tags:
+    parameters:
+      - name: groupId
+        in: path
+        required: true
+        schema: {type: string, format: uuid}
+    get:
+      operationId: GetGroupTags
+      summary: 그룹 태그 조회
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-getgrouptag
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {$ref: '#/components/schemas/TagItem'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: AddGroupTag
+      summary: 그룹에 태그 추가
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-addgrouptag
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - tagKey
+                - tagValue
+              properties:
+                tagKey:
+                  type: string
+                  description: 태그 키 key 제약 조건 참조
+                tagValue:
+                  type: string
+                  description: 태그 값 value 제약 조건 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+    delete:
+      operationId: RemoveGroupTag
+      summary: 그룹에서 태그 제거
+      tags: [sub-account]
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/management-subaccount-removegrouptag
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - tagKey
+                - tagValue
+              properties:
+                tagKey:
+                  type: string
+                  description: 태그 키 태그 조회 참조
+                tagValue:
+                  type: string
+                  description: 태그 값 태그 조회 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuccessResponse'}
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+components:
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  schemas:
+    SuccessResponse:
+      type: object
+      required: [success]
+      properties:
+        success: {type: boolean, description: API 호출 성공 여부}
+
+    NewAccessKey:
+      type: object
+      description: 신규 발급된 Access Key. keySecret은 최초 생성 응답에만 포함됨 (이후 조회 불가).
+      required: [accessKey, keySecret, createTime]
+      properties:
+        accessKey: {type: string, description: "Access Key (ncp_iam_* 형식)"}
+        keySecret: {type: string, description: "Secret Key. 최초 생성 시에만 평문 노출, 이후 조회 불가."}
+        createTime: {type: string, format: date-time, description: "생성 일시 (ISO 8601)"}
+    AccessKeyInfo:
+      type: object
+      description: 조회 API가 반환하는 Access Key 정보. keySecret은 제공되지 않음.
+      required: [accessKey, active, createTime]
+      properties:
+        accessKey: {type: string}
+        active: {type: boolean, description: 활성 상태}
+        createTime: {type: string, format: date-time}
+
+    AccessSourceItem:
+      type: object
+      description: API 접근 가능 소스 한 건.
+      properties:
+        type:
+          type: string
+          enum: [IP, VPC, VPC_SERVER]
+          description: "IP: 단일 IP/CIDR, VPC: VPC 단위, VPC_SERVER: 서버 인스턴스 단위"
+        source:
+          type: string
+          description: IP 주소(또는 CIDR) 또는 인스턴스 번호
+
+    CreateSubAccountRequest:
+      type: object
+      required: [loginId, name, canConsoleAccess, canAPIGatewayAccess, needPasswordReset]
+      properties:
+        loginId: {type: string, description: 로그인 아이디}
+        name: {type: string, description: 사용자 이름 (2~30자)}
+        email: {type: string, description: 이메일 주소 (6~100자)}
+        memo: {type: string, maxLength: 300, description: 서브 계정 설명 (Bytes 기준 0~300)}
+        canConsoleAccess: {type: boolean, description: 콘솔 접근 가능 여부}
+        canAPIGatewayAccess: {type: boolean, description: API Gateway 접근 가능 여부}
+        needPasswordReset: {type: boolean, description: 첫 로그인 시 비밀번호 변경 안내 여부}
+        needPasswordGenerate: {type: boolean, description: "true: 비밀번호 자동 생성 (응답에 generatedPassword 포함), false: password 필수"}
+        password:
+          type: string
+          description: needPasswordGenerate=false 일 때 필수
+        isMfaMandatory: {type: boolean, description: 2차 인증 필수 여부}
+        useConsolePermitIp: {type: boolean, description: 콘솔 접근 IP 대역 제한 사용}
+        consolePermitIps:
+          type: array
+          items: {type: string}
+          description: 허용 IP/CIDR 목록 (useConsolePermitIp=true 시)
+        useApiAllowSource: {type: boolean, description: API 접근 소스 제한 사용}
+        apiAllowSources:
+          type: array
+          items: {$ref: '#/components/schemas/AccessSourceItem'}
+        tags:
+          type: object
+          additionalProperties: {type: string}
+          description: 사용자 정의 태그 (key/value)
+
+    UpdateSubAccountRequest:
+      type: object
+      description: 부분 업데이트. 보내지 않은 필드는 변경하지 않음.
+      properties:
+        name: {type: string}
+        email: {type: string}
+        memo: {type: string}
+        canConsoleAccess: {type: boolean}
+        canAPIGatewayAccess: {type: boolean}
+        isMfaMandatory: {type: boolean}
+        useConsolePermitIp: {type: boolean}
+        consolePermitIps:
+          type: array
+          items: {type: string}
+        useApiAllowSource: {type: boolean}
+        apiAllowSources:
+          type: array
+          items: {$ref: '#/components/schemas/AccessSourceItem'}
+
+    SubAccountSummary:
+      type: object
+      description: 목록 조회 시 반환되는 요약 형태.
+      properties:
+        subAccountId: {type: string, format: uuid}
+        subAccountNo: {type: integer}
+        loginId: {type: string}
+        name: {type: string}
+        email: {type: string}
+        active: {type: boolean}
+        canConsoleAccess: {type: boolean}
+        canAPIGatewayAccess: {type: boolean}
+        createTime: {type: string, format: date-time}
+        lastLoginTime: {type: string, format: date-time}
+
+    SubAccountListResponse:
+      type: object
+      description: |
+        목록 응답. 페이지/사이즈/총 개수와 items 배열로 구성된다고 가정 (NCP IAM 페이징 패턴).
+        실제 응답 키는 docs JSON 예시가 잘려있어 추정 — 후속 검증 필요.
+      properties:
+        items:
+          type: array
+          items: {$ref: '#/components/schemas/SubAccountSummary'}
+        page: {type: integer}
+        size: {type: integer}
+        itemCount: {type: integer}
+        hasMore: {type: boolean}
+      additionalProperties: true
+
+    SubAccountDetail:
+      type: object
+      description: GetSubAccount 응답.
+      properties:
+        subAccountId: {type: string, format: uuid}
+        subAccountNo: {type: integer}
+        loginId: {type: string}
+        name: {type: string}
+        email: {type: string}
+        memo: {type: string}
+        needPasswordReset: {type: boolean, description: 첫 로그인 비밀번호 변경 안내 여부}
+        canAPIGatewayAccess: {type: boolean}
+        canConsoleAccess: {type: boolean}
+        useConsolePermitIp: {type: boolean}
+        consolePermitIps:
+          type: array
+          items: {type: string}
+        useApiAllowSource: {type: boolean}
+        apiAllowSources:
+          type: array
+          items: {$ref: '#/components/schemas/AccessSourceItem'}
+        lastLoginTime: {type: string, format: date-time}
+        createTime: {type: string, format: date-time}
+
+    UserDetail:
+      type: object
+      description: GetUserDetail 응답 (그룹 소속까지 포함).
+      properties:
+        subAccountId: {type: string, format: uuid}
+        loginId: {type: string}
+        name: {type: string}
+        active: {type: boolean}
+        deleted: {type: boolean}
+        createTime: {type: string, format: date-time}
+        groups:
+          type: array
+          items:
+            type: object
+            properties:
+              groupId: {type: string, format: uuid}
+              groupName: {type: string}
+              nrn: {type: string, description: "Group NRN (nrn:PUB:IAM::<account>:Group/<groupId>)"}
+      additionalProperties: true
+
+    # ---- groups family schemas ----
+    TagItem:
+      type: object
+      required: [tagKey, tagValue]
+      properties:
+        tagKey: {type: string, description: 태그 키 (1~128자)}
+        tagValue: {type: string, description: 태그 값 (1~256자)}
+        tagDisplay: {type: string, description: '"{tagKey}:{tagValue}" 형식의 표시 문자열'}
+
+    GroupSummary:
+      type: object
+      description: 그룹 목록 응답 항목.
+      properties:
+        id: {type: string, format: uuid, description: 그룹 아이디}
+        groupName: {type: string}
+        description: {type: string}
+        nrn: {type: string}
+        createTime: {type: string, format: date-time}
+      additionalProperties: true
+
+    GroupListResponse:
+      type: object
+      description: 그룹 페이징 응답 (NCP IAM의 totalPages/totalItems/hasPrevious/hasNext 패턴).
+      properties:
+        totalPages: {type: integer, description: 전체 페이지 수}
+        totalItems: {type: integer, description: 응답 결과 수}
+        hasPrevious: {type: boolean}
+        hasNext: {type: boolean}
+        items:
+          type: array
+          items: {$ref: '#/components/schemas/GroupSummary'}
+      additionalProperties: true
+
+    GroupDetail:
+      type: object
+      description: 그룹 상세 (멤버 + 정책 + NRN까지 포함). 추가 필드는 docs JSON 예시 미공개.
+      properties:
+        id: {type: string, format: uuid}
+        groupName: {type: string}
+        description: {type: string}
+        nrn: {type: string, description: "Group NRN (nrn:PUB:IAM::<account>:Group/<groupId>)"}
+        subAccounts:
+          type: array
+          description: 그룹에 속한 서브 계정 목록
+          items:
+            type: object
+            properties:
+              subAccountId: {type: string, format: uuid}
+              loginId: {type: string}
+              name: {type: string}
+            additionalProperties: true
+        policies:
+          type: array
+          description: 그룹에 할당된 정책 목록
+          items:
+            type: object
+            properties:
+              policyId: {type: string, format: uuid}
+              policyName: {type: string}
+              nrn: {type: string}
+            additionalProperties: true
+      additionalProperties: true
+
+    # ---- policies family schemas ----
+    PolicyPermission:
+      type: object
+      description: |
+        정책 권한 항목. AWS IAM Statement 형식과 유사 (action + resource).
+        정확한 키 이름은 NCP docs 미공개 — 실제 호출 시 확인 후 보정 필요.
+      properties:
+        action:
+          type: array
+          items: {type: string}
+          description: 허용/거부할 API 액션 목록 (예 "ncp:vserver:*")
+        resource:
+          type: array
+          items: {type: string}
+          description: 적용 대상 리소스 NRN 목록 (예 "nrn:PUB:vserver:KR:*:Server/*")
+        effect:
+          type: string
+          enum: [ALLOW, DENY]
+          default: ALLOW
+        condition:
+          type: object
+          additionalProperties: true
+      additionalProperties: true
+
+    CreatePolicyRequest:
+      type: object
+      required: [policyName, permissions]
+      properties:
+        policyName: {type: string, description: 정책 이름}
+        description: {type: string, description: 정책 설명}
+        permissions:
+          type: array
+          items: {$ref: '#/components/schemas/PolicyPermission'}
+          description: 권한 항목 목록 (1개 이상)
+        tags:
+          type: object
+          additionalProperties: {type: string}
+
+    PolicySummary:
+      type: object
+      description: 정책 목록 응답 항목.
+      properties:
+        policyId: {type: string, format: uuid}
+        policyName: {type: string}
+        policyType:
+          type: string
+          enum: [SYSTEM, USER]
+          description: "SYSTEM: NCP 기본 제공 정책, USER: 사용자 정의 정책"
+        policyDesc: {type: string}
+        nrn: {type: string}
+        createTime: {type: string, format: date-time}
+      additionalProperties: true
+
+    PolicyListResponse:
+      type: object
+      properties:
+        totalPages: {type: integer}
+        totalItems: {type: integer}
+        hasPrevious: {type: boolean}
+        hasNext: {type: boolean}
+        items:
+          type: array
+          items: {$ref: '#/components/schemas/PolicySummary'}
+      additionalProperties: true
+
+    PolicyDetail:
+      type: object
+      description: 정책 상세 — product / actions / resourceNrns 트리플 형태로 응답.
+      properties:
+        policyId: {type: string, format: uuid}
+        policyName: {type: string}
+        description: {type: string}
+        product:
+          type: string
+          description: "적용 NCP 프로덕트 (예: vserver, vpc)"
+        actions:
+          type: array
+          items: {type: string}
+        resourceNrns:
+          type: array
+          items: {type: string}
+        permissions:
+          type: array
+          items: {$ref: '#/components/schemas/PolicyPermission'}
+      additionalProperties: true
+
+    # ---- roles family schemas ----
+    CreateRoleRequest:
+      type: object
+      required: [roleName]
+      properties:
+        roleName: {type: string}
+        description: {type: string}
+        trustedEntities:
+          type: array
+          description: 역할이 신뢰하는 엔티티 (서브 계정/그룹/외부 IDP 등). 필드명·구조 추정.
+          items:
+            type: object
+            additionalProperties: true
+        tags:
+          type: object
+          additionalProperties: {type: string}
+
+    RoleSummary:
+      type: object
+      properties:
+        roleId: {type: string, format: uuid}
+        roleName: {type: string}
+        nrn: {type: string}
+        active: {type: boolean}
+        createTime: {type: string, format: date-time}
+      additionalProperties: true
+
+    RoleListResponse:
+      type: object
+      properties:
+        totalPages: {type: integer}
+        totalItems: {type: integer}
+        hasPrevious: {type: boolean}
+        hasNext: {type: boolean}
+        items:
+          type: array
+          items: {$ref: '#/components/schemas/RoleSummary'}
+      additionalProperties: true
+
+    RoleDetail:
+      type: object
+      description: |
+        역할 상세. agent 추출이 필드명을 못 잡아 (column shift) IAM 표준 패턴으로 추정.
+        실제 호출 후 보정 필요.
+      properties:
+        roleId: {type: string, format: uuid}
+        roleName: {type: string}
+        nrn: {type: string}
+        description: {type: string}
+        active: {type: boolean}
+        entities:
+          type: array
+          description: 역할 적용 대상 엔티티 목록 (사용자/그룹)
+          items:
+            type: object
+            properties:
+              entityType: {type: string, enum: [ACCOUNT, GROUP, RESOURCE]}
+              entityId: {type: string}
+              entityName: {type: string}
+            additionalProperties: true
+        policies:
+          type: array
+          description: 역할에 부착된 정책 목록
+          items:
+            type: object
+            properties:
+              policyId: {type: string, format: uuid}
+              policyName: {type: string}
+              nrn: {type: string}
+            additionalProperties: true
+      additionalProperties: true
+
+    Profile:
+      type: object
+      description: X.509 인증된 엔터티가 assume할 역할 세트 + 세션 정책.
+      properties:
+        profileId: {type: string}
+        profileNrn: {type: string}
+        name: {type: string}
+        description: {type: string}
+        enabled: {type: boolean}
+        durationSeconds: {type: integer, description: 임시 자격 증명 지속 시간(초)}
+        roleIdList:
+          type: array
+          items: {type: string, format: uuid}
+          description: 이 Profile이 assume 가능한 역할 ID 목록
+        createdAt: {type: string, format: date-time}
+        modifiedAt: {type: string, format: date-time}
+      additionalProperties: true
+
+    ProfileListResponse:
+      type: object
+      properties:
+        pageNo: {type: integer}
+        pageSize: {type: integer}
+        totalElements: {type: integer}
+        totalPages: {type: integer}
+        items:
+          type: array
+          items: {$ref: '#/components/schemas/Profile'}
+      additionalProperties: true
+
+    TrustAnchorSource:
+      type: object
+      description: Trust Anchor의 CA 정보 (source.sourceType + source.sourceData 계층).
+      required: [sourceType, sourceData]
+      properties:
+        sourceType:
+          type: string
+          enum: [CERTIFICATE_BUNDLE, ACM_PCA]
+          description: "CERTIFICATE_BUNDLE: PEM 인증서 번들 업로드, ACM_PCA: Private CA 연동 (필드값 추정)"
+        sourceData:
+          type: object
+          description: sourceType별 CA 세부 정보 (구조 추정)
+          additionalProperties: true
+
+    TrustAnchor:
+      type: object
+      description: 클라이언트 인증서 발급 CA 루트.
+      properties:
+        trustAnchorId: {type: string}
+        trustAnchorNrn: {type: string}
+        name: {type: string}
+        description: {type: string}
+        enabled: {type: boolean}
+        source: {$ref: '#/components/schemas/TrustAnchorSource'}
+        createdAt: {type: string, format: date-time}
+        modifiedAt: {type: string, format: date-time}
+      additionalProperties: true
+
+    TrustAnchorListResponse:
+      type: object
+      properties:
+        pageNo: {type: integer}
+        pageSize: {type: integer}
+        totalElements: {type: integer}
+        totalPages: {type: integer}
+        items:
+          type: array
+          items: {$ref: '#/components/schemas/TrustAnchor'}
+      additionalProperties: true
+
+    Crl:
+      type: object
+      description: 인증서 해지 목록. Trust Anchor에 속함.
+      properties:
+        crlId: {type: string}
+        crlNrn: {type: string}
+        trustAnchorId: {type: string}
+        name: {type: string}
+        crlData: {type: string, description: Base64로 인코딩된 CRL 바이너리}
+        enabled: {type: boolean}
+        createdAt: {type: string, format: date-time}
+        modifiedAt: {type: string, format: date-time}
+      additionalProperties: true
+
+    # ---- Subjects (X.509 authenticated principal) ----
+    Subject:
+      type: object
+      description: X.509 인증서로 인증된 호출 주체. Roles Anywhere 세션의 identity 기록.
+      properties:
+        subjectId: {type: string}
+        subjectNrn: {type: string}
+        x509Subject: {type: string, description: 인증서의 X.509 Subject DN}
+        enabled: {type: boolean}
+        createTime: {type: string, format: date-time}
+        modifiedAt: {type: string, format: date-time}
+        lastSeenTime: {type: string, format: date-time}
+      additionalProperties: true
+
+    SubjectListResponse:
+      type: object
+      properties:
+        pageNo: {type: integer}
+        pageSize: {type: integer}
+        totalElements: {type: integer}
+        totalPages: {type: integer}
+        content:
+          type: array
+          items: {$ref: '#/components/schemas/Subject'}
+      additionalProperties: true
+
+    SubjectCredential:
+      type: object
+      description: Subject가 과거에 제시한 X.509 인증서 기록.
+      properties:
+        issuer: {type: string, description: 인증서 발급자}
+        serialNumber: {type: string, description: 인증서 번호}
+        x509CertificateData: {type: string, description: X.509 인증서 데이터 (PEM 또는 base64)}
+        failed: {type: boolean, description: 인증 실패 여부}
+        seenTime: {type: string, format: date-time, description: "인증 시각 (ISO 8601)"}
+      additionalProperties: true
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

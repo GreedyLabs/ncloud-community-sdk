@@ -1,0 +1,1022 @@
+openapi: 3.0.3
+info:
+  title: cache
+  description: |-
+    Cloud DB for Cache (formerly Cloud DB for Redis) — VPC.
+    Rebranded by NCP in 2025-2026 (Valkey-aligned naming). NRN productCode VPCCloudDBforRedis is preserved for backward compatibility.
+
+    Canonical API scheme: base /vcache/v2 + operations named CloudCache*.
+    The legacy /vredis/v2 + CloudRedis* scheme remains active but the two cannot be mixed.
+
+    Omitted vs the SDK: AddCloudRedisUserList, DeleteCloudRedisUserList, GetCloudRedisUserList (gov-only, undocumented under either scheme; callers needing them must fall back to the legacy /vredis/v2 path).
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: true
+    gov: true
+
+  x-ncloud-nrn:
+
+    productName: VPCCloudDBforRedis
+    resource_types:
+      - Service
+      - Server
+      - ConfigGroup
+
+servers:
+  - url: https://ncloud.apigw.ntruss.com/vcache/v2
+    description: cache 민간
+    x-ncloud-env: public
+  - url: https://ncloud.apigw.fin-ntruss.com/vcache/v2
+    description: cache 금융
+    x-ncloud-env: financial
+  - url: https://ncloud.apigw.gov-ntruss.com/vcache/v2
+    description: cache 공공
+    x-ncloud-env: gov
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /createCloudCacheConfigGroup:
+    post:
+      operationId: CreateCloudCacheConfigGroup
+      tags:
+        - cache
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateCloudCacheConfigGroupRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCloudCacheConfigGroupResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for Cache Config Group을 생성합니다. Config Group에서는 생성한 Redis Server를 그룹핑하여 그룹에 속한 서버들에 동일한 설정값을 지정하여 효율적으로 관리할 수 있습니다.
+  /createCloudCacheInstance:
+    post:
+      operationId: CreateCloudCacheInstance
+      tags:
+        - cache
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateCloudCacheInstanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCloudCacheInstanceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for Cache 인스턴스를 생성합니다.
+  /deleteCloudCacheConfigGroup:
+    post:
+      operationId: DeleteCloudCacheConfigGroup
+      tags:
+        - cache
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteCloudCacheConfigGroupRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteCloudCacheConfigGroupResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for Cache Config Group을 삭제합니다.
+  /deleteCloudCacheInstance:
+    post:
+      operationId: DeleteCloudCacheInstance
+      tags:
+        - cache
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteCloudCacheInstanceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteCloudCacheInstanceResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Delete cloud cache instance
+  /getCloudCacheBackupDetailList:
+    post:
+      operationId: GetCloudCacheBackupDetailList
+      tags:
+        - cache
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudCacheBackupDetailListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudCacheBackupDetailListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: 사용할 수 있는 Cloud DB for Cache System Backup 상세 정보 리스트를 조회합니다.
+  /getCloudCacheBackupList:
+    post:
+      operationId: GetCloudCacheBackupList
+      tags:
+        - cache
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudCacheBackupListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudCacheBackupListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for Cache 시스템 백업 리스트를 조회합니다.
+  /getCloudCacheConfigGroupList:
+    post:
+      operationId: GetCloudCacheConfigGroupList
+      tags:
+        - cache
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudCacheConfigGroupListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudCacheConfigGroupListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for Cache Config Group 리스트를 조회합니다.
+  /getCloudCacheImageProductList:
+    post:
+      operationId: GetCloudCacheImageProductList
+      tags:
+        - cache
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudCacheImageProductListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudCacheImageProductListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for Cache 이미지 상품 코드 리스트를 조회합니다.
+  /getCloudCacheInstanceDetail:
+    post:
+      operationId: GetCloudCacheInstanceDetail
+      tags:
+        - cache
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudCacheInstanceDetailRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudCacheInstanceDetailResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for Cache 인스턴스 상세 정보를 조회합니다.
+  /getCloudCacheInstanceList:
+    post:
+      operationId: GetCloudCacheInstanceList
+      tags:
+        - cache
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudCacheInstanceListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudCacheInstanceListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: Cloud DB for Cache 인스턴스 리스트를 조회합니다.
+  /getCloudCacheProductList:
+    post:
+      operationId: GetCloudCacheProductList
+      tags:
+        - cache
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetCloudCacheProductListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCloudCacheProductListResponse'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+
+      x-ncloud-source: sdk:NaverCloudPlatform/ncloud-sdk-go-v2@6eac36b
+      summary: 사용할 수 있는 Cloud DB for Cache 서버 스펙 코드 리스트를 조회합니다.
+components:
+  schemas:
+    CloudCacheBackup:
+      type: object
+      properties:
+        cloudCacheInstanceNo:
+          type: string
+          description: CloudCache 인스턴스 번호
+        cloudCacheServiceName:
+          type: string
+          description: CloudCache 서비스이름
+        backupFileRetentionPeriod:
+          type: integer
+          format: int32
+          description: 백업파일보관기간
+        backupTime:
+          type: string
+          description: 백업시간
+        backupSize:
+          type: integer
+          format: int64
+          description: 백업사이즈
+        lastBackupDate:
+          type: string
+          description: 마지막백업일시
+        backupType:
+          $ref: '#/components/schemas/CommonCode'
+        shardCount:
+          type: integer
+          format: int32
+          description: 샤드수
+    CloudCacheBackupDetail:
+      type: object
+      properties:
+        startTime:
+          type: string
+          description: 백업시작시간
+        endTime:
+          type: string
+          description: 백업종료시간
+        backupSize:
+          type: integer
+          format: int64
+          description: 백업사이즈
+        dataStorageSize:
+          type: integer
+          format: int64
+          description: 데이터스토리지사이즈
+    CloudCacheConfigGroup:
+      type: object
+      properties:
+        configGroupNo:
+          type: string
+          description: configGroup 번호
+        configGroupName:
+          type: string
+          description: configGroup 이름
+        configGroupDescription:
+          type: string
+          description: configGroup 설명
+        configGroupStatusName:
+          type: string
+          description: configGroup 상태명
+        configGroupStatus:
+          $ref: '#/components/schemas/CommonCode'
+        cloudCacheVersion:
+          type: string
+          description: cloudredis 버전
+        createDate:
+          type: string
+          description: 생성일자
+        modifyDate:
+          type: string
+          description: 수정일자
+    CloudCacheInstance:
+      type: object
+      properties:
+        cloudCacheInstanceNo:
+          type: string
+          description: CloudCache 인스턴스 번호
+        cloudCacheServiceName:
+          type: string
+          description: CloudCache 서비스이름
+        cloudCacheInstanceStatusName:
+          type: string
+          description: CloudCache 인스턴스 상태이름
+        cloudCacheInstanceStatus:
+          $ref: '#/components/schemas/CommonCode'
+        cloudCacheInstanceOperation:
+          $ref: '#/components/schemas/CommonCode'
+        cloudCacheImageProductCode:
+          type: string
+          description: CloudCache 이미지상품코드
+        engineVersion:
+          type: string
+          description: CloudCache 엔진버전
+        license:
+          $ref: '#/components/schemas/CommonCode'
+        cloudCachePort:
+          type: integer
+          format: int32
+          description: CloudCache 포트
+        isHa:
+          type: boolean
+          description: 고가용성여부
+        isBackup:
+          type: boolean
+          description: 백업여부
+        backupFileRetentionPeriod:
+          type: integer
+          format: int32
+          description: 백업파일보관기간
+        backupTime:
+          type: string
+          description: 백업시간
+        backupSchedule:
+          type: string
+          description: 백업스케줄
+        cloudCacheServerPrefix:
+          type: string
+          description: 서버 이름 Prefix
+        role:
+          $ref: '#/components/schemas/CommonCode'
+        createDate:
+          type: string
+          description: 생성일자
+        accessControlGroupNoList:
+          type: array
+          description: ACG 번호 리스트
+          items:
+            type: string
+        shardCount:
+          type: integer
+          format: int32
+          description: 샤드수
+        shardCopyCount:
+          type: integer
+          format: int32
+          description: 샤드당복제본
+        configGroupNo:
+          type: string
+          description: configGroup 번호
+        configGroupName:
+          type: string
+          description: configGroup 이름
+        CloudCacheServerInstanceList:
+          type: array
+          description: CloudCache 서버인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudCacheServerInstance'
+    CloudCacheServerInstance:
+      type: object
+      properties:
+        cloudCacheServerInstanceNo:
+          type: string
+          description: CloudCache 서버인스턴스 번호
+        cloudCacheServerName:
+          type: string
+          description: CloudCache 서버 이름
+        cloudCacheServerRole:
+          $ref: '#/components/schemas/CommonCode'
+        cloudCacheServerInstanceStatusName:
+          type: string
+          description: CloudCache 인스턴스 상태이름
+        cloudCacheServerInstanceStatus:
+          $ref: '#/components/schemas/CommonCode'
+        cloudCacheServerInstanceOperation:
+          $ref: '#/components/schemas/CommonCode'
+        cloudCacheProductCode:
+          type: string
+          description: CloudCache 상품코드
+        regionCode:
+          type: string
+          description: REGION 코드
+        zoneCode:
+          type: string
+          description: ZONE 코드
+        vpcNo:
+          type: string
+          description: VPC 번호
+        subnetNo:
+          type: string
+          description: Subnet 번호
+        privateDomain:
+          type: string
+          description: 사설도메인명
+        memorySize:
+          type: integer
+          format: int64
+          description: 메모리사이즈
+        osMemorySize:
+          type: integer
+          format: int64
+          description: os 메모리사이즈
+        uptime:
+          type: string
+          description: 업시간
+        createDate:
+          type: string
+          description: 생성일자
+        slotName:
+          type: string
+          description: 슬롯이름
+    CommonCode:
+      type: object
+      properties:
+        code:
+          type: string
+          description: 코드
+        codeName:
+          type: string
+          description: 코드명
+    CreateCloudCacheConfigGroupRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudCacheVersion:
+          type: string
+          description: cloudCache 버전
+        configGroupName:
+          type: string
+          description: configGroup 이름
+        configGroupDescription:
+          type: string
+          description: CloudCache 설명
+    CreateCloudCacheConfigGroupResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudCacheConfigGroupList:
+          type: array
+          description: CloudCacheConfigGroup 리스트
+          items:
+            $ref: '#/components/schemas/CloudCacheConfigGroup'
+    CreateCloudCacheInstanceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        vpcNo:
+          type: string
+          description: VPC 번호
+        cloudCacheImageProductCode:
+          type: string
+          description: CloudCache 이미지상품코드
+        cloudCacheProductCode:
+          type: string
+          description: CloudCache 상품코드
+        shardCount:
+          type: integer
+          format: int32
+          description: 샤드수
+        shardCopyCount:
+          type: integer
+          format: int32
+          description: 샤드당복제본
+        isHa:
+          type: boolean
+          description: 고가용성여부
+        configGroupNo:
+          type: string
+          description: configGroup 번호
+        isBackup:
+          type: boolean
+          description: 백업여부
+        backupFileRetentionPeriod:
+          type: integer
+          format: int32
+          description: 백업파일보관기간
+        backupTime:
+          type: string
+          description: 백업시간
+        isAutomaticBackup:
+          type: boolean
+          description: 백업시간자동여부
+        cloudCacheServiceName:
+          type: string
+          description: CloudCache 서비스이름
+        cloudCacheServerNamePrefix:
+          type: string
+          description: CloudCache 서버 이름
+        cloudCachePort:
+          type: integer
+          format: int32
+          description: CloudCache 포트
+        cloudCacheModeCode:
+          type: string
+          description: CloudCache 구성
+        subnetNo:
+          type: string
+          description: Subnet 번호
+        cloudCacheUserName:
+          type: string
+          description: 공공 Ncloud 에만 사용되는 필드
+        cloudCacheUserPassword:
+          type: string
+          description: 공공 Ncloud 에만 사용되는 필드
+        engineVersionCode:
+          type: string
+          description: Engine Version
+    CreateCloudCacheInstanceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudCacheInstanceList:
+          type: array
+          description: CloudCache 인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudCacheInstance'
+    DeleteCloudCacheConfigGroupRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        configGroupNo:
+          type: string
+          description: configGroup 번호
+    DeleteCloudCacheConfigGroupResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudCacheConfigGroupList:
+          type: array
+          description: CloudCacheConfigGroup 리스트
+          items:
+            $ref: '#/components/schemas/CloudCacheConfigGroup'
+    DeleteCloudCacheInstanceRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudCacheInstanceNo:
+          type: string
+          description: CloudCache 인스턴스 번호
+    DeleteCloudCacheInstanceResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudCacheInstanceList:
+          type: array
+          description: CloudCache 인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudCacheInstance'
+    GetCloudCacheBackupDetailListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudCacheInstanceNo:
+          type: string
+          description: CloudCache 인스턴스 번호
+    GetCloudCacheBackupDetailListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudCacheBackupDetailList:
+          type: array
+          description: CloudCache 백업상세리스트
+          items:
+            $ref: '#/components/schemas/CloudCacheBackupDetail'
+    GetCloudCacheBackupListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+    GetCloudCacheBackupListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudCacheBackupList:
+          type: array
+          description: CloudCache 백업리스트
+          items:
+            $ref: '#/components/schemas/CloudCacheBackup'
+    GetCloudCacheConfigGroupListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        configGroupNo:
+          type: string
+          description: configGroup 번호
+        configGroupName:
+          type: string
+          description: configGroup 이름
+        cloudCacheInstanceNo:
+          type: string
+          description: CloudCache 인스턴스 번호
+        cloudCacheServiceName:
+          type: string
+          description: CloudCache 서비스이름
+        cloudCacheModeCode:
+          type: string
+          description: CloudCache 구성
+    GetCloudCacheConfigGroupListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudCacheConfigGroupList:
+          type: array
+          description: CloudCacheConfigGroup 리스트
+          items:
+            $ref: '#/components/schemas/CloudCacheConfigGroup'
+    GetCloudCacheImageProductListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        productCode:
+          type: string
+          description: 조회할상품코드
+        exclusionProductCode:
+          type: string
+          description: 제외할상품코드
+    GetCloudCacheImageProductListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        productList:
+          type: array
+          description: 상품리스트
+          items:
+            $ref: '#/components/schemas/Product'
+    GetCloudCacheInstanceDetailRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        cloudCacheInstanceNo:
+          type: string
+          description: CloudCache 인스턴스 번호
+    GetCloudCacheInstanceDetailResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudCacheInstanceList:
+          type: array
+          description: CloudCache 인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudCacheInstance'
+    GetCloudCacheInstanceListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        zoneCode:
+          type: string
+          description: ZONE 코드
+        vpcNo:
+          type: string
+          description: VPC 번호
+        subnetNo:
+          type: string
+          description: Subnet 번호
+        cloudCacheServiceName:
+          type: string
+          description: CloudCache 서비스이름
+        cloudCacheInstanceNoList:
+          type: array
+          description: CloudCache 인스턴스 번호 리스트
+          items:
+            type: string
+        cloudCacheServerName:
+          type: string
+          description: CloudCache 서버 이름
+        cloudCacheServerInstanceNoList:
+          type: array
+          description: CloudCache 서버인스턴스 번호 리스트
+          items:
+            type: string
+        pageNo:
+          type: integer
+          format: int32
+          description: 페이지번호
+        pageSize:
+          type: integer
+          format: int32
+          description: 페이지사이즈
+    GetCloudCacheInstanceListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        cloudCacheInstanceList:
+          type: array
+          description: CloudCache 인스턴스 리스트
+          items:
+            $ref: '#/components/schemas/CloudCacheInstance'
+    GetCloudCacheProductListRequest:
+      type: object
+      properties:
+        regionCode:
+          type: string
+          description: REGION 코드
+        zoneCode:
+          type: string
+          description: ZONE 코드
+        cloudCacheImageProductCode:
+          type: string
+          description: CloudCache 이미지상품코드
+        productCode:
+          type: string
+          description: 조회할상품코드
+        exclusionProductCode:
+          type: string
+          description: 제외할상품코드
+    GetCloudCacheProductListResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        returnCode:
+          type: string
+        returnMessage:
+          type: string
+        totalRows:
+          type: integer
+          format: int32
+        productList:
+          type: array
+          description: 상품리스트
+          items:
+            $ref: '#/components/schemas/Product'
+    Product:
+      type: object
+      properties:
+        productCode:
+          type: string
+          description: 상품코드
+        productName:
+          type: string
+          description: 상품이름
+        productType:
+          $ref: '#/components/schemas/CommonCode'
+        productDescription:
+          type: string
+          description: 상품설명
+        infraResourceType:
+          $ref: '#/components/schemas/CommonCode'
+        infraResourceDetailType:
+          $ref: '#/components/schemas/CommonCode'
+        cpuCount:
+          type: integer
+          format: int32
+          description: CPU 개수
+        memorySize:
+          type: integer
+          format: int64
+          description: 메모리사이즈
+        baseBlockStorageSize:
+          type: integer
+          format: int64
+          description: 기본블록스토리지사이즈
+        platformType:
+          $ref: '#/components/schemas/CommonCode'
+        osInformation:
+          type: string
+          description: OS 정보
+        diskType:
+          $ref: '#/components/schemas/CommonCode'
+        dbKindCode:
+          type: string
+          description: DB 유형 코드
+        addBlockStorageSize:
+          type: integer
+          format: int64
+          description: 추가블록스토리지사이즈
+        generationCode:
+          type: string
+          description: 세대코드
+        engineVersionCode:
+          type: string
+          description: engineVersionCode
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

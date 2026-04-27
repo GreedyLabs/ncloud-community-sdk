@@ -1,0 +1,201 @@
+openapi: 3.0.3
+info:
+  title: geo-location
+  description: geo-location
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: false
+    gov: false
+
+  x-ncloud-nrn:
+
+    productName: GeoLocation
+    resource_types:
+      - GeoLocation
+
+servers:
+  - url: https://geolocation.apigw.ntruss.com
+    description: geo-location 민간
+    x-ncloud-env: public
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  # Path slug verified against the live NCP API on 2026-04-26: the gateway
+  # routes use the un-hyphenated `geolocation` segment, not `geo-location`.
+  /geolocation/v2/geoLocation:
+    get:
+      operationId: GeoLocation
+      summary: 예제
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - geo-location
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-geolocation-geolocation
+      parameters:
+        - name: ip
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 지역 정보를 알고자 하는 사용자 IP IP 주소 형식에 대한 자세한 정보는 IPv4 위키백과 참고
+        - name: ext
+          in: query
+          required: false
+          schema:
+            type: string
+          description: '추가 정보 포함 여부 t | f (기본값) t : 포함 f : 미포함'
+        - name: enc
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 응답 결과의 인코딩 방식 utf8 (기본값) | euckr
+        - name: responseFormatType
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 응답 결과의 형식 xml (기본값) | json
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnCode:
+                    type: string
+                    description: 정상 코드는 0, 이외는 오류 코드
+                  requestId:
+                    type: string
+                    description: API 요청 ID
+                  country:
+                    type: string
+                    description: IP 주소에 해당하는 국가 코드 ISO 3166 표준 준수 EU (유럽), AP (아시아, 호주), A1 (Anonymous Proxy), A2 (Satellite Provider), O1 (Other Country) 포함
+                  code:
+                    type: string
+                    description: 대한민국 행정안전부에서 정의한 행정 구역 코드
+                  r1:
+                    type: string
+                    description: 도, 광역시, 주
+                  r2:
+                    type: string
+                    description: 시, 군, 구
+                  r3:
+                    type: string
+                    description: 동, 면, 읍
+                  lat:
+                    type: number
+                    description: 위도
+                  long:
+                    type: number
+                    description: 경도
+                  net:
+                    type: string
+                    description: 통신사 이름
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /geolocation/v2/quota:
+    get:
+      operationId: GetQuota
+      summary: getQuota
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - geo-location
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-geolocation-getquota
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resource:
+                    type: object
+                    additionalProperties: true
+                    description: 리소스 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: SetQuota
+      summary: setQuota
+      description: Classic/VPC 환경에서 이용 가능합니다.
+      tags:
+        - geo-location
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/ai-application-service-geolocation-setquota
+      parameters:
+        - name: quota
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 설정하고 싶은 한도 유형 및 월별 최대 호출 건수 한도를 무제한으로 설정하고 싶으면 unlimit 입력 월별 사용 한도를 제한하고 싶으면 최대 호출 건수 입력
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+components:
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  schemas:
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

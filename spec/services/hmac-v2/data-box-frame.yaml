@@ -1,0 +1,1742 @@
+openapi: 3.0.3
+info:
+  title: data-box-frame
+  description: data-box-frame
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: false
+    gov: false
+
+  x-ncloud-nrn:
+
+    productName: CloudDataBox
+    resource_types:
+      - DataBox
+
+servers:
+  - url: https://databoxframe.apigw.ntruss.com/api/v1
+    description: data-box-frame 민간
+    x-ncloud-env: public
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /bucket/get-bucket-list:
+    get:
+      operationId: GetBucketList
+      summary: get-bucket-list
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-box-frame
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-bucket-list
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 수
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 버킷 목록
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /data-box-frame/change-data-box-frame-nas-volume-size:
+    post:
+      operationId: ChangeDataBoxFrameNasVolumeSize
+      summary: change-data-box-frame-nas-volume-size
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-box-frame
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/change-data-box-frame-nas-volume-size
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - dataBoxFrameNo
+                - nasVolumeInstanceNo
+                - volumeSize
+              properties:
+                dataBoxFrameNo:
+                  type: integer
+                  description: Data Box Frame 번호 get-data-box-frame-list 참조
+                nasVolumeInstanceNo:
+                  type: string
+                  description: NAS 인스턴스 번호 get-data-box-frame-infra-list 참조
+                volumeSize:
+                  type: integer
+                  description: NAS 볼륨 크기(GB) 500~10000 100GB 단위로 설정 NAS 총 사용량(10TB)으로 인해 제한될 수 있음
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnMessage:
+                    type: string
+                    description: API 처리 결과 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /data-box-frame/get-data-box-frame-detail:
+    get:
+      operationId: GetDataBoxFrameDetail
+      summary: get-data-box-frame-detail
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-box-frame
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-data-box-frame-detail
+      parameters:
+        - name: dataBoxFrameNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Data Box Frame 번호 get-data-box-frame-list 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  dataBoxFrameNo:
+                    type: string
+                    description: Data Box Frame 번호
+                  dataBoxFrameName:
+                    type: string
+                    description: Data Box Frame 이름
+                  dataBoxCount:
+                    type: string
+                    description: Data Box 개수
+                  createDate:
+                    type: string
+                    description: Data Box Frame 생성 일시 YYYY-MM-DD HH:mm:ss 형식
+                  statusCode:
+                    type: string
+                    description: 'Data Box Frame 상태 코드 SET_READY | SET_INIT | SET_USE | SET_ING | SET_RTN | SET_TERMT SET_READY : 신청 중 SET_INIT : 생성 중 SET_USE : 이용 중 SET_ING : 변경 중 SET_RTN : 반납 중 SET_TERMT : 반납 완료'
+                  statusName:
+                    type: string
+                    description: 'Data Box Frame 상태 이름 Request for creating | Initial State | Using | Changing | Returning | Terminated Request for creating : 신청 중 Initial State : 생성 중 Using : 이용 중 Changing : 변경 중 Returning : 반납 중 Terminated : 반납 완료'
+                  memo:
+                    type: string
+                    description: Data Box Frame에 대한 설명
+                  exportBucketName:
+                    type: string
+                    description: 반출 심사용 Object Storage 버킷 이름
+                  usePseudonymInfo:
+                    type: string
+                    description: 인프라 관리 권한 확대 여부 Y | N
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /data-box-frame/get-data-box-frame-infra-list:
+    get:
+      operationId: GetDataBoxFrameInfraList
+      summary: get-data-box-frame-infra-list
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-box-frame
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-data-box-frame-infra-list
+      parameters:
+        - name: dataBoxFrameNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Data Box Frame 번호 get-data-box-frame-list 참조
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~100 (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 출력 수 1~100 (기본값: 10)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 수
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: Data Box Frame 목록
+                  usePseudonymInfo:
+                    type: string
+                    description: 인프라 관리 권한 강화 여부 Y | N
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /data-box-frame/get-data-box-frame-list:
+    get:
+      operationId: GetDataBoxFrameList
+      summary: get-data-box-frame-list
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-box-frame
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-data-box-frame-list
+      parameters:
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~100 (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 출력 수 1~100 (기본값: 10)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 수
+                  dataBoxFrameNo:
+                    type: string
+                    description: Data Box Frame 번호
+                  dataBoxFrameName:
+                    type: string
+                    description: Data Box Frame 이름
+                  dataBoxCount:
+                    type: string
+                    description: Data Box 개수
+                  createDate:
+                    type: string
+                    description: Data Box Frame 생성 일시 YYYY-MM-DD HH:mm:ss 형식
+                  statusCode:
+                    type: string
+                    description: 'Data Box Frame 상태 코드 SET_READY | SET_INIT | SET_USE | SET_ING | SET_RTN | SET_TERMT SET_READY : 신청 중 SET_INIT : 생성 중 SET_USE : 이용 중 SET_ING : 변경 중 SET_RTN : 반납 중 SET_TERMT : 반납 완료'
+                  statusName:
+                    type: string
+                    description: 'Data Box Frame 상태 이름 Request for creating | Initial State | Using | Changing | Returning | Terminated Request for creating : 신청 중 Initial State : 생성 중 Using : 이용 중 Changing : 변경 중 Returning : 반납 중 Terminated : 반납 완료'
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /data-box-frame/modify-data-box-frame-admin-infra:
+    post:
+      operationId: ModifyDataBoxFrameAdminInfra
+      summary: modify-data-box-frame-admin-infra
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-box-frame
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/modify-data-box-frame-admin-infra
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - dataBoxFrameNo
+                - actionType
+                - userPassword
+              properties:
+                dataBoxFrameNo:
+                  type: integer
+                  description: Data Box Frame 번호 get-data-box-frame-list 참조
+                memo:
+                  type: string
+                  description: Data Box Frame에 대한 메모
+                adminServerList:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: 어드민 서버 목록
+                nasList:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: NAS 목록
+                actionType:
+                  type: string
+                  description: '처리 유형 CREATE | UPDATE | DELETE CREATE : 생성 UPDATE : 수정 DELETE : 반납'
+                adminServerInstanceNo:
+                  type: integer
+                  description: 어드민 서버 인스턴스 번호 get-data-box-frame-infra-list 참조 actionType 이 UPDATE 또는 DELETE 인 경우, 필수 입력
+                prodSpecId:
+                  type: integer
+                  description: 서버 스펙 코드 Product Spec Code 참조 actionType 이 CREATE 또는 UPDATE 인 경우, 필수 입력
+                userPassword:
+                  type: string
+                  description: "어드민 서버 접속 비밀번호 영문 대소문자, 숫자, 특수 문자를 조합하여 8~14자 이내로 입력 사용 불가 특수 문자: ', \", ₩, /, &, `, 공백 actionType 이 CREATE 인 경우, 필수 입력"
+                count:
+                  type: integer
+                  description: NAS 개수 actionType 이 CREATE 인 경우, 필수 입력
+                nasInstanceNo:
+                  type: integer
+                  description: NAS 인스턴스 번호 Product Spec Code 참조 actionType 이 DELETE 인 경우, 필수 입력
+                nasSize:
+                  type: integer
+                  description: NAS 볼륨 크기(GB) 500~10000 100GB 단위로 설정 NAS 총 사용량(10TB)으로 인해 제한될 수 있음 actionType 이 CREATE 인 경우, 필수 입력
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnMessage:
+                    type: string
+                    description: API 처리 결과 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /data-box-frame/return-data-box-frame:
+    post:
+      operationId: ReturnDataBoxFrame
+      summary: return-data-box-frame
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-box-frame
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/return-data-box-frame
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - dataBoxFrameNo
+              properties:
+                dataBoxFrameNo:
+                  type: integer
+                  description: Data Box Frame 번호 get-data-box-frame-list 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnMessage:
+                    type: string
+                    description: API 처리 결과 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /data-box/change-data-box-nas-volume-size:
+    post:
+      operationId: ChangeDataBoxNasVolumeSize
+      summary: change-data-box-nas-volume-size
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-box-frame
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/change-data-box-nas-volume-size
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - dataBoxFrameNo
+                - dataBoxNo
+                - nasVolumeInstanceNo
+                - volumeSize
+              properties:
+                dataBoxFrameNo:
+                  type: integer
+                  description: Data Box Frame 번호 get-data-box-frame-list 참조
+                dataBoxNo:
+                  type: integer
+                  description: Data Box 번호 get-data-box-list 참조
+                nasVolumeInstanceNo:
+                  type: string
+                  description: NAS 인스턴스 번호 get-data-box-infra-list 참조
+                volumeSize:
+                  type: integer
+                  description: NAS 볼륨 크기(GB) 500~10000 100GB 단위로 설정 NAS 총 사용량(10TB)으로 인해 제한될 수 있음
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnMessage:
+                    type: string
+                    description: API 처리 결과 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /data-box/create-data-box:
+    post:
+      operationId: CreateDataBox
+      summary: create-data-box
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-box-frame
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/create-data-box
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - dataBoxFrameNo
+                - dataBoxInfo
+              properties:
+                dataBoxFrameNo:
+                  type: string
+                  description: Data Box Frame 번호 get-data-box-frame-list 를 통해 확인
+                dataBoxInfo:
+                  type: object
+                  additionalProperties: true
+                  description: Data Box 정보
+                prodSpecId:
+                  type: integer
+                  description: Connect 서버 스펙 코드 Product Spec Code 참조
+                storageSize:
+                  type: integer
+                  description: Connect 서버 블록 스토리지 크기(GB)
+                adminPassword:
+                  type: string
+                  description: "Connect 서버 어드민 계정 비밀번호 영문 대소문자, 숫자, 특수 문자를 조합하여 8~14자 이내로 입력 사용 불가 특수 문자: ', \", ₩, /, &, `, 공백"
+                userPassword1:
+                  type: string
+                  description: "Connect 서버 ncp1 계정 비밀번호 영문 대소문자, 숫자, 특수 문자를 조합하여 8~14자 이내로 입력 사용 불가 특수 문자: ', \", ₩, /, &, `, 공백"
+                userPassword2:
+                  type: string
+                  description: "Connect 서버 ncp2 계정 비밀번호 영문 대소문자, 숫자, 특수 문자를 조합하여 8~14자 이내로 입력 사용 불가 특수 문자: ', \", ₩, /, &, `, 공백"
+                edgeNodeProdSpecId:
+                  type: integer
+                  description: 엣지 노드 서버 스펙 코드 Product Spec Code 참조
+                masterNodeProdSpecId:
+                  type: integer
+                  description: 마스터 노드 서버 스펙 코드 Product Spec Code 참조
+                masterNodeStorageSize:
+                  type: integer
+                  description: 마스터 노드 블록 스토리지 크기(GB)
+                workerNodeProdSpecId:
+                  type: integer
+                  description: 워커 노드 서버 스펙 코드 Product Spec Code 참조
+                workerNodeCount:
+                  type: integer
+                  description: 워커 노드 개수
+                workerNodeStorageSize:
+                  type: integer
+                  description: 워커 노드 블록 스토리지 크기(GB)
+                userPassword:
+                  type: string
+                  description: "Hadoop 클러스터 계정 비밀번호 영문 대소문자, 숫자, 특수 문자를 조합하여 8~14자 이내로 입력 사용 불가 특수 문자: ', \", ₩, /, &, `, 공백"
+                count:
+                  type: integer
+                  description: NAS 개수
+                nasSize:
+                  type: integer
+                  description: NAS 볼륨 크기(GB) actionType 이 CREATE 인 경우, 유효
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnMessage:
+                    type: string
+                    description: API 처리 결과 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /data-box/get-data-box-infra-list:
+    get:
+      operationId: GetDataBoxInfraList
+      summary: get-data-box-infra-list
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-box-frame
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-data-box-infra-list
+      parameters:
+        - name: dataBoxFrameNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Data Box Frame 번호 get-data-box-frame-list 참조
+        - name: dataBoxNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Data Box 번호 get-data-box-list 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 수
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: Data Box 인프라 목록
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /data-box/get-data-box-list:
+    get:
+      operationId: GetDataBoxList
+      summary: get-data-box-list
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-box-frame
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-data-box-list
+      parameters:
+        - name: dataBoxFrameNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Data Box Frame 번호 get-data-box-frame-list 참조
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~100 (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 출력 수 1~100 (기본값: 10)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 수
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: Data Box 목록
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /data-box/get-data-box-summary-info:
+    get:
+      operationId: GetDataBoxSummaryInfo
+      summary: get-data-box-summary-info
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-box-frame
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-data-box-summary-info
+      parameters:
+        - name: dataBoxFrameNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Data Box Frame 번호 get-data-box-frame-list 참조
+        - name: dataBoxNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Data Box 번호 get-data-box-list 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  dataBoxName:
+                    type: string
+                    description: Data Box 이름
+                  sslVpnCount:
+                    type: integer
+                    description: SSL VPN 사용 가능한 계정 수
+                  connectSslVpnUrl:
+                    type: string
+                    description: SSL VPN 접속 URL
+                  webBlockStatus:
+                    type: boolean
+                    description: '외부망 차단 여부 true | false true : 차단 false : 연결'
+                  mountCount:
+                    type: integer
+                    description: 공용 데이터 열람 횟수
+                  nasCount:
+                    type: integer
+                    description: Data Box 저장소의 개수
+                  nasTotalSize:
+                    type: integer
+                    description: Data Box 저장소의 총 용량(GB)
+                  nasTotalUseSize:
+                    type: string
+                    description: Data Box 저장소의 총 사용량(GB)
+                  createDate:
+                    type: string
+                    description: Data Box 생성 일시 YYYY-MM-DD HH:mm:ss 형식
+                  statusCode:
+                    type: string
+                    description: 'Data Box 상태 코드 READY | INIT | USE | ING | RTN | TERMT READY : 신청 중 INIT : 생성 중 USE : 이용 중 ING : 변경 중 RTN : 반납 중 TERMT : 반납 완료'
+                  exportApplyCount:
+                    type: integer
+                    description: 반출 심사 요청 횟수
+                  memo:
+                    type: string
+                    description: Data Box에 대한 설명
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /data-box/get-hadoop-cluster-info:
+    get:
+      operationId: GetHadoopClusterInfo
+      summary: get-hadoop-cluster-info
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-box-frame
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-hadoop-cluster-info
+      parameters:
+        - name: dataBoxFrameNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Data Box Frame 번호 get-data-box-frame-list 참조
+        - name: dataBoxNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Data Box 번호 get-data-box-list 참조
+        - name: instanceNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Hadoop 클러스터 번호 get-data-box-infra-list 참조 동일 Data Box의 Hadoop Edge, Hadoop Master, Hadoop Worker 노드 타입은 인스턴스 번호 모두 동일
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  specList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: Hadoop Cluster 노드 정보 목록
+                  connectionList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 접속 정보 목록
+                  storageList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: NAS 스토리지 정보 목록
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /data-box/get-linux-info:
+    get:
+      operationId: GetLinuxInfo
+      summary: get-linux-info
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-box-frame
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-linux-info
+      parameters:
+        - name: dataBoxFrameNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Data Box Frame 번호 get-data-box-frame-list 참조
+        - name: dataBoxNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Data Box 번호 get-data-box-list 참조
+        - name: instanceNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Linux 서버 번호 get-data-box-infra-list 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  storageList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: NAS 스토리지 정보 목록
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /data-box/get-tensor-flow-info:
+    get:
+      operationId: GetTensorFlowInfo
+      summary: get-tensor-flow-info
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-box-frame
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-tensor-flow-info
+      parameters:
+        - name: dataBoxFrameNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Data Box Frame 번호 get-data-box-frame-list 참조
+        - name: dataBoxNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Data Box 번호 get-data-box-list 참조
+        - name: instanceNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Tensorflow 서버 번호 get-data-box-infra-list 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  connectionList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: Tensorflow 서버 접속 정보
+                  storageList:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: Tensorflow 서버 스토리지 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /data-box/modify-data-box:
+    post:
+      operationId: ModifyDataBox
+      summary: modify-data-box
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-box-frame
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/modify-data-box
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - dataBoxFrameNo
+                - dataBoxInfo
+              properties:
+                dataBoxFrameNo:
+                  type: string
+                  description: Data Box Frame 번호 get-data-box-frame-list 참조
+                dataBoxInfo:
+                  type: object
+                  additionalProperties: true
+                  description: Data Box 정보
+                actionType:
+                  type: string
+                  description: '처리 유형 CREATE | UPDATE | DELETE CREATE : 생성 UPDATE : 수정 DELETE : 반납'
+                blockStorageInstanceNo:
+                  type: integer
+                  description: Connect 서버와 연결된 블록 스토리지의 인스턴스 번호 get-data-box-infra-list 참조 actionType 이 UPDATE 인 경우
+                prodSpecId:
+                  type: integer
+                  description: Connect 서버 스펙 코드 Product Spec Code 참조 actionType 이 CREATE , UPDATE 인 경우, 필수 입력
+                serverInstanceNo:
+                  type: integer
+                  description: Connect 서버 인스턴스 번호 get-data-box-infra-list 참조 actionType 이 UPDATE 인 경우, 필수 입력
+                storageSize:
+                  type: integer
+                  description: Connect 서버 블록 스토리지 크기(GB) actionType 이 CREATE , UPDATE 인 경우
+                adminPassword:
+                  type: string
+                  description: "Connect 서버 어드민 계정 비밀번호 영문 대소문자, 숫자, 특수 문자를 조합하여 8~14자 이내로 입력 사용 불가 특수 문자: ', \", ₩, /, &, `, 공백 actionType 이 CREATE 인 경우, 필수 입력"
+                userPassword1:
+                  type: string
+                  description: "Connect 서버 ncp1 계정 비밀번호 영문 대소문자, 숫자, 특수 문자를 조합하여 8~14자 이내로 입력 사용 불가 특수 문자: ', \", ₩, /, &, `, 공백 actionType 이 CREATE 인 경우, 필수 입력"
+                userPassword2:
+                  type: string
+                  description: "Connect 서버 ncp2 계정 비밀번호 영문 대소문자, 숫자, 특수 문자를 조합하여 8~14자 이내로 입력 사용 불가 특수 문자: ', \", ₩, /, &, `, 공백 actionType 이 CREATE 인 경우, 필수 입력"
+                hadoopInstanceNo:
+                  type: integer
+                  description: Hadoop 클러스터 인스턴스 번호 get-data-box-infra-list 참조 actionType 이 UPDATE 인 경우, 필수 입력
+                EdgeNodeProdSpecId:
+                  type: integer
+                  description: 엣지 노드 서버 스펙 코드 Product Spec Code 참조 actionType 이 CREATE , UPDATE 인 경우, 필수 입력
+                masterNodeProdSpecId:
+                  type: integer
+                  description: 마스터 노드 서버 스펙 코드 Product Spec Code 참조 actionType 이 CREATE , UPDATE 인 경우, 필수 입력
+                masterNodeStorageSize:
+                  type: integer
+                  description: 마스터 노드 블록 스토리지 크기(GB) actionType 이 CREATE 인 경우
+                workerNodeCount:
+                  type: integer
+                  description: 워커 노드 개수 actionType 이 CREATE 인 경우
+                workerNodeProdSpecId:
+                  type: integer
+                  description: 워커 노드 서버 스펙 코드 Product Spec Code 참조 actionType 이 CREATE , UPDATE 인 경우, 필수 입력
+                workerNodeStorageSize:
+                  type: integer
+                  description: 워커 노드 블록 스토리지 크기(GB) actionType 이 CREATE 인 경우
+                userPassword:
+                  type: string
+                  description: "Hadoop 클러스터 계정 비밀번호 영문 대소문자, 숫자, 특수 문자를 조합하여 8~14자 이내로 입력 사용 불가 특수 문자: ', \", ₩, /, &, `, 공백 actionType 이 CREATE 인 경우, 필수 입력"
+                count:
+                  type: integer
+                  description: NAS 개수 actionType 이 CREATE 인 경우
+                nasInstanceNo:
+                  type: integer
+                  description: NAS 인스턴스 번호 get-data-box-infra-list 참조 actionType 이 DELETE 인 경우, 필수 입력
+                nasSize:
+                  type: integer
+                  description: NAS 볼륨 크기(GB) actionType 이 CREATE 인 경우
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnMessage:
+                    type: string
+                    description: API 처리 결과 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /data-box/return-data-box:
+    post:
+      operationId: ReturnDataBox
+      summary: return-data-box
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-box-frame
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/return-data-box
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - dataBoxFrameNo
+                - dataBoxNo
+              properties:
+                dataBoxFrameNo:
+                  type: integer
+                  description: Data Box Frame 번호 get-data-box-frame-list 참조
+                dataBoxNo:
+                  type: integer
+                  description: Data Box 번호 get-data-box-list 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnMessage:
+                    type: string
+                    description: API 처리 결과 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /data-box/set-block-external-network:
+    post:
+      operationId: SetBlockExternalNetwork
+      summary: set-block-external-network
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-box-frame
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/set-block-external-network
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - dataBoxFrameNo
+                - dataBoxNo
+                - isBlock
+              properties:
+                dataBoxFrameNo:
+                  type: integer
+                  description: Data Box Frame 번호 get-data-box-frame-list 참조
+                dataBoxNo:
+                  type: integer
+                  description: Data Box 번호 get-data-box-list 참조
+                isBlock:
+                  type: boolean
+                  description: '외부망 연결 차단 여부 true | false true : 차단 false : 허용'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnMessage:
+                    type: string
+                    description: API 처리 결과 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /export-approve/get-export-file-approve-detail:
+    get:
+      operationId: GetExportFileApproveDetail
+      summary: get-export-file-approve-detail
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-box-frame
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-export-file-approve-detail
+      parameters:
+        - name: dataBoxFrameNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Data Box Frame 번호 get-data-box-frame-list 참조
+        - name: dataBoxNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Data Box 번호 get-data-box-list 참조
+        - name: exportApplyId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: 반출 신청 아이디 get-export-file-approve-list 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalCount:
+                    type: integer
+                    description: 반출 심사 대상 수
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 반출 심사 대상 상세 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /export-approve/get-export-file-approve-list:
+    get:
+      operationId: GetExportFileApproveList
+      summary: get-export-file-approve-list
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-box-frame
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-export-file-approve-list
+      parameters:
+        - name: dataBoxFrameNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Data Box Frame 번호
+        - name: dataBoxNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: Data Box 번호
+        - name: applyStartDate
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 시작 일시 yyyyMMddHHmmss 형식
+        - name: applyEndDate
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 종료 일시 yyyyMMddHHmmss 형식
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~1000 (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 출력 개수 1~1000 (기본값: 10)'
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 반출 신청 상태 코드 File Export Status Code 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 수
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 반출 심사 대상 목록
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /export/apply-file-export:
+    post:
+      operationId: ApplyFileExport
+      summary: apply-file-export
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-box-frame
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/apply-file-export
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - dataBoxFrameNo
+                - dataBoxNo
+                - exportPurpose
+                - sourceFileInfoList
+                - sourceNasInstanceNo
+                - sslVpnNo
+                - targetBucketName
+                - fileName
+              properties:
+                dataBoxFrameNo:
+                  type: integer
+                  description: Data Box Frame 번호 get-data-box-frame-list 참조
+                dataBoxNo:
+                  type: integer
+                  description: Data Box 번호 get-data-box-list 참조
+                exportPurpose:
+                  type: string
+                  description: 반출 목적 1~1000자
+                memo:
+                  type: string
+                  description: 반출 신청에 대한 설명 0~50자
+                sourceFileInfoList:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: 반출 신청 파일 정보 목록
+                sourceNasInstanceNo:
+                  type: integer
+                  description: Source NAS 인스턴스 번호 get-source-nas-list 참조
+                sslVpnNo:
+                  type: integer
+                  description: SSL VPN 번호 get-ssl-vpn-account-list 참조
+                targetBucketName:
+                  type: string
+                  description: Target 버킷 이름
+                description:
+                  type: string
+                  description: 반출 신청 파일에 대한 설명 1~1000자
+                fileName:
+                  type: string
+                  description: '반출 신청 파일 이름 목록 한 번에 최대 5개 파일까지 반출 가능 개별 파일 크기: 10 MB 이하'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 수
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 반출 신청 정보 목록
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /export/get-export-apply-detail:
+    get:
+      operationId: GetExportApplyDetail
+      summary: get-export-apply-detail
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-box-frame
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-export-apply-detail
+      parameters:
+        - name: dataBoxFrameNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Data Box Frame 번호 get-data-box-frame-list 참조
+        - name: dataBoxNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Data Box 번호 get-data-box-list 참조
+        - name: exportApplyId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: 반출 신청 아이디 get-export-apply-list 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 수
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 반출 신청 목록
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /export/get-export-apply-list:
+    get:
+      operationId: GetExportApplyList
+      summary: get-export-apply-list
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-box-frame
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-export-apply-list
+      parameters:
+        - name: dataBoxFrameNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Data Box Frame 번호 get-data-box-frame-list 참조
+        - name: dataBoxNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Data Box 번호 get-data-box-list 참조
+        - name: applyStartDate
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 시작 일시 yyyyMMddHHmmss 형식
+        - name: applyEndDate
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 종료 일시 yyyyMMddHHmmss 형식
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~1000 (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 출력 수 1~1000 (기본값: 10)'
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 반출 신청 상태 코드 File Export Status Code 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 수
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 반출 신청 목록
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /export/get-source-nas-list:
+    get:
+      operationId: GetSourceNasList
+      summary: get-source-nas-list
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-box-frame
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-source-nas-list
+      parameters:
+        - name: dataBoxFrameNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Data Box Frame 번호 get-data-box-frame-list 참조
+        - name: dataBoxNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Data Box 번호 get-data-box-list 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 수
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 반출 신청 파일이 저장된 NAS 목록
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /export/get-ssl-vpn-account-list:
+    get:
+      operationId: GetSslVpnAccountList
+      summary: get-ssl-vpn-account-list
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-box-frame
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-ssl-vpn-account-list
+      parameters:
+        - name: dataBoxFrameNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Data Box Frame 번호 get-data-box-frame-list 참조
+        - name: dataBoxNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Data Box 번호 get-data-box-list 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: SSL VPN 계정 목록
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /export/return-file-export-apply:
+    post:
+      operationId: ReturnFileExportApply
+      summary: return-file-export-apply
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-box-frame
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/return-file-export-apply
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - dataBoxNo
+                - exportApplyId
+              properties:
+                dataBoxNo:
+                  type: integer
+                  description: Data Box 번호 get-data-box-list 참조
+                exportApplyId:
+                  type: integer
+                  description: 반출 신청 아이디 get-export-apply-list 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  returnMessage:
+                    type: string
+                    description: API 처리 결과 메시지
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /import/apply-file-import:
+    post:
+      operationId: ApplyFileImport
+      summary: apply-file-import
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-box-frame
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/apply-file-import
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - dataBoxFrameNo
+                - dataBoxNo
+                - sourceBucketName
+                - sourceFileInfoList
+                - targetNasInstanceNo
+                - fileName
+              properties:
+                dataBoxFrameNo:
+                  type: integer
+                  description: Data Box Frame 번호 get-data-box-frame-list 참조
+                dataBoxNo:
+                  type: integer
+                  description: Data Box 번호 get-data-box-list 참조
+                memo:
+                  type: string
+                  description: 반입 신청에 대한 설명 1~50자
+                sourceBucketName:
+                  type: string
+                  description: Source 버킷 이름
+                sourceFileInfoList:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                  description: 반입 파일 정보 목록
+                targetNasInstanceNo:
+                  type: integer
+                  description: Target NAS 인스턴스 번호 get-target-nas-list 참조
+                fileName:
+                  type: string
+                  description: '반입 파일 이름 목록 한 번에 최대 5개 파일까지 반입 가능 개별 파일 크기: 500MB 이하'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 수
+                  importApplyId:
+                    type: string
+                    description: 반입 신청 아이디
+                  dataBoxNo:
+                    type: string
+                    description: Data Box 번호
+                  dataBoxName:
+                    type: string
+                    description: Data Box 이름
+                  nasInstanceName:
+                    type: string
+                    description: Target NAS 이름
+                  sourceBucketName:
+                    type: string
+                    description: Source 버킷 이름
+                  sourceBucketFileName:
+                    type: string
+                    description: 반입 파일 이름
+                  status:
+                    type: string
+                    description: 반입 상태 코드 File import status code 참조
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /import/get-import-apply-detail:
+    get:
+      operationId: GetImportApplyDetail
+      summary: get-import-apply-detail
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-box-frame
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-import-apply-detail
+      parameters:
+        - name: dataBoxFrameNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Data Box Frame 번호 get-data-box-frame-list 참조
+        - name: dataBoxNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Data Box 번호 get-data-box-list 참조
+        - name: importApplyId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: 반입 신청 아이디 get-import-apply-list 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 수
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 반입 신청 목록
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /import/get-import-apply-list:
+    get:
+      operationId: GetImportApplyList
+      summary: get-import-apply-list
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-box-frame
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-import-apply-list
+      parameters:
+        - name: dataBoxFrameNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Data Box Frame 번호 get-data-box-frame-list 참조
+        - name: dataBoxNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: Data Box 번호 get-data-box-list 참조
+        - name: applyStartDate
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 시작 일시 yyyyMMddHHmmss 형식
+        - name: applyEndDate
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 종료 일시 yyyyMMddHHmmss 형식
+        - name: pageNo
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 번호 1~1000 (기본값: 1)'
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: '페이지 출력 수 1~1000 (기본값: 10)'
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 반입 상태 코드 File Export Status Code 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 수
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                    description: 반입 신청 목록
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /import/get-target-nas-list:
+    get:
+      operationId: GetTargetNasList
+      summary: get-target-nas-list
+      description: VPC 환경에서 이용 가능합니다.
+      tags:
+        - data-box-frame
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/get-target-nas-list
+      parameters:
+        - name: dataBoxFrameNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Data Box Frame 번호 get-data-box-frame-list 참조
+        - name: dataBoxNo
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Data Box 번호 get-data-box-list 참조
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalCount:
+                    type: integer
+                    description: 응답 결과 수
+                  nasInstanceNo:
+                    type: string
+                    description: Target NAS 인스턴스 번호
+                  nasName:
+                    type: string
+                    description: Target NAS 이름
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+components:
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  schemas:
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'

@@ -1,0 +1,1026 @@
+openapi: 3.0.3
+info:
+  title: gamepot
+  description: gamepot
+  version: 1.0.0
+  x-ncloud-availability:
+    public: true
+    financial: false
+    gov: false
+
+  x-ncloud-nrn:
+
+    productName: GAMEPOT
+    resource_types:
+      - Project
+      - ProjectV2
+
+servers:
+  - url: https://gamepot.apigw.ntruss.com
+    description: gamepot 민간
+    x-ncloud-env: public
+security:
+  - ncpAccessKey: []
+    ncpTimestamp: []
+    ncpHmacV2: []
+paths:
+  /v1/api/project/{projectId}/coupon/{couponNumber}:
+    get:
+      operationId: Coupon
+      summary: 예시
+      description: 일반 쿠폰 사용 내역을 조회합니다. 키워드 쿠폰 사용 내역은 조회되지 않습니다.
+      tags:
+        - gamepot
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/game-gamepot-coupon
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: couponNumber
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: '결과값 (1: 성공)'
+                  id:
+                    type: string
+                    description: 쿠폰 사용 내역 아이디
+                  enable:
+                    type: string
+                    description: 사용가능 여부
+                  number:
+                    type: string
+                    description: 쿠폰 번호
+                  userdata:
+                    type: string
+                    description: 쿠폰 사용 유저 정보
+                  usedAt:
+                    type: string
+                    description: 쿠폰 사용일
+                  request:
+                    type: string
+                    description: 쿠폰 사용 요청
+                  response:
+                    type: string
+                    description: 쿠폰 사용 응답
+                  type:
+                    type: string
+                    description: 쿠폰 타입
+                  keyword:
+                    type: string
+                    description: 키워드 쿠폰 키워드
+                  desc:
+                    type: string
+                    description: 쿠폰명
+                  used:
+                    type: string
+                    description: 쿠폰 상태
+                  count:
+                    type: string
+                    description: 쿠폰 수량
+                  length:
+                    type: string
+                    description: 쿠폰 길이
+                  limit:
+                    type: string
+                    description: 아이템 수량
+                  prefix:
+                    type: string
+                    description: 쿠폰 접미사
+                  suffix:
+                    type: string
+                    description: 쿠폰 접두사
+                  store_id:
+                    type: string
+                    description: 스토어 아이디 (google,one,apple,galaxy)
+                  startedAt:
+                    type: string
+                    description: 쿠폰 사용 시작일
+                  endedAt:
+                    type: string
+                    description: 쿠폰 사용 종료일
+                  item_id:
+                    type: string
+                    description: 아이템 아이디
+                  store_item_id:
+                    type: string
+                    description: 아이템 스토어 아이디
+                additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/api/project/{projectId}/player/{playerID}:
+    get:
+      operationId: Player
+      summary: 예시
+      description: 게임 내 플레이어 아이디를 조회합니다.
+      tags:
+        - gamepot
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/game-gamepot-player
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: playerID
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: '결과값 (1: 성공)'
+                  id:
+                    type: string
+                    description: 사용자 ID / / 게임팟 내부 고유값 무시해주세요.
+                  player_id:
+                    type: string
+                    description: 플레이어 아이디
+                  server_id:
+                    type: string
+                    description: 서버 아이디
+                  name:
+                    type: string
+                    description: 플레이어 명
+                  level:
+                    type: string
+                    description: 플레이어 레벨
+                  userdata:
+                    type: string
+                    description: 등록한 Userdata
+                  ip:
+                    type: string
+                    description: 플레이어 아이피
+                  createdAt:
+                    type: string
+                    description: 플레이어 생성일
+                  updatedAt:
+                    type: string
+                    description: 플레이어 갱신일
+                  user_id:
+                    type: string
+                    description: 게임팟 UID
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/api/project/{projectId}/purchase/statistics?startDate={startDate}&endDate={endDate}&currency={currency}:
+    get:
+      operationId: PurchaseStatistics
+      summary: 예시
+      description: 결제 매출 통계를 조회합니다.
+      tags:
+        - gamepot
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/game-gamepot-purchasestatistics
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: startDate
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: endDate
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: currency
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: '결과값 (1: 성공)'
+                  totalCount:
+                    type: string
+                    description: 검색 결과 값 수
+                  currencyList:
+                    type: string
+                    description: 통화 리스트 ISO 4217규정을 따름
+                  date:
+                    type: string
+                    description: 통계 날짜
+                  count:
+                    type: string
+                    description: 매출 통계 금액
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/api/project/{projectId}/purchase/voided/{transactionID}:
+    get:
+      operationId: PurchaseVoided
+      summary: 예시
+      description: 결제 아이디로 결제 취소 내역을 조회합니다.
+      tags:
+        - gamepot
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/game-gamepot-purchasevoided
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: transactionID
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: '결과값 (1: 성공)'
+                  id:
+                    type: string
+                    description: 결제 취소 아이디
+                  member_id:
+                    type: string
+                    description: 유저 UID
+                  package_id:
+                    type: string
+                    description: 패키지 명
+                  price:
+                    type: string
+                    description: 결제 금액
+                  deleted:
+                    type: boolean
+                    description: '삭제 여부 (true : 삭제, false : 정상)'
+                  purchasedAt:
+                    type: string
+                    description: 결제일
+                  voidedAt:
+                    type: string
+                    description: 결제 취소일
+                  createdAt:
+                    type: string
+                    description: 생성일
+                  updatedAt:
+                    type: string
+                    description: 갱신일
+                  deletedAt:
+                    type: string
+                    description: 삭제일
+                  currency:
+                    type: string
+                    description: 통화
+                  purchase_id:
+                    type: string
+                    description: 응답 성공값 중 purchase_id 부분은 결제 조회 API 참고 바람
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/api/project/{projectId}/purchase/{transactionID}:
+    get:
+      operationId: Purchase
+      summary: 예시
+      description: 결제 아이디로 결제 내역을 조회합니다.
+      tags:
+        - gamepot
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/game-gamepot-purchase
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: transactionID
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: '결과값 (1: 성공)'
+                  exchange_price:
+                    type: string
+                    description: 결제 금액 (환율 적용)
+                  project_id:
+                    type: string
+                    description: GamePot SDK의 projectId
+                  store_id:
+                    type: string
+                    description: 스토어 아이디 (google,one,apple,galaxy)
+                  payment_id:
+                    type: string
+                    description: 결제 스토어 아이디 (google,tpay...) ㅣ일반적으로 store_id와 동일
+                  signature:
+                    type: string
+                    description: 서명
+                  order_id:
+                    type: string
+                    description: Order ID
+                  currency:
+                    type: string
+                    description: 통화
+                  userdata:
+                    type: string
+                    description: 유저 정보
+                  price:
+                    type: string
+                    description: 결제 금액
+                  id:
+                    type: string
+                    description: 결제 데이터의 Unique ID
+                  unique_id:
+                    type: string
+                    description: Unique ID
+                  transaction_id:
+                    type: string
+                    description: 스토어 결제 ID
+                  createdAt:
+                    type: string
+                    description: 생성일
+                  updatedAt:
+                    type: string
+                    description: 갱신일
+                  request:
+                    type: string
+                    description: 결제 요청값
+                  response:
+                    type: string
+                    description: 결제 응답값
+                  type:
+                    type: string
+                    description: 아이템 타입 (inapp)
+                  name:
+                    type: string
+                    description: 아이템 이름
+                  prices:
+                    type: string
+                    description: 아이템 가격
+                  user_id:
+                    type: string
+                    description: 응답 성공값 중 user_id 부분은 사용자 조회 API 참고 바람
+                additionalProperties: true
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/api/project/{projectId}/store/{storeID}/notice/posting:
+    get:
+      operationId: StorenoticePostIng
+      summary: 예시
+      description: 게시 중인 공지사항을 확인할 수 있습니다.
+      tags:
+        - gamepot
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/game-gamepot-storenoticeposting
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: storeID
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: '결과값 (1: 성공)'
+                  totalCount:
+                    type: string
+                    description: 공지사항(이미지) 조회 (건)수
+                  baseUrl:
+                    type: string
+                    description: 오브젝트 스토리지 Bucket URL
+                  id:
+                    type: string
+                    description: (해당 이미지의) 고유 아이디
+                  store_id:
+                    type: string
+                    description: 결제 스토어 (google,one,apple,galaxy)
+                  enable:
+                    type: boolean
+                    description: 공지사항 활성화 여부
+                  url:
+                    type: string
+                    description: (클릭액션) url
+                  scheme:
+                    type: string
+                    description: (클릭액션) scheme
+                  startDate:
+                    type: string
+                    description: 공지 시작 일자
+                  endDate:
+                    type: string
+                    description: 공지 종료 일자
+                  lang:
+                    type: string
+                    description: 언어
+                  value:
+                    type: string
+                    description: (baseUrl 이하) 리소스 주소
+                  default:
+                    type: boolean
+                    description: 기본 언어 여부
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/api/project/{projectId}/store/{storeID}/user/{userID}/coupon/{couponNumber}?userData={userData}:
+    put:
+      operationId: StoreUserCoupon
+      summary: 예시
+      description: 일반 쿠폰, 키워드 쿠폰을 사용할 수 있습니다.
+      tags:
+        - gamepot
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/game-gamepot-storeusercoupon
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: storeID
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: userID
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: couponNumber
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: userData
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: '결괏값 (1: 성공)'
+                  message:
+                    type: string
+                    description: 결과 내용
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/api/project/{projectId}/user/statistics/ccu?oneDate={oneDate}&twoDate={twoDate}&threeDate={threeDate}:
+    get:
+      operationId: StatisticsCcu
+      summary: 예시
+      description: 선택한 3 개의 날짜에 대해, 동시 접속자를 시간 별 조회할 수 있습니다.
+      tags:
+        - gamepot
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/game-gamepot-statisticsccu
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: oneDate
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: twoDate
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: threeDate
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: '결과값 (1: 성공)'
+                  totalCount:
+                    type: string
+                    description: ccu 조회 결과 (건)수
+                  createdAt:
+                    type: string
+                    description: 집계 일시
+                  one:
+                    type: string
+                    description: (첫번째 일자에 대한) 해당시간 동시접속자 수
+                  two:
+                    type: string
+                    description: (두번째 일자에 대한) 해당시간 동시접속자 수
+                  three:
+                    type: string
+                    description: (세번째 일자에 대한) 해당시간 동시접속자 수
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/api/project/{projectId}/user/statistics/dau?startDate={startDate}&endDate={endDate}:
+    get:
+      operationId: StatisticsDau
+      summary: 예시
+      description: 일별 접속자를 조회할 수 있습니다.
+      tags:
+        - gamepot
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/game-gamepot-statisticsdau
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: startDate
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: endDate
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: '결과값 (1: 성공)'
+                  totalCount:
+                    type: string
+                    description: dau 조회 결과 (건)수
+                  date:
+                    type: string
+                    description: 집계 일시
+                  count:
+                    type: string
+                    description: (해당 일자) DAU
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/api/project/{projectId}/user/statistics/nru?startDate={startDate}&endDate={endDate}:
+    get:
+      operationId: StatisticsNru
+      summary: 예시
+      description: 신규 사용자를 조회할 수 있습니다.
+      tags:
+        - gamepot
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/game-gamepot-statisticsnru
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: startDate
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: endDate
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: '결과값 (1: 성공)'
+                  totalCount:
+                    type: string
+                    description: 조회 (건)수
+                  date:
+                    type: string
+                    description: 집계 일자
+                  count:
+                    type: string
+                    description: 해당 일자) NRU
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/api/project/{projectId}/user/{userId}:
+    get:
+      operationId: User
+      summary: 예시
+      description: 사용자 UID로 사용자를 조회합니다.
+      tags:
+        - gamepot
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/game-gamepot-user
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: '결과값 (1: 성공)'
+                  id:
+                    type: string
+                    description: 사용자 아이디
+                  deleted:
+                    type: boolean
+                    description: '회원 삭제 여부 (true : 삭제, false : 정상)'
+                  store_id:
+                    type: string
+                    description: 계정 생성 시 접속한 스토어 (google...)
+                  country:
+                    type: string
+                    description: 유저 국가 코드 (ISO 3166-1 기준)
+                  remoteip:
+                    type: string
+                    description: 유저 아이피
+                  adid:
+                    type: string
+                    description: 광고 id
+                  device:
+                    type: string
+                    description: 기기 종류 (android,ios)
+                  network:
+                    type: string
+                    description: 유저 접속 네트워크 (WI-FI...)
+                  version:
+                    type: string
+                    description: Client의 버전 정보
+                  model:
+                    type: string
+                    description: 유저 기기 모델명
+                  token:
+                    type: string
+                    description: 푸시 토큰
+                  push:
+                    type: boolean
+                    description: '푸시 동의 여부 (true : 동의, false : 비동의)'
+                  night:
+                    type: boolean
+                    description: '야간 푸시 동의 여부 (true : 동의, false : 비동의)'
+                  ad:
+                    type: boolean
+                    description: '광고성 푸시 동의 여부 (true : 동의, false : 비동의)'
+                  memo:
+                    type: string
+                    description: 회원 메모
+                  device_id:
+                    type: string
+                    description: 회원 디바이스 ID
+                  createdAt:
+                    type: string
+                    description: 회원이 생성된 날짜
+                  updatedAt:
+                    type: string
+                    description: 회원 정보를 수정한 날짜
+                  loginedAt:
+                    type: string
+                    description: 마지막 접속일
+                  deletedAt:
+                    type: string
+                    description: 회원 삭제된 날짜
+                  verify:
+                    type: string
+                    description: 본인인증 정보
+                  agree:
+                    type: string
+                    description: 약관동의 관련 정보
+                  gdpr:
+                    type: string
+                    description: gdpr 약관 동의 관련 정보
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/api/project/{projectId}/user/{userId}/block:
+    get:
+      operationId: UserBlockGet
+      summary: 예시
+      description: 사용자 UID로 사용자가 정지되었는지 조회합니다.
+      tags:
+        - gamepot
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/game-gamepot-userblockget
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: '결과값 (1: 성공)'
+                  id:
+                    type: string
+                    description: 사용자 정지 정보에 대한 아이디
+                  member_id:
+                    type: string
+                    description: 사용자 아이디
+                  deleted:
+                    type: boolean
+                    description: '사용자 정지 정보에 대한 삭제 유무 (true: 삭제, false: 정상)'
+                  type:
+                    type: string
+                    description: '이용정지 분류 (manual: 수동, autopurchase: 자동)'
+                  message:
+                    type: string
+                    description: 이용정지 사유 (현재 사용되지 않음)
+                  lang:
+                    type: string
+                    description: 이용정지 메시지 언어
+                  value:
+                    type: string
+                    description: 이용정지 사유 메시지
+                  default:
+                    type: boolean
+                    description: 기본 언어 설정 (디바이스의 언어값이 messageMulti에 없는 경우 true로 설정된 메시지가 기본으로 노출됨)
+                  startedAt:
+                    type: string
+                    description: 이용정지 시작일
+                  endedAt:
+                    type: string
+                    description: 이용정지 종료일
+                  createdAt:
+                    type: boolean
+                    description: 이용정지 등록일
+                  updatedAt:
+                    type: boolean
+                    description: 이용정지 수정일
+                  deletedAt:
+                    type: boolean
+                    description: 이용정지 삭제일
+                  category_id:
+                    type: string
+                    description: 이용정지 분류 아이디
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+    post:
+      operationId: UserBlockPost
+      summary: 예시
+      description: 사용자 UID로 사용자를 이용정지 처리합니다.
+      tags:
+        - gamepot
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/game-gamepot-userblockpost
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: '결과값 (1: 성공)'
+                  id:
+                    type: string
+                    description: 이용정지된 아이디
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+  /v1/certifications/{orderID}:
+    get:
+      operationId: ResultCheck
+      summary: 예시
+      description: 본인 인증된 결괏값을 조회할 수 있습니다.
+      tags:
+        - gamepot
+
+      x-ncloud-source: https://api.ncloud-docs.com/docs/game-gamepot-resultcheck
+      parameters:
+        - name: orderID
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  project_id:
+                    type: string
+                    description: 프로젝트 ID
+                  plugin_id:
+                    type: string
+                    description: 플러그인 ID
+                  user_id:
+                    type: string
+                    description: 사용자 ID
+                  name:
+                    type: string
+                    description: 이름
+                  gender:
+                    type: string
+                    description: 성별
+                  birth:
+                    type: string
+                    description: 생년월일
+                  phone:
+                    type: string
+                    description: 핸드폰 번호
+                  tid:
+                    type: string
+                    description: TID
+                  ci:
+                    type: string
+                    description: CI
+                  di:
+                    type: string
+                    description: DI
+                  order_id:
+                    type: string
+                    description: 주문번호
+                  userdata:
+                    type: string
+                    description: 사용자 데이터
+                  createdAt:
+                    type: string
+                    description: 입력일
+        4XX:
+          $ref: '#/components/responses/NcloudClientError'
+        5XX:
+          $ref: '#/components/responses/NcloudServerError'
+components:
+  securitySchemes:
+    ncpHmacV2:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-signature-v2
+    ncpAccessKey:
+      type: apiKey
+      in: header
+      name: x-ncp-iam-access-key
+    ncpTimestamp:
+      type: apiKey
+      in: header
+      name: x-ncp-apigw-timestamp
+  schemas:
+    NcloudErrorEnvelope:
+      type: object
+      description: 'Naver Cloud Platform standard error envelope. Most products return this shape; some (Object Storage, CLOVA) wrap differently — `additionalProperties: true` keeps clients tolerant.'
+      properties:
+        responseError:
+          type: object
+          description: 'Error detail (present on most NCP product errors). Field shape varies; `additionalProperties: true` keeps clients tolerant.'
+          properties:
+            returnCode:
+              type: string
+              description: NCP error code.
+            returnMessage:
+              type: string
+              description: Human-readable error message.
+          additionalProperties: true
+        error:
+          description: 'Alternative error field. Type varies: object (CLOVA, NCP standard), string (cert-manager Spring Boot 404), or null.'
+      additionalProperties: true
+  responses:
+    NcloudClientError:
+      description: Client error (4xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
+    NcloudServerError:
+      description: Server error (5xx) — NCP error envelope
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NcloudErrorEnvelope'
